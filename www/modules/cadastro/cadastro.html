@@ -1,0 +1,266 @@
+<ion-view>
+
+    <div class="bar bar-header bar-light">
+      <h1 class="title">{{vm.viewName}}</h1>
+    </div>
+
+    <ion-content class="posicao-inicial">
+
+      <!--<h2>Insira o CPF e Data de nascimento</h2>-->
+      <!--cada etapa pode ser migrada pra rotas independentes-->
+      <!--vm.etapaDocumento-->
+      <div ng-if="vm.etapaDocumento">
+          <div class="list list-inset">
+            <div  >
+              <div class="item item-divider">
+                  Dados iniciais
+              </div>
+              <label class="item item-input">
+                <span class="input-label">Data de Nascimento</span>
+                <input ng-model="vm.birthdate" type="tel"  name="date" mask="39/19/9999">
+              </label>
+              <label class="item item-input">
+                <span class="input-label">CPF</span>
+                <input ng-model="vm.cpf" type="tel"  ng-change="vm.validarCPF()" mask="11111111111">
+              </label>              
+              <label class="item item-input" ng-show="vm.showName">
+                <span class="input-label">Nome</span>
+                <input ng-model="vm.name" type="text">
+              </label>
+             
+
+              <div class="padding">
+                <button ng-if="vm.buscar" class="button button-block button-positive" ng-disabled="vm.cpf.length < 11 || vm.birthdate.length < 10" on-tap="vm.onTapSearchDocument()">Buscar</button>
+                <button ng-if="vm.enviar" class="button button-block button-positive" ng-disabled="vm.cpf.length < 11 || vm.birthdate.length < 10" on-tap="vm.onTapSendDocument()">Enviar</button>
+              </div>
+
+            </div>
+          </div>
+      </div>
+
+      <!--vm.etapaEndereco-->
+      <div ng-if="vm.etapaEndereco">
+
+        <div class="item item-divider">
+            Endereço
+        </div>
+        <label class="item item-input">
+            <span class="input-label">CEP</span>
+            <input ng-model="vm.zipcode" type="tel"  name="CEP" mask="99999-999" ng-change="vm.validarCEP(vm.zipcode)" >
+        </label>
+        <div ng-if="vm.etapaOutrosCampos">
+          <label class="item item-input">
+              <span class="input-label">Número</span>
+              <input ng-model="vm.street_number" type="tel" >
+          </label>
+          <label class="item item-input">
+              <span class="input-label">Complemento</span>
+              <input ng-model="vm.complement" type="text">
+          </label>
+          <label class="item item-input">
+              <span class="input-label">Rua</span>
+              <input ng-model="vm.street" type="text">
+          </label>
+
+          <label class="item item-input">
+              <span class="input-label">Bairro</span>
+              <input ng-model="vm.neighborhood" type="text">
+          </label>
+          <label class="item item-input">
+              <span class="input-label">Cidade</span>
+              <input ng-model="vm.city" type="text">
+          </label>
+          <label class="item item-input">
+              <span class="input-label">Estado</span>
+              <input ng-model="vm.uf" type="text">
+          </label>
+        </div>
+
+        <div class="padding">
+          <!--vm.etapaBuscarCEP no lugar do true-->
+                <button ng-if="vm.etapaBuscarCEP" ng-disabled="vm.zipcode.length < 9" class="button button-block button-positive" ng-disabled="vm.cpf.length < 11 || vm.birthdate.length < 10" on-tap="vm.onTapSearchAddress()">Buscar</button>
+                <button ng-if="vm.etapaOutrosCampos" class="button button-block button-positive" ng-disabled="vm.street.length == 0 || vm.street_number.length == 0 || vm.neighborhood.length == 0 || vm.city.length == 0 || vm.uf.length == 0 || vm.zipcode.length == 0 " on-tap="vm.onTapSendAddress()">Enviar</button>
+              </div>
+
+      </div>
+      <!--vm.etapaDadosPessoais-->
+      <div ng-if="vm.etapaDadosPessoais">
+        <div class="item item-divider">
+            Dados Pessoais
+        </div>
+        <label class="item item-input">
+            <span class="input-label">Email</span>
+            <input ng-model="vm.email" type="text">
+        </label>
+        <label class="item item-input">
+            <span class="input-label">DDD</span>
+            <input ng-model="vm.personalDDD" type="tel" mask="22">
+        </label>
+        <label class="item item-input">
+            <span class="input-label">Telefone</span>
+            <input ng-model="vm.personalNumber" type="tel"  mask="9?9999-9999">
+        </label>
+
+        <!--seção fotos-->
+        <div class="foto-selfie" on-tap="vm.onTapPhotoSelfie()">
+            <div class="item">
+                <a ng-if="vm.selfieSended" class="ion-android-done custom-icon"></a>
+                <a ng-if="!vm.selfieSended" class="ion-ios-plus-outline custom-icon-default"></a>
+                <h2 class="text-item">Selfie</h2>
+                <p class="text-sub-item">Foto sua segurando o documento</p>
+            </div>
+
+            <div class="item item-body" ng-if="vm.showSelfiePhoto">
+                <img class="full-image" ng-src="{{vm.selfiePhotoURL}}">
+            </div>
+        </div>
+
+        <div class="foto-frente" on-tap="vm.onTapPhotoFront()">
+            <div class="item">
+                <a ng-if="vm.frontSended" class="ion-android-done custom-icon"></a>
+                <a ng-if="!vm.frontSended" class="ion-ios-plus-outline custom-icon-default"></a>
+                <h2 class="text-item">Frente</h2>
+                <p class="text-sub-item">do RG, CNH ou RNE</p>
+            </div>
+
+            <div class="item item-body" ng-if="vm.showFrontPhoto">
+                <img class="full-image" ng-src="{{vm.frontPhotoURL}}">
+            </div>
+        </div>
+
+        <div class="foto-verso" on-tap="vm.onTapPhotoVerse()">
+            <div class="item">
+                <a ng-if="vm.verseSended" class="ion-android-done custom-icon"></a>
+                <a ng-if="!vm.verseSended" class="ion-ios-plus-outline custom-icon-default"></a>
+                <h2 class="text-item">Verso</h2>
+                <p class="text-sub-item">do RG, CNH ou RNE</p>
+            </div>
+
+            <div class="item item-body" ng-if="vm.showVersePhoto">
+                <img class="full-image" ng-src="{{vm.versePhotoURL}}">
+            </div>
+        </div>
+
+
+        <div class="padding">
+            <button class="button button-block button-positive" ng-disabled="vm.email.length == 0 || vm.personalDDD.length < 2 || vm.personalNumber.length < 9 || !vm.selfieSended || !vm.frontSended || !vm.verseSended"  on-tap="vm.onTapSendPersonalData()">Enviar</button>
+        </div>
+
+      </div>
+
+
+      <!--vm.etapaComplementar-->
+      <div ng-if="vm.etapaComplementar">
+            <div class="item item-divider">
+                Convite Foneclube
+            </div>
+            <!--<label class="item item-input">
+                <span class="input-label">Quem te convidou para o Foneclube?</span>
+                <input ng-model="vm.whoinvite" type="text">
+            </label>-->
+            <label class="item item-input">
+                <span class="input-label">Telefone de quem convidou</span>
+                <input ng-model="vm.contactParent" type="tel"  placeholder="21-99999-9999" mask="(99) 9?9999-9999">
+            </label>
+            <div class="item item-divider">
+                Informações nova linha Foneclube
+            </div>
+            <label class="item item-input">
+                <span class="input-label">Usuário/Apelido</span>
+                <input ng-model="vm.Nickname" type="text">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">DDD</span>
+                <input ng-model="vm.UserDDD" type="tel" mask="21">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Telefone</span>
+                <input ng-model="vm.UserCellphone" type="tel"  placeholder="99999-9999" mask="9?9999-9999" >
+            </label>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                Plano
+                </div>
+                <select ng-model="vm.plan">
+                <option ng-repeat="plan in vm.plans" value="{{plan.Id}}">{{plan.Description}}</option>
+
+                </select>
+            </label>
+
+            <div class="item item-divider">
+                Qual sua operadora atual?
+            </div>
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                Operadora:
+                </div>
+                <select ng-model="vm.operator">
+                <option ng-repeat="operator in vm.allOperatorOptions" value="{{operator.id}}">{{operator.nome}}</option>
+
+                </select>
+            </label>
+
+            <div class="padding">
+                <button class="button button-block button-positive" ng-disabled=""  on-tap="vm.onTapSendFoneclubeData()">Enviar</button>
+            </div>
+
+
+            <!--<div class="item item-divider">
+                Qual operadora(s) vai usar no Foneclube?
+            </div>
+            <ion-list>
+            <ion-checkbox ng-model="vm.OperatorsSelecteds[item.Id]" ng-repeat="item in vm.operators">{{item.Name}}</ion-checkbox>-->
+
+            </ion-list>
+
+
+      </div>
+
+
+
+
+
+    </ion-content>
+
+    <!--=================== modal ======================-->
+    <!--Extrair-->
+    <!--====================================================-->
+    <script id="templates/modal.html" type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-positive">
+          <h1 class="title">Adicionar foto</h1>
+          <button class="button button-clear button-primary" ng-click="vm.modal.hide()">Cancelar</button>
+        </ion-header-bar>
+        <ion-content class="padding">
+        <div class="item item-text-wrap">
+            De onde você deseja incluir sua foto?
+        </div>
+
+        <div class="button-bar">
+
+           <div class="fileUpload btn">
+                <span class="button">Da galeria</span>
+                <input id="input-file" type="file" name="file" file="vm.file" class="upload" />
+            </div>
+
+            <div class="fileUpload btn">
+                 <span class="button">Da galeria</span>
+                 <input id="input-file" type="file" name="file" file="vm.file" class="upload" accept="image/*" capture="camera" />
+            </div>
+        </div>
+
+         <div class="padding">
+            <button class="button button-block button-positive" ng-disabled="(!vm.hasFileSelected && !vm.hasPhotoCaptured)"  on-tap="vm.onTapSendImage()">Enviar</button>
+        </div>
+
+        </ion-content>
+      </ion-modal-view>
+    </script>
+
+    <!--====================================================-->
+    <!--====================================================-->
+    <!--====================================================-->
+
+
+</ion-view>

@@ -1,0 +1,25 @@
+<ion-tabs class="tabs-icon-top tabs-positive">
+
+    <ion-tab title="Home" icon="ion-ios-home" href="#/tab/home">
+        <ion-nav-view name="home-tab"></ion-nav-view>
+    </ion-tab>
+
+    <!--<ion-tab title="Cadastro Old" icon="ion-card" href="#/tab/checkout-view">
+        <ion-nav-view name="checkout-view-tab"></ion-nav-view>
+    </ion-tab>-->
+
+    <ion-tab title="Cadastro" icon="ion-card" ui-sref="tabs.cadastro">
+        <ion-nav-view name="cadastro-tab"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="Pagarme" icon="ion-person-stalker" ui-sref="tabs.list-customer">
+        <ion-nav-view name="list-customer-tab"></ion-nav-view>
+    </ion-tab>
+
+    <ion-tab title="Customers" icon="ion-person-stalker" ui-sref="tabs.customers">
+        <ion-nav-view name="customers-tab"></ion-nav-view>
+    </ion-tab>
+
+
+
+</ion-tabs>

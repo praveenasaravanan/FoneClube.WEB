@@ -1,0 +1,17 @@
+<ion-view view-title="FoneClube" name="login-view">
+  <ion-content class="padding">
+      <div class="list list-inset">
+          <label class="item item-input">
+              <input type="text" placeholder="Usuário" ng-model="vm.user">
+          </label>
+          <label class="item item-input">
+              <input type="password" placeholder="Senha" ng-model="vm.password">
+          </label>
+      </div>
+      <button class="button button-block button-calm" on-tap="vm.login()">Login</button>
+
+  </ion-content>
+  <div class="bar bar-footer">
+    <div class="title">[ v.0.2.0 ]</div>
+  </div>
+</ion-view>

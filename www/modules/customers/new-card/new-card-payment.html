@@ -1,0 +1,58 @@
+<ion-modal-view ng-controller="NewCardPaymentModalController as vm">
+    <ion-header-bar class="bar bar-header bar-positive">
+        <h1 class="title">Pagar com novo cartão</h1>
+        <button class="button button-clear button-primary" ng-click="modal.hide()">Fechar</button>
+    </ion-header-bar>
+
+    <ion-content>
+<!--ng-if="vm.fasePagamento"-->
+    <div >
+            <!--remoção-->
+            <!--<div class="item item-divider">
+                -- Daqui pra baixo tudo será movido --
+            </div>-->
+            <div class="item item-divider">
+                Dados Cartão de Crédito
+            </div>
+            <label class="item item-input">
+                <span class="input-label">Nome como no cartão</span>
+                <input ng-model="vm.cardHolderName" type="text">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Número do cartão</span>
+                <input ng-model="vm.cardNumber" type="tel" >
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Mês expiração</span>
+                <input ng-model="vm.cardExpirationMonth" type="tel" placeholder="01">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Ano expiração</span>
+                <input ng-model="vm.cardExpirationYear" type="tel" placeholder="2019" >
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Código de verificação</span>
+                <input ng-model="vm.cardCVV" type="tel" >
+            </label>
+
+            <div class="item item-divider">
+                Valor
+            </div>
+            <label class="item item-input">
+                <span class="input-label">Quantia: </span>
+                <input ng-model="vm.amount" money-input type="tel" >
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Observação: </span>
+                <input ng-model="vm.comment" type="text">
+            </label>
+            <button on-tap="vm.onTapPagar()" ng-disabled="vm.comment.length == 0 || vm.disableTapPay || vm.disablePagarButton || vm.amount.length == 0 || vm.cardHolderName.length == 0 || vm.cardNumber.length == 0 || vm.cardExpirationMonth.length < 2 || vm.cardExpirationYear.length < 2 || vm.cardCVV.length < 3" class="button button-block button-positive">
+                Pagar
+            </button>
+            <h2>{{vm.statusTransaction}}</h2>
+
+        </div>
+
+
+    </ion-content>
+</ion-modal-view>

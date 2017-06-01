@@ -1,0 +1,77 @@
+<ion-modal-view ng-controller="CustomerModalController as vm">
+    <ion-header-bar class="bar bar-header bar-positive">
+        <h1 class="title">Detalhe cliente</h1>
+        <button class="button button-clear button-primary" ng-click="modal.hide()">Fechar</button>
+    </ion-header-bar>
+
+
+
+    <ion-content class="padding">
+        <div class="text-center">
+            <h3 style="text-align: center;">{{vm.customer.Name}}</h3>
+        </div>
+
+        <div class="padding">
+            <button class="button button-block button-positive" ng-disabled=""  on-tap="vm.onTapNewCardPayment()">Pagamento com novo cartão</button>
+            <button class="button button-block button-positive" ng-disabled=""  on-tap="vm.onTapBoleto()">Pagamento com boleto</button>
+        </div>
+
+        <!--<ul class="list">
+                    <div>
+                        <h2>{{vm.customer.Name}}</h2>
+                    </div>
+            </ul>-->
+
+        <div ng-if="vm.etapaEscolhaCartao">
+
+            <div class="item item-divider">
+                Cartões disponíveis
+            </div>
+
+            <ul class="list">
+                <a class="item" ng-repeat="card in vm.cards">
+
+                    <div on-tap="vm.onTapCard(card)">
+                        <h2>Bandeira: {{card.brand}}</h2>
+                        <p>Final: {{card.last_digits}}</p>
+                        <p>{{card.valid ? 'Cartão válido' : 'Cartão inválido/vencido'}}</p>
+                    </div>
+                </a>
+            </ul>
+
+            <div class="item item-divider">
+                Hitórico de cobrança
+            </div>
+
+            <ul class="list">
+                <a class="item" ng-repeat="history in vm.histories">
+
+                    <div>
+                        <p>Data e hora: <strong>{{history.PaymentDate}}.</strong> </p>
+                        <p>Comentário: <strong>{{history.Comment}}.</strong> </p>
+                        <p>Valor: <strong>{{history.Ammount / 100 }} R$ </strong> </p>
+                        <p>Tipo: <strong>{{history.descriptionType}} </strong> </p>
+                        <p>Agente: <strong>{{history.CollectorName }} </strong> </p>
+                        <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{history.StatusPayment }} </strong> </p>
+                    </div>
+                </a>
+            </ul>
+
+
+        </div>
+
+        <div ng-if="vm.etapaQuantia">
+            <label class="item item-input">
+                <span class="input-label">Quantia: </span>
+                <input ng-model="vm.amount" money-input type="text">
+            </label>
+            <button on-tap="vm.onTapPagar()" class="button button-block button-dark">
+                Pagar
+            </button>
+        </div>
+
+        <div class="list">
+            <h2>{{vm.message}}</h2>
+        </div>
+    </ion-content>
+</ion-modal-view>

@@ -1,0 +1,24 @@
+<ion-view view-title="Customers">
+    <div class="bar bar-header bar-light">
+      <h1 class="title">Clientes</h1>
+    </div>
+
+    <ion-content class="posicao-inicial">
+        <label class="item item-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="text" placeholder="Buscar" ng-model="vm.search">
+        </label>
+        <ion-spinner icon="android" ng-if="vm.showLoader"></ion-spinner>
+      
+        <ul class="list">
+            <a class="item" ng-repeat="customer in vm.customers | orderBy : 'name' | filter: vm.search">
+                <div on-tap="vm.onTapCustomer(customer)">
+                    <h2>{{customer.name}}</h2>
+                    <p>{{customer.email}}</p>
+                    <p>Documento: {{customer.document_number}}</p>
+                </div>
+            </a>
+        </ul>
+
+    </ion-content>
+</ion-view>

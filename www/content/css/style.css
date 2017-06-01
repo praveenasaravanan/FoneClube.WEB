@@ -1,0 +1,65 @@
+/* Empty. Add your own CSS if you like */
+.posicao-inicial {
+    margin-top: 50px;
+}
+
+.spinner{
+    padding-left: 50%;
+    margin-left: -30px;
+}
+.spinner svg {
+        width: 60px;
+        height: 60px;
+
+}
+
+.padding{
+     margin-top: 50px;
+}
+
+.custom-icon {
+  font-size: 50px;
+  color : greenyellow;
+  float: left;
+  position: relative;
+}
+
+.custom-icon-default {
+  font-size: 50px;
+  color : grey;
+  float: left;
+  position: relative;
+}
+
+.text-item{
+    position: absolute;
+    float: left;
+    left: 20%;
+    top: 20%;
+
+}
+
+.text-sub-item{
+    position: absolute;
+    float: left;
+    left: 20%;
+    top:55%;
+
+}
+
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}

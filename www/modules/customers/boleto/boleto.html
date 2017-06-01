@@ -1,0 +1,31 @@
+<ion-modal-view ng-controller="BoletoModalController as vm">
+    <ion-header-bar class="bar bar-header bar-positive">
+        <h1 class="title">Pagamento por boleto</h1>
+        <button class="button button-clear button-primary" ng-click="modal.hide()">Fechar</button>
+    </ion-header-bar>
+    <ion-content class="padding">
+
+        <div class="text-center">
+            <h3 style="text-align: center;">{{vm.customer.Name}}</h3>
+        </div>
+
+
+
+            <label class="item item-input">
+                <span class="input-label">Quantia: </span>
+                <input ng-model="vm.amount" money-input type="tel">
+            </label>
+             <label class="item item-input">
+                <span class="input-label">Observação: </span>
+                <input ng-model="vm.comment" type="text">
+            </label>
+            <button on-tap="vm.onTapPagar()" ng-disabled="vm.comment.length == 0 || vm.amount.length == 0 || vm.disableTapPay" class="button button-block button-dark">
+                Pagar
+            </button>
+
+
+        <div class="list">
+            <h2>{{vm.message}}</h2>
+        </div>
+    </ion-content>
+</ion-modal-view>
