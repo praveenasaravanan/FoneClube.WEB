@@ -458,11 +458,24 @@
                 }
         }
 
-        function uploadFile(file){
-             console.log('-- uploadFile galeria')
-            var q = $q.defer();
-            console.log(file)
+        function isInvalidName(str){
+            return /\s/.test(str);
+        }
+    
 
+        function uploadFile(file){
+            
+            console.log('-- uploadFile galeria')
+            var q = $q.defer();
+            console.log(file);
+
+            if(isInvalidName(file.name)){
+                vm.file = null;
+                vm.msg = "Não foi possivel enviar sua imagem, por favor envie uma imagem sem espaço no nome do arquivo"
+                q.reject();
+                return q.promise;
+            }
+                    
             MainComponents.showLoader('Enviando...');
 
             var imageUploader = new ImageUploader();
@@ -483,6 +496,7 @@
         }
 
         function onTapSendImage(){
+            vm.msg = "";
             console.log('onTapSendImage ');
 
             if(vm.hasPhotoCaptured)
