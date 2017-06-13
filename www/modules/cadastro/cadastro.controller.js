@@ -40,6 +40,17 @@
         vm.email = '';
         vm.personalDDD = '';
         vm.personalNumber = '';
+        vm.phoneNumbers =[
+            {
+                'Portabilidade': false,
+                'OperadoraAntiga': '',
+                'Nickname': '',
+                'DDD': '',
+                'Number': '',
+                'plan': '',
+                'IsFoneclube': true
+            }
+        ]
 
         vm.onTapSearchDocument = onTapSearchDocument;
         vm.onTapSendDocument = onTapSendDocument;
@@ -52,6 +63,9 @@
         vm.onTapPhotoSelfie = onTapPhotoSelfie;
         vm.onTapPhotoFront = onTapPhotoFront;
         vm.onTapPhotoVerse = onTapPhotoVerse;
+        
+        vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
+        vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
 
         vm.onTapCancel = onTapCancel;
 
@@ -701,6 +715,24 @@
                 MainComponents.alert({mensagem:error.statusText});
             });
 
+        }
+        
+        function onTapNewPhoneNumber() {
+            vm.phoneNumbers.push(
+                {
+                    'Portabilidade': false,
+                    'OperadoraAntiga': '',
+                    'Nickname': '',
+                    'DDD': '',
+                    'Number': '',
+                    'plan': '',
+                    'IsFoneclube': true
+                }
+            );
+        }
+        
+        function onTapRemoveNewNumber(position){
+            vm.phoneNumbers.splice(position, 1);
         }
         
         function onTapCancel(){
