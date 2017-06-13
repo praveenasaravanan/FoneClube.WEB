@@ -53,6 +53,8 @@
         vm.onTapPhotoFront = onTapPhotoFront;
         vm.onTapPhotoVerse = onTapPhotoVerse;
 
+        vm.onTapCancel = onTapCancel;
+
         init();
 
         function init(){
@@ -224,7 +226,7 @@
 
         function onTapSendPersonalData(){
             console.log('onTapSendPersonalData');
-
+            
             var cpf = vm.cpf.replace(/[-.,]/g , '');
             var personalPhone = vm.personalNumber.replace('-', '').replace(' ', '');
 
@@ -241,8 +243,8 @@
                 };
 
                 /**var selfiePhotoName = '';
-        var frontPhotoName = '';
-        var versePhotoName = ''; */
+                var frontPhotoName = '';
+                var versePhotoName = ''; */
                 console.log(personCheckout)
 
             FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
@@ -668,6 +670,7 @@
                     'DocumentNumber': cpf,
                     'NickName': vm.Nickname,
                     'Email': vm.email,
+                    'WhoInvite': vm.whoinvite,
                     'IdContactParent': contactParent,
                     'IdPlanOption': vm.plan,
                     'IdCurrentOperator': vm.operator,
@@ -699,7 +702,10 @@
             });
 
         }
-
+        
+        function onTapCancel(){
+            vm.modal.hide();
+        }
         /////////////////////////////////////
         /////////////////////////////////////
     }

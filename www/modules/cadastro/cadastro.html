@@ -143,7 +143,8 @@
 
 
         <div class="padding">
-            <button class="button button-block button-positive" ng-disabled="vm.email.length == 0 || vm.personalDDD.length < 2 || vm.personalNumber.length < 9 || !vm.selfieSended || !vm.frontSended || !vm.verseSended"  on-tap="vm.onTapSendPersonalData()">Enviar</button>
+            <!--button class="button button-block button-positive" ng-disabled="vm.email.length == 0 || vm.personalDDD.length < 2 || vm.personalNumber.length < 9 || !vm.selfieSended || !vm.frontSended || !vm.verseSended"  on-tap="vm.onTapSendPersonalData()">Enviar</button-->
+            <button class="button button-block button-positive" on-tap="vm.onTapSendPersonalData()">Enviar</button>
         </div>
 
       </div>
@@ -154,10 +155,10 @@
             <div class="item item-divider">
                 Convite Foneclube
             </div>
-            <!--<label class="item item-input">
+            <label class="item item-input">
                 <span class="input-label">Quem te convidou para o Foneclube?</span>
                 <input ng-model="vm.whoinvite" type="text">
-            </label>-->
+            </label>
             <label class="item item-input">
                 <span class="input-label">Telefone de quem convidou</span>
                 <input ng-model="vm.contactParent" type="tel"  placeholder="21-99999-9999" mask="(99) 9?9999-9999">
@@ -253,6 +254,7 @@
          <div class="padding">
             <!--button class="button button-block button-positive" ng-disabled="(!vm.hasFileSelected && !vm.hasPhotoCaptured)"  on-tap="vm.onTapSendImage()">Enviar</button-->
             <button class="button button-block button-positive" ng-disabled="(!vm.hasFileSelected && !vm.hasPhotoCaptured)"  on-tap="vm.onTapSendImage()">Enviar</button>
+              <button class="button button-block button-positive" on-tap="vm.onTapCancel()">Cancelar</button>
         </div>
             {{vm.msg}}
         </ion-content>
