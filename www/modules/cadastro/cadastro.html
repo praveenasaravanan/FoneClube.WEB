@@ -244,13 +244,14 @@
                 <input id="input-file" type="file" name="file" file="vm.file" class="upload" />
             </div>
 
-            <div class="fileUpload btn">
+            <!--div class="fileUpload btn">
                  <span class="button">Da camera</span>
                  <input id="input-file" type="file" name="file" file="vm.file" class="upload" accept="image/*;capture=camera" />
-            </div>
+            </div-->
         </div>
 
          <div class="padding">
+            <!--button class="button button-block button-positive" ng-disabled="(!vm.hasFileSelected && !vm.hasPhotoCaptured)"  on-tap="vm.onTapSendImage()">Enviar</button-->
             <button class="button button-block button-positive" ng-disabled="(!vm.hasFileSelected && !vm.hasPhotoCaptured)"  on-tap="vm.onTapSendImage()">Enviar</button>
         </div>
             {{vm.msg}}
