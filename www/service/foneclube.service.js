@@ -21,6 +21,7 @@
         this.postUpdatePersonAdress = postUpdatePersonAdress;
         this.postCheckout = postCheckout;
         this.postHistoryPayment = postHistoryPayment;
+        this.postDeletePerson = postDeletePerson;
         this.getPlans = getPlans;
         this.getOperators = getOperators;
         this.getCustomers = getCustomers;
@@ -30,6 +31,20 @@
             var q = $q.defer();
 
             HTTPService.post(urlApi.concat('/profile/update'), personCheckout)
+            .then(function(result){
+                q.resolve(result);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+
+            return q.promise;
+        }
+
+        function postDeletePerson(personCheckout){
+            var q = $q.defer();
+
+            HTTPService.post(urlApi.concat('/profile/delete/customer'), personCheckout)
             .then(function(result){
                 q.resolve(result);
             })
