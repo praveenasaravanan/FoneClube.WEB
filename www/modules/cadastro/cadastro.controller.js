@@ -239,21 +239,25 @@
 
         function onTapSendPersonalData(){
             console.log('onTapSendPersonalData');
-
+            debugger;
             var cpf = vm.cpf.replace(/[-.,]/g , '');
             var personalPhone = vm.personalNumber.replace('-', '').replace(' ', '');
 
             var personCheckout = {
                     'DocumentNumber': cpf,
                     'Email': vm.email,
-                    'Phones': [
-                        {
-                            'DDD': vm.personalDDD,
-                            'Number': personalPhone
-                        }
-                    ],
                     'Images': [selfiePhotoName, frontPhotoName, versePhotoName]
                 };
+
+            if(vm.personalDDD && personalPhone)
+            {
+                personCheckout['Phones'] = [
+                    {
+                        'DDD': vm.personalDDD,
+                        'Number': personalPhone
+                    }
+                ];
+            }
 
                 /**var selfiePhotoName = '';
                 var frontPhotoName = '';
@@ -680,19 +684,28 @@
             var plans = [];
             var phones = [];
             debugger;
-            
+
             vm.phoneNumbersView.forEach(function (element, index, array) {
+
+                //tlvz isso vai morrer parte de planos solta ( estou avaliando, cardozo)
                 plans.push( {
                     'IdPlanOption': element.plan,
                     'IdContact': clearPhoneNumber(element.DDD).toString().concat(clearPhoneNumber(element.Number).toString())
                 });
-                phones.push({
-                    'DDD': clearPhoneNumber(element.DDD),
-                    'Number': clearPhoneNumber(element.Number),
-                    /*'Portability': element.Portability, *///descomentar quando ajustar API
-                    'IsFoneclube': true
-                    /*'NickName': element.NickName*/  //descomentar quando ajustar API
-                });
+
+                if(clearPhoneNumber(element.DDD).toString() != '' || clearPhoneNumber(element.DDD).toString() == undefined
+                || clearPhoneNumber(element.Number).toString() != '' || clearPhoneNumber(element.Number).toString() != undefined)
+                {
+                    phones.push({
+                        'DDD': clearPhoneNumber(element.DDD),
+                        'Number': clearPhoneNumber(element.Number),
+                        'Portability': element.Portability, ///descomentar quando ajustar API
+                        'IsFoneclube': true,
+                        'NickName': element.NickName,  //descomentar quando ajustar API
+                        'IdPlanOption': element.plan
+                    });
+                }
+
             });
 
             var personCheckout = {
@@ -745,17 +758,17 @@
         function onTapRemoveNewNumber(position){
             vm.phoneNumbersView.splice(position, 1);
         }
-        
+
         //monta checkout da etapa etapaComplementar
         function buildCheckoutLastFase(array) {
             return { };
         }
-        
+
         //remove () - < > do numero de telefone
         function clearPhoneNumber(number) {
             return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : ' ';
         }
-        
+
         function onTapCancel(){
             vm.modal.hide();
         }
