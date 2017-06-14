@@ -714,13 +714,13 @@
                     'Email': vm.email,
                     'NameContactParent': vm.whoinvite,
                     'IdContactParent': contactParent,
-                    'IdPlanOption': 1, //remover quando ajustar API <- está mockado
+                    // 'IdPlanOption': 1, //remover quando ajustar API <- está mockado
                     /*'Plans': plans,*/ //descomentar quando ajustar API
                     'IdCurrentOperator': vm.operator,
                     'Phones': phones
             };
 
-            /*FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
+            FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
                 console.log(result);
                 if(result)
                 {
@@ -735,7 +735,7 @@
                 console.log('catch error');
                 console.log(error);
                 MainComponents.alert({mensagem:error.statusText});
-            });*/
+            });
             console.log(personCheckout);
 
         }
