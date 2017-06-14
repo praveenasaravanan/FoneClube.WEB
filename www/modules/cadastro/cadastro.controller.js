@@ -40,15 +40,14 @@
         vm.email = '';
         vm.personalDDD = '';
         vm.personalNumber = '';
-        vm.phoneNumbers =[
+        vm.phoneNumbersView =[
             {
-                'Portabilidade': false,
-                'OperadoraAntiga': '',
-                'Nickname': '',
                 'DDD': '',
                 'Number': '',
                 'plan': '',
-                'IsFoneclube': true
+                'IsFoneclube': true,
+                'Portability': false,
+                'Nickname': ''
             }
         ]
 
@@ -675,30 +674,40 @@
 
         function onTapSendFoneclubeData(){
             console.log('onTapSendFoneclubeData');
-            var cpf = vm.cpf.replace(/[-.,]/g , '');
             //var cpf = '32250616035'; //remover ============
-            var contactParent = vm.contactParent.replace('-', '').replace(' ', '').replace('(', '').replace(')', '');
-            var cellNumber = vm.UserCellphone.replace('-', '').replace(' ', '');
+            var cpf = vm.cpf.replace(/[-.,]/g , '');
+            var contactParent = clearPhoneNumber(vm.contactParent);
+            var plans = [];
+            var phones = [];
+            debugger;
+            
+            vm.phoneNumbersView.forEach(function (element, index, array) {
+                plans.push( {
+                    'IdPlanOption': element.plan,
+                    'IdContact': clearPhoneNumber(element.DDD).toString().concat(clearPhoneNumber(element.Number).toString())
+                });
+                phones.push({
+                    'DDD': clearPhoneNumber(element.DDD),
+                    'Number': clearPhoneNumber(element.Number),
+                    /*'Portability': element.Portability, *///descomentar quando ajustar API
+                    'IsFoneclube': true
+                    /*'NickName': element.NickName*/  //descomentar quando ajustar API
+                });
+            });
 
             var personCheckout = {
                     'DocumentNumber': cpf,
-                    'NickName': vm.Nickname,
+                    'NickName': 'Mock para nao quebrar tela', //remover quando ajustar API
                     'Email': vm.email,
                     'NameContactParent': vm.whoinvite,
                     'IdContactParent': contactParent,
-                    'IdPlanOption': vm.plan,
+                    'IdPlanOption': 1, //remover quando ajustar API <- está mockado
+                    /*'Plans': plans,*/ //descomentar quando ajustar API
                     'IdCurrentOperator': vm.operator,
-                    'Phones': [
-                        {
-                            'DDD': vm.UserDDD,
-                            'Number': cellNumber,
-                            'IsFoneclube': true
-                        }
-                    ]
+                    'Phones': phones
             };
 
-
-            FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
+            /*FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
                 console.log(result);
                 if(result)
                 {
@@ -713,12 +722,14 @@
                 console.log('catch error');
                 console.log(error);
                 MainComponents.alert({mensagem:error.statusText});
-            });
+            });*/
+            console.log(personCheckout);
 
         }
 
+        //adiciona telefone do array que é exibido na view
         function onTapNewPhoneNumber() {
-            vm.phoneNumbers.push(
+            vm.phoneNumbersView.push(
                 {
                     'Portabilidade': false,
                     'OperadoraAntiga': '',
@@ -730,11 +741,21 @@
                 }
             );
         }
-
+        //remove telefone do array que é exibido na view
         function onTapRemoveNewNumber(position){
-            vm.phoneNumbers.splice(position, 1);
+            vm.phoneNumbersView.splice(position, 1);
         }
-
+        
+        //monta checkout da etapa etapaComplementar
+        function buildCheckoutLastFase(array) {
+            return { };
+        }
+        
+        //remove () - < > do numero de telefone
+        function clearPhoneNumber(number) {
+            return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : ' ';
+        }
+        
         function onTapCancel(){
             vm.modal.hide();
         }

@@ -167,7 +167,7 @@
                 Informações nova linha Foneclube
                 <button on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
             </div>
-            <div ng-repeat="phoneNumber in vm.phoneNumbers track by $index">
+            <div ng-repeat="phoneNumber in vm.phoneNumbersView track by $index">
                 <div class="item item-divider item-icon-right">
                     Linha {{$index + 1}}
                     <button on-tap="vm.onTapRemoveNewNumber($index)" class="icon ion-minus" style="background: transparent; border: none;"></button>
@@ -179,7 +179,7 @@
                 <div class="item item-toggle">
                     Deseja Portabilidade?
                     <label class="toggle toggle-positive">
-                        <input type="checkbox" ng-model="phoneNumber.Portabilidade">
+                        <input type="checkbox" ng-model="phoneNumber.Portability">
                         <div class="track">
                             <div class="handle"></div>
                         </div>
@@ -199,40 +199,30 @@
                     </div>
                     <select ng-model="phoneNumber.plan">
                         <option ng-repeat="plan in vm.plans" value="{{plan.Id}}">{{plan.Description}}</option>
-
                     </select>
                 </label>
             </div>
             
-
             <div class="item item-divider">
                 Qual sua operadora atual?
             </div>
-
             <label class="item item-input item-select">
                 <div class="input-label">
-                Operadora:
+                    Operadora:
                 </div>
                 <select ng-model="vm.operator">
-                <option ng-repeat="operator in vm.allOperatorOptions" value="{{operator.id}}">{{operator.nome}}</option>
-
+                    <option ng-repeat="operator in vm.allOperatorOptions" value="{{operator.id}}">{{operator.nome}}</option>
                 </select>
             </label>
-
             <div class="padding">
                 <button class="button button-block button-positive" ng-disabled=""  on-tap="vm.onTapSendFoneclubeData()">Enviar</button>
             </div>
-
-
             <!--<div class="item item-divider">
                 Qual operadora(s) vai usar no Foneclube?
             </div>
             <ion-list>
-            <ion-checkbox ng-model="vm.OperatorsSelecteds[item.Id]" ng-repeat="item in vm.operators">{{item.Name}}</ion-checkbox>-->
-
-            </ion-list>
-
-
+            <ion-checkbox ng-model="vm.OperatorsSelecteds[item.Id]" ng-repeat="item in vm.operators">{{item.Name}}</ion-checkbox>
+            </ion-list>-->
       </div>
 
 
