@@ -63,7 +63,7 @@
         vm.onTapPhotoSelfie = onTapPhotoSelfie;
         vm.onTapPhotoFront = onTapPhotoFront;
         vm.onTapPhotoVerse = onTapPhotoVerse;
-        
+
         vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
 
@@ -240,7 +240,7 @@
 
         function onTapSendPersonalData(){
             console.log('onTapSendPersonalData');
-            
+
             var cpf = vm.cpf.replace(/[-.,]/g , '');
             var personalPhone = vm.personalNumber.replace('-', '').replace(' ', '');
 
@@ -477,10 +477,10 @@
         function isInvalidName(str){
             return /\s/.test(str);
         }
-    
+
 
         function uploadFile(file){
-            
+
             console.log('-- uploadFile galeria')
             var q = $q.defer();
             console.log(file);
@@ -491,7 +491,7 @@
                 q.reject();
                 return q.promise;
             }
-                    
+
             MainComponents.showLoader('Enviando...');
 
             var imageUploader = new ImageUploader();
@@ -684,7 +684,7 @@
                     'DocumentNumber': cpf,
                     'NickName': vm.Nickname,
                     'Email': vm.email,
-                    'WhoInvite': vm.whoinvite,
+                    'NameContactParent': vm.whoinvite,
                     'IdContactParent': contactParent,
                     'IdPlanOption': vm.plan,
                     'IdCurrentOperator': vm.operator,
@@ -716,7 +716,7 @@
             });
 
         }
-        
+
         function onTapNewPhoneNumber() {
             vm.phoneNumbers.push(
                 {
@@ -730,11 +730,11 @@
                 }
             );
         }
-        
+
         function onTapRemoveNewNumber(position){
             vm.phoneNumbers.splice(position, 1);
         }
-        
+
         function onTapCancel(){
             vm.modal.hide();
         }
