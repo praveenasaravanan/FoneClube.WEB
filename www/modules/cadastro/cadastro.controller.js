@@ -710,10 +710,9 @@
 
             var personCheckout = {
                     'DocumentNumber': cpf,
-                    'NickName': 'Mock para nao quebrar tela', //remover quando ajustar API
                     'Email': vm.email,
                     'NameContactParent': vm.whoinvite,
-                    'IdContactParent': contactParent,
+                    'IdContactParent': contactParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
                     // 'IdPlanOption': 1, //remover quando ajustar API <- está mockado
                     /*'Plans': plans,*/ //descomentar quando ajustar API
                     'IdCurrentOperator': vm.operator,
