@@ -9,6 +9,7 @@
     function ExistentCardPaymentModalController(ViewModelUtilsService, PagarmeService, MainComponents, FoneclubeService, MainUtils) {
 
         var vm = this;
+        vm.etapaDados = true;
         var customer = ViewModelUtilsService.modalExistentCardPaymentData;
         var card = ViewModelUtilsService.modalExistentCardData;
         vm.customer = customer;
@@ -19,8 +20,11 @@
         var CARTAO = 1;
         vm.amount = '';
         vm.comment = '';
+        vm.cobrancaRealizada = false;
         console.log('ExistentCardPaymentModalController');
         vm.onTapPagar = onTapPagar;
+        vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
+        vm.onTapCancel = onTapCancel;
 
         var existentCustomer = {
                     'name' : customer.Name,
@@ -39,9 +43,22 @@
 
              }
 
+        function onTapConfirmarPagamento() {
+            vm.etapaDados = false;
+            vm.etapaConfirmacao = true;
+        }
+        
+        function onTapCancel(number){
+            vm.etapaDados = true;
+            vm.etapaConfirmacao = false;
+            if (number == 1){
+                vm.amount = 0;
+                vm.comment = '';
+                vm.cobrancaRealizada = false;   
+            }
+        }
 
         function onTapPagar(){
-
             console.log('tap pagar existente')
             console.log(parseInt(vm.amount))
             console.log(card.id)
@@ -62,6 +79,7 @@
                         vm.message = 'Transação concluída';
                         saveHistoryPayment();
                         vm.disableTapPay = false;
+                        vm.cobrancaRealizada = true;                        
                     })
                     .catch(function(error){
 

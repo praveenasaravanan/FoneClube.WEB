@@ -13,10 +13,14 @@
         vm.customer = customer;
         var newCustomer;
         var BOLETO = 2;
+        vm.etapaDados = true;
+        vm.cobrancaRealizada = false;
         vm.amount = '';
         vm.comment = '';
         console.log('BoletoModalController');
         vm.onTapPagar = onTapPagar;
+        vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
+        vm.onTapCancel = onTapCancel;
 
         var existentCustomer = {
                     'name' : customer.Name,
@@ -35,7 +39,21 @@
 
              }
 
-
+        function onTapConfirmarPagamento() {
+            vm.etapaDados = false;
+            vm.etapaConfirmacao = true;
+        }
+        
+        function onTapCancel(number){
+            vm.etapaDados = true;
+            vm.etapaConfirmacao = false;
+            if (number == 1){
+                vm.amount = 0;
+                vm.comment = '';
+                vm.cobrancaRealizada = false;   
+            }
+        }
+        
         function onTapPagar(){
 
             console.log('tap pagar boleto')
@@ -57,14 +75,20 @@
 
                             PagarmeService.notifyCustomerBoleto(resultCapture.id, existentCustomer.email).then(function(resultNotify){
                             vm.message = 'Boleto gerado com sucesso'
+                            vm.cobrancaRealizada = true;
+                            vm.disableTapPay = false;
                                 })
                                 .catch(function(error){
                                 try{
                                     vm.message = 'Boleto gerado com sucesso. Sem envio de notificação'
+                                    vm.cobrancaRealizada = true;
+                                    vm.disableTapPay = false;
                                     //MainComponents.alert({mensagem:'Erro na notificação do boleto' + error.status});
                                 }
                                 catch(erro){
                                     vm.message = 'Boleto gerado com sucesso. Sem envio de notificação'
+                                    vm.cobrancaRealizada = true;
+                                    vm.disableTapPay = false;
                                     //MainComponents.alert({mensagem:'Erro na notificação do boleto'});
                                 }
                                 console.log(error);

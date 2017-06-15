@@ -11,7 +11,7 @@
         </div>
 
 
-
+        <div ng-if="vm.etapaDados">
             <label class="item item-input">
                 <span class="input-label">Quantia: </span>
                 <input ng-model="vm.amount" money-input type="tel">
@@ -20,13 +20,37 @@
                 <span class="input-label">Observação: </span>
                 <input ng-model="vm.comment" type="text">
             </label>
-            <button on-tap="vm.onTapPagar()" ng-disabled="vm.comment.length == 0 || vm.amount.length == 0 || vm.disableTapPay" class="button button-block button-dark">
+            <button on-tap="vm.onTapConfirmarPagamento()" ng-disabled="vm.comment.length == 0 || vm.amount.length == 0 || vm.disableTapPay" class="button button-block button-dark">
                 Pagar
             </button>
-
-
-        <div class="list">
-            <h2>{{vm.message}}</h2>
+        </div>
+        
+        <div ng-if="vm.etapaConfirmacao">
+            <label class="item item-input">
+                <span class="input-label">Quantia: </span>
+                <span class="input-label">{{vm.amount}}</span>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Método: </span>
+                <span class="input-label">Cartão de crédito</span>
+            </label>
+            <div class="list">
+                <h2>{{vm.message}}</h2>
+            </div>
+            <div ng-if="vm.disableTapPay || !vm.cobrancaRealizada">
+                <button on-tap="vm.onTapPagar()" class="button button-block button-dark" ng-disabled="vm.disableTapPay">
+                    Cobrar
+                </button>
+                <button on-tap="vm.onTapCancel()" class="button button-block button-dark" ng-disabled="vm.disableTapPay">
+                    Cancelar
+                </button>
+            </div>
+            <div ng-if="vm.cobrancaRealizada">
+                <h4 style="text-align: center;">Cobrança realizada com sucesso.</h4>
+                <button on-tap="vm.onTapCancel(1)" class="button button-block button-dark">
+                    Ok
+                </button>
+            </div>
         </div>
     </ion-content>
 </ion-modal-view>
