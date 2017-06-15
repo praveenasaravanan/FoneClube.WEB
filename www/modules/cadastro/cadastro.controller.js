@@ -699,9 +699,9 @@
                     phones.push({
                         'DDD': clearPhoneNumber(element.DDD),
                         'Number': clearPhoneNumber(element.Number),
-                        'Portability': element.Portability, ///descomentar quando ajustar API
+                        'Portability': element.Portability,
                         'IsFoneclube': true,
-                        'NickName': element.NickName,  //descomentar quando ajustar API
+                        'NickName': element.NickName,
                         'IdPlanOption': element.plan
                     });
                 }
@@ -713,8 +713,7 @@
                     'Email': vm.email,
                     'NameContactParent': vm.whoinvite,
                     'IdContactParent': contactParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
-                    // 'IdPlanOption': 1, //remover quando ajustar API <- está mockado
-                    /*'Plans': plans,*/ //descomentar quando ajustar API
+                    'Plans': plans,
                     'IdCurrentOperator': vm.operator,
                     'Phones': phones
             };
