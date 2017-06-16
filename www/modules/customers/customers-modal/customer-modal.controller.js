@@ -65,7 +65,7 @@
             FoneclubeService.getHistoryPayment(customer.Id).then(function(result){
                 console.log('FoneclubeService.getHistoryPayment');
                 console.log(result);
-                vm.histories = result;
+                vm.histories = result;                
                 for(var i in vm.histories)
                 {
                     var history = vm.histories[i];
@@ -76,6 +76,7 @@
                         setStatusBoleto(history);
                     }
                 }
+                customer.histories = vm.histories;
             })
             .catch(function(error){
                 console.log('catch error');

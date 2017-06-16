@@ -21,7 +21,7 @@
                 <input ng-model="vm.comment" type="text">
             </label>
             <button on-tap="vm.onTapConfirmarPagamento()" ng-disabled="vm.comment.length == 0 || vm.amount.length == 0 || vm.disableTapPay" class="button button-block button-dark">
-                Pagar
+                Cobrar
             </button>
         </div>
         
@@ -34,6 +34,23 @@
                 <span class="input-label">Método: </span>
                 <span class="input-label">Cartão de crédito</span>
             </label>
+              <div class="item item-divider">
+                Ultima Cobranca
+            </div>
+
+            <ul class="list">
+                <a class="item" ng-repeat="history in vm.customer.histories|limitTo:1">
+
+                    <div>
+                        <p>Data e hora: <strong>{{history.PaymentDate}}.</strong> </p>
+                        <p>Comentário: <strong>{{history.Comment}}.</strong> </p>
+                        <p>Valor: <strong>{{history.Ammount / 100 }} R$ </strong> </p>
+                        <p>Tipo: <strong>{{history.descriptionType}} </strong> </p>
+                        <p>Agente: <strong>{{history.CollectorName }} </strong> </p>
+                        <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{history.StatusPayment }} </strong> </p>
+                    </div>
+                </a>
+            </ul>
             <div class="list">
                 <h2>{{vm.message}}</h2>
             </div>
@@ -47,7 +64,7 @@
             </div>
             <div ng-if="vm.cobrancaRealizada">
                 <h4 style="text-align: center;">Cobrança realizada com sucesso.</h4>
-                <button on-tap="vm.onTapCancel(1)" class="button button-block button-dark">
+                <button on-tap="vm.onTapCancel(1); modal.hide()" class="button button-block button-dark">
                     Ok
                 </button>
             </div>

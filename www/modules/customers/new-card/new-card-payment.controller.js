@@ -14,9 +14,28 @@
         var newCustomer;
         var cardData;
         var CARTAO = 1;
-
+        
         vm.onTapPagar = onTapPagar;
+        vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
+        vm.onTapCancel = onTapCancel;
 
+        vm.etapaDados = true;
+
+        function onTapConfirmarPagamento() {
+            vm.etapaDados = false;
+            vm.etapaConfirmacao = true;
+        }
+        
+        function onTapCancel(number){
+            vm.etapaDados = true;
+            vm.etapaConfirmacao = false;
+            if (number == 1){
+                vm.amount = 0;
+                vm.comment = '';
+                vm.cobrancaRealizada = false;   
+            }
+        }
+        
         vm.cardHolderName = '';
         vm.cardNumber = '';
         vm.cardExpirationMonth = '';
@@ -25,6 +44,8 @@
         vm.amount = '';
         vm.statusTransaction = ''
         vm.comment = '';
+        vm.cobrancaRealizada = false;        
+      
 
         console.log('NewCardPaymentModalController');
 
@@ -138,14 +159,16 @@
                     PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function(result){
 
                         vm.statusTransaction = 'Transação concluída';
+                        vm.disableTapPay = false;
+                        vm.cobrancaRealizada = true;  
                         saveHistoryPayment();
                     })
                     .catch(function(error){
-                        try{
+                        try{                            
                             MainComponents.showSimpleToast('Erro na captura da transação' + error.status, 'Aviso');
 
                         }
-                        catch(erro){
+                        catch(erro){                            
                             MainComponents.showSimpleToast('Erro na captura da transação', 'Aviso');
                         }
                         console.log(error);
@@ -157,13 +180,18 @@
                 .catch(function(error){
                     try{
                         console.log(error.data.errors)
-
+                        vm.etapaDados = true;
+                        vm.disableTapPay = false;
+                        vm.etapaConfirmacao = false;
                         error.data.errors.forEach(function(erro) {
                             MainComponents.showSimpleToast('Erro na transação: ' + erro.message, 'Aviso');
                         }, this);
 
                     }
                     catch(erro){
+                        vm.etapaDados = true;
+                        vm.disableTapPay = false;
+                        vm.etapaConfirmacao = false;
                         MainComponents.showSimpleToast('Erro na transação', 'Aviso');
                     }
 
@@ -179,6 +207,9 @@
 
                     erro = error[i];
                 }
+                vm.etapaDados = true;
+                vm.disableTapPay = false;
+                 vm.etapaConfirmacao = false;
                 MainComponents.showSimpleToast('Erro na transação'+ erro, 'Aviso');
 
             });
