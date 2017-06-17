@@ -21,10 +21,11 @@
         'MainComponents',
         '$ionicModal',
         '$interval',
-        'FlowManagerService'
+        'FlowManagerService',
+        'ViewModelUtilsService'
         ];
 
-    function CadastroController($scope,PagarmeService, $ionicPopup, HubDevService, FoneclubeService, $ionicLoading, FileListUtil, MainUtils, $q, $cordovaCamera, $cordovaFile, $timeout, MainComponents, $ionicModal, $interval, FlowManagerService) {
+    function CadastroController($scope,PagarmeService, $ionicPopup, HubDevService, FoneclubeService, $ionicLoading, FileListUtil, MainUtils, $q, $cordovaCamera, $cordovaFile, $timeout, MainComponents, $ionicModal, $interval, FlowManagerService, ViewModelUtilsService) {
         var vm = this;
         vm.viewName = 'Cadastro Foneclube';
 
@@ -239,7 +240,10 @@
 
         function onTapSendPersonalData(){
             console.log('onTapSendPersonalData');
-            debugger;
+            if (vm.email.length == 0) {
+                MainComponents.alert({mensagem:'E-mail é um campo obrigatório.'});
+                return;
+            }
             var cpf = vm.cpf.replace(/[-.,]/g , '');
             var personalPhone = vm.personalNumber.replace('-', '').replace(' ', '');
 
@@ -683,16 +687,26 @@
             var contactParent = clearPhoneNumber(vm.contactParent);
             var plans = [];
             var phones = [];
-            debugger;
+            vm.totalPlansValue = 0;
+            
+            //validação de campos obrigatorios
+            for (var i=0; i < vm.phoneNumbersView.length; i++) {
+                if(vm.phoneNumbersView[i].Nickname == '') {
+                   MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'Nickname é um campo obrigario'});
+                    return;
+                }
+                if(vm.phoneNumbersView[i].plan == '') {
+                   MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'A escolha do plano é obrigatória.'});
+                    return;
+                }
+            }
 
             vm.phoneNumbersView.forEach(function (element, index, array) {
-
                 //tlvz isso vai morrer parte de planos solta ( estou avaliando, cardozo)
                 plans.push( {
                     'IdPlanOption': element.plan,
                     'IdContact': clearPhoneNumber(element.DDD).toString().concat(clearPhoneNumber(element.Number).toString())
                 });
-
                 if(clearPhoneNumber(element.DDD).toString() != '' || clearPhoneNumber(element.DDD).toString() == undefined
                 || clearPhoneNumber(element.Number).toString() != '' || clearPhoneNumber(element.Number).toString() != undefined)
                 {
@@ -701,11 +715,16 @@
                         'Number': clearPhoneNumber(element.Number),
                         'Portability': element.Portability,
                         'IsFoneclube': true,
-                        'NickName': element.NickName,
+                        'Nickname': element.Nickname,
                         'IdPlanOption': element.plan
                     });
                 }
-
+                //calcular aqui o valor dos planos
+                for (var i=0; i < vm.plans.length; i++) {
+                    if (vm.plans[i].Id == element.plan) {
+                        vm.totalPlansValue = vm.totalPlansValue + vm.plans[i].Value;
+                    }
+                }
             });
 
             var personCheckout = {
@@ -722,11 +741,34 @@
                 console.log(result);
                 if(result)
                 {
-                    //conclusão do form, volta pra main
-                    MainComponents.alert({titulo:'Cadastro Realizado',mensagem:'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso. Você foi redirecionado para a home.'});
                     FlowManagerService.changeHomeView();
+                    var params = {
+                        title: 'Cadastro Realizado',
+                        template: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.',
+                        buttons: [
+                          { 
+                            text: 'Ir para Home',
+                            type: 'button-positive',
+                            onTap: function(e) {
+                                console.log('Ir para Home.');
+                                //FlowManagerService.changeHomeView();
+                            }
+                          },
+                          {
+                            text: 'Realizar Cobrança',
+                            type: 'button-positive',
+                            onTap: function(e) {
+                                console.log('Realizar cobrança.');
+                                FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
+                                    result.CacheIn = vm.totalPlansValue;
+                                    ViewModelUtilsService.showModalCustomer(result);
+                                });
+                            }
+                          }
+                        ]
+                    }
+                    MainComponents.show(params);
                 }
-
                 //post realizado com sucesso
             })
             .catch(function(error){
@@ -735,7 +777,6 @@
                 MainComponents.alert({mensagem:error.statusText});
             });
             console.log(personCheckout);
-
         }
 
         //adiciona telefone do array que é exibido na view

@@ -18,6 +18,9 @@
         console.log('BoletoModalController');
         vm.onTapPagar = onTapPagar;
 
+        if (vm.customer.CacheIn) {
+            vm.amount = vm.customer.CacheIn;
+        }
         var existentCustomer = {
                     'name' : customer.Name,
                     'document_number' : customer.DocumentNumber,

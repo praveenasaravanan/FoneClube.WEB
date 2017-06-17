@@ -13,6 +13,7 @@
     /* fields */
     var vm = this;
     vm.alert = alert;
+    vm.show = show;
     vm.showSimpleToast = showSimpleToast;
     vm.infoAlert = infoAlert;
     vm.showLoader = showLoader;
@@ -34,6 +35,11 @@
         return answer;
       });
 
+    }
+      
+    function show(params){
+      closeAllPopups();
+      return $ionicPopup.show(params);
     }
 
     function showLoader(mensagem){

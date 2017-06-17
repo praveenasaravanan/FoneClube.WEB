@@ -18,7 +18,7 @@
         var CARTAO = 1;
         var BOLETO = 2;
         console.log('customer modal controller')
-        console.log(customer)
+        console.log(customer);
 
         init();
 

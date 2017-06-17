@@ -25,6 +25,10 @@
         vm.amount = '';
         vm.statusTransaction = ''
         vm.comment = '';
+        
+        if (vm.customer.CacheIn) {
+            vm.amount = vm.customer.CacheIn;
+        }
 
         console.log('NewCardPaymentModalController');
 

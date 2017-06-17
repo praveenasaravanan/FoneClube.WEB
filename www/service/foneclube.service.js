@@ -25,6 +25,7 @@
         this.getPlans = getPlans;
         this.getOperators = getOperators;
         this.getCustomers = getCustomers;
+        this.getCustomerByCPF = getCustomerByCPF;
         this.getHistoryPayment = getHistoryPayment;
 
         function postUpdatePerson(personCheckout){
@@ -129,6 +130,21 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/account/operators'))
+            .then(function(result){
+                q.resolve(result);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+
+            return q.promise;
+        }
+        
+        function getCustomerByCPF(param){
+
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/profile/cliente?documentRegister='.concat(param)))
             .then(function(result){
                 q.resolve(result);
             })
