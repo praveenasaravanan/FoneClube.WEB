@@ -1,7 +1,7 @@
 
 angular
 .module('foneClub')
-.directive('moneyInput', function($filter, $browser) {
+.directive('moneyInput', function($filter, $browser, $timeout) {
     return {
         require: 'ngModel',
         link: function($scope, $element, $attrs, ngModelCtrl) {
@@ -28,8 +28,10 @@ angular
             $element.bind('keydown', function(event) {
                 $browser.defer(listener); // Have to do this or changes don't get picked up properly
             });
+            $timeout(function(){
+                $element.val($filter('currency')($element.val().replace(/[^0-9]/g, '')/100, "R$", 2));    
+            },10);
             
-
         }
 
     };

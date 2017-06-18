@@ -5,19 +5,20 @@
         .module('foneClub')
         .controller('CustomerModalController', CustomerModalController);
 
-    CustomerModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'FoneclubeService'];
-    function CustomerModalController(ViewModelUtilsService, PagarmeService, FoneclubeService) {
+    CustomerModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'FoneclubeService', 'MainComponents'];
+    function CustomerModalController(ViewModelUtilsService, PagarmeService, FoneclubeService, MainComponents) {
         var vm = this;
         vm.onTapNewCardPayment = onTapNewCardPayment;
         vm.onTapBoleto = onTapBoleto;
         vm.onTapCard = onTapCard;
+        vm.onTapExcluir = onTapExcluir;
 
         var customer = ViewModelUtilsService.modalCustomerData;
         vm.customer = customer;
         var CARTAO = 1;
         var BOLETO = 2;
         console.log('customer modal controller')
-        console.log(customer)
+        console.log(customer);
 
         init();
 
@@ -82,6 +83,28 @@
                 console.log('catch error');
                 console.log(error);
             });
+        }
+
+        function onTapExcluir(){
+            //alert('Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta.');
+            var personCheckout = {
+                    'DocumentNumber': customer.DocumentNumber
+                };
+
+            if (confirm('Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?')) {
+                FoneclubeService.postDeletePerson(personCheckout).then(function(result){
+                    console.log(result);
+                })
+                .catch(function(error){
+                    console.log('catch error');
+                    console.log(error);
+                });
+            } else {
+            // Do nothing!
+            }
+
+            //MainComponents.infoAlert({mensagem:'Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta.'});
+            //MainComponents.alert({titulo:'Andamento',mensagem:'Documento enviado, agora preencha os dados de Endereço.'});
         }
 
         function setStatusBoleto(history){

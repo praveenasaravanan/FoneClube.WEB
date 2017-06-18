@@ -21,10 +21,11 @@
         'MainComponents',
         '$ionicModal',
         '$interval',
-        'FlowManagerService'
+        'FlowManagerService',
+        'ViewModelUtilsService'
         ];
 
-    function CadastroController($scope,PagarmeService, $ionicPopup, HubDevService, FoneclubeService, $ionicLoading, FileListUtil, MainUtils, $q, $cordovaCamera, $cordovaFile, $timeout, MainComponents, $ionicModal, $interval, FlowManagerService) {
+    function CadastroController($scope,PagarmeService, $ionicPopup, HubDevService, FoneclubeService, $ionicLoading, FileListUtil, MainUtils, $q, $cordovaCamera, $cordovaFile, $timeout, MainComponents, $ionicModal, $interval, FlowManagerService, ViewModelUtilsService) {
         var vm = this;
         vm.viewName = 'Cadastro Foneclube';
 
@@ -40,6 +41,16 @@
         vm.email = '';
         vm.personalDDD = '';
         vm.personalNumber = '';
+        vm.phoneNumbersView =[
+            {
+                'DDD': '',
+                'Number': '',
+                'plan': '',
+                'IsFoneclube': true,
+                'Portability': false,
+                'Nickname': ''
+            }
+        ]
 
         vm.onTapSearchDocument = onTapSearchDocument;
         vm.onTapSendDocument = onTapSendDocument;
@@ -52,6 +63,9 @@
         vm.onTapPhotoSelfie = onTapPhotoSelfie;
         vm.onTapPhotoFront = onTapPhotoFront;
         vm.onTapPhotoVerse = onTapPhotoVerse;
+
+        vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
+        vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
 
         vm.onTapCancel = onTapCancel;
 
@@ -226,21 +240,36 @@
 
         function onTapSendPersonalData(){
             console.log('onTapSendPersonalData');
-            
+            if (vm.email.length == 0) {
+                MainComponents.alert({mensagem:'E-mail é um campo obrigatório.'});
+                return;
+            }
+            if (vm.personalDDD.length == 0) {
+                MainComponents.alert({mensagem:'DDD é um campo obrigatório.'});
+                return;
+            }
+            if (vm.personalNumber.length == 0) {
+                MainComponents.alert({mensagem:'Telefone é um campo obrigatório.'});
+                return;
+            }
             var cpf = vm.cpf.replace(/[-.,]/g , '');
             var personalPhone = vm.personalNumber.replace('-', '').replace(' ', '');
 
             var personCheckout = {
                     'DocumentNumber': cpf,
                     'Email': vm.email,
-                    'Phones': [
-                        {
-                            'DDD': vm.personalDDD,
-                            'Number': personalPhone
-                        }
-                    ],
                     'Images': [selfiePhotoName, frontPhotoName, versePhotoName]
                 };
+
+            if(vm.personalDDD && personalPhone)
+            {
+                personCheckout['Phones'] = [
+                    {
+                        'DDD': vm.personalDDD,
+                        'Number': personalPhone
+                    }
+                ];
+            }
 
                 /**var selfiePhotoName = '';
                 var frontPhotoName = '';
@@ -463,10 +492,10 @@
         function isInvalidName(str){
             return /\s/.test(str);
         }
-    
+
 
         function uploadFile(file){
-            
+
             console.log('-- uploadFile galeria')
             var q = $q.defer();
             console.log(file);
@@ -477,7 +506,7 @@
                 q.reject();
                 return q.promise;
             }
-                    
+
             MainComponents.showLoader('Enviando...');
 
             var imageUploader = new ImageUploader();
@@ -661,38 +690,101 @@
 
         function onTapSendFoneclubeData(){
             console.log('onTapSendFoneclubeData');
-            var cpf = vm.cpf.replace(/[-.,]/g , '');
             //var cpf = '32250616035'; //remover ============
-            var contactParent = vm.contactParent.replace('-', '').replace(' ', '').replace('(', '').replace(')', '');
-            var cellNumber = vm.UserCellphone.replace('-', '').replace(' ', '');
+            var cpf = vm.cpf.replace(/[-.,]/g , '');
+            var contactParent = clearPhoneNumber(vm.contactParent);
+            var plans = [];
+            var phones = [];
+            vm.totalPlansValue = 0;
+            
+            //validação de campos obrigatorios
+            for (var i=0; i < vm.phoneNumbersView.length; i++) {
+                if(vm.phoneNumbersView[i].Nickname == '') {
+                    MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'Nickname é um campo obrigario'});
+                    return;
+                }
+                if (vm.phoneNumbersView[i].DDD.length == 0) {
+                    MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'DDD é um campo obrigatório.'});
+                    return;
+                }
+                if (vm.phoneNumbersView[i].Number.length == 0) {
+                    MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'Telefone é um campo obrigatório.'});
+                    return;
+                }
+                if(vm.phoneNumbersView[i].plan == '') {
+                    MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'A escolha do plano é obrigatória.'});
+                    return;
+                }
+            }
+
+            vm.phoneNumbersView.forEach(function (element, index, array) {
+                //tlvz isso vai morrer parte de planos solta ( estou avaliando, cardozo)
+                plans.push( {
+                    'IdPlanOption': element.plan,
+                    'IdContact': clearPhoneNumber(element.DDD).toString().concat(clearPhoneNumber(element.Number).toString())
+                });
+                if(clearPhoneNumber(element.DDD).toString() != '' || clearPhoneNumber(element.DDD).toString() == undefined
+                || clearPhoneNumber(element.Number).toString() != '' || clearPhoneNumber(element.Number).toString() != undefined)
+                {
+                    phones.push({
+                        'DDD': clearPhoneNumber(element.DDD),
+                        'Number': clearPhoneNumber(element.Number),
+                        'Portability': element.Portability,
+                        'IsFoneclube': true,
+                        'Nickname': element.Nickname,
+                        'IdPlanOption': element.plan
+                    });
+                }
+                //calcular aqui o valor dos planos
+                for (var i=0; i < vm.plans.length; i++) {
+                    if (vm.plans[i].Id == element.plan) {
+                        vm.totalPlansValue = vm.totalPlansValue + vm.plans[i].Value;
+                    }
+                }
+            });
 
             var personCheckout = {
                     'DocumentNumber': cpf,
-                    'NickName': vm.Nickname,
                     'Email': vm.email,
-                    'WhoInvite': vm.whoinvite,
-                    'IdContactParent': contactParent,
-                    'IdPlanOption': vm.plan,
+                    'NameContactParent': vm.whoinvite,
+                    'IdContactParent': contactParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
+                    'Plans': plans,
                     'IdCurrentOperator': vm.operator,
-                    'Phones': [
-                        {
-                            'DDD': vm.UserDDD,
-                            'Number': cellNumber,
-                            'IsFoneclube': true
-                        }
-                    ]
+                    'Phones': phones
             };
-
 
             FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
                 console.log(result);
                 if(result)
                 {
-                    //conclusão do form, volta pra main
-                    MainComponents.alert({titulo:'Cadastro Realizado',mensagem:'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso. Você foi redirecionado para a home.'});
                     FlowManagerService.changeHomeView();
+                    var params = {
+                        title: 'Cadastro Realizado',
+                        template: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.',
+                        buttons: [
+                          { 
+                            text: 'Ir para Home',
+                            type: 'button-positive',
+                            onTap: function(e) {
+                                console.log('Ir para Home.');
+                                //FlowManagerService.changeHomeView();
+                            }
+                          },
+                          {
+                            text: 'Realizar Cobrança',
+                            type: 'button-positive',
+                            onTap: function(e) {
+                                console.log('Realizar cobrança.');
+                                FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
+                                    result.CacheIn = vm.totalPlansValue;
+                                    ViewModelUtilsService.showModalCustomer(result);
+                                });
+                            }
+                          }
+                        ]
+                    }
+                    MainComponents.show(params);
                 }
-
                 //post realizado com sucesso
             })
             .catch(function(error){
@@ -700,9 +792,38 @@
                 console.log(error);
                 MainComponents.alert({mensagem:error.statusText});
             });
-
+            console.log(personCheckout);
         }
-        
+
+        //adiciona telefone do array que é exibido na view
+        function onTapNewPhoneNumber() {
+            vm.phoneNumbersView.push(
+                {
+                    'Portabilidade': false,
+                    'OperadoraAntiga': '',
+                    'Nickname': '',
+                    'DDD': '',
+                    'Number': '',
+                    'plan': '',
+                    'IsFoneclube': true
+                }
+            );
+        }
+        //remove telefone do array que é exibido na view
+        function onTapRemoveNewNumber(position){
+            vm.phoneNumbersView.splice(position, 1);
+        }
+
+        //monta checkout da etapa etapaComplementar
+        function buildCheckoutLastFase(array) {
+            return { };
+        }
+
+        //remove () - < > do numero de telefone
+        function clearPhoneNumber(number) {
+            return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : ' ';
+        }
+
         function onTapCancel(){
             vm.modal.hide();
         }

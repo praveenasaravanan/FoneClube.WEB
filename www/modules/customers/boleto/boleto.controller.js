@@ -15,7 +15,7 @@
         var BOLETO = 2;
         vm.etapaDados = true;
         vm.cobrancaRealizada = false;
-        vm.amount = '';
+        vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
         vm.comment = '';
         console.log('BoletoModalController');
         vm.onTapPagar = onTapPagar;

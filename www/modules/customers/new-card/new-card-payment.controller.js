@@ -44,8 +44,10 @@
         vm.amount = '';
         vm.statusTransaction = ''
         vm.comment = '';
-        vm.cobrancaRealizada = false;        
-      
+        vm.cobrancaRealizada = false;
+        if (vm.customer.CacheIn) {
+            vm.amount = vm.customer.CacheIn;
+        }
 
         console.log('NewCardPaymentModalController');
 
@@ -70,12 +72,6 @@
         {
             console.log('não tem conta no pagarme >>>');
             //não tem conta no pagarme ainda
-
-
-
-
-
-
         }
         else
         {

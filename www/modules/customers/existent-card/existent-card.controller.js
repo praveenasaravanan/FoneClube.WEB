@@ -26,6 +26,9 @@
         vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
         vm.onTapCancel = onTapCancel;
 
+        if (vm.customer.CacheIn) {
+            vm.amount = vm.customer.CacheIn;
+        }
         var existentCustomer = {
                     'name' : customer.Name,
                     'document_number' : customer.DocumentNumber,
