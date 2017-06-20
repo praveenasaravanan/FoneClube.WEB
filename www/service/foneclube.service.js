@@ -23,6 +23,7 @@
         this.postHistoryPayment = postHistoryPayment;
         this.postDeletePerson = postDeletePerson;
         this.getPlans = getPlans;
+        this.getCustomerPlans = getCustomerPlans;
         this.getOperators = getOperators;
         this.getCustomers = getCustomers;
         this.getCustomerByCPF = getCustomerByCPF;
@@ -116,6 +117,20 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/account/plans'))
+            .then(function(result){
+                q.resolve(result);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+
+            return q.promise;
+        }
+        
+        function getCustomerPlans(register){
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/profile/customer/plans?documentNumber=').concat(register.toString()))
             .then(function(result){
                 q.resolve(result);
             })

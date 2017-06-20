@@ -19,7 +19,7 @@
                 <input ng-model="vm.comment" type="text">
             </label>
             <button on-tap="vm.onTapConfirmarPagamento()" ng-disabled="vm.comment.length == 0 || vm.amount.length == 0 || vm.disableTapPay" class="button button-block button-dark">
-                Pagar
+                Cobrar
             </button>
         </div>
         
@@ -30,9 +30,9 @@
             </label>
             <label class="item item-input">
                 <span class="input-label">Método: </span>
-                <span class="input-label">Pagamento com boleto</span>
+                <span class="input-label">Cobrança com boleto</span>
             </label>
-                <div class="item item-divider">
+            <div class="item item-divider"><!--ng-if="vm.customer.histories.length > 0"-->
                 Ultima Cobranca
             </div>
 

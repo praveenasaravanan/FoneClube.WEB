@@ -529,7 +529,7 @@
         function onTapSendImage(){
             vm.msg = "";
             console.log('onTapSendImage ');
-
+            debugger;
             if(vm.hasPhotoCaptured)
                 startListUpload(vm.fotos);
 
@@ -776,8 +776,16 @@
                             onTap: function(e) {
                                 console.log('Realizar cobrança.');
                                 FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
-                                    result.CacheIn = vm.totalPlansValue;
-                                    ViewModelUtilsService.showModalCustomer(result);
+                                    FoneclubeService.getCustomerPlans(vm.cpf).then(function(customerPlans){
+                                        var valueTotal = 0;
+                                        if(customerPlans.length > 0) {
+                                            for(var i=0; i<customerPlans.length;i++){
+                                                valueTotal = valueTotal + customerPlans[i].Value;
+                                            }  
+                                        }
+                                        result.CacheIn = valueTotal;
+                                        ViewModelUtilsService.showModalCustomer(result);
+                                    });
                                 });
                             }
                           }
