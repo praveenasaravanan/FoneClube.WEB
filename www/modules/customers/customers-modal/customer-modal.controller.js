@@ -66,7 +66,7 @@
             FoneclubeService.getHistoryPayment(customer.Id).then(function(result){
                 console.log('FoneclubeService.getHistoryPayment');
                 console.log(result);
-                vm.histories = result;                
+                vm.histories = result;
                 for(var i in vm.histories)
                 {
                     var history = vm.histories[i];
@@ -94,6 +94,10 @@
             if (confirm('Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?')) {
                 FoneclubeService.postDeletePerson(personCheckout).then(function(result){
                     console.log(result);
+                    if(result)
+                        alert('Usuário foi removido com sucesso, no próximo carregamento da lista ele não será mais exibido')
+                    else
+                        alert('Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber)
                 })
                 .catch(function(error){
                     console.log('catch error');
