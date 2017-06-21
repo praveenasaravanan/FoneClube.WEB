@@ -723,7 +723,7 @@
                     vm.requesting = false;
                     return;
                 }
-                if (vm.phoneNumbersView[i].DDD.length == 0) {
+                /*if (vm.phoneNumbersView[i].DDD.length == 0) {
                     MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'DDD é um campo obrigatório.'});
                     vm.requesting = false;
                     return;
@@ -732,7 +732,7 @@
                     MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'Telefone é um campo obrigatório.'});
                     vm.requesting = false;
                     return;
-                }
+                }*/
                 if(vm.phoneNumbersView[i].plan == '') {
                     MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'A escolha do plano é obrigatória.'});
                     vm.requesting = false;
