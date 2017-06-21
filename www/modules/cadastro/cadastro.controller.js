@@ -529,7 +529,6 @@
         function onTapSendImage(){
             vm.msg = "";
             console.log('onTapSendImage ');
-            debugger;
             if(vm.hasPhotoCaptured)
                 startListUpload(vm.fotos);
 

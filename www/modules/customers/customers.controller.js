@@ -27,7 +27,6 @@
         });
 
         function onTapCustomer(customer){
-            debugger;
             console.log('customer')
             console.log(customer)
             ViewModelUtilsService.showModalCustomer(customer);
