@@ -28,6 +28,7 @@
     function CadastroController($scope,PagarmeService, $ionicPopup, HubDevService, FoneclubeService, $ionicLoading, FileListUtil, MainUtils, $q, $cordovaCamera, $cordovaFile, $timeout, MainComponents, $ionicModal, $interval, FlowManagerService, ViewModelUtilsService) {
         var vm = this;
         vm.viewName = 'Cadastro Foneclube';
+        vm.requesting = false;
 
         vm.cpf = '';
         vm.birthdate = '';
@@ -105,6 +106,7 @@
         }
 
         function onTapSearchDocument(){
+            vm.requesting = true;
             console.log('onTapSearchDocument ' + vm.birthdate.length)
             var dia = vm.birthdate.split('/')[0];
             var mes = vm.birthdate.split('/')[1];
@@ -115,6 +117,7 @@
 
             if(!patternValidaData.test(vm.birthdate) || dadosInvalidos){
                 MainComponents.alert({mensagem:'Data de nascimento Inválida'});
+                vm.requesting = false;
                 return;
             }
 
@@ -125,12 +128,12 @@
 
             HubDevService.validaCPF(cpf,vm.birthdate)
                 .then(function(result){
-                   if(result.status){
+                    if(result.status){
                        console.log(result);
                        vm.name = result.result.nome_da_pf;
-                   }
-                   MainComponents.hideLoader();
-                   etapaDocumentoFaseNome();
+                    }
+                    MainComponents.hideLoader();
+                    etapaDocumentoFaseNome();
                 },
             function(error){
                 etapaDocumentoFaseNome();
@@ -139,6 +142,7 @@
         }
 
         function onTapSendDocument(){
+            vm.requesting = true;
             var cpf = vm.cpf.replace(/[-.,]/g , '');
             console.log(cpf);
             console.log(vm.birthdate);
@@ -165,12 +169,14 @@
                 console.log('catch error');
                 console.log(error);
                 console.log(error.statusText); // mensagem de erro para tela, caso precise
+                vm.requesting = false;
                 MainComponents.alert({mensagem:error.statusText});
             });
 
         }
 
         function onTapSearchAddress(){
+            vm.requesting = true;
             console.log('onTapSearchAddress')
             var cep = vm.zipcode.replace(/[-.]/g , '');
 
@@ -200,7 +206,7 @@
         }
 
         function onTapSendAddress(){
-
+            vm.requesting = true;
             var cpf = vm.cpf.replace(/[-.,]/g , '');
 
             var personCheckout = {
@@ -233,33 +239,37 @@
                 console.log(error);
                 console.log(error.statusText); // mensagem de erro para tela, caso precise
                 MainComponents.alert({mensagem:error.statusText});
+                vm.requesting = false;
             });
 
             console.log(personCheckout)
         }
 
         function onTapSendPersonalData(){
+            vm.requesting = true;
             console.log('onTapSendPersonalData');
             if (vm.email.length == 0) {
                 MainComponents.alert({mensagem:'E-mail é um campo obrigatório.'});
+                vm.requesting = false;
                 return;
             }
             if (vm.personalDDD.length == 0) {
                 MainComponents.alert({mensagem:'DDD é um campo obrigatório.'});
+                vm.requesting = false;
                 return;
             }
             if (vm.personalNumber.length == 0) {
                 MainComponents.alert({mensagem:'Telefone é um campo obrigatório.'});
+                vm.requesting = false;
                 return;
             }
             var cpf = vm.cpf.replace(/[-.,]/g , '');
             var personalPhone = vm.personalNumber.replace('-', '').replace(' ', '');
-
             var personCheckout = {
-                    'DocumentNumber': cpf,
-                    'Email': vm.email,
-                    'Images': [selfiePhotoName, frontPhotoName, versePhotoName]
-                };
+                'DocumentNumber': cpf,
+                'Email': vm.email,
+                'Images': [selfiePhotoName, frontPhotoName, versePhotoName]
+            };
 
             if(vm.personalDDD && personalPhone)
             {
@@ -271,10 +281,10 @@
                 ];
             }
 
-                /**var selfiePhotoName = '';
-                var frontPhotoName = '';
-                var versePhotoName = ''; */
-                console.log(personCheckout)
+            /**var selfiePhotoName = '';
+            var frontPhotoName = '';
+            var versePhotoName = ''; */
+            console.log(personCheckout)
 
             FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
                 console.log(result);
@@ -290,6 +300,7 @@
                 console.log('catch error');
                 console.log(error);
                 MainComponents.alert({mensagem:error.statusText});
+                vm.requesting = false;
             });
 
         }
@@ -298,12 +309,16 @@
         function etapaEnderecoFaseOutrosCampos(){
             vm.etapaOutrosCampos = true;
             vm.etapaBuscarCEP = false;
+            
+            vm.requesting = false;
         }
 
         function etapaDocumentoFaseNome(){
             vm.buscar = false;
             vm.enviar = true;
             vm.showName = true;
+            
+            vm.requesting = false;
         }
 
         function etapaDocumento(){
@@ -315,16 +330,22 @@
             limpaEtapas();
             vm.etapaBuscarCEP = true;
             vm.etapaEndereco = true;
+            
+            vm.requesting = false;
         }
 
         function etapaDadosPessoais(){
             limpaEtapas();
             vm.etapaDadosPessoais = true;
+            
+            vm.requesting = false;
         }
 
         function etapaComplementar(){
             limpaEtapas();
             vm.etapaComplementar = true;
+            
+            vm.requesting = false;
         }
 
         function limpaEtapas(){
@@ -688,30 +709,33 @@
         vm.onTapSendFoneclubeData = onTapSendFoneclubeData;
 
         function onTapSendFoneclubeData(){
+            vm.requesting = true;
             console.log('onTapSendFoneclubeData');
-            //var cpf = '32250616035'; //remover ============
             var cpf = vm.cpf.replace(/[-.,]/g , '');
             var contactParent = clearPhoneNumber(vm.contactParent);
             var plans = [];
             var phones = [];
-            vm.totalPlansValue = 0;
             
             //validação de campos obrigatorios
             for (var i=0; i < vm.phoneNumbersView.length; i++) {
                 if(vm.phoneNumbersView[i].Nickname == '') {
                     MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'Nickname é um campo obrigario'});
+                    vm.requesting = false;
                     return;
                 }
                 if (vm.phoneNumbersView[i].DDD.length == 0) {
                     MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'DDD é um campo obrigatório.'});
+                    vm.requesting = false;
                     return;
                 }
                 if (vm.phoneNumbersView[i].Number.length == 0) {
                     MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'Telefone é um campo obrigatório.'});
+                    vm.requesting = false;
                     return;
                 }
                 if(vm.phoneNumbersView[i].plan == '') {
                     MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'A escolha do plano é obrigatória.'});
+                    vm.requesting = false;
                     return;
                 }
             }
@@ -733,12 +757,6 @@
                         'Nickname': element.Nickname,
                         'IdPlanOption': element.plan
                     });
-                }
-                //calcular aqui o valor dos planos
-                for (var i=0; i < vm.plans.length; i++) {
-                    if (vm.plans[i].Id == element.plan) {
-                        vm.totalPlansValue = vm.totalPlansValue + vm.plans[i].Value;
-                    }
                 }
             });
 
@@ -797,6 +815,7 @@
             .catch(function(error){
                 console.log('catch error');
                 console.log(error);
+                vm.requesting = false;
                 MainComponents.alert({mensagem:error.statusText});
             });
             console.log(personCheckout);

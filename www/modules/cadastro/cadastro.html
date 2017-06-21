@@ -30,8 +30,8 @@
              
 
               <div class="padding">
-                <button ng-if="vm.buscar" class="button button-block button-positive" ng-disabled="vm.cpf.length < 11 || vm.birthdate.length < 10" on-tap="vm.onTapSearchDocument()">Buscar</button>
-                <button ng-if="vm.enviar" class="button button-block button-positive" ng-disabled="vm.cpf.length < 11 || vm.birthdate.length < 10" on-tap="vm.onTapSendDocument()">Enviar</button>
+                <button ng-if="vm.buscar" class="button button-block button-positive" ng-disabled="vm.cpf.length < 11 || vm.birthdate.length < 10 || vm.requesting" on-tap="vm.onTapSearchDocument()">Buscar</button>
+                <button ng-if="vm.enviar" class="button button-block button-positive" ng-disabled="vm.cpf.length < 11 || vm.birthdate.length < 10 || vm.requesting" on-tap="vm.onTapSendDocument()">Enviar</button>
               </div>
 
             </div>
@@ -78,9 +78,9 @@
 
         <div class="padding">
           <!--vm.etapaBuscarCEP no lugar do true-->
-                <button ng-if="vm.etapaBuscarCEP" ng-disabled="vm.zipcode.length < 9" class="button button-block button-positive" ng-disabled="vm.cpf.length < 11 || vm.birthdate.length < 10" on-tap="vm.onTapSearchAddress()">Buscar</button>
-                <button ng-if="vm.etapaOutrosCampos" class="button button-block button-positive" ng-disabled="vm.street.length == 0 || vm.street_number.length == 0 || vm.neighborhood.length == 0 || vm.city.length == 0 || vm.uf.length == 0 || vm.zipcode.length == 0 " on-tap="vm.onTapSendAddress()">Enviar</button>
-              </div>
+            <button ng-if="vm.etapaBuscarCEP" class="button button-block button-positive" ng-disabled="vm.cpf.length < 11 || vm.birthdate.length < 10 || vm.zipcode.length < 9 || vm.requesting" on-tap="vm.onTapSearchAddress()">Buscar</button>
+            <button ng-if="vm.etapaOutrosCampos" class="button button-block button-positive" ng-disabled="vm.street.length == 0 || vm.street_number.length == 0 || vm.neighborhood.length == 0 || vm.city.length == 0 || vm.uf.length == 0 || vm.zipcode.length == 0 || vm.requesting" on-tap="vm.onTapSendAddress()">Enviar</button>
+        </div>
 
       </div>
       <!--vm.etapaDadosPessoais-->
@@ -144,7 +144,7 @@
 
         <div class="padding">
             <!--button class="button button-block button-positive" ng-disabled="vm.email.length == 0 || vm.personalDDD.length < 2 || vm.personalNumber.length < 9 || !vm.selfieSended || !vm.frontSended || !vm.verseSended"  on-tap="vm.onTapSendPersonalData()">Enviar</button-->
-            <button class="button button-block button-positive" on-tap="vm.onTapSendPersonalData()">Enviar</button>
+            <button class="button button-block button-positive" ng-disabled="vm.email.length == 0 || vm.personalDDD.length < 2 || vm.personalNumber.length < 8 || vm.requesting" on-tap="vm.onTapSendPersonalData()">Enviar</button>
         </div>
 
       </div>
@@ -215,7 +215,7 @@
                 </select>
             </label>
             <div class="padding">
-                <button class="button button-block button-positive" ng-disabled=""  on-tap="vm.onTapSendFoneclubeData()">Enviar</button>
+                <button class="button button-block button-positive" ng-disabled="vm.requesting"  on-tap="vm.onTapSendFoneclubeData()">Enviar</button>
             </div>
             <!--<div class="item item-divider">
                 Qual operadora(s) vai usar no Foneclube?

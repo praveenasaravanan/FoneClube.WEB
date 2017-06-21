@@ -1,6 +1,7 @@
 <ion-modal-view ng-controller="NewCardPaymentModalController as vm">
     <ion-header-bar class="bar bar-header bar-positive">
-        <h1 class="title">Pagar com novo cartão</h1>
+        <h1 class="title" ng-if="!vm.etapaConfirmacao">Pagar com novo cartão</h1>
+        <h1 class="title" ng-if="vm.etapaConfirmacao">Confirmação de pagamento</h1>
         <button class="button button-clear button-primary" ng-click="modal.hide()">Fechar</button>
     </ion-header-bar>
 
@@ -46,7 +47,7 @@
                 <span class="input-label">Observação: </span>
                 <input ng-model="vm.comment" type="text">
             </label>
-            <button on-tap="vm.onTapConfirmarPagamento()" ng-disabled="vm.comment.length == 0 || vm.disableTapPay || vm.disablePagarButton || vm.amount.length == 0 || vm.cardHolderName.length == 0 || vm.cardNumber.length == 0 || vm.cardExpirationMonth.length < 2 || vm.cardExpirationYear.length < 2 || vm.cardCVV.length < 3" class="button button-block button-positive">
+            <button on-tap="vm.onTapConfirmarPagamento()" ng-disabled="vm.comment.length == 0 || vm.disableTapPay || vm.disablePagarButton || vm.amount.length == 0 || vm.cardHolderName.length == 0 || vm.cardNumber.length == 0 || vm.cardExpirationMonth.length < 2 || vm.cardExpirationYear.length < 2 || vm.cardCVV.length < 3" class="button button-block button-dark">
                 Cobrar
             </button>
            
@@ -85,7 +86,7 @@
                 <h2>{{vm.statusTransaction}}</h2>
             </div>
             <div ng-if="vm.disableTapPay || !vm.cobrancaRealizada">
-                <button on-tap="vm.onTapPagar()" class="button button-block button-dark" ng-disabled="vm.disableTapPay">
+                <button on-tap="vm.onTapPagar()" class="button button-block button-balanced" ng-disabled="vm.disableTapPay">
                     Cobrar
                 </button>
                 <button on-tap="vm.onTapCancel()" class="button button-block button-dark" ng-disabled="vm.disableTapPay">
