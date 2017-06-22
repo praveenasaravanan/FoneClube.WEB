@@ -309,7 +309,7 @@
         function etapaEnderecoFaseOutrosCampos(){
             vm.etapaOutrosCampos = true;
             vm.etapaBuscarCEP = false;
-            
+
             vm.requesting = false;
         }
 
@@ -317,7 +317,7 @@
             vm.buscar = false;
             vm.enviar = true;
             vm.showName = true;
-            
+
             vm.requesting = false;
         }
 
@@ -330,21 +330,21 @@
             limpaEtapas();
             vm.etapaBuscarCEP = true;
             vm.etapaEndereco = true;
-            
+
             vm.requesting = false;
         }
 
         function etapaDadosPessoais(){
             limpaEtapas();
             vm.etapaDadosPessoais = true;
-            
+
             vm.requesting = false;
         }
 
         function etapaComplementar(){
             limpaEtapas();
             vm.etapaComplementar = true;
-            
+
             vm.requesting = false;
         }
 
@@ -715,7 +715,7 @@
             var contactParent = clearPhoneNumber(vm.contactParent);
             var plans = [];
             var phones = [];
-            
+
             //validação de campos obrigatorios
             for (var i=0; i < vm.phoneNumbersView.length; i++) {
                 if(vm.phoneNumbersView[i].Nickname == '') {
@@ -750,8 +750,8 @@
                 || clearPhoneNumber(element.Number).toString() != '' || clearPhoneNumber(element.Number).toString() != undefined)
                 {
                     phones.push({
-                        'DDD': clearPhoneNumber(element.DDD),
-                        'Number': clearPhoneNumber(element.Number),
+                        'DDD': clearPhoneNumber(element.DDD).trim(),
+                        'Number': clearPhoneNumber(element.Number).trim(),
                         'Portability': element.Portability,
                         'IsFoneclube': true,
                         'Nickname': element.Nickname,
@@ -779,7 +779,7 @@
                         title: 'Cadastro Realizado',
                         template: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.',
                         buttons: [
-                          { 
+                          {
                             text: 'Ir para Home',
                             type: 'button-positive',
                             onTap: function(e) {
@@ -798,7 +798,7 @@
                                         if(customerPlans.length > 0) {
                                             for(var i=0; i<customerPlans.length;i++){
                                                 valueTotal = valueTotal + customerPlans[i].Value;
-                                            }  
+                                            }
                                         }
                                         result.CacheIn = valueTotal;
                                         ViewModelUtilsService.showModalCustomer(result);
