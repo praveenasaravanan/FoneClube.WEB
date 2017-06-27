@@ -277,10 +277,13 @@
             };
             
             //Remove os atributos falsy
-            for (var key in personCheckout.Images) {
-                if (personCheckout.Images[key] == "" || !personCheckout.Images[key]) {
-                    personCheckout.Images.splice(key, 1);
+            for(var i = personCheckout.Images.length - 1; i >= 0; i--) {
+                if(personCheckout.Images[i] == "" || !personCheckout.Images[i]) {
+                    personCheckout.Images.splice(i, 1);
                 }
+            } 
+            if (personCheckout.Images.length == 0) {
+                delete personCheckout.Images
             }
 
             if(vm.personalDDD && personalPhone)
@@ -774,8 +777,7 @@
             });
 
             var personCheckout = {
-                    'DocumentNumber': cpf,
-                    'Email': vm.email,
+                    'DocumentNumber': cpf,  
                     'NameContactParent': vm.whoinvite,
                     'IdContactParent': contactParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
                     'Plans': plans,
@@ -799,6 +801,8 @@
                 }
             }
 
+            console.log('Enviado a API:');
+            console.log(personCheckout);
             FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
                 console.log(result);
                 if(result)
