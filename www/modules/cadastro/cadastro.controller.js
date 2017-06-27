@@ -210,19 +210,24 @@
             var cpf = vm.cpf.replace(/[-.,]/g , '');
 
             var personCheckout = {
-                    'DocumentNumber': cpf,
-                    'Adresses': [
-                        {
-                        'Street': vm.street,
-                        'Complement': vm.complement,
-                        'StreetNumber': vm.street_number,
-                        'Neighborhood': vm.neighborhood,
-                        'City': vm.city,
-                        'State': vm.uf,
-                        'Cep': vm.zipcode
-                        }
-                    ]
-                };
+                'DocumentNumber': cpf,
+                'Adresses': [
+                    {
+                    'Street': vm.street,
+                    'Complement': vm.complement,
+                    'StreetNumber': vm.street_number,
+                    'Neighborhood': vm.neighborhood,
+                    'City': vm.city,
+                    'State': vm.uf,
+                    'Cep': vm.zipcode
+                    }
+                ]
+            };
+            
+            //Remove os atributos falsy
+            if (personCheckout.Adresses[0].Complement == '' || !personCheckout.Adresses[0].Complement) {
+                delete personCheckout.Adresses[0].Complement;
+            }
 
             FoneclubeService.postUpdatePersonAdress(personCheckout).then(function(result){
                 console.log(result);
@@ -270,6 +275,13 @@
                 'Email': vm.email,
                 'Images': [selfiePhotoName, frontPhotoName, versePhotoName]
             };
+            
+            //Remove os atributos falsy
+            for (var key in personCheckout.Images) {
+                if (personCheckout.Images[key] == "" || !personCheckout.Images[key]) {
+                    personCheckout.Images.splice(key, 1);
+                }
+            }
 
             if(vm.personalDDD && personalPhone)
             {
@@ -749,9 +761,10 @@
                 if(clearPhoneNumber(element.DDD).toString() != '' || clearPhoneNumber(element.DDD).toString() == undefined
                 || clearPhoneNumber(element.Number).toString() != '' || clearPhoneNumber(element.Number).toString() != undefined)
                 {
+                    
                     phones.push({
-                        'DDD': clearPhoneNumber(element.DDD).trim(),
-                        'Number': clearPhoneNumber(element.Number).trim(),
+                        'DDD': clearPhoneNumber(element.DDD),
+                        'Number': clearPhoneNumber(element.Number),
                         'Portability': element.Portability,
                         'IsFoneclube': true,
                         'Nickname': element.Nickname,
@@ -769,6 +782,22 @@
                     'IdCurrentOperator': vm.operator,
                     'Phones': phones
             };
+            
+            //Remove os atributos falsy
+            for (var key in personCheckout) {
+                if (!personCheckout[key]) {
+                    delete personCheckout[key];
+                }
+                if (personCheckout[key] && personCheckout[key].constructor === Array) {
+                    for (var i in personCheckout[key]) {
+                        for (var x in personCheckout[key][i]) {
+                            if (!personCheckout[key][i][x]) {
+                                delete personCheckout[key][i][x];
+                            }
+                        }
+                    }    
+                }
+            }
 
             FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
                 console.log(result);
@@ -825,13 +854,12 @@
         function onTapNewPhoneNumber() {
             vm.phoneNumbersView.push(
                 {
-                    'Portabilidade': false,
-                    'OperadoraAntiga': '',
-                    'Nickname': '',
                     'DDD': '',
                     'Number': '',
                     'plan': '',
-                    'IsFoneclube': true
+                    'IsFoneclube': true,
+                    'Portability': false,
+                    'Nickname': ''
                 }
             );
         }
@@ -847,7 +875,7 @@
 
         //remove () - < > do numero de telefone
         function clearPhoneNumber(number) {
-            return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : ' ';
+            return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : '';
         }
 
         function onTapCancel(){
