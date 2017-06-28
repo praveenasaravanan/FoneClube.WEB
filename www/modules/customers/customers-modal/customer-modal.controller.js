@@ -94,8 +94,10 @@
             if (confirm('Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?')) {
                 FoneclubeService.postDeletePerson(personCheckout).then(function(result){
                     console.log(result);
-                    if(result)
+                    if(result){
                         alert('Usuário foi removido com sucesso, no próximo carregamento da lista ele não será mais exibido')
+                        ViewModelUtilsService.modalCustomer.hide();
+                    }                       
                     else
                         alert('Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber)
                 })
