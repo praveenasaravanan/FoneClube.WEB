@@ -23,7 +23,8 @@
                         }
                     }
                     vm.customer.Plans = customerPlans;
-                    vm.customer = result;                 
+                    vm.customer = result; 
+
                 });
             });
             FoneclubeService.getPlans().then(function(result){
@@ -33,9 +34,27 @@
         };
         
 
-         function onTapSendUser(){
-            alert(JSON.stringify(costumer));
+         function onTapSendUser(customer){
+             FoneclubeService.postUpdatePerson(customer).then(function(result){
+                console.log(result);
+                if(result)
+                {
+                    etapaComplementar();
+                    MainComponents.alert({titulo:'Andamento',mensagem:'Dados pessoais enviados, agora preencha os dados Foneclube.'});
+                }
+
+                //post realizado com sucesso
+            })
+            .catch(function(error){
+                console.log('catch error');
+                console.log(error);
+                MainComponents.alert({mensagem:error.statusText});
+                vm.requesting = false;
+            });
+
         };
+
+      
        
 
     }

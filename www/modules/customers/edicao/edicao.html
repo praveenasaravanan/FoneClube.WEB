@@ -64,13 +64,13 @@
             </label>
             </div>
             
-            <div ng-repeat="phoneNumber in vm.customer.Phones"> 
+            <div ng-repeat="phoneNumber in vm.customer.Phones | filter: { IsFoneclube: 'true' }"> 
             <div class="item item-divider">
                 Linha {{$index + 1}}
             </div>
             <label class="item item-input item-icon-right">
                     <span class="input-label">Usuário/Apelido</span>
-                    <input ng-model="phoneNumber.Nickname" type="text">
+                    <input ng-model="phoneNumber.NickName" type="text">
                 </label>
                 <div class="item item-toggle">
                     Deseja Portabilidade?
@@ -93,8 +93,8 @@
                     <div class="input-label">
                         Plano
                     </div>
-                    <select ng-model="phoneNumber.IdPlanOption">
-                        <option ng-repeat="plan in vm.plans" value="{{plan.Id}}">{{plan.Description}}</option>
+                    <select ng-model="phoneNumber.IdPlanOption" ng-options="plan.Id as plan.Description for plan in vm.plans">
+                       
                     </select>
                 </label>
             </div>
