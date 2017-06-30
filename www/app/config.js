@@ -69,14 +69,10 @@
           }
         }
       })
-      .state('tabs.edicao', {
-        url: "/edicao",
-        views: {
-          'edicao-tab': {
-            templateUrl: "modules/edicao/edicao.html",
-            controller: 'EdicaoController as vm'
-          }
-        }
+      .state('edicao', {
+        url: "/edicao",       
+        templateUrl: "modules/customers/edicao/edicao.html",
+        controller: 'EdicaoController as vm'        
       })
 
 
