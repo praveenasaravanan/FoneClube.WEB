@@ -69,6 +69,15 @@
           }
         }
       })
+      .state('tabs.edicao', {
+        url: "/edicao",
+        views: {
+          'edicao-tab': {
+            templateUrl: "modules/edicao/edicao.html",
+            controller: 'EdicaoController as vm'
+          }
+        }
+      })
 
 
       $urlRouterProvider.otherwise('/');
