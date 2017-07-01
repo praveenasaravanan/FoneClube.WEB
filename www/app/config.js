@@ -72,7 +72,8 @@
       .state('edicao', {
         url: "/edicao",       
         templateUrl: "modules/customers/edicao/edicao.html",
-        controller: 'EdicaoController as vm'        
+        controller: 'EdicaoController as vm',
+        params: { data: null }      
       })
 
 

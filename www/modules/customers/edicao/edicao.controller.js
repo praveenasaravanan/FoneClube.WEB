@@ -5,13 +5,18 @@
         .module('foneClub')
         .controller('EdicaoController', EdicaoController);
 
-    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils'];
-    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils) {
+    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService'];
+    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService) {
         var vm = this;
         vm.onTapSendUser = onTapSendUser;
-        vm.cpf = "51823413854"
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
+        vm.id = $stateParams.data ? $stateParams.data.Id : '';
         init();
+        
         function init(){
+            /*if (!vm.cpf) {
+                FlowManagerService.changeCustomers;
+            }*/
             FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
                 console.log(result);
                 vm.customer = result;
@@ -24,7 +29,6 @@
                     }
                     vm.customer.Plans = customerPlans;
                     vm.customer = result; 
-
                 });
             });
             FoneclubeService.getPlans().then(function(result){
@@ -32,18 +36,16 @@
                 vm.plans = result;                
             })
         };
-        
 
-         function onTapSendUser(customer){
-             FoneclubeService.postUpdatePerson(customer).then(function(result){
-                console.log(result);
-                if(result)
-                {
-                    etapaComplementar();
-                    MainComponents.alert({titulo:'Andamento',mensagem:'Dados pessoais enviados, agora preencha os dados Foneclube.'});
-                }
-
-                //post realizado com sucesso
+        function onTapSendUser(customer){
+            FoneclubeService.postUpdatePerson(customer).then(function(result){
+            console.log(result);
+            if(result)
+            {
+                etapaComplementar();
+                MainComponents.alert({titulo:'Andamento',mensagem:'Dados pessoais enviados, agora preencha os dados Foneclube.'});
+            }
+            //post realizado com sucesso
             })
             .catch(function(error){
                 console.log('catch error');
@@ -51,11 +53,6 @@
                 MainComponents.alert({mensagem:error.statusText});
                 vm.requesting = false;
             });
-
         };
-
-      
-       
-
     }
 })();
