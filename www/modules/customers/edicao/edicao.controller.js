@@ -9,17 +9,24 @@
     function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService) {
         var vm = this;
         vm.onTapSendUser = onTapSendUser;
+        vm.validateData = validateData;
+        vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
+        vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
+        
         vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
         vm.id = $stateParams.data ? $stateParams.data.Id : '';
+        vm.requesting = true;
         init();
         
         function init(){
-            /*if (!vm.cpf) {
-                FlowManagerService.changeCustomers;
-            }*/
+            if (!vm.cpf) {
+                FlowManagerService.changeCustomers();
+                return;
+            }
             FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
-                console.log(result);
                 vm.customer = result;
+                vm.customer.Born = getFormatedDate(vm.customer.Born);
+                vm.requesting = false; // mover para a promessa de baixo, ou remover-la
                 FoneclubeService.getCustomerPlans(vm.cpf).then(function(customerPlans){
                     var valueTotal = 0;
                     if(customerPlans.length > 0) {
@@ -28,16 +35,90 @@
                         }
                     }
                     vm.customer.Plans = customerPlans;
-                    vm.customer = result; 
+                    //vm.customer = result; 
                 });
             });
             FoneclubeService.getPlans().then(function(result){
-                console.log(result)
-                vm.plans = result;                
-            })
+                vm.plans = result;
+            });
         };
 
+        function getFormatedDate(param) {
+            var date = new Date(param);
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            if (day < 10) {day = "0" + day;}
+            if (month < 10) {month = "0" + month;}
+            return day + '/' + month + '/' + year;
+        }
+        
+        function validateData() {
+            if (vm.requesting) {return true}
+            if(
+                vm.customer.DocumentNumber.length < 11
+                || vm.customer.Born.length < 10
+                || vm.customer.Name.length == 0
+                || vm.customer.Adresses[0].Cep.length < 9
+                || vm.customer.Adresses[0].Street.length == 0
+                || vm.customer.Adresses[0].StreetNumber.length == 0
+                || vm.customer.Adresses[0].Neighborhood.length == 0
+                || vm.customer.Adresses[0].City.length == 0
+                || vm.customer.Adresses[0].State.length == 0
+                || vm.customer.Email.length == 0
+            ) {
+                return true;
+            }
+            for (var i=0; i < vm.customer.Phones.length; i++) {
+                if (vm.customer.Phones[i].IsFoneclube) {
+                    if (!vm.customer.Phones[i].Delete) {
+                        if(!vm.customer.Phones[i].NickName) {
+                            return true;
+                        }
+                        if(vm.customer.Phones[i].IdPlanOption == 0) {
+                            return true;
+                        } 
+                    }
+                } else {
+                    if(vm.customer.Phones[i].DDD.length == 0) {
+                        return true;
+                    }
+                    if(vm.customer.Phones[i].Number.length < 9) {
+                        return true;
+                    } 
+                }
+            }
+            return false;
+        }
+        
+        function onTapRemoveNewNumber(position){
+            /*var i = MainComponents.infoAlert(
+            {
+                mensagem: 'teste'
+            });*/
+            vm.customer.Phones[position].Delete = true;
+        }
+        
+        function onTapNewPhoneNumber() {
+            vm.customer.Phones.push(
+                {
+                    'DDD': '',
+                    'Delete': null,
+                    'Id': null,
+                    'IdOperator': 0,
+                    'IdPlanOption': 0,
+                    'Inative': null,
+                    'IsFoneclube': true,
+                    'NickName': '',
+                    'Number': '',
+                    'Portability': false
+                }
+            );
+        }
+        
         function onTapSendUser(customer){
+            vm.requesting = true;
+            //tratar aqui o objeto que será enviado a API
             FoneclubeService.postUpdatePerson(customer).then(function(result){
             console.log(result);
             if(result)
@@ -46,6 +127,7 @@
                 MainComponents.alert({titulo:'Andamento',mensagem:'Dados pessoais enviados, agora preencha os dados Foneclube.'});
             }
             //post realizado com sucesso
+            vm.requesting = false;
             })
             .catch(function(error){
                 console.log('catch error');
