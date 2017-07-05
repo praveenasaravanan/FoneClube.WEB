@@ -118,20 +118,38 @@
         
         function onTapSendUser(customer){
             vm.requesting = true;
-            //tratar aqui o objeto que será enviado a API
-            FoneclubeService.postUpdatePerson(customer).then(function(result){
-            console.log(result);
-            if(result)
-            {
-                etapaComplementar();
-                MainComponents.alert({titulo:'Andamento',mensagem:'Dados pessoais enviados, agora preencha os dados Foneclube.'});
+            
+            var customerSend = {
+                "Id": customer.Id,
+                "DocumentNumber": customer.DocumentNumber,
+                "Register": customer.Register,
+                "Name": customer.Name,
+                "NickName": customer.NickName,
+                "Email": customer.Email,
+                "Born": customer.Born,
+                "Gender": customer.Gender,
+                "IdPlanOption": customer.IdPlanOption,
+                "IdPagarme": customer.IdPagarme,
+                "IdRole": customer.IdRole,
+                "IdCurrentOperator": customer.IdCurrentOperator,
+                "Adresses": customer.Adresses,
+                "Phones": customer.Phones,
+                "Images": customer.Images,
+                "IdParent": customer.IdParent,
+                "IdContactParent": customer.IdContactParent,
+                "NameContactParent": customer.NameContactParent,
+                "IdCommissionLevel": customer.IdCommissionLevel
             }
-            //post realizado com sucesso
-            vm.requesting = false;
-            })
-            .catch(function(error){
-                console.log('catch error');
-                console.log(error);
+            
+            FoneclubeService.postUpdateCustomer(customer).then(function(result){
+                if(result) {
+                    MainComponents.alert({
+                        titulo:'Edição',
+                        mensagem:'Todos dados pessoais enviados, edição Foneclube feita com sucesso.'
+                    });
+                }
+                vm.requesting = false;
+            }).catch(function(error){
                 MainComponents.alert({mensagem:error.statusText});
                 vm.requesting = false;
             });

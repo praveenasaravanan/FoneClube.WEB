@@ -17,11 +17,12 @@
         //var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         this.postBasePerson = postBasePerson;
-        this.postUpdatePerson = postUpdatePerson;
+        //this.postUpdatePerson = postUpdatePerson; verificar depois
         this.postUpdatePersonAdress = postUpdatePersonAdress;
         this.postCheckout = postCheckout;
         this.postHistoryPayment = postHistoryPayment;
         this.postDeletePerson = postDeletePerson;
+        this.postUpdateCustomer = postUpdateCustomer;
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
         this.getOperators = getOperators;
@@ -105,6 +106,21 @@
             HTTPService.post(urlApi.concat('/profile/charging/insert'), personCharging)
             .then(function(result){
                 q.resolve(result);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+
+            return q.promise;
+        }
+        
+        function postUpdateCustomer(customer){
+            var q = $q.defer();
+
+            HTTPService.post(urlApi.concat('/profile/customer/update'), customer)
+            .then(function(data, status, headers, config){
+                debugger;
+                q.resolve(data);
             })
             .catch(function(error){
                 q.reject(error);
