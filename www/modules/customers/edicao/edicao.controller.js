@@ -144,7 +144,12 @@
                 "IdCommissionLevel": customer.IdCommissionLevel
             }
             
-            FoneclubeService.postUpdateCustomer(customer).then(function(result){
+            for (var i=0; i < customerSend.Phones.length; i++) {
+                customerSend.Phones[i].DDD = clearPhoneNumber(customerSend.Phones[i].DDD);
+                customerSend.Phones[i].Number = clearPhoneNumber(customerSend.Phones[i].Number);
+            }
+            
+            FoneclubeService.postUpdateCustomer(customerSend).then(function(result){
                 if(result) {
                     MainComponents.alert({
                         titulo:'Edição',
@@ -157,5 +162,9 @@
                 vm.requesting = false;
             });
         };
+
+        function clearPhoneNumber(number) {
+            return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : '';
+        }
     }
 })();
