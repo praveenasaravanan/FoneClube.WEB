@@ -14,7 +14,6 @@
         vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
         
         vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
-        vm.id = $stateParams.data ? $stateParams.data.Id : '';
         vm.requesting = true;
         init();
         
@@ -26,6 +25,9 @@
             FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
                 vm.customer = result;
                 vm.customer.Born = getFormatedDate(vm.customer.Born);
+                for(var i=0; i < vm.customer.Adresses.length;i++){
+                    vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber);
+                }
                 vm.requesting = false; // mover para a promessa de baixo, ou remover-la
                 FoneclubeService.getCustomerPlans(vm.cpf).then(function(customerPlans){
                     var valueTotal = 0;
@@ -66,6 +68,7 @@
                 || vm.customer.Adresses[0].City.length == 0
                 || vm.customer.Adresses[0].State.length == 0
                 || vm.customer.Email.length == 0
+                || vm.customer.Phones.length == 1
             ) {
                 return true;
             }

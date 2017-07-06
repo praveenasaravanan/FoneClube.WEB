@@ -118,8 +118,7 @@
             var q = $q.defer();
 
             HTTPService.post(urlApi.concat('/profile/customer/update'), customer)
-            .then(function(data, status, headers, config){
-                debugger;
+            .then(function(data){
                 q.resolve(data);
             })
             .catch(function(error){
