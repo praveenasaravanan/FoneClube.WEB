@@ -5,12 +5,13 @@
         .module('foneClub')
         .controller('CustomerModalController', CustomerModalController);
 
-    CustomerModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'FoneclubeService', 'MainComponents'];
-    function CustomerModalController(ViewModelUtilsService, PagarmeService, FoneclubeService, MainComponents) {
+    CustomerModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'FoneclubeService', 'MainComponents', 'FlowManagerService'];
+    function CustomerModalController(ViewModelUtilsService, PagarmeService, FoneclubeService, MainComponents, FlowManagerService) {
         var vm = this;
         vm.onTapNewCardPayment = onTapNewCardPayment;
         vm.onTapBoleto = onTapBoleto;
         vm.onTapCard = onTapCard;
+        vm.onTapEditar = onTapEditar;
         vm.onTapExcluir = onTapExcluir;
 
         var customer = ViewModelUtilsService.modalCustomerData;
@@ -233,14 +234,19 @@
 
         }
 
-        function etapaEscolhaCartao(){
+        function etapaEscolhaCartao() {
             vm.etapaEscolhaCartao = true;
             vm.etapaQuantia = false;
         }
 
-        function etapaQuantia(){
+        function etapaQuantia() {
             vm.etapaEscolhaCartao = false;
             vm.etapaQuantia = true;
+        }
+        
+        function onTapEditar() {
+            FlowManagerService.changeEdicaoView(customer);
+            ViewModelUtilsService.modalCustomer.hide();
         }
 
     }
