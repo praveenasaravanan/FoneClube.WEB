@@ -56,8 +56,8 @@
         }
         
         function validateData() {
-            if (vm.requesting) {return true}
-            if(
+            if (vm.requesting || vm.customer.DocumentNumber.length < 11) {return true}
+            /*if(
                 vm.customer.DocumentNumber.length < 11
                 || vm.customer.Born.length < 10
                 || vm.customer.Name.length == 0
@@ -89,7 +89,7 @@
                         return true;
                     } 
                 }
-            }
+            }*/
             return false;
         }
         
