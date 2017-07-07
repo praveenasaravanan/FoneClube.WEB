@@ -27,6 +27,11 @@
             });
         }
 
+        // FireBaseManagerUtil.addUser({
+        //     user:'Gustavo',
+        //     password:'123gustavo'
+        // });
+
         function addUser(user){
             users.$add(user);
         }
