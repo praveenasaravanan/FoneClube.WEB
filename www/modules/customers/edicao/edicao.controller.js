@@ -151,10 +151,30 @@
             
             FoneclubeService.postUpdateCustomer(customerSend).then(function(result){
                 if(result) {
-                    MainComponents.alert({
-                        titulo:'Edição',
-                        mensagem:'Todos dados pessoais enviados, edição Foneclube feita com sucesso.'
-                    });
+                    FlowManagerService.changeHomeView();
+                    var params = {
+                        title: 'Edição Realizada',
+                        template: 'Todos dados pessoais enviados, edição Foneclube feita com sucesso.',
+                        buttons: [
+                            {
+                                text: 'Ir para Home',
+                                type: 'button-positive',
+                                onTap: function(e) {
+
+                                }
+                            },
+                            {
+                                text: 'Visualizar Cliente',
+                                type: 'button-positive',
+                                onTap: function(e) {
+                                    FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
+                                        ViewModelUtilsService.showModalCustomer(result);
+                                    });
+                                }
+                            }
+                        ]
+                    }
+                    MainComponents.show(params);
                 }
                 vm.requesting = false;
             }).catch(function(error){
