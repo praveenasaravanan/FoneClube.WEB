@@ -17,7 +17,7 @@
         //var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         this.postBasePerson = postBasePerson;
-        //this.postUpdatePerson = postUpdatePerson; verificar depois
+        this.postUpdatePerson = postUpdatePerson;
         this.postUpdatePersonAdress = postUpdatePersonAdress;
         this.postCheckout = postCheckout;
         this.postHistoryPayment = postHistoryPayment;

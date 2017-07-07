@@ -68,7 +68,6 @@
                 || vm.customer.Adresses[0].City.length == 0
                 || vm.customer.Adresses[0].State.length == 0
                 || vm.customer.Email.length == 0
-                || vm.customer.Phones.length == 1
             ) {
                 return true;
             }
