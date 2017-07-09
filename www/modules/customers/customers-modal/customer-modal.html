@@ -12,10 +12,17 @@
         </div>
 
         <div class="padding">
-            <button class="button button-block button-positive" ng-disabled=""  on-tap="vm.onTapNewCardPayment()">Cobrança com novo cartão</button>
-            <button class="button button-block button-positive" ng-disabled=""  on-tap="vm.onTapBoleto()">Cobrança com boleto</button>
-            <button on-tap="vm.onTapEditar()" class="button button-block button-positive">Editar cliente</button>
-            <button on-tap="vm.onTapExcluir()" class="button button-block button-assertive">Excluir cliente</button>
+            <div class="row">
+                <button class="button button-block button-positive" on-tap="vm.onTapOrdemServico()">Cadastrar Odem de Serviço</button>
+            </div>
+            <div class="row">
+                <button class="button button-block button-positive" on-tap="vm.onTapNewCardPayment()" style="margin-right:10px">Cobrança com novo cartão</button>
+                <button class="button button-block button-positive" on-tap="vm.onTapBoleto()" style="margin-left:10px">Cobrança com boleto</button>
+            </div>
+            <div class="row">
+                <button on-tap="vm.onTapEditar()" class="button button-block button-positive" style="margin-right:10px">Editar cliente</button>
+                <button on-tap="vm.onTapExcluir()" class="button button-block button-assertive" style="margin-left:10px">Excluir cliente</button>
+            </div>
         </div>
 
         <!--<ul class="list">

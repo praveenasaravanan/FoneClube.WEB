@@ -12,7 +12,8 @@
         this.changeHomeView = changeHomeView;
         this.changeCheckoutView = changeCheckoutView;
         this.changeEdicaoView = changeEdicaoView;
-        this.changeCustomers = changeCustomers;
+        this.changeCustomersView = changeCustomersView;
+        this.changeOrdemServicoView = changeOrdemServicoView;
 
         function changeLoginView(){
             LocationService.change('login');
@@ -30,8 +31,12 @@
             LocationService.change('edicao', param);
         }
         
-        function changeCustomers(){
+        function changeCustomersView(){
             LocationService.change('tabs.customers');
+        }
+        
+        function changeOrdemServicoView(){
+            LocationService.change('ordemservico');
         }
     }
 })();

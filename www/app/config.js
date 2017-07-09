@@ -75,7 +75,12 @@
         controller: 'EdicaoController as vm',
         params: { data: null }      
       })
-
+      .state('ordemservico', {
+        url: "/ordemservico",       
+        templateUrl: "modules/customers/ordem-servico/ordemservico.html",
+        controller: 'OrdemServico as vm',
+        params: { data: null }      
+      })
 
       $urlRouterProvider.otherwise('/');
       configErrorHandler($provide);

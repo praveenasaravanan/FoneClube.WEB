@@ -19,7 +19,7 @@
         
         function init(){
             if (!vm.cpf) {
-                FlowManagerService.changeCustomers();
+                FlowManagerService.changeCustomersView();
                 return;
             }
             FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
