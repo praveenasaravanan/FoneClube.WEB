@@ -12,7 +12,7 @@
         this.changeHomeView = changeHomeView;
         this.changeCheckoutView = changeCheckoutView;
         this.changeEdicaoView = changeEdicaoView;
-        this.changeCustomers = changeCustomers;
+        this.changeCustomersView = changeCustomersView;
 
         function changeLoginView(){
             LocationService.change('login');
@@ -30,7 +30,7 @@
             LocationService.change('edicao', param);
         }
         
-        function changeCustomers(){
+        function changeCustomersView(){
             LocationService.change('tabs.customers');
         }
     }

@@ -19,7 +19,7 @@
         
         function init(){
             if (!vm.cpf) {
-                FlowManagerService.changeCustomers();
+                FlowManagerService.changeCustomersView();
                 return;
             }
             FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
@@ -150,7 +150,7 @@
             
             FoneclubeService.postUpdateCustomer(customerSend).then(function(result){
                 if(result) {
-                    FlowManagerService.changeHomeView();
+                    FlowManagerService.changeCustomersView();
                     var params = {
                         title: 'Edição Realizada',
                         template: 'Todos dados pessoais enviados, edição Foneclube feita com sucesso.',
