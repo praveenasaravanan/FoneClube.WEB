@@ -299,7 +299,7 @@
             /**var selfiePhotoName = '';
             var frontPhotoName = '';
             var versePhotoName = ''; */
-            console.log(personCheckout)
+            console.log(personCheckout);
 
             FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
                 console.log(result);
@@ -730,6 +730,8 @@
             var contactParent = clearPhoneNumber(vm.contactParent);
             var plans = [];
             var phones = [];
+            
+            var totalPriceValidade = 0;
 
             //validação de campos obrigatorios
             for (var i=0; i < vm.phoneNumbersView.length; i++) {
@@ -738,21 +740,26 @@
                     vm.requesting = false;
                     return;
                 }
-                /*if (vm.phoneNumbersView[i].DDD.length == 0) {
-                    MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'DDD é um campo obrigatório.'});
-                    vm.requesting = false;
-                    return;
-                }
-                if (vm.phoneNumbersView[i].Number.length == 0) {
-                    MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'Telefone é um campo obrigatório.'});
-                    vm.requesting = false;
-                    return;
-                }*/
                 if(vm.phoneNumbersView[i].plan == '') {
                     MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'A escolha do plano é obrigatória.'});
                     vm.requesting = false;
                     return;
+                } else {
+                    vm.plans.find(function (element, index, array) {
+                        if (element.Id == vm.phoneNumbersView[i].plan) {
+                            totalPriceValidade = totalPriceValidade + element.Value / 100;
+                        }
+                    });
                 }
+            }
+            if (vm.singlePrice) {
+                var price = parseFloat(vm.singlePrice) / 100;
+                if (price > totalPriceValidade) {
+                    MainComponents.alert({mensagem:'Preço único não pode ser maior do que o preço de todos os planos somados.'});
+                    vm.requesting = false;
+                    return
+                }
+                
             }
 
             vm.phoneNumbersView.forEach(function (element, index, array) {
@@ -782,7 +789,9 @@
                     'IdContactParent': contactParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
                     'Plans': plans,
                     'IdCurrentOperator': vm.operator,
-                    'Phones': phones
+                    'Phones': phones,
+                    'SinglePrice': vm.singlePrice,
+                    'DescriptionSinglePrice': vm.descriptionSinglePrice
             };
             
             //Remove os atributos falsy
@@ -826,16 +835,21 @@
                             onTap: function(e) {
                                 console.log('Realizar cobrança.');
                                 FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
-                                    FoneclubeService.getCustomerPlans(vm.cpf).then(function(customerPlans){
-                                        var valueTotal = 0;
-                                        if(customerPlans.length > 0) {
-                                            for(var i=0; i<customerPlans.length;i++){
-                                                valueTotal = valueTotal + customerPlans[i].Value;
-                                            }
-                                        }
+                                    if(vm.singlePrice) {
                                         result.CacheIn = valueTotal;
                                         ViewModelUtilsService.showModalCustomer(result);
-                                    });
+                                    } else {
+                                        FoneclubeService.getCustomerPlans(vm.cpf).then(function(customerPlans){
+                                            var valueTotal = 0;
+                                            if(customerPlans.length > 0) {
+                                                for(var i=0; i<customerPlans.length;i++){
+                                                    valueTotal = valueTotal + customerPlans[i].Value;
+                                                }
+                                            }
+                                            result.CacheIn = valueTotal;
+                                            ViewModelUtilsService.showModalCustomer(result);
+                                        });
+                                    }
                                 });
                             }
                           }

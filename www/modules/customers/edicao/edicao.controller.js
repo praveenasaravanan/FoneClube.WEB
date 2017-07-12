@@ -57,6 +57,21 @@
         
         function validateData() {
             if (vm.requesting || vm.customer.DocumentNumber.length < 11) {return true}
+            
+            var totalPriceValidade = 0;
+            for (var i in vm.customer.Phones) {
+                vm.plans.find(function (element, index, array) {
+                    if (element.Id == vm.customer.Phones[i].IdPlanOption) {
+                        totalPriceValidade = totalPriceValidade + element.Value / 100;
+                    }
+                });
+            }
+            if (vm.customer.SinglePrice) {
+                if ((vm.customer.SinglePrice / 100) > totalPriceValidade) {
+                    return true;
+                }
+            }
+
             /*if(
                 vm.customer.DocumentNumber.length < 11
                 || vm.customer.Born.length < 10
@@ -140,7 +155,9 @@
                 "IdParent": customer.IdParent,
                 "IdContactParent": customer.IdContactParent,
                 "NameContactParent": customer.NameContactParent,
-                "IdCommissionLevel": customer.IdCommissionLevel
+                "IdCommissionLevel": customer.IdCommissionLevel,
+                "SinglePrice": customer.SinglePrice,
+                "DescriptionSinglePrice": customer.DescriptionSinglePrice
             }
             
             for (var i=0; i < customerSend.Phones.length; i++) {
