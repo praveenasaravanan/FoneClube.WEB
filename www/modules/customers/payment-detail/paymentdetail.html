@@ -1,0 +1,29 @@
+<ion-modal-view ng-controller="PaymentDetailController as vm">
+    <ion-header-bar class="bar bar-header bar-positive">
+        <h1 class="title">Detalhe de cobrança</h1>
+        <button class="button button-clear button-primary" ng-click="modal.hide()">Fechar</button>
+    </ion-header-bar>
+    <ion-content class="padding">
+
+        <div class="text-center">
+            <h3 style="text-align: center;">{{vm.customer.Name}}</h3>
+        </div>
+        
+        <div class="item item-divider" style="margin-top: 60px;">
+            Hitórico de cobrança
+        </div>
+
+        <ul class="list">
+            <a class="item">
+                <div>
+                    <p>Data e hora: <strong>{{vm.history.PaymentDate}}.</strong> </p>
+                    <p style="text-overflow: clip; white-space: normal;">Comentário: <strong>{{vm.history.Comment}}.</strong> </p>
+                    <p>Valor: <strong>{{vm.history.Ammount / 100 }} R$ </strong> </p>
+                    <p>Tipo: <strong>{{vm.history.descriptionType}} </strong> </p>
+                    <p>Agente: <strong>{{vm.history.CollectorName }} </strong> </p>
+                    <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{vm.history.StatusPayment }} </strong> </p>
+                </div>
+            </a>
+        </ul>
+    </ion-content>
+</ion-modal-view>

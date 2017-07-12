@@ -19,6 +19,7 @@
         this.modalExistentCardPaymentData = {};
         this.modalExistentCardData = {};
         this.showModalExistentCardPayment = showModalExistentCardPayment;
+        this.showModalPaymentHistoryDetail = showModalPaymentHistoryDetail;
 
         this.modalData = {};
         this.showModal = showModal;
@@ -76,7 +77,7 @@
             });
         }
 
-           function showModalBoleto(data){
+       function showModalBoleto(data){
             this.modalBoletoData = data;           
             var service = this;
 
@@ -85,6 +86,19 @@
             }).then(function(modal) {
                 service.modalBoleto = modal;
                 service.modalBoleto.show();
+            });
+        }
+        
+        function showModalPaymentHistoryDetail(history, customer) {
+            this.modalPaymentDetailHistory = history;
+            this.modalPaymentDetailCustomer = customer;
+            var service = this;
+
+            $ionicModal.fromTemplateUrl('modules/customers/payment-detail/paymentdetail.html', {
+                scope: null
+            }).then(function(modal) {
+                service.modalPaymentDetail = modal;
+                service.modalPaymentDetail.show();
             });
         }
 

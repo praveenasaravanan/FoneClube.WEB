@@ -13,6 +13,7 @@
         vm.onTapCard = onTapCard;
         vm.onTapEditar = onTapEditar;
         vm.onTapExcluir = onTapExcluir;
+        vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
 
         var customer = ViewModelUtilsService.modalCustomerData;
         vm.customer = customer;
@@ -247,6 +248,10 @@
         function onTapEditar() {
             FlowManagerService.changeEdicaoView(customer);
             ViewModelUtilsService.modalCustomer.hide();
+        }
+        
+        function onTapPaymentHistoryDetail(history) {
+            ViewModelUtilsService.showModalPaymentHistoryDetail(history, vm.customer);
         }
 
     }
