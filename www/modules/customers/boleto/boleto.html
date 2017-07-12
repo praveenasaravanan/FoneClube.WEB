@@ -39,8 +39,7 @@
 
             <ul class="list">
                 <a class="item" ng-repeat="history in vm.customer.histories|limitTo:1">
-
-                    <div>
+                    <div ng-click="vm.onTapPaymentHistoryDetail(history);">
                         <p>Data e hora: <strong>{{history.PaymentDate}}.</strong> </p>
                         <p>Comentário: <strong>{{history.Comment}}.</strong> </p>
                         <p>Valor: <strong>{{history.Ammount / 100 }} R$ </strong> </p>

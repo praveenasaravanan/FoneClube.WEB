@@ -18,6 +18,7 @@
         vm.onTapPagar = onTapPagar;
         vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
         vm.onTapCancel = onTapCancel;
+        vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
 
         vm.etapaDados = true;
 
@@ -245,6 +246,10 @@
             }
 
 
+        }
+        
+        function onTapPaymentHistoryDetail(history) {
+            ViewModelUtilsService.showModalPaymentHistoryDetail(history, vm.customer);
         }
 
 

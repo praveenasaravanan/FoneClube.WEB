@@ -21,6 +21,7 @@
         vm.onTapPagar = onTapPagar;
         vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
         vm.onTapCancel = onTapCancel;
+        vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
 
         var existentCustomer = {
                     'name' : customer.Name,
@@ -175,6 +176,10 @@
 
                 }
             }
+        }
+        
+        function onTapPaymentHistoryDetail(history) {
+            ViewModelUtilsService.showModalPaymentHistoryDetail(history, vm.customer);
         }
 
     }

@@ -25,6 +25,7 @@
         vm.onTapPagar = onTapPagar;
         vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
         vm.onTapCancel = onTapCancel;
+        vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
 
         if (vm.customer.CacheIn) {
             vm.amount = vm.customer.CacheIn;
@@ -154,6 +155,10 @@
 
                 }
             }
+        }
+        
+        function onTapPaymentHistoryDetail(history) {
+            ViewModelUtilsService.showModalPaymentHistoryDetail(history, vm.customer);
         }
 
     }
