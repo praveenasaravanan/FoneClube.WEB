@@ -23,6 +23,7 @@
         this.postHistoryPayment = postHistoryPayment;
         this.postDeletePerson = postDeletePerson;
         this.postUpdateCustomer = postUpdateCustomer;
+        this.postOrderServicePerson = postOrderServicePerson;
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
         this.getOperators = getOperators;
@@ -118,6 +119,20 @@
             var q = $q.defer();
 
             HTTPService.post(urlApi.concat('/profile/customer/update'), customer)
+            .then(function(data){
+                q.resolve(data);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+
+            return q.promise;
+        }
+        
+        function postOrderServicePerson(param) {
+            var q = $q.defer();
+
+            HTTPService.post(urlApi.concat('/profile/service/order/insert'), param)
             .then(function(data){
                 q.resolve(data);
             })

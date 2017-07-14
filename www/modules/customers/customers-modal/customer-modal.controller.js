@@ -251,7 +251,7 @@
         }
         
         function onTapOrdemServico() {
-            FlowManagerService.changeOrdemServicoView();
+            FlowManagerService.changeOrdemServicoView(customer);
             ViewModelUtilsService.modalCustomer.hide();
         }
 

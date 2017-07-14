@@ -35,8 +35,8 @@
             LocationService.change('tabs.customers');
         }
         
-        function changeOrdemServicoView(){
-            LocationService.change('ordemservico');
+        function changeOrdemServicoView(param){
+            LocationService.change('ordemservico', param);
         }
     }
 })();
