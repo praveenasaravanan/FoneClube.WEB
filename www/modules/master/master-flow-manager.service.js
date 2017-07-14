@@ -5,14 +5,16 @@
         .module('foneClub')
         .service('FlowManagerService', FlowManagerService);
 
-    FlowManagerService.inject = ['LocationService', 'FireBaseManagerUtil'];
-    function FlowManagerService(LocationService, FireBaseManagerUtil) {
+    FlowManagerService.inject = ['LocationService', 'FireBaseManagerUtil', '$window'];
+    function FlowManagerService(LocationService, FireBaseManagerUtil, $window) {
 
         this.changeLoginView = changeLoginView;
         this.changeHomeView = changeHomeView;
         this.changeCheckoutView = changeCheckoutView;
         this.changeEdicaoView = changeEdicaoView;
         this.changeCustomersView = changeCustomersView;
+        this.changeOrdemServicoView = changeOrdemServicoView;
+        this.goBack = goBack;
 
         function changeLoginView(){
             LocationService.change('login');
@@ -32,6 +34,14 @@
         
         function changeCustomersView(){
             LocationService.change('tabs.customers');
+        }
+        
+        function changeOrdemServicoView(param){
+            LocationService.change('ordemservico', param);
+        }
+        
+        function goBack() {
+            $window.history.back();
         }
     }
 })();

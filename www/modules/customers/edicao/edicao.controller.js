@@ -12,6 +12,7 @@
         vm.validateData = validateData;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
         vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
+        vm.goBack = goBack;
         
         vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
         vm.requesting = true;
@@ -28,8 +29,11 @@
                 for(var i=0; i < vm.customer.Adresses.length;i++){
                     vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber);
                 }
-                vm.requesting = false; // mover para a promessa de baixo, ou remover-la
-                FoneclubeService.getCustomerPlans(vm.cpf).then(function(customerPlans){
+                FoneclubeService.getPlans().then(function(result){
+                    vm.plans = result;
+                    vm.requesting = false; // mover para a promessa de baixo, ou remover-la
+                });
+                /*FoneclubeService.getCustomerPlans(vm.cpf).then(function(customerPlans){
                     var valueTotal = 0;
                     if(customerPlans.length > 0) {
                         for(var i=0; i<customerPlans.length;i++){
@@ -38,11 +42,9 @@
                     }
                     vm.customer.Plans = customerPlans;
                     //vm.customer = result; 
-                });
+                });*/
             });
-            FoneclubeService.getPlans().then(function(result){
-                vm.plans = result;
-            });
+            
         };
 
         function getFormatedDate(param) {
@@ -167,7 +169,6 @@
             
             FoneclubeService.postUpdateCustomer(customerSend).then(function(result){
                 if(result) {
-                    FlowManagerService.changeCustomersView();
                     var params = {
                         title: 'Edição Realizada',
                         template: 'Todos dados pessoais enviados, edição Foneclube feita com sucesso.',
@@ -176,13 +177,14 @@
                                 text: 'Ir para Home',
                                 type: 'button-positive',
                                 onTap: function(e) {
-
+                                    FlowManagerService.changeHomeView();
                                 }
                             },
                             {
                                 text: 'Visualizar Cliente',
                                 type: 'button-positive',
                                 onTap: function(e) {
+                                    FlowManagerService.changeCustomersView();
                                     FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
                                         ViewModelUtilsService.showModalCustomer(result);
                                     });
@@ -201,6 +203,13 @@
 
         function clearPhoneNumber(number) {
             return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : '';
+        }
+        
+        function goBack() {
+            FlowManagerService.goBack();
+            FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
+                ViewModelUtilsService.showModalCustomer(result);
+            });
         }
     }
 })();

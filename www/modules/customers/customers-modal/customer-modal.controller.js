@@ -14,6 +14,7 @@
         vm.onTapEditar = onTapEditar;
         vm.onTapExcluir = onTapExcluir;
         vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
+        vm.onTapOrdemServico = onTapOrdemServico;
 
         var customer = ViewModelUtilsService.modalCustomerData;
         vm.customer = customer;
@@ -250,8 +251,14 @@
             ViewModelUtilsService.modalCustomer.hide();
         }
         
+
         function onTapPaymentHistoryDetail(history) {
-            ViewModelUtilsService.showModalPaymentHistoryDetail(history, vm.customer);
+            ViewModelUtilsService.showModalPaymentHistoryDetail(history, vm.customer)
+        }
+
+        function onTapOrdemServico() {
+            FlowManagerService.changeOrdemServicoView(customer);
+            ViewModelUtilsService.modalCustomer.hide();
         }
 
     }
