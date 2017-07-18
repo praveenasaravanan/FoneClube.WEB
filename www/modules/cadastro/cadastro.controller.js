@@ -836,7 +836,7 @@
                                 console.log('Realizar cobrança.');
                                 FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
                                     if(vm.singlePrice) {
-                                        result.CacheIn = valueTotal;
+                                        result.CacheIn = vm.singlePrice;
                                         ViewModelUtilsService.showModalCustomer(result);
                                     } else {
                                         FoneclubeService.getCustomerPlans(vm.cpf).then(function(customerPlans){

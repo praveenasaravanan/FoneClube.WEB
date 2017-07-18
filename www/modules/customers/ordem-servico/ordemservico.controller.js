@@ -30,12 +30,12 @@
         }
         
         function onTapSendOS() {
+            MainUtils.setAgent('Cardozo');
             var order = {
                 "Id": vm.customer.Id,
-                "DocumentNumber": vm.customer.DocumentNumber,
                 "ServiceOrder": {
                     "AgentName": MainUtils.getAgent(),
-                    "AgentId": MainUtils.getAgent(),
+                    "AgentId": 1,
                     "PendingInteraction": vm.data.warn,
                     "Description": vm.data.text
                 }

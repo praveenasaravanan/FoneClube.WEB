@@ -5,14 +5,16 @@
         .module('foneClub')
         .controller('EdicaoController', EdicaoController);
 
-    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService'];
-    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService) {
+    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout'];
+    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService, $timeout) {
         var vm = this;
         vm.onTapSendUser = onTapSendUser;
         vm.validateData = validateData;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
         vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
         vm.goBack = goBack;
+        
+        vm.singlePriceLocal = 0;
         
         vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
         vm.requesting = true;
@@ -33,6 +35,7 @@
                     vm.plans = result;
                     vm.requesting = false; // mover para a promessa de baixo, ou remover-la
                 });
+                vm.singlePriceLocal = vm.customer.SinglePrice ? vm.customer.SinglePrice : 0;
                 /*FoneclubeService.getCustomerPlans(vm.cpf).then(function(customerPlans){
                     var valueTotal = 0;
                     if(customerPlans.length > 0) {
@@ -68,8 +71,8 @@
                     }
                 });
             }
-            if (vm.customer.SinglePrice) {
-                if ((vm.customer.SinglePrice / 100) > totalPriceValidade) {
+            if (vm.singlePriceLocal) {
+                if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
                     return true;
                 }
             }
@@ -158,7 +161,7 @@
                 "IdContactParent": customer.IdContactParent,
                 "NameContactParent": customer.NameContactParent,
                 "IdCommissionLevel": customer.IdCommissionLevel,
-                "SinglePrice": customer.SinglePrice,
+                "SinglePrice": vm.singlePriceLocal,
                 "DescriptionSinglePrice": customer.DescriptionSinglePrice
             }
             
@@ -186,6 +189,7 @@
                                 onTap: function(e) {
                                     FlowManagerService.changeCustomersView();
                                     FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
+                                        //result.CacheIn = vm.singlePriceLocal;
                                         ViewModelUtilsService.showModalCustomer(result);
                                     });
                                 }

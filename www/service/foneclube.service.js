@@ -132,7 +132,7 @@
         function postOrderServicePerson(param) {
             var q = $q.defer();
 
-            HTTPService.post(urlApi.concat('/profile/service/order/insert'), param)
+            HTTPService.post(urlApi.concat('/profile/service/order'), param)
             .then(function(data){
                 q.resolve(data);
             })

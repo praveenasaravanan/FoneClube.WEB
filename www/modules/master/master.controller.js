@@ -9,11 +9,11 @@
     function MasterController(FlowManagerService, MainUtils) {
         var vm = this;
         console.log('--- Master controller --- ' + FlowManagerService);
-        //FlowManagerService.changeLoginView();
+        FlowManagerService.changeLoginView();
 
         ////////
-        MainUtils.setAgent('Cardozo');
-        FlowManagerService.changeHomeView();
+        //MainUtils.setAgent('Cardozo');
+        //FlowManagerService.changeHomeView();
         ////////
 
     }
