@@ -130,7 +130,7 @@
                 .then(function(result){
                     if(result.status){
                        console.log(result);
-                       vm.name = result.result.nome_da_pf;
+                       vm.name = result.nome;
                     }
                     MainComponents.hideLoader();
                     etapaDocumentoFaseNome();
@@ -185,10 +185,10 @@
             HubDevService.validaCEP(cep)
             .then(function(result){
                 try{
-                    vm.street = result.info.logradouro;
-                    vm.neighborhood = result.info.bairro;
-                    vm.city = result.info.cidade;
-                    vm.uf = result.info.uf;
+                    vm.street = result.logradouro;
+                    vm.neighborhood = result.bairro;
+                    vm.city = result.localidade;
+                    vm.uf = result.uf;
                 }
                 catch(erro){
 
