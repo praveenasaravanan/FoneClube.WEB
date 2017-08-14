@@ -48,15 +48,16 @@
                 'Number': '',
                 'plan': '',
                 'IsFoneclube': true,
-                'Portability': false,
-                'Nickname': ''
+                'Portability': true,
+                'Nickname': '',
+                'SameNumber': false
             }
         ]
 
         vm.onTapSearchDocument = onTapSearchDocument;
         vm.onTapSendDocument = onTapSendDocument;
 
-        vm.onTapSearchAddress = onTapSearchAddress;
+        vm.validarCEP = validarCEP;
         vm.onTapSendAddress = onTapSendAddress;
 
         vm.onTapSendPersonalData = onTapSendPersonalData;
@@ -67,14 +68,19 @@
 
         vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
+        vm.setPlansList = setPlansList;
+        vm.changeNumberPortabilty = changeNumberPortabilty;
+        vm.changeNumberNew = changeNumberNew;
+        
+        vm.passAddress = passAddress;
+        vm.passPersonalData = passPersonalData;
 
         vm.onTapCancel = onTapCancel;
 
         init();
 
         function init(){
-            vm.buscar = true;
-            vm.enviar = false;
+            vm.hasCPF = false;
             etapaDocumento();
 
             vm.allOperatorOptions = MainUtils.operatorOptions();
@@ -83,6 +89,7 @@
             FoneclubeService.getPlans().then(function(result){
                 console.log(result)
                 vm.plans = result;
+                vm.selectedPlansList = [];
                 //post realizado com sucesso
             })
             .catch(function(error){
@@ -107,105 +114,115 @@
 
         function onTapSearchDocument(){
             vm.requesting = true;
-            console.log('onTapSearchDocument ' + vm.birthdate.length)
+            MainComponents.showLoader('Tentando preencher dados...');
+            
+            var cpf = vm.cpf.replace(/[-.,]/g , '');
+            FoneclubeService.getCustomerByCPF(cpf).then(function(existentClient){
+                if (existentClient.Id == 0) {
+                    HubDevService.validaCPF(cpf).then(function(result){
+                        if(result.status){
+                           vm.name = result.nome;
+                        }
+                        etapaDocumentoFaseNome();
+                    }, function(error){
+                        etapaDocumentoFaseNome();
+                    });
+                } else {
+                    MainComponents.hideLoader();
+                    var confirmPopup = $ionicPopup.confirm({
+                        title: 'Cliente já cadastrado',
+                        template: 'Deseja acrescentar novas linhas a este CPF?',
+                        buttons: [
+                            {   text: 'Não' },
+                            {   text: '<b>Sim</b>',
+                                type: 'button-positive',
+                                onTap: function(e) {
+                                    return true;
+                                }
+                            }
+                        ]
+                    });
+                    confirmPopup.then(function(res) {
+                        if(res) {
+                            FlowManagerService.changeEdicaoView(existentClient);
+                        } else {
+                            FlowManagerService.changeHomeView();
+                        }
+                    });
+                }
+            }, function (result) {
+                FlowManagerService.changeHomeView();
+            }).catch(function (error) {
+                FlowManagerService.changeHomeView();
+            });
+        }
+        
+        
+
+        function onTapSendDocument(){
+            vm.requesting = true;
             var dia = vm.birthdate.split('/')[0];
             var mes = vm.birthdate.split('/')[1];
-            console.log(dia)
-            console.log(mes)
-            var patternValidaData =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+            var regexBirthday =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
             var dadosInvalidos = parseInt(dia) > 31 || parseInt(mes) > 12 || parseInt(mes) == 0 || parseInt(dia) == 0;
-
-            if(!patternValidaData.test(vm.birthdate) || dadosInvalidos){
+            if(!regexBirthday.test(vm.birthdate) || dadosInvalidos){
                 MainComponents.alert({mensagem:'Data de nascimento Inválida'});
                 vm.requesting = false;
                 return;
             }
-
-            MainComponents.showLoader('Tentando preencher dados...');
+            
             var cpf = vm.cpf.replace(/[-.,]/g , '');
-            console.log(cpf)
-            console.log(vm.birthdate)
-
-            HubDevService.validaCPF(cpf,vm.birthdate)
-                .then(function(result){
-                    if(result.status){
-                       console.log(result);
-                       vm.name = result.nome;
-                    }
-                    MainComponents.hideLoader();
-                    etapaDocumentoFaseNome();
-                },
-            function(error){
-                etapaDocumentoFaseNome();
-                MainComponents.hideLoader()
-            });
-        }
-
-        function onTapSendDocument(){
-            vm.requesting = true;
-            var cpf = vm.cpf.replace(/[-.,]/g , '');
-            console.log(cpf);
-            console.log(vm.birthdate);
-            console.log(vm.name);
-
             var personCheckout = {
-                    'DocumentNumber': cpf,
-                    'Name': vm.name,
-                    'Born': vm.birthdate
-                };
-
-
+                'DocumentNumber': cpf,
+                'Name': vm.name,
+                'Born': vm.birthdate,
+                'IdCurrentOperator': vm.operator,
+                'Email': vm.email
+            };
+            
+            var personalPhone = vm.personalNumber.replace('-', '').replace(' ', '');
+            if(vm.personalDDD && personalPhone) {
+                personCheckout['Phones'] = [
+                    {
+                        'DDD': vm.personalDDD,
+                        'Number': personalPhone
+                    }
+                ];
+            }
             FoneclubeService.postBasePerson(personCheckout).then(function(result){
-                console.log(result);
-                if(result)
-                {
+                if(result) {
                     etapaEndereco();
                     MainComponents.alert({titulo:'Andamento',mensagem:'Documento enviado, agora preencha os dados de Endereço.'});
                 }
-
-                //post realizado com sucesso
-            })
-            .catch(function(error){
+            }).catch(function(error){
                 console.log('catch error');
                 console.log(error);
                 console.log(error.statusText); // mensagem de erro para tela, caso precise
                 vm.requesting = false;
                 MainComponents.alert({mensagem:error.statusText});
             });
-
         }
 
-        function onTapSearchAddress(){
-            vm.requesting = true;
-            console.log('onTapSearchAddress')
-            var cep = vm.zipcode.replace(/[-.]/g , '');
-
+        function validarCEP() {
+            if (vm.zipcode.length < 9) return;
+            
             MainComponents.showLoader('Tentando preencher dados...');
-
-            HubDevService.validaCEP(cep)
-            .then(function(result){
-                try{
+            HubDevService.validaCEP(vm.zipcode.replace(/[-.]/g , '')).then(function(result){
+                if (!result.erro) {
                     vm.street = result.logradouro;
                     vm.neighborhood = result.bairro;
                     vm.city = result.localidade;
                     vm.uf = result.uf;
+                } else {
+                    MainComponents.alert({mensagem: "CEP incorreto."});
                 }
-                catch(erro){
-
-                }
-
                 MainComponents.hideLoader();
-                etapaEnderecoFaseOutrosCampos();
-                console.log(result);
-
-            },
-            function(error){
+            }, function(error){
                 MainComponents.hideLoader();
-                etapaEnderecoFaseOutrosCampos();
             });
         }
 
-        function onTapSendAddress(){
+        function onTapSendAddress() {
             vm.requesting = true;
             var cpf = vm.cpf.replace(/[-.,]/g , '');
 
@@ -213,13 +230,13 @@
                 'DocumentNumber': cpf,
                 'Adresses': [
                     {
-                    'Street': vm.street,
-                    'Complement': vm.complement,
-                    'StreetNumber': vm.street_number,
-                    'Neighborhood': vm.neighborhood,
-                    'City': vm.city,
-                    'State': vm.uf,
-                    'Cep': vm.zipcode
+                        'Street': vm.street,
+                        'Complement': vm.complement,
+                        'StreetNumber': vm.street_number,
+                        'Neighborhood': vm.neighborhood,
+                        'City': vm.city,
+                        'State': vm.uf,
+                        'Cep': vm.zipcode
                     }
                 ]
             };
@@ -252,27 +269,10 @@
 
         function onTapSendPersonalData(){
             vm.requesting = true;
-            console.log('onTapSendPersonalData');
-            if (vm.email.length == 0) {
-                MainComponents.alert({mensagem:'E-mail é um campo obrigatório.'});
-                vm.requesting = false;
-                return;
-            }
-            if (vm.personalDDD.length == 0) {
-                MainComponents.alert({mensagem:'DDD é um campo obrigatório.'});
-                vm.requesting = false;
-                return;
-            }
-            if (vm.personalNumber.length == 0) {
-                MainComponents.alert({mensagem:'Telefone é um campo obrigatório.'});
-                vm.requesting = false;
-                return;
-            }
             var cpf = vm.cpf.replace(/[-.,]/g , '');
-            var personalPhone = vm.personalNumber.replace('-', '').replace(' ', '');
+            
             var personCheckout = {
                 'DocumentNumber': cpf,
-                'Email': vm.email,
                 'Images': [selfiePhotoName, frontPhotoName, versePhotoName]
             };
             
@@ -286,15 +286,7 @@
                 delete personCheckout.Images
             }
 
-            if(vm.personalDDD && personalPhone)
-            {
-                personCheckout['Phones'] = [
-                    {
-                        'DDD': vm.personalDDD,
-                        'Number': personalPhone
-                    }
-                ];
-            }
+
 
             /**var selfiePhotoName = '';
             var frontPhotoName = '';
@@ -320,20 +312,10 @@
 
         }
 
-
-        function etapaEnderecoFaseOutrosCampos(){
-            vm.etapaOutrosCampos = true;
-            vm.etapaBuscarCEP = false;
-
-            vm.requesting = false;
-        }
-
         function etapaDocumentoFaseNome(){
-            vm.buscar = false;
-            vm.enviar = true;
-            vm.showName = true;
-
+            vm.hasCPF = true;
             vm.requesting = false;
+            MainComponents.hideLoader();
         }
 
         function etapaDocumento(){
@@ -345,21 +327,18 @@
             limpaEtapas();
             vm.etapaBuscarCEP = true;
             vm.etapaEndereco = true;
-
             vm.requesting = false;
         }
 
         function etapaDadosPessoais(){
             limpaEtapas();
             vm.etapaDadosPessoais = true;
-
             vm.requesting = false;
         }
 
         function etapaComplementar(){
             limpaEtapas();
             vm.etapaComplementar = true;
-
             vm.requesting = false;
         }
 
@@ -788,7 +767,6 @@
                     'NameContactParent': vm.whoinvite,
                     'IdContactParent': contactParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
                     'Plans': plans,
-                    'IdCurrentOperator': vm.operator,
                     'Phones': phones,
                     'SinglePrice': vm.singlePrice,
                     'DescriptionSinglePrice': vm.descriptionSinglePrice
@@ -867,6 +845,27 @@
             });
             console.log(personCheckout);
         }
+        
+        function setPlansList(operadora) {
+            vm.selectedPlansList = [];
+            for (var item in vm.plans) {
+                if (operadora == 1 && vm.plans[item].Description.endsWith('VIVO')) {
+                    vm.selectedPlansList.push(vm.plans[item]);
+                } else if (operadora == 2 && vm.plans[item].Description.endsWith('CLARO')){
+                    vm.selectedPlansList.push(vm.plans[item]);
+                }
+            }
+        }
+        
+        function changeNumberPortabilty(item) {
+            vm.phoneNumbersView[item].Portability = true;
+            vm.phoneNumbersView[item].NewNumber = false;
+        }
+        
+        function changeNumberNew(item) {
+            vm.phoneNumbersView[item].Portability = false;
+            vm.phoneNumbersView[item].NewNumber = true;
+        }
 
         //adiciona telefone do array que é exibido na view
         function onTapNewPhoneNumber() {
@@ -876,8 +875,9 @@
                     'Number': '',
                     'plan': '',
                     'IsFoneclube': true,
-                    'Portability': false,
-                    'Nickname': ''
+                    'Portability': true,
+                    'Nickname': '',
+                    'SameNumber': false
                 }
             );
         }
@@ -898,6 +898,14 @@
 
         function onTapCancel(){
             vm.modal.hide();
+        }
+        
+        function passAddress() {
+            etapaDadosPessoais();
+        }
+        
+        function passPersonalData() {
+            etapaComplementar();
         }
         /////////////////////////////////////
         /////////////////////////////////////
