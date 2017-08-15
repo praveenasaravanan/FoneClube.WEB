@@ -5,21 +5,24 @@
         .module('foneClub')
         .controller('EdicaoController', EdicaoController);
 
-    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout'];
-    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService, $timeout) {
+    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService'];
+    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService) {
         var vm = this;
         vm.onTapSendUser = onTapSendUser;
         vm.validateData = validateData;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
         vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
+        vm.changeNumberPortabilty = changeNumberPortabilty;
+        vm.changeNumberNew = changeNumberNew;
+        vm.validarCEP = validarCEP;
         vm.goBack = goBack;
         
         vm.singlePriceLocal = 0;
-        
+        vm.allOperatorOptions = MainUtils.operatorOptions();
         vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
         vm.requesting = true;
-        init();
         
+        init();
         function init(){
             if (!vm.cpf) {
                 FlowManagerService.changeCustomersView();
@@ -28,24 +31,30 @@
             FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
                 vm.customer = result;
                 vm.customer.Born = getFormatedDate(vm.customer.Born);
+                vm.customer.IdCurrentOperator = vm.customer.IdCurrentOperator.toString();
+                console.log(vm.customer);
                 for(var i=0; i < vm.customer.Adresses.length;i++){
                     vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber);
                 }
                 FoneclubeService.getPlans().then(function(result){
                     vm.plans = result;
-                    vm.requesting = false; // mover para a promessa de baixo, ou remover-la
-                });
-                vm.singlePriceLocal = vm.customer.SinglePrice ? vm.customer.SinglePrice : 0;
-                /*FoneclubeService.getCustomerPlans(vm.cpf).then(function(customerPlans){
-                    var valueTotal = 0;
-                    if(customerPlans.length > 0) {
-                        for(var i=0; i<customerPlans.length;i++){
-                            valueTotal = valueTotal + customerPlans[i].Value;
+                    for(var number in vm.customer.Phones) {
+                        vm.customer.Phones[number].IdPlanOption = vm.customer.Phones[number].IdPlanOption.toString();
+                        vm.customer.Phones[number].NewNumber = !vm.customer.Phones[number].Portability;
+                        for (var plan in vm.plans) {
+                            if (vm.plans[plan].Id == vm.customer.Phones[number].IdPlanOption) {
+                                if (vm.plans[plan].Description.endsWith('VIVO')) {
+                                    vm.customer.Phones[number].operadora = '1';
+                                } else {
+                                    vm.customer.Phones[number].operadora = '2';
+                                }
+                            }
                         }
                     }
-                    vm.customer.Plans = customerPlans;
-                    //vm.customer = result; 
-                });*/
+                    
+                    vm.requesting = false;
+                });
+                vm.singlePriceLocal = vm.customer.SinglePrice ? vm.customer.SinglePrice : 0;
             });
             
         };
@@ -61,7 +70,7 @@
         }
         
         function validateData() {
-            if (vm.requesting || vm.customer.DocumentNumber.length < 11) {return true}
+            if (vm.requesting || vm.customer.DocumentNumber.length < 11) { return true }
             
             var totalPriceValidade = 0;
             for (var i in vm.customer.Phones) {
@@ -76,48 +85,10 @@
                     return true;
                 }
             }
-
-            /*if(
-                vm.customer.DocumentNumber.length < 11
-                || vm.customer.Born.length < 10
-                || vm.customer.Name.length == 0
-                || vm.customer.Adresses[0].Cep.length < 9
-                || vm.customer.Adresses[0].Street.length == 0
-                || vm.customer.Adresses[0].StreetNumber.length == 0
-                || vm.customer.Adresses[0].Neighborhood.length == 0
-                || vm.customer.Adresses[0].City.length == 0
-                || vm.customer.Adresses[0].State.length == 0
-                || vm.customer.Email.length == 0
-            ) {
-                return true;
-            }
-            for (var i=0; i < vm.customer.Phones.length; i++) {
-                if (vm.customer.Phones[i].IsFoneclube) {
-                    if (!vm.customer.Phones[i].Delete) {
-                        if(!vm.customer.Phones[i].NickName) {
-                            return true;
-                        }
-                        if(vm.customer.Phones[i].IdPlanOption == 0) {
-                            return true;
-                        } 
-                    }
-                } else {
-                    if(vm.customer.Phones[i].DDD.length == 0) {
-                        return true;
-                    }
-                    if(vm.customer.Phones[i].Number.length < 9) {
-                        return true;
-                    } 
-                }
-            }*/
             return false;
         }
         
         function onTapRemoveNewNumber(position){
-            /*var i = MainComponents.infoAlert(
-            {
-                mensagem: 'teste'
-            });*/
             vm.customer.Phones[position].Delete = true;
         }
         
@@ -133,7 +104,8 @@
                     'IsFoneclube': true,
                     'NickName': '',
                     'Number': '',
-                    'Portability': false
+                    'Portability': false,
+                    'NewNumber': true
                 }
             );
         }
@@ -189,7 +161,6 @@
                                 onTap: function(e) {
                                     FlowManagerService.changeCustomersView();
                                     FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
-                                        //result.CacheIn = vm.singlePriceLocal;
                                         ViewModelUtilsService.showModalCustomer(result);
                                     });
                                 }
@@ -204,9 +175,48 @@
                 vm.requesting = false;
             });
         };
+        
+        function setPlansList(operadora) {
+            vm.selectedPlansList = [];
+            for (var item in vm.plans) {
+                if (operadora == 1 && vm.plans[item].Description.endsWith('VIVO')) {
+                    vm.selectedPlansList.push(vm.plans[item]);
+                } else if (operadora == 2 && vm.plans[item].Description.endsWith('CLARO')){
+                    vm.selectedPlansList.push(vm.plans[item]);
+                }
+            }
+        }
+        
+        function changeNumberPortabilty(item) {
+            vm.customer.Phones[item].Portability = true;
+            vm.customer.Phones[item].NewNumber = false;
+        }
+        
+        function changeNumberNew(item) {
+            vm.customer.Phones[item].Portability = false;
+            vm.customer.Phones[item].NewNumber = true;
+        }
 
         function clearPhoneNumber(number) {
             return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : '';
+        }
+        
+        function validarCEP(index) {
+            if (vm.customer.Adresses[index].Cep.length < 9) return;
+            MainComponents.showLoader('Tentando preencher dados...');
+            HubDevService.validaCEP(vm.customer.Adresses[index].Cep.replace(/[-.]/g , '')).then(function(result){
+                if (!result.erro) {
+                    vm.customer.Adresses[index].Street = result.logradouro;
+                    vm.customer.Adresses[index].Neighborhood = result.bairro;
+                    vm.customer.Adresses[index].City = result.localidade;
+                    vm.customer.Adresses[index].State = result.uf;
+                } else {
+                    MainComponents.alert({mensagem: "CEP incorreto."});
+                }
+                MainComponents.hideLoader();
+            }, function(error){
+                MainComponents.hideLoader();
+            });
         }
         
         function goBack() {

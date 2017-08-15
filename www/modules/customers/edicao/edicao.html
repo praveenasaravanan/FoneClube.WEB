@@ -40,13 +40,21 @@
                     <input ng-model="phoneNumber.Number" type="tel"  mask="9?9999-9999" restrict="reject">
                 </label>
             </div>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Qual sua operadora atual?
+                </div>
+                <select ng-model="vm.operator">
+                    <option ng-repeat="operator in vm.allOperatorOptions" value="{{operator.id}}">{{operator.nome}}</option>
+                </select>
+            </label>
             <div class="item item-divider" ng-show="vm.customer.Adresses.length > 0">
                 Endereço
             </div>
-            <div ng-repeat="adress in vm.customer.Adresses">
+            <div ng-repeat="adress in vm.customer.Adresses track by $index">
                 <label class="item item-input">
                     <span class="input-label">CEP</span>
-                    <input ng-model="adress.Cep" type="text" name="CEP" mask="99999-999" restrict="reject">
+                    <input ng-model="adress.Cep" type="text" name="CEP" mask="99999-999" restrict="reject" ng-change="vm.validarCEP($index)">
                 </label>
                 <label class="item item-input">
                   <span class="input-label">Rua</span>
@@ -87,11 +95,68 @@
             </label>
             <div class="item item-divider item-icon-right">
                 Informações linha(s) Foneclube
-                <button on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
+                <button ng-show="vm.customer.Phones.length == 0" on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
             </div>
-            <div ng-repeat="phoneNumber in vm.customer.Phones">
+            <div ng-repeat="phoneNumber in vm.customer.Phones track by $index">
                 <div ng-hide="!phoneNumber.IsFoneclube || phoneNumber.Delete">
                     <div class="item item-divider item-icon-right">
+                        Linha {{$index + 1}}
+                    </div>
+                    <label class="item item-input item-icon-right">
+                        <span class="input-label">Qual <b>apelido</b> que quer usar para identificar esta linha, este nome vai aparecer no seu relatorio de gastos por email todo mes.</span>
+                        <input ng-model="phoneNumber.NickName" type="text">
+                    </label>
+                    <label class="item item-input item-select">
+                        <span class="input-label">Qual operadora quer usar?</span>
+                        <select ng-model="phoneNumber.operadora" ng-change="phoneNumber.IdPlanOption = ''">
+                            <option value="">Selecione...</option>
+                            <option value="1">Vivo</option>
+                            <option value="2">Claro</option>
+                        </select>
+                    </label>
+                    <label class="item item-input item-select">
+                        <span class="input-label">Qual plano que deseja contratar?</span>
+                        <select ng-model="phoneNumber.IdPlanOption">
+                            <option value="">Selecione...</option>
+                            <option ng-repeat="plan in vm.plans" value="{{plan.Id}}" ng-show="plan.Description.endsWith(phoneNumber.operadora == '1' ? 'VIVO' : phoneNumber.operadora == '2' ? 'CLARO' : '')">{{plan.Description}}</option>
+                        </select>
+                    </label>
+                    <div class="item item-toggle">
+                        Deseja usar seu número atual (portabilidade)?
+                        <label class="toggle toggle-positive">
+                            <input type="checkbox" ng-model="phoneNumber.Portability" ng-change="vm.changeNumberPortabilty($index)">
+                            <div class="track">
+                                <div class="handle"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="item item-toggle">
+                        Deseja receber um número de telefone novo do Foneclube?
+                        <label class="toggle toggle-positive">
+                            <input type="checkbox" ng-model="phoneNumber.NewNumber" ng-change="vm.changeNumberNew($index)">
+                            <div class="track">
+                                <div class="handle"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <label class="item item-input" ng-show="phoneNumber.NewNumber">
+                        <span class="input-label"><b>Se você ainda não sabe o novo número de telefone pode deixar em branco.</b></span>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">DDD</span>
+                        <input ng-model="phoneNumber.DDD" type="tel" mask="99" restrict="reject" placeholder="99">
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Telefone</span>
+                        <input ng-model="phoneNumber.Number" type="tel"  placeholder="99999-9999" mask="9?9999-9999"  restrict="reject">
+                    </label>
+                    <div class="item item-divider item-icon-right" style="height: 41px;">
+                        <div>
+                            <button on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none; right: 53px;"></button>
+                            <button on-tap="vm.onTapRemoveNewNumber($index)" class="icon ion-minus" style="background: transparent; border: none;"></button>
+                        </div>
+                    </div>
+<!--                    <div class="item item-divider item-icon-right">
                         Linha {{$index + 1}}
                         <button on-tap="vm.onTapRemoveNewNumber($index)" class="icon ion-minus" style="background: transparent; border: none;"></button>
                     </div>
@@ -123,7 +188,7 @@
                         <select ng-model="phoneNumber.IdPlanOption" ng-options="plan.Id as plan.Description for plan in vm.plans">
 
                         </select>
-                    </label>
+                    </label>-->
                 </div>
             </div>
             <div class="padding">              

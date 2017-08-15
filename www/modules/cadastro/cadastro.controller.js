@@ -50,7 +50,8 @@
                 'IsFoneclube': true,
                 'Portability': true,
                 'Nickname': '',
-                'SameNumber': false
+                'SameNumber': false,
+                'operadora': ''
             }
         ]
 
@@ -72,8 +73,7 @@
         vm.changeNumberPortabilty = changeNumberPortabilty;
         vm.changeNumberNew = changeNumberNew;
         
-        vm.passAddress = passAddress;
-        vm.passPersonalData = passPersonalData;
+        vm.enter = enter;
 
         vm.onTapCancel = onTapCancel;
 
@@ -877,7 +877,8 @@
                     'IsFoneclube': true,
                     'Portability': true,
                     'Nickname': '',
-                    'SameNumber': false
+                    'SameNumber': false,
+                    'operadora': ''
                 }
             );
         }
@@ -900,12 +901,37 @@
             vm.modal.hide();
         }
         
-        function passAddress() {
-            etapaDadosPessoais();
-        }
-        
-        function passPersonalData() {
-            etapaComplementar();
+        function enter() {
+            if (vm.etapaEndereco) {
+                etapaDadosPessoais();
+            } else if (vm.etapaDadosPessoais) {
+                etapaComplementar();
+            } else if (vm.etapaComplementar) {
+                FlowManagerService.changeHomeView();
+                var params = {
+                    title: 'Cadastro Realizado',
+                    template: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.',
+                    buttons: [
+                      {
+                        text: 'Ir para Home',
+                        type: 'button-positive',
+                        onTap: function(e) {
+
+                        }
+                      },
+                      {
+                        text: 'Visualizar Cadastro',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
+                                ViewModelUtilsService.showModalCustomer(result);
+                            });
+                        }
+                      }
+                    ]
+                }
+                MainComponents.show(params);
+            }
         }
         /////////////////////////////////////
         /////////////////////////////////////

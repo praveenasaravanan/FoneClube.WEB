@@ -4,7 +4,7 @@
 <h1 class="title">{{vm.viewName}}</h1>
 </div>
 
-<ion-content class="posicao-inicial">
+<ion-content class="posicao-inicial" ng-enter="vm.enter()">
 
 <!--<h2>Insira o CPF e Data de nascimento</h2>-->
 <!--cada etapa pode ser migrada pra rotas independentes-->
@@ -56,7 +56,7 @@
 </div>
 
 <!--vm.etapaEndereco-->
-<div ng-if="vm.etapaEndereco" ng-enter="vm.passAddress()">
+<div ng-if="vm.etapaEndereco">
     <div class="item item-divider">
         Endereço
     </div>
@@ -93,7 +93,7 @@
     </div>
 </div>
 <!--vm.etapaDadosPessoais-->
-<div ng-if="vm.etapaDadosPessoais" ng-enter="vm.passPersonalData()">
+<div ng-if="vm.etapaDadosPessoais">
     <div class="item item-divider">
         Dados Pessoais
     </div>
@@ -182,7 +182,7 @@
         </label>
         <label class="item item-input item-select">
             <span class="input-label">Qual operadora quer usar?</span>
-            <select ng-model="operadora" ng-change="vm.setPlansList(operadora)">
+            <select ng-model="phoneNumber.operadora" ng-change="phoneNumber.plan = ''">
                 <option value="">Selecione...</option>
                 <option value="1">Vivo</option>
                 <option value="2">Claro</option>
@@ -192,7 +192,7 @@
             <span class="input-label">Qual plano que deseja contratar?</span>
             <select ng-model="phoneNumber.plan">
                 <option value="">Selecione...</option>
-                <option ng-repeat="plan in vm.selectedPlansList" value="{{plan.Id}}">{{plan.Description}}</option>
+                <option ng-repeat="plan in vm.plans" value="{{plan.Id}}" ng-show="plan.Description.endsWith(phoneNumber.operadora == '1' ? 'VIVO' : phoneNumber.operadora == '2' ? 'CLARO' : '')">{{plan.Description}}</option>
             </select>
         </label>
         <div class="item item-toggle">
