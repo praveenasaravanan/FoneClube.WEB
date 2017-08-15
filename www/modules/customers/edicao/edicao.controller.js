@@ -30,8 +30,8 @@
             }
             FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
                 vm.customer = result;
-                vm.customer.Born = getFormatedDate(vm.customer.Born);
-                vm.customer.IdCurrentOperator = vm.customer.IdCurrentOperator.toString();
+                vm.customer.Born = vm.customer.Born ? getFormatedDate(vm.customer.Born) : '';
+                vm.customer.IdCurrentOperator = vm.customer.IdCurrentOperator ? vm.customer.IdCurrentOperator.toString() : '';
                 console.log(vm.customer);
                 for(var i=0; i < vm.customer.Adresses.length;i++){
                     vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber);

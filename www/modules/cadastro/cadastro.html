@@ -1,10 +1,11 @@
 <ion-view>
-
+<ng-enter ng-enter="vm.enter()" ></ng-enter>
+    
 <div class="bar bar-header bar-light">
 <h1 class="title">{{vm.viewName}}</h1>
 </div>
 
-<ion-content class="posicao-inicial" ng-enter="vm.enter()">
+<ion-content class="posicao-inicial">
 
 <!--<h2>Insira o CPF e Data de nascimento</h2>-->
 <!--cada etapa pode ser migrada pra rotas independentes-->
@@ -44,6 +45,7 @@
                     Qual sua operadora atual?
                 </div>
                 <select ng-model="vm.operator">
+                    <option value="">Selecione...</option>
                     <option ng-repeat="operator in vm.allOperatorOptions" value="{{operator.id}}">{{operator.nome}}</option>
                 </select>
             </label>
