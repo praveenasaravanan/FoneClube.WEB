@@ -15,6 +15,7 @@
         vm.changeNumberPortabilty = changeNumberPortabilty;
         vm.changeNumberNew = changeNumberNew;
         vm.validarCEP = validarCEP;
+        vm.validarCPF = validarCPF;
         vm.goBack = goBack;
         
         vm.singlePriceLocal = 0;
@@ -29,6 +30,7 @@
                 return;
             }
             FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
+                vm.DocumentNumberFreeze = result.DocumentNumber;
                 vm.customer = result;
                 vm.customer.Born = vm.customer.Born ? getFormatedDate(vm.customer.Born) : '';
                 vm.customer.IdCurrentOperator = vm.customer.IdCurrentOperator ? vm.customer.IdCurrentOperator.toString() : '';
@@ -216,6 +218,40 @@
                 MainComponents.hideLoader();
             }, function(error){
                 MainComponents.hideLoader();
+            });
+        }
+        
+        function validarCPF () {
+            if (vm.customer.DocumentNumber.length < 11) { return }
+            FoneclubeService.getCustomerByCPF(vm.customer.DocumentNumber).then(function(existentClient){
+                if (existentClient.Id == 0) {
+                    HubDevService.validaCPF(vm.customer.DocumentNumber).then(function(result){
+                        if(result.status){
+                           vm.name = result.nome;
+                        }
+                    }, function(error){ });
+                } else {
+                    MainComponents.hideLoader();
+                    var confirmPopup = $ionicPopup.confirm({
+                        title: 'CPF já cadastrado',
+                        template: 'Você não pode cadastrar um cpf repetido.',
+                        buttons: [
+                            {   text: '<b>Ok</b>',
+                                type: 'button-positive',
+                                onTap: function(e) {
+                                    return true;
+                                }
+                            }
+                        ]
+                    });
+                    confirmPopup.then(function(res) {
+                        vm.customer.DocumentNumber = angular.copy(vm.DocumentNumberFreeze);
+                    });
+                }
+            }, function (result) {
+                FlowManagerService.changeHomeView();
+            }).catch(function (error) {
+                FlowManagerService.changeHomeView();
             });
         }
         
