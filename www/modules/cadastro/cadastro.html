@@ -154,12 +154,12 @@
         Convite Foneclube
     </div>
     <label class="item item-input">
-        <span class="input-label">Quem te convidou para o Foneclube?</span>
-        <input ng-model="vm.whoinvite" type="text">
-    </label>
-    <label class="item item-input">
         <span class="input-label">Telefone de quem convidou</span>
         <input ng-model="vm.contactParent" type="tel"  placeholder="21-99999-9999" mask="(99) 9?9999-9999" restrict="reject">
+    </label>
+    <label class="item item-input">
+        <span class="input-label">Quem te convidou para o Foneclube?</span>
+        <input ng-model="vm.whoinvite" type="text">
     </label>
     <label class="item item-input">
         <span class="input-label">Preço único</span>
@@ -171,12 +171,11 @@
     </label>
     <div class="item item-divider item-icon-right">
         Informações nova linha Foneclube
-        <!--<button on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>-->
+        <button ng-show="vm.phoneNumbersView.length == 1 || vm.phoneNumbersView.length == 0" on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
     </div>
     <div ng-repeat="phoneNumber in vm.phoneNumbersView track by $index">
         <div class="item item-divider item-icon-right">
             Linha {{$index + 1}}
-            <!--<button on-tap="vm.onTapRemoveNewNumber($index)" class="icon ion-minus" style="background: transparent; border: none;"></button>-->
         </div>
         <label class="item item-input item-icon-right">
             <span class="input-label">Qual <b>apelido</b> que quer usar para identificar esta linha, este nome vai aparecer no seu relatorio de gastos por email todo mes.</span>
@@ -220,11 +219,11 @@
         </label>
         <label class="item item-input">
             <span class="input-label">DDD</span>
-            <input ng-model="phoneNumber.DDD" type="tel" mask="99" restrict="reject" placeholder="99">
+            <input ng-model="phoneNumber.DDD" type="tel" mask="99" restrict="reject" placeholder="99" ng-change="vm.changePhoneNumber($index)">
         </label>
         <label class="item item-input">
             <span class="input-label">Telefone</span>
-            <input ng-model="phoneNumber.Number" type="tel"  placeholder="99999-9999" mask="9?9999-9999"  restrict="reject">
+            <input ng-model="phoneNumber.Number" type="tel" placeholder="99999-9999" mask="9?9999-9999" restrict="reject" ng-change="vm.changePhoneNumber($index)">
         </label>
         <div class="item item-divider item-icon-right" style="height: 41px;">
             <!--Linha {{$index + 1}}-->

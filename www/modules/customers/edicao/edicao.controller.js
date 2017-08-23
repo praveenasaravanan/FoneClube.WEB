@@ -16,6 +16,7 @@
         vm.changeNumberNew = changeNumberNew;
         vm.validarCEP = validarCEP;
         vm.validarCPF = validarCPF;
+        vm.changePhoneNumber = changePhoneNumber;
         vm.goBack = goBack;
         
         vm.singlePriceLocal = 0;
@@ -91,7 +92,24 @@
         }
         
         function onTapRemoveNewNumber(position){
-            vm.customer.Phones[position].Delete = true;
+            var confirmPopup = $ionicPopup.confirm( {
+                title: 'Excluir Número',
+                template: 'Deseja realmente remover este número?',
+                buttons: [
+                    {   text: 'Não' },
+                    {   text: '<b>Sim</b>',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            return true;
+                        }
+                    }
+                ]
+            });
+            confirmPopup.then(function(res) {
+                if(res) {
+                    vm.customer.Phones[position].Delete = true;
+                }
+            });
         }
         
         function onTapNewPhoneNumber() {
@@ -253,6 +271,14 @@
             }).catch(function (error) {
                 FlowManagerService.changeHomeView();
             });
+        }
+        
+        function changePhoneNumber(position) {
+            if (vm.customer.Phones[position].DDD.length < 2 || vm.customer.Phones[position].Number.length < 9) {
+                console.log('return');
+                return
+            }
+            console.log('verificar numero na api');
         }
         
         function goBack() {

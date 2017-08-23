@@ -72,9 +72,9 @@
         vm.setPlansList = setPlansList;
         vm.changeNumberPortabilty = changeNumberPortabilty;
         vm.changeNumberNew = changeNumberNew;
+        vm.changePhoneNumber = changePhoneNumber;
         
         vm.enter = enter;
-
         vm.onTapCancel = onTapCancel;
 
         init();
@@ -884,7 +884,24 @@
         }
         //remove telefone do array que é exibido na view
         function onTapRemoveNewNumber(position){
-            vm.phoneNumbersView.splice(position, 1);
+            var confirmPopup = $ionicPopup.confirm( {
+                title: 'Excluir Número',
+                template: 'Deseja realmente remover este número?',
+                buttons: [
+                    {   text: 'Não' },
+                    {   text: '<b>Sim</b>',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            return true;
+                        }
+                    }
+                ]
+            });
+            confirmPopup.then(function(res) {
+                if(res) {
+                    vm.phoneNumbersView.splice(position, 1);
+                }
+            });
         }
 
         //monta checkout da etapa etapaComplementar
@@ -895,6 +912,14 @@
         //remove () - < > do numero de telefone
         function clearPhoneNumber(number) {
             return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : '';
+        }
+        
+        function changePhoneNumber(position) {
+            if (vm.customer.Phones[position].DDD.length < 2 || vm.customer.Phones[position].Number.length < 9) {
+                console.log('return');
+                return
+            }
+            console.log('verificar numero na api');
         }
 
         function onTapCancel(){
