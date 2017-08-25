@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('EdicaoController', EdicaoController);
 
-    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService'];
-    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService) {
+    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q'];
+    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q) {
         var vm = this;
         vm.onTapSendUser = onTapSendUser;
         vm.validateData = validateData;
@@ -17,11 +17,12 @@
         vm.validarCEP = validarCEP;
         vm.validarCPF = validarCPF;
         vm.changePhoneNumber = changePhoneNumber;
+        vm.getContactParentName = getContactParentName;
         vm.goBack = goBack;
         
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
-        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '10667103767';
         vm.requesting = true;
         
         init();
@@ -145,24 +146,43 @@
                 "IdPlanOption": customer.IdPlanOption,
                 "IdPagarme": customer.IdPagarme,
                 "IdRole": customer.IdRole,
-                "IdCurrentOperator": customer.IdCurrentOperator,
+                "IdCurrentOperator": parseInt(customer.IdCurrentOperator),
                 "Adresses": customer.Adresses,
                 "Phones": customer.Phones,
                 "Images": customer.Images,
                 "IdParent": customer.IdParent,
-                "IdContactParent": customer.IdContactParent,
+                "IdContactParent": parseInt(clearPhoneNumber(customer.IdContactParent)),
                 "NameContactParent": customer.NameContactParent,
                 "IdCommissionLevel": customer.IdCommissionLevel,
                 "SinglePrice": vm.singlePriceLocal,
                 "DescriptionSinglePrice": customer.DescriptionSinglePrice
             }
             
-            for (var i=0; i < customerSend.Phones.length; i++) {
-                customerSend.Phones[i].DDD = clearPhoneNumber(customerSend.Phones[i].DDD);
-                customerSend.Phones[i].Number = clearPhoneNumber(customerSend.Phones[i].Number);
+            function filterPhones(number){
+                return number.IsFoneclube == true;
             }
+
+            validadeNumbers(customerSend.Phones.filter(filterPhones)).then(function(result) {
+                var right = true;
+                for (var item in result) {
+                    if (result[item].DocumentNumber && result[item].DocumentNumber != vm.customer.DocumentNumber) {
+                        showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.');
+                        right = false;
+                        vm.requesting = false;
+                    }
+                }
+                if (right) {
+                    for (var i in customerSend.Phones) {
+                        customerSend.Phones[i].DDD = clearPhoneNumber(customerSend.Phones[i].DDD);
+                        customerSend.Phones[i].Number = clearPhoneNumber(customerSend.Phones[i].Number);
+                    }
+                    FoneclubeService.postUpdateCustomer(customerSend)
+                        .then(postUpdateCustomerSucess)
+                        .catch(postUpdateCustomerError);
+                }
+            });
             
-            FoneclubeService.postUpdateCustomer(customerSend).then(function(result){
+            function postUpdateCustomerSucess(result) {
                 if(result) {
                     var params = {
                         title: 'Edição Realizada',
@@ -190,11 +210,23 @@
                     MainComponents.show(params);
                 }
                 vm.requesting = false;
-            }).catch(function(error){
+            }
+            
+            function postUpdateCustomerError(error) {
                 MainComponents.alert({mensagem:error.statusText});
                 vm.requesting = false;
-            });
+            }
         };
+        
+        function validadeNumbers(numbers){
+            var promises = numbers.map(function(number) {
+                return FoneclubeService.getCustomerByPhoneNumber({
+                    ddd: clearPhoneNumber(number.DDD),
+                    numero: clearPhoneNumber(number.Number)
+                });
+            });
+            return $q.all(promises);
+        }
         
         function setPlansList(operadora) {
             vm.selectedPlansList = [];
@@ -278,13 +310,40 @@
                 console.log('return');
                 return
             }
-            console.log('verificar numero na api');
+            var param = {
+                ddd: clearPhoneNumber(vm.customer.Phones[position].DDD),
+                numero: clearPhoneNumber(vm.customer.Phones[position].Number)
+            }
+            FoneclubeService.getCustomerByPhoneNumber(param).then(function(res) {
+                if (res.DocumentNumber && res.DocumentNumber != vm.customer.DocumentNumber) {
+                    showAlert('Aviso', 'Este telefone já pertence a um cliente.');
+                }
+            });
+        }
+        
+        function getContactParentName() {
+            if (vm.customer.IdContactParent.length < 13) { return }
+            var param = {
+                ddd: clearPhoneNumber(vm.customer.IdContactParent).substring(0, 2),
+                numero: clearPhoneNumber(vm.customer.IdContactParent).substring(2)
+            }
+            FoneclubeService.getCustomerByPhoneNumber(param).then(function(result) {
+                vm.customer.NameContactParent = result.Name;
+            })
         }
         
         function goBack() {
             FlowManagerService.goBack();
             FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
                 ViewModelUtilsService.showModalCustomer(result);
+            });
+        }
+        
+        //ToDo => colocar em uma service, ou utils
+        function showAlert(title, message){
+            return $ionicPopup.alert({
+                title: title,
+                template: message
             });
         }
     }

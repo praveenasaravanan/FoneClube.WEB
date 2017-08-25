@@ -230,10 +230,10 @@
             return q.promise;
         }
         
-        function getCustomerByPhoneNumber (number) {
-            /*var q = $q.defer();
+        function getCustomerByPhoneNumber(param) {
+            var q = $q.defer();
 
-            HTTPService.get(urlApi.concat('/profile/charges?personID='.concat(id)))
+            HTTPService.get(urlApi.concat('/profile/phoneOwner'), param)
             .then(function(result){
                 q.resolve(result);
             })
@@ -241,7 +241,7 @@
                 q.reject(error);
             });
 
-            return q.promise;*/
+            return q.promise;
         }
 
 

@@ -73,6 +73,7 @@
         vm.changeNumberPortabilty = changeNumberPortabilty;
         vm.changeNumberNew = changeNumberNew;
         vm.changePhoneNumber = changePhoneNumber;
+        vm.getContactParentName = getContactParentName;
         
         vm.enter = enter;
         vm.onTapCancel = onTapCancel;
@@ -701,10 +702,8 @@
         /////////////////////////////////////
 
         vm.onTapSendFoneclubeData = onTapSendFoneclubeData;
-
         function onTapSendFoneclubeData(){
             vm.requesting = true;
-            console.log('onTapSendFoneclubeData');
             var cpf = vm.cpf.replace(/[-.,]/g , '');
             var contactParent = clearPhoneNumber(vm.contactParent);
             var plans = [];
@@ -787,13 +786,29 @@
                     }    
                 }
             }
+            
+            function filterPhones(number){
+                return number.IsFoneclube == true;
+            }
+            
+            validadeNumbers(personCheckout.Phones.filter(filterPhones)).then(function(result) {
+                var right = true;
+                for (var item in result) {
+                    if (result[item].DocumentNumber && result[item].DocumentNumber != vm.cpf.replace(/[-.,]/g , '')) {
+                        showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.');
+                        right = false;
+                        vm.requesting = false;
+                    }
+                }
+                if (right) {
+                    FoneclubeService.postUpdatePerson(personCheckout)
+                        .then(postUpdatePersonSucess)
+                        .catch(postUpdatePersonError);
+                }
+            });
 
-            console.log('Enviado a API:');
-            console.log(personCheckout);
-            FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
-                console.log(result);
-                if(result)
-                {
+            function postUpdatePersonSucess(result) {
+                if(result) {
                     FlowManagerService.changeHomeView();
                     var params = {
                         title: 'Cadastro Realizado',
@@ -803,8 +818,7 @@
                             text: 'Ir para Home',
                             type: 'button-positive',
                             onTap: function(e) {
-                                console.log('Ir para Home.');
-                                //FlowManagerService.changeHomeView();
+
                             }
                           },
                           {
@@ -835,15 +849,22 @@
                     }
                     MainComponents.show(params);
                 }
-                //post realizado com sucesso
-            })
-            .catch(function(error){
-                console.log('catch error');
-                console.log(error);
+            }
+            
+            function postUpdatePersonError(error) {
                 vm.requesting = false;
                 MainComponents.alert({mensagem:error.statusText});
+            }
+        }
+        
+        function validadeNumbers(numbers){
+            var promises = numbers.map(function(number) {
+                return FoneclubeService.getCustomerByPhoneNumber({
+                    ddd: clearPhoneNumber(number.DDD),
+                    numero: clearPhoneNumber(number.Number)
+                });
             });
-            console.log(personCheckout);
+            return $q.all(promises);
         }
         
         function setPlansList(operadora) {
@@ -904,22 +925,35 @@
             });
         }
 
-        //monta checkout da etapa etapaComplementar
-        function buildCheckoutLastFase(array) {
-            return { };
-        }
-
         //remove () - < > do numero de telefone
         function clearPhoneNumber(number) {
             return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : '';
         }
         
         function changePhoneNumber(position) {
-            if (vm.customer.Phones[position].DDD.length < 2 || vm.customer.Phones[position].Number.length < 9) {
-                console.log('return');
+            if (vm.phoneNumbersView[position].DDD.length < 2 || vm.phoneNumbersView[position].Number.length < 9) {
                 return
             }
-            console.log('verificar numero na api');
+            var param = {
+                ddd: clearPhoneNumber(vm.phoneNumbersView[position].DDD),
+                numero: clearPhoneNumber(vm.phoneNumbersView[position].Number)
+            }
+            FoneclubeService.getCustomerByPhoneNumber(param).then(function(res) {
+                if (res.DocumentNumber && res.DocumentNumber != vm.cpf.replace(/[-.,]/g , '')) {
+                    showAlert('Aviso', 'Este telefone já pertence a um cliente.');
+                }
+            });
+        }
+        
+        function getContactParentName() {
+            if (vm.contactParent.length < 13) { return }
+            var param = {
+                ddd: clearPhoneNumber(vm.contactParent).substring(0, 2),
+                numero: clearPhoneNumber(vm.contactParent).substring(2)
+            }
+            FoneclubeService.getCustomerByPhoneNumber(param).then(function(result) {
+                vm.whoinvite = result.Name;
+            })
         }
 
         function onTapCancel(){
@@ -957,6 +991,13 @@
                 }
                 MainComponents.show(params);
             }
+        }
+        //ToDo => colocar em uma service, ou utils
+        function showAlert(title, message){
+            return $ionicPopup.alert({
+                title: title,
+                template: message
+            });
         }
         /////////////////////////////////////
         /////////////////////////////////////
