@@ -18,11 +18,12 @@
         vm.validarCPF = validarCPF;
         vm.changePhoneNumber = changePhoneNumber;
         vm.getContactParentName = getContactParentName;
+        vm.showAddNewPhone = showAddNewPhone;
         vm.goBack = goBack;
         
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
-        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '10667103767';
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
         vm.requesting = true;
         
         init();
@@ -337,6 +338,13 @@
             FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
                 ViewModelUtilsService.showModalCustomer(result);
             });
+        }
+        
+        function showAddNewPhone() {
+            function filterPhones(number){
+                return number.IsFoneclube == true;
+            }
+            return vm.customer.Phones.filter(filterPhones);
         }
         
         //ToDo => colocar em uma service, ou utils

@@ -74,6 +74,7 @@
         vm.changeNumberNew = changeNumberNew;
         vm.changePhoneNumber = changePhoneNumber;
         vm.getContactParentName = getContactParentName;
+        vm.showAddNewPhone = showAddNewPhone;
         
         vm.enter = enter;
         vm.onTapCancel = onTapCancel;
@@ -991,6 +992,13 @@
                 }
                 MainComponents.show(params);
             }
+        }
+        
+        function showAddNewPhone() {
+            function filterPhones(number){
+                return number.IsFoneclube == true;
+            }
+            return personCheckout.Phones.filter(filterPhones);
         }
         //ToDo => colocar em uma service, ou utils
         function showAlert(title, message){

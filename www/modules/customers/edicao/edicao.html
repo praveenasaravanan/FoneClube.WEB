@@ -103,7 +103,7 @@
             </label>
             <div class="item item-divider item-icon-right">
                 Informações linha(s) Foneclube
-                <button ng-show="vm.customer.Phones.length == 0" on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
+                <button ng-show="vm.showAddNewPhone.length == 0" on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
             </div>
             <div ng-repeat="phoneNumber in vm.customer.Phones track by $index">
                 <div ng-hide="!phoneNumber.IsFoneclube || phoneNumber.Delete">

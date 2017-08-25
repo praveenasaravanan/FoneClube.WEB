@@ -171,7 +171,7 @@
     </label>
     <div class="item item-divider item-icon-right">
         Informações nova linha Foneclube
-        <button ng-show="vm.phoneNumbersView.length == 1 || vm.phoneNumbersView.length == 0" on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
+        <button ng-show="vm.showAddNewPhone.length == 0" on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
     </div>
     <div ng-repeat="phoneNumber in vm.phoneNumbersView track by $index">
         <div class="item item-divider item-icon-right">
