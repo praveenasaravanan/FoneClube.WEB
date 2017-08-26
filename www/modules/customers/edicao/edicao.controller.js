@@ -23,7 +23,7 @@
         
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
-        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';//64642412301 //10667103767
         vm.requesting = true;
         
         init();
@@ -40,6 +40,9 @@
                 console.log(vm.customer);
                 for(var i=0; i < vm.customer.Adresses.length;i++){
                     vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber);
+                }
+                for (var item in vm.customer.Phones) {
+                    vm.customer.Phones[item].IdOperator = vm.customer.Phones[item].IdOperator.toString();
                 }
                 FoneclubeService.getPlans().then(function(result){
                     vm.plans = result;
@@ -147,12 +150,11 @@
                 "IdPlanOption": customer.IdPlanOption,
                 "IdPagarme": customer.IdPagarme,
                 "IdRole": customer.IdRole,
-                "IdCurrentOperator": parseInt(customer.IdCurrentOperator),
                 "Adresses": customer.Adresses,
                 "Phones": customer.Phones,
                 "Images": customer.Images,
                 "IdParent": customer.IdParent,
-                "IdContactParent": parseInt(clearPhoneNumber(customer.IdContactParent)),
+                "IdContactParent": customer.IdContactParent,
                 "NameContactParent": customer.NameContactParent,
                 "IdCommissionLevel": customer.IdCommissionLevel,
                 "SinglePrice": vm.singlePriceLocal,
@@ -160,28 +162,36 @@
             }
             
             function filterPhones(number){
-                return number.IsFoneclube == true;
+                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 9;
             }
-
-            validadeNumbers(customerSend.Phones.filter(filterPhones)).then(function(result) {
-                var right = true;
-                for (var item in result) {
-                    if (result[item].DocumentNumber && result[item].DocumentNumber != vm.customer.DocumentNumber) {
-                        showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.');
-                        right = false;
-                        vm.requesting = false;
+            var arrayFiltered = customerSend.Phones.filter(filterPhones);
+            if (arrayFiltered.length == 0) {
+                runPostUpdateCustomer(customerSend);
+            } else {
+                validadeNumbers(arrayFiltered).then(function(result) {
+                    var right = true;
+                    for (var item in result) {
+                        if (result[item].DocumentNumber && result[item].DocumentNumber != vm.customer.DocumentNumber) {
+                            showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.');
+                            right = false;
+                            vm.requesting = false;
+                        }
                     }
-                }
-                if (right) {
-                    for (var i in customerSend.Phones) {
-                        customerSend.Phones[i].DDD = clearPhoneNumber(customerSend.Phones[i].DDD);
-                        customerSend.Phones[i].Number = clearPhoneNumber(customerSend.Phones[i].Number);
+                    if (right) {
+                        runPostUpdateCustomer(customerSend);
                     }
-                    FoneclubeService.postUpdateCustomer(customerSend)
-                        .then(postUpdateCustomerSucess)
-                        .catch(postUpdateCustomerError);
+                });
+            }
+            
+            function runPostUpdateCustomer(customerSend) {
+                for (var i in customerSend.Phones) {
+                    customerSend.Phones[i].DDD = clearPhoneNumber(customerSend.Phones[i].DDD);
+                    customerSend.Phones[i].Number = clearPhoneNumber(customerSend.Phones[i].Number);
                 }
-            });
+                FoneclubeService.postUpdateCustomer(customerSend)
+                    .then(postUpdateCustomerSucess)
+                    .catch(postUpdateCustomerError);
+            }
             
             function postUpdateCustomerSucess(result) {
                 if(result) {
@@ -323,12 +333,13 @@
         }
         
         function getContactParentName() {
-            if (vm.customer.IdContactParent.length < 13) { return }
+            if (vm.contactParent.length < 13) { return }
             var param = {
-                ddd: clearPhoneNumber(vm.customer.IdContactParent).substring(0, 2),
-                numero: clearPhoneNumber(vm.customer.IdContactParent).substring(2)
+                ddd: clearPhoneNumber(vm.contactParent).substring(0, 2),
+                numero: clearPhoneNumber(vm.contactParent).substring(2)
             }
             FoneclubeService.getCustomerByPhoneNumber(param).then(function(result) {
+                vm.customer.IdContactParent = result.Id;
                 vm.customer.NameContactParent = result.Name;
             })
         }

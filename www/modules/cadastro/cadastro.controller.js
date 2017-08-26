@@ -178,7 +178,6 @@
                 'DocumentNumber': cpf,
                 'Name': vm.name,
                 'Born': vm.birthdate,
-                'IdCurrentOperator': vm.operator,
                 'Email': vm.email
             };
             
@@ -187,7 +186,9 @@
                 personCheckout['Phones'] = [
                     {
                         'DDD': vm.personalDDD,
-                        'Number': personalPhone
+                        'Number': personalPhone,
+                        'IdOperator': vm.operator,
+                        'IsFoneclube': null
                     }
                 ];
             }
@@ -789,25 +790,32 @@
             }
             
             function filterPhones(number){
-                return number.IsFoneclube == true;
+                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 9;
             }
             
-            validadeNumbers(personCheckout.Phones.filter(filterPhones)).then(function(result) {
-                var right = true;
-                for (var item in result) {
-                    if (result[item].DocumentNumber && result[item].DocumentNumber != vm.cpf.replace(/[-.,]/g , '')) {
-                        showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.');
-                        right = false;
-                        vm.requesting = false;
-                    }
-                }
-                if (right) {
-                    FoneclubeService.postUpdatePerson(personCheckout)
+            var arrayFiltered = personCheckout.Phones.filter(filterPhones);
+            if (arrayFiltered.length == 0) {
+                FoneclubeService.postUpdatePerson(personCheckout)
                         .then(postUpdatePersonSucess)
                         .catch(postUpdatePersonError);
-                }
-            });
-
+            } else {
+                validadeNumbers(arrayFiltered).then(function(result) {
+                    var right = true;
+                    for (var item in result) {
+                        if (result[item].DocumentNumber && result[item].DocumentNumber != vm.cpf.replace(/[-.,]/g , '')) {
+                            showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.');
+                            right = false;
+                            vm.requesting = false;
+                        }
+                    }
+                    if (right) {
+                        FoneclubeService.postUpdatePerson(personCheckout)
+                            .then(postUpdatePersonSucess)
+                            .catch(postUpdatePersonError);
+                    }
+                });
+            }
+            
             function postUpdatePersonSucess(result) {
                 if(result) {
                     FlowManagerService.changeHomeView();
