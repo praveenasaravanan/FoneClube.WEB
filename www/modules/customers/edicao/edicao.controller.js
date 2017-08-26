@@ -23,7 +23,7 @@
         
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
-        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';//64642412301 //10667103767
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : ''; //64642412301 //10667103767
         vm.requesting = true;
         
         init();
@@ -37,6 +37,7 @@
                 vm.customer = result;
                 vm.customer.Born = vm.customer.Born ? getFormatedDate(vm.customer.Born) : '';
                 vm.customer.IdCurrentOperator = vm.customer.IdCurrentOperator ? vm.customer.IdCurrentOperator.toString() : '';
+                getPersonParent(vm.customer.IdContactParent); //ToDo falta ajustar a API para devolver o id do cliente parent;
                 console.log(vm.customer);
                 for(var i=0; i < vm.customer.Adresses.length;i++){
                     vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber);
@@ -44,6 +45,7 @@
                 for (var item in vm.customer.Phones) {
                     vm.customer.Phones[item].IdOperator = vm.customer.Phones[item].IdOperator.toString();
                 }
+                
                 FoneclubeService.getPlans().then(function(result){
                     vm.plans = result;
                     for(var number in vm.customer.Phones) {
@@ -59,13 +61,23 @@
                             }
                         }
                     }
-                    
                     vm.requesting = false;
                 });
                 vm.singlePriceLocal = vm.customer.SinglePrice ? vm.customer.SinglePrice : 0;
             });
-            
         };
+        
+        function getPersonParent(id) {
+            if (id) {
+                FoneclubeService.getCustomerById(id).then(function (result) {
+                    if (result.Phones.length > 0) {
+                        vm.contactParent = result.Phones[0].DDD.concat(result.Phones[0].Number); 
+                    }
+                }).catch(function (error) {
+                    console.log('error: ' + error);
+                });
+            }
+        }
 
         function getFormatedDate(param) {
             var date = new Date(param);
@@ -333,13 +345,16 @@
         }
         
         function getContactParentName() {
-            if (vm.contactParent.length < 13) { return }
+            if (vm.contactParent.length < 13) { 
+                vm.customer.IdParent = "";
+                return
+            }
             var param = {
                 ddd: clearPhoneNumber(vm.contactParent).substring(0, 2),
                 numero: clearPhoneNumber(vm.contactParent).substring(2)
             }
             FoneclubeService.getCustomerByPhoneNumber(param).then(function(result) {
-                vm.customer.IdContactParent = result.Id;
+                vm.customer.IdParent = result.Id;
                 vm.customer.NameContactParent = result.Name;
             })
         }

@@ -707,7 +707,6 @@
         function onTapSendFoneclubeData(){
             vm.requesting = true;
             var cpf = vm.cpf.replace(/[-.,]/g , '');
-            var contactParent = clearPhoneNumber(vm.contactParent);
             var plans = [];
             var phones = [];
             
@@ -766,7 +765,7 @@
             var personCheckout = {
                     'DocumentNumber': cpf,  
                     'NameContactParent': vm.whoinvite,
-                    'IdContactParent': contactParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
+                    'IdParent': vm.IdParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
                     'Plans': plans,
                     'Phones': phones,
                     'SinglePrice': vm.singlePrice,
@@ -955,12 +954,16 @@
         }
         
         function getContactParentName() {
-            if (vm.contactParent.length < 13) { return }
+            if (vm.phoneContactParent.length < 13) { 
+                vm.IdParent = "";
+                return 
+            }
             var param = {
-                ddd: clearPhoneNumber(vm.contactParent).substring(0, 2),
-                numero: clearPhoneNumber(vm.contactParent).substring(2)
+                ddd: clearPhoneNumber(vm.phoneContactParent).substring(0, 2),
+                numero: clearPhoneNumber(vm.phoneContactParent).substring(2)
             }
             FoneclubeService.getCustomerByPhoneNumber(param).then(function(result) {
+                vm.IdParent = result.Id;
                 vm.whoinvite = result.Name;
             })
         }

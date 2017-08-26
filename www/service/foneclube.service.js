@@ -31,6 +31,7 @@
         this.getCustomerByCPF = getCustomerByCPF;
         this.getHistoryPayment = getHistoryPayment;
         this.getCustomerByPhoneNumber = getCustomerByPhoneNumber;
+        this.getCustomerById = getCustomerById;
         
         function postUpdatePerson(personCheckout){
             var q = $q.defer();
@@ -234,6 +235,20 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/profile/phoneOwner'), param)
+            .then(function(result){
+                q.resolve(result);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+
+            return q.promise;
+        }
+        
+        function getCustomerById(id) {
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/profile/cliente/id/'.concat(id)))
             .then(function(result){
                 q.resolve(result);
             })
