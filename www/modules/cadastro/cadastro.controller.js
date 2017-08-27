@@ -22,10 +22,30 @@
         '$ionicModal',
         '$interval',
         'FlowManagerService',
-        'ViewModelUtilsService'
-        ];
+        'ViewModelUtilsService',
+        '$ionicScrollDelegate'
+    ];
 
-    function CadastroController($scope,PagarmeService, $ionicPopup, HubDevService, FoneclubeService, $ionicLoading, FileListUtil, MainUtils, $q, $cordovaCamera, $cordovaFile, $timeout, MainComponents, $ionicModal, $interval, FlowManagerService, ViewModelUtilsService) {
+    function CadastroController(
+        $scope,PagarmeService, 
+         $ionicPopup, 
+         HubDevService, 
+         FoneclubeService,
+         $ionicLoading, 
+         FileListUtil,
+         MainUtils, 
+         $q, 
+         $cordovaCamera, 
+         $cordovaFile, 
+         $timeout, 
+         MainComponents, 
+         $ionicModal,
+         $interval,
+         FlowManagerService, 
+         ViewModelUtilsService,
+         $ionicScrollDelegate
+    ) {
+            
         var vm = this;
         vm.viewName = 'Cadastro Foneclube';
         vm.requesting = false;
@@ -40,20 +60,9 @@
         vm.city = '';
         vm.uf = '';
         vm.email = '';
-        vm.personalDDD = '';
         vm.personalNumber = '';
-        vm.phoneNumbersView =[
-            {
-                'DDD': '',
-                'Number': '',
-                'plan': '',
-                'IsFoneclube': true,
-                'Portability': true,
-                'Nickname': '',
-                'SameNumber': false,
-                'operadora': ''
-            }
-        ]
+        vm.phoneNumbersView =[ ];
+        onTapNewPhoneNumber();
 
         vm.onTapSearchDocument = onTapSearchDocument;
         vm.onTapSendDocument = onTapSendDocument;
@@ -70,8 +79,6 @@
         vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
         vm.setPlansList = setPlansList;
-        vm.changeNumberPortabilty = changeNumberPortabilty;
-        vm.changeNumberNew = changeNumberNew;
         vm.changePhoneNumber = changePhoneNumber;
         vm.getContactParentName = getContactParentName;
         vm.showAddNewPhone = showAddNewPhone;
@@ -84,29 +91,21 @@
         function init(){
             vm.hasCPF = false;
             etapaDocumento();
-
             vm.allOperatorOptions = MainUtils.operatorOptions();
-            console.log(vm.allOperatorOptions)
-
             FoneclubeService.getPlans().then(function(result){
                 console.log(result)
                 vm.plans = result;
                 vm.selectedPlansList = [];
-                //post realizado com sucesso
             })
             .catch(function(error){
-                console.log(error.statusText); // mensagem de erro para tela, caso precise
+                console.log(error.statusText);
             });
-
-
            FoneclubeService.getOperators().then(function(result){
                 vm.operators = result;
-                //post realizado com sucesso
             })
             .catch(function(error){
-                console.log(error.statusText); // mensagem de erro para tela, caso precise
+                console.log(error.statusText);
             });
-
             $ionicModal.fromTemplateUrl('templates/modal.html', {
                 scope: $scope
             }).then(function(modal) {
@@ -158,8 +157,6 @@
                 FlowManagerService.changeHomeView();
             });
         }
-        
-        
 
         function onTapSendDocument(){
             vm.requesting = true;
@@ -172,21 +169,17 @@
                 vm.requesting = false;
                 return;
             }
-            
-            var cpf = vm.cpf.replace(/[-.,]/g , '');
             var personCheckout = {
-                'DocumentNumber': cpf,
+                'DocumentNumber': vm.cpf.replace(/[-.,]/g , ''),
                 'Name': vm.name,
                 'Born': vm.birthdate,
                 'Email': vm.email
             };
-            
-            var personalPhone = vm.personalNumber.replace('-', '').replace(' ', '');
-            if(vm.personalDDD && personalPhone) {
+            if(vm.personalNumber.length >= 14) {
                 personCheckout['Phones'] = [
                     {
-                        'DDD': vm.personalDDD,
-                        'Number': personalPhone,
+                        'DDD': getNumberJson(vm.personalNumber).DDD,
+                        'Number': getNumberJson(vm.personalNumber).Number,
                         'IdOperator': vm.operator,
                         'IsFoneclube': null
                     }
@@ -200,10 +193,18 @@
             }).catch(function(error){
                 console.log('catch error');
                 console.log(error);
-                console.log(error.statusText); // mensagem de erro para tela, caso precise
+                console.log(error.statusText);
                 vm.requesting = false;
                 MainComponents.alert({mensagem:error.statusText});
             });
+        }
+            
+        function getNumberJson(param) {
+            var number = {
+                DDD: clearPhoneNumber(param).substring(0, 2),
+                Number: clearPhoneNumber(param).substring(2)
+            }
+            return number;
         }
 
         function validarCEP() {
@@ -250,14 +251,10 @@
             }
 
             FoneclubeService.postUpdatePersonAdress(personCheckout).then(function(result){
-                console.log(result);
-                if(result)
-                {
+                if(result) {
                     etapaDadosPessoais();
                     MainComponents.alert({titulo:'Andamento',mensagem:'Endereço enviado, agora preencha os dados pessoais.'});
                 }
-
-                //post realizado com sucesso
             })
             .catch(function(error){
                 console.log('catch error');
@@ -273,7 +270,6 @@
         function onTapSendPersonalData(){
             vm.requesting = true;
             var cpf = vm.cpf.replace(/[-.,]/g , '');
-            
             var personCheckout = {
                 'DocumentNumber': cpf,
                 'Images': [selfiePhotoName, frontPhotoName, versePhotoName]
@@ -289,21 +285,16 @@
                 delete personCheckout.Images
             }
 
-
-
             /**var selfiePhotoName = '';
             var frontPhotoName = '';
             var versePhotoName = ''; */
             console.log(personCheckout);
-
             FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
                 console.log(result);
-                if(result)
-                {
+                if(result) {
                     etapaComplementar();
                     MainComponents.alert({titulo:'Andamento',mensagem:'Dados pessoais enviados, agora preencha os dados Foneclube.'});
                 }
-
                 //post realizado com sucesso
             })
             .catch(function(error){
@@ -312,7 +303,6 @@
                 MainComponents.alert({mensagem:error.statusText});
                 vm.requesting = false;
             });
-
         }
 
         function etapaDocumentoFaseNome(){
@@ -323,6 +313,8 @@
 
         function etapaDocumento(){
             limpaEtapas();
+            resizeScroll();
+            $ionicScrollDelegate.scrollTop(true);
             vm.etapaDocumento = true;
         }
 
@@ -330,18 +322,24 @@
             limpaEtapas();
             vm.etapaBuscarCEP = true;
             vm.etapaEndereco = true;
+            resizeScroll();
+            $ionicScrollDelegate.scrollTop(true);
             vm.requesting = false;
         }
 
         function etapaDadosPessoais(){
             limpaEtapas();
             vm.etapaDadosPessoais = true;
+            resizeScroll();
+            $ionicScrollDelegate.scrollTop(true);
             vm.requesting = false;
         }
 
         function etapaComplementar(){
             limpaEtapas();
             vm.etapaComplementar = true;
+            resizeScroll();
+            $ionicScrollDelegate.scrollTop(true);
             vm.requesting = false;
         }
 
@@ -352,18 +350,14 @@
             vm.etapaComplementar = false;
         }
 
-
         /////////////////////////
         /////FOTOS FASE
-
         //MOVER PRA CONSTATNS
         var PHOTO_SELFIE = 1;
         var PHOTO_FRONT = 2;
         var PHOTO_VERSE = 3;
         var interval;
         vm.currentPhoto;
-
-
 
         function onTapPhotoSelfie(){
             console.log('onTapPhotoSelfie');
@@ -381,20 +375,16 @@
             console.log('onTapPhotoVerse');
             if(!vm.verseSended)
                 launchModal(PHOTO_VERSE);
-
                 //deseja trocar imagem?
         }
 
         function launchModal(photoType){
             console.log('launchModal ' + photoType);
             vm.currentPhoto = photoType;
-
             //limpa seleção de arquivo em variável local e em variável global
             vm.hasFileSelected = false;
             FileListUtil.set(undefined);
-
             vm.hasPhotoCaptured = false;
-
             vm.modal.show();
             validadeFile();
 
@@ -404,10 +394,7 @@
             try{
                 $interval.cancel(interval);
             }
-            catch(error){
-
-            }
-
+            catch(error){ }
             interval = $interval(function() {
                 //console.log('say hello');
                 //console.log(FileListUtil.get())
@@ -418,20 +405,16 @@
             }, 500);
         }
 
-
         vm.onTapPhotoGalley = onTapPhotoGalley;
         vm.onTapPhotoCamera = onTapPhotoCamera;
-
         function onTapPhotoGalley(){
             console.log('onTapPhotoGalley');
             //não precisu file upload abre direto do DOM
         }
-
         function onTapPhotoCamera(){
             console.log('onTapPhotoCamera');
             //startCameraPhoto(); não precisa file upload abre direto do DOM
         }
-
 
         ////PHOTO PROCCESS
         /////////////////////////////////////
@@ -447,33 +430,23 @@
         var cameraPhotoName;
         vm.fotos = [];
         vm.images = []
-
         vm.onTapSendImage = onTapSendImage;
-
         function uploadIdentidadeGaleria(){
             console.log('uploadIdentidadeGaleria')
             var file = FileListUtil.get();
-
             if(!file)
              return;
-
             uploadFile(file).then(function(result){
                 console.log('result')
                 console.log(result.filename);
-
-
                 setImageReleaseView(result);
-
-
                 //https://s3-sa-east-1.amazonaws.com/fone-clube-bucket/lsUbxLxh-IMG_20170420_162617843.jpg
             });
 
         }
 
         function setImageReleaseView(result){
-
             switch(vm.currentPhoto) {
-
                     case PHOTO_SELFIE:
                         console.log('PHOTO_SELFIE');
                         vm.selfieSended = true;
@@ -503,7 +476,6 @@
                         vm.modal.hide();
                         //code
                         break;
-
                 }
         }
 
@@ -513,7 +485,6 @@
 
 
         function uploadFile(file){
-
             console.log('-- uploadFile galeria')
             var q = $q.defer();
             console.log(file);
@@ -524,9 +495,7 @@
                 q.reject();
                 return q.promise;
             }
-
             MainComponents.showLoader('Enviando...');
-
             var imageUploader = new ImageUploader();
             imageUploader.push(file)
             .then((data) => {
@@ -549,21 +518,14 @@
             console.log('onTapSendImage ');
             if(vm.hasPhotoCaptured)
                 startListUpload(vm.fotos);
-
             if(vm.hasFileSelected)
                 uploadIdentidadeGaleria();
-
-
-
-
         }
-
 
         /////////////////////////////////////
         ///foto de camera
         //extrair
         function startCameraPhoto() {
-
             console.log('fotoIdentidadeCamera')
             // 2
             var options = {
@@ -576,7 +538,6 @@
 
             // 3
             $cordovaCamera.getPicture(options).then(function(imageData) {
-
                 console.log('cordovaCamera.getPicture')
                 console.log(imageData)
                 // 4
@@ -585,16 +546,12 @@
                 function onImageSuccess(fileURI) {
                     createFileEntry(fileURI);
                 }
-
                 function createFileEntry(fileURI) {
                     window.resolveLocalFileSystemURL(fileURI, copyFile, fail);
                 }
-
                 // 5
                 function copyFile(fileEntry) {
-
                     var newName = MainUtils.guid() + '.jpg'; //todo fazer tratamento pra nome jpg /png
-
                     window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(fileSystem2) {
                         fileEntry.copyTo(
                             fileSystem2,
@@ -612,17 +569,13 @@
                     console.log(entry);
                     console.log(entry.nativeURL);
                     var listName = entry.nativeURL.split('/');
-
                     vm.fotos.push(entry.nativeURL);
                     listaImagens.push(listName[listName.length - 1]);
-
                     $scope.$apply(function () {
                         vm.images.push(entry.nativeURL);
                     });
-
                     vm.hasPhotoCaptured = true;
                     //startListUpload(vm.fotos);
-
                 }
 
                 function fail(error) {
@@ -632,7 +585,6 @@
                 function makeid() {
                     var text = "";
                     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
                     for (var i=0; i < 5; i++) {
                         text += possible.charAt(Math.floor(Math.random() * possible.length));
                     }
@@ -642,25 +594,17 @@
             }, function(err) {
                 console.log(err);
             });
-
-
         }
 
         function startListUpload(photos){
-
             MainComponents.showLoader('Enviando...');
-
-            if(photos.length > 0)
-            {
+            if(photos.length > 0) {
                 var lastItemIndex = photos[photos.length - 1];
                 uploadImagePath(lastItemIndex).then(function(result){
                     if(result)
                         continueListUpload(vm.fotos);
-
                 });
-            }
-            else
-            {
+            } else {
                 MainComponents.hideLoader();
                 //MainComponents.alert({mensagem:'Imagem enviada com sucesso'});
                 console.log(listaImagens)
@@ -675,16 +619,11 @@
         }
 
         function uploadImagePath(path){
-
             var q = $q.defer();
-
             var guidName = MainUtils.guid();
-
             MainUtils.pathToDataURI(path, function(dataUri) {
-
                 var blob = MainUtils.dataURIToBlob(dataUri);
                 blob.name = guidName.concat('.jpg');
-
                 MainUtils.uploadFile(blob).then(function(result){
                     console.log(' MainUtils.uploadFile(blob)')
                     console.log(result)
@@ -695,7 +634,6 @@
                     q.resolve(false);
                 });
             });
-
             return q.promise;
         }
 
@@ -706,26 +644,26 @@
         vm.onTapSendFoneclubeData = onTapSendFoneclubeData;
         function onTapSendFoneclubeData(){
             vm.requesting = true;
+            MainComponents.showLoader('Enviando dados...');
             var cpf = vm.cpf.replace(/[-.,]/g , '');
-            var plans = [];
             var phones = [];
-            
             var totalPriceValidade = 0;
-
-            //validação de campos obrigatorios
-            for (var i=0; i < vm.phoneNumbersView.length; i++) {
-                if(vm.phoneNumbersView[i].Nickname == '') {
-                    MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'Nickname é um campo obrigario'});
+            
+            for (var number in vm.phoneNumbersView) {
+                if(vm.phoneNumbersView[number].Nickname == '') {
+                    MainComponents.alert({titulo:'Linha ' + (number + 1), mensagem:'Nickname é um campo obrigario'});
                     vm.requesting = false;
+                    MainComponents.hideLoader();
                     return;
                 }
-                if(vm.phoneNumbersView[i].plan == '') {
-                    MainComponents.alert({titulo:'Linha ' + (i + 1), mensagem:'A escolha do plano é obrigatória.'});
+                if(vm.phoneNumbersView[number].IdPlanOption == '') {
+                    MainComponents.alert({titulo:'Linha ' + (number + 1), mensagem:'A escolha do plano é obrigatória.'});
                     vm.requesting = false;
+                    MainComponents.hideLoader();
                     return;
                 } else {
                     vm.plans.find(function (element, index, array) {
-                        if (element.Id == vm.phoneNumbersView[i].plan) {
+                        if (element.Id == vm.phoneNumbersView[number].IdPlanOption) {
                             totalPriceValidade = totalPriceValidade + element.Value / 100;
                         }
                     });
@@ -736,44 +674,34 @@
                 if (price > totalPriceValidade) {
                     MainComponents.alert({mensagem:'Preço único não pode ser maior do que o preço de todos os planos somados.'});
                     vm.requesting = false;
+                    MainComponents.hideLoader();
                     return
                 }
                 
             }
 
             vm.phoneNumbersView.forEach(function (element, index, array) {
-                //tlvz isso vai morrer parte de planos solta ( estou avaliando, cardozo)
-                plans.push( {
-                    'IdPlanOption': element.plan,
-                    'IdContact': clearPhoneNumber(element.DDD).toString().concat(clearPhoneNumber(element.Number).toString())
+                phones.push({
+                    'DDD': getNumberJson(element.NovoFormatoNumero).DDD,
+                    'Number': getNumberJson(element.NovoFormatoNumero).Number,
+                    'Portability': element.Portability,
+                    'IsFoneclube': true,
+                    'Nickname': element.Nickname,
+                    'IdPlanOption': element.IdPlanOption
                 });
-                if(clearPhoneNumber(element.DDD).toString() != '' || clearPhoneNumber(element.DDD).toString() == undefined
-                || clearPhoneNumber(element.Number).toString() != '' || clearPhoneNumber(element.Number).toString() != undefined)
-                {
-                    
-                    phones.push({
-                        'DDD': clearPhoneNumber(element.DDD),
-                        'Number': clearPhoneNumber(element.Number),
-                        'Portability': element.Portability,
-                        'IsFoneclube': true,
-                        'Nickname': element.Nickname,
-                        'IdPlanOption': element.plan
-                    });
-                }
             });
 
             var personCheckout = {
-                    'DocumentNumber': cpf,  
-                    'NameContactParent': vm.whoinvite,
-                    'IdParent': vm.IdParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
-                    'Plans': plans,
-                    'Phones': phones,
-                    'SinglePrice': vm.singlePrice,
-                    'DescriptionSinglePrice': vm.descriptionSinglePrice
+                'DocumentNumber': cpf,  
+                'NameContactParent': vm.whoinvite,
+                'IdParent': vm.IdParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
+                'Phones': phones,
+                'SinglePrice': vm.singlePrice,
+                'DescriptionSinglePrice': vm.descriptionSinglePrice
             };
             
             //Remove os atributos falsy
-            for (var key in personCheckout) {
+            /*for (var key in personCheckout) {
                 if (!personCheckout[key]) {
                     delete personCheckout[key];
                 }
@@ -786,13 +714,11 @@
                         }
                     }    
                 }
-            }
+            }*/
             
-            function filterPhones(number){
+            var arrayFiltered = personCheckout.Phones.filter(function (number){
                 return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 9;
-            }
-            
-            var arrayFiltered = personCheckout.Phones.filter(filterPhones);
+            });
             if (arrayFiltered.length == 0) {
                 FoneclubeService.postUpdatePerson(personCheckout)
                         .then(postUpdatePersonSucess)
@@ -805,6 +731,7 @@
                             showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.');
                             right = false;
                             vm.requesting = false;
+                            MainComponents.hideLoader();
                         }
                     }
                     if (right) {
@@ -816,6 +743,7 @@
             }
             
             function postUpdatePersonSucess(result) {
+                MainComponents.hideLoader();
                 if(result) {
                     FlowManagerService.changeHomeView();
                     var params = {
@@ -861,6 +789,7 @@
             
             function postUpdatePersonError(error) {
                 vm.requesting = false;
+                MainComponents.hideLoader();
                 MainComponents.alert({mensagem:error.statusText});
             }
         }
@@ -885,29 +814,24 @@
                 }
             }
         }
-        
-        function changeNumberPortabilty(item) {
-            vm.phoneNumbersView[item].Portability = true;
-            vm.phoneNumbersView[item].NewNumber = false;
-        }
-        
-        function changeNumberNew(item) {
-            vm.phoneNumbersView[item].Portability = false;
-            vm.phoneNumbersView[item].NewNumber = true;
-        }
-
+            
         //adiciona telefone do array que é exibido na view
         function onTapNewPhoneNumber() {
             vm.phoneNumbersView.push(
                 {
+                    'Id': null,
                     'DDD': '',
                     'Number': '',
-                    'plan': '',
                     'IsFoneclube': true,
-                    'Portability': true,
-                    'Nickname': '',
-                    'SameNumber': false,
-                    'operadora': ''
+                    'IdOperator': 0,
+                    'Portability': false,
+                    'NickName': '',
+                    'IdPlanOption': 0,
+                    'Inative': false,
+                    'Delete': false,
+                    'NovoFormatoNumero': '',
+                    'operadora': '1',
+                    'key': Math.random()
                 }
             );
         }
@@ -1010,6 +934,10 @@
                 return number.IsFoneclube == true;
             }
             return personCheckout.Phones.filter(filterPhones);
+        }
+            
+        function resizeScroll() {
+            $ionicScrollDelegate.resize();
         }
         //ToDo => colocar em uma service, ou utils
         function showAlert(title, message){

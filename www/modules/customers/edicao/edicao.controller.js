@@ -5,25 +5,23 @@
         .module('foneClub')
         .controller('EdicaoController', EdicaoController);
 
-    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q'];
-    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q) {
+    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate'];
+    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate) {
         var vm = this;
         vm.onTapSendUser = onTapSendUser;
         vm.validateData = validateData;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
         vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
-        vm.changeNumberPortabilty = changeNumberPortabilty;
-        vm.changeNumberNew = changeNumberNew;
         vm.validarCEP = validarCEP;
         vm.validarCPF = validarCPF;
-        vm.changePhoneNumber = changePhoneNumber;
+        vm.validatePhoneNumber = validatePhoneNumber;
         vm.getContactParentName = getContactParentName;
         vm.showAddNewPhone = showAddNewPhone;
         vm.goBack = goBack;
         
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
-        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : ''; //64642412301 //10667103767
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '93152412746'; //64642412301 //10667103767
         vm.requesting = true;
         
         init();
@@ -32,40 +30,49 @@
                 FlowManagerService.changeCustomersView();
                 return;
             }
+            MainComponents.showLoader('Carregando dados...');
             FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
                 vm.DocumentNumberFreeze = result.DocumentNumber;
                 vm.customer = result;
-                vm.customer.Born = vm.customer.Born ? getFormatedDate(vm.customer.Born) : '';
-                vm.customer.IdCurrentOperator = vm.customer.IdCurrentOperator ? vm.customer.IdCurrentOperator.toString() : '';
+                vm.customer.Born = vm.customer.Born ? getFormatedDate(vm.customer.Born) : ''; //formata data de nasicmento
                 getPersonParent(vm.customer.IdContactParent); //ToDo falta ajustar a API para devolver o id do cliente parent;
-                console.log(vm.customer);
+                vm.singlePriceLocal = vm.customer.SinglePrice ? vm.customer.SinglePrice : 0; //single place formatado;
                 for(var i=0; i < vm.customer.Adresses.length;i++){
-                    vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber);
+                    vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber); //deve ser int por causa da mascara
                 }
-                for (var item in vm.customer.Phones) {
-                    vm.customer.Phones[item].IdOperator = vm.customer.Phones[item].IdOperator.toString();
-                }
-                
                 FoneclubeService.getPlans().then(function(result){
                     vm.plans = result;
                     for(var number in vm.customer.Phones) {
-                        vm.customer.Phones[number].IdPlanOption = vm.customer.Phones[number].IdPlanOption.toString();
-                        vm.customer.Phones[number].NewNumber = !vm.customer.Phones[number].Portability;
+                        vm.customer.Phones[number].key = Math.random();
+                        vm.customer.Phones[number].IdOperator = vm.customer.Phones[number].IdOperator.toString(); //deve ser string por causa do ng-options
+                        vm.customer.Phones[number].IdPlanOption = vm.customer.Phones[number].IdPlanOption.toString(); //deve ser string por causa do ng-options
+                        if (vm.customer.Phones[number].Portability) {
+                            vm.customer.Phones[number].Portability = 'true';
+                        } else {
+                            vm.customer.Phones[number].Portability = 'false';   
+                        }
+                        vm.customer.Phones[number].NovoFormatoNumero = getNumberString(vm.customer.Phones[number]); //popula o novo campo vm.<telefone>
                         for (var plan in vm.plans) {
                             if (vm.plans[plan].Id == vm.customer.Phones[number].IdPlanOption) {
                                 if (vm.plans[plan].Description.endsWith('VIVO')) {
-                                    vm.customer.Phones[number].operadora = '1';
+                                    vm.customer.Phones[number].operadora = '1'; //seta a operadora local
                                 } else {
-                                    vm.customer.Phones[number].operadora = '2';
+                                    vm.customer.Phones[number].operadora = '2'; //seta a operadora local
                                 }
                             }
                         }
                     }
+                    console.info(vm.customer);
+                    MainComponents.hideLoader();
                     vm.requesting = false;
                 });
-                vm.singlePriceLocal = vm.customer.SinglePrice ? vm.customer.SinglePrice : 0;
             });
         };
+        
+        function ajustaDados() {
+
+            console.log(vm.customer); //log :D
+        }
         
         function getPersonParent(id) {
             if (id) {
@@ -108,45 +115,6 @@
             return false;
         }
         
-        function onTapRemoveNewNumber(position){
-            var confirmPopup = $ionicPopup.confirm( {
-                title: 'Excluir Número',
-                template: 'Deseja realmente remover este número?',
-                buttons: [
-                    {   text: 'Não' },
-                    {   text: '<b>Sim</b>',
-                        type: 'button-positive',
-                        onTap: function(e) {
-                            return true;
-                        }
-                    }
-                ]
-            });
-            confirmPopup.then(function(res) {
-                if(res) {
-                    vm.customer.Phones[position].Delete = true;
-                }
-            });
-        }
-        
-        function onTapNewPhoneNumber() {
-            vm.customer.Phones.push(
-                {
-                    'DDD': '',
-                    'Delete': null,
-                    'Id': null,
-                    'IdOperator': 0,
-                    'IdPlanOption': 0,
-                    'Inative': null,
-                    'IsFoneclube': true,
-                    'NickName': '',
-                    'Number': '',
-                    'Portability': false,
-                    'NewNumber': true
-                }
-            );
-        }
-        
         function onTapSendUser(customer){
             vm.requesting = true;
             
@@ -173,10 +141,22 @@
                 "DescriptionSinglePrice": customer.DescriptionSinglePrice
             }
             
-            function filterPhones(number){
-                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 9;
+            //Regra: o telefone não pode ser incompleto, mass pode estar em branco
+            for (var item in customerSend.Phones) {
+                if (customerSend.Phones[item].NovoFormatoNumero.length < 14 && customerSend.Phones[item].NovoFormatoNumero.length > 0) {
+                    showAlert('Aviso', 'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.'));
+                    vm.requesting = false;
+                    return;
+                } else {
+                    customerSend.Phones[item].DDD = getNumberJson(customerSend.Phones[item].NovoFormatoNumero).DDD;
+                    customerSend.Phones[item].Number = getNumberJson(customerSend.Phones[item].NovoFormatoNumero).Number;
+                }
             }
-            var arrayFiltered = customerSend.Phones.filter(filterPhones);
+            
+            var arrayFiltered = customerSend.Phones.filter(function (number) {
+                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 9;
+            });
+            
             if (arrayFiltered.length == 0) {
                 runPostUpdateCustomer(customerSend);
             } else {
@@ -196,10 +176,6 @@
             }
             
             function runPostUpdateCustomer(customerSend) {
-                for (var i in customerSend.Phones) {
-                    customerSend.Phones[i].DDD = clearPhoneNumber(customerSend.Phones[i].DDD);
-                    customerSend.Phones[i].Number = clearPhoneNumber(customerSend.Phones[i].Number);
-                }
                 FoneclubeService.postUpdateCustomer(customerSend)
                     .then(postUpdateCustomerSucess)
                     .catch(postUpdateCustomerError);
@@ -241,16 +217,6 @@
             }
         };
         
-        function validadeNumbers(numbers){
-            var promises = numbers.map(function(number) {
-                return FoneclubeService.getCustomerByPhoneNumber({
-                    ddd: clearPhoneNumber(number.DDD),
-                    numero: clearPhoneNumber(number.Number)
-                });
-            });
-            return $q.all(promises);
-        }
-        
         function setPlansList(operadora) {
             vm.selectedPlansList = [];
             for (var item in vm.plans) {
@@ -260,20 +226,6 @@
                     vm.selectedPlansList.push(vm.plans[item]);
                 }
             }
-        }
-        
-        function changeNumberPortabilty(item) {
-            vm.customer.Phones[item].Portability = true;
-            vm.customer.Phones[item].NewNumber = false;
-        }
-        
-        function changeNumberNew(item) {
-            vm.customer.Phones[item].Portability = false;
-            vm.customer.Phones[item].NewNumber = true;
-        }
-
-        function clearPhoneNumber(number) {
-            return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : '';
         }
         
         function validarCEP(index) {
@@ -328,22 +280,6 @@
             });
         }
         
-        function changePhoneNumber(position) {
-            if (vm.customer.Phones[position].DDD.length < 2 || vm.customer.Phones[position].Number.length < 9) {
-                console.log('return');
-                return
-            }
-            var param = {
-                ddd: clearPhoneNumber(vm.customer.Phones[position].DDD),
-                numero: clearPhoneNumber(vm.customer.Phones[position].Number)
-            }
-            FoneclubeService.getCustomerByPhoneNumber(param).then(function(res) {
-                if (res.DocumentNumber && res.DocumentNumber != vm.customer.DocumentNumber) {
-                    showAlert('Aviso', 'Este telefone já pertence a um cliente.');
-                }
-            });
-        }
-        
         function getContactParentName() {
             if (vm.contactParent.length < 13) { 
                 vm.customer.IdParent = "";
@@ -359,6 +295,94 @@
             })
         }
         
+        function onTapNewPhoneNumber() {
+            vm.customer.Phones.push(
+                {
+                    'Id': null,
+                    'DDD': '',
+                    'Number': '',
+                    'IsFoneclube': true,
+                    'IdOperator': 0,
+                    'Portability': false,
+                    'NickName': '',
+                    'IdPlanOption': 0,
+                    'Inative': false,
+                    'Delete': false,
+                    'NovoFormatoNumero': '',
+                    'operadora': '1',
+                    'key' : Math.random()
+                }
+            );
+            resizeScroll();
+        }
+        
+        function onTapRemoveNewNumber(position){
+            var confirmPopup = $ionicPopup.confirm( {
+                title: 'Excluir Número',
+                template: 'Deseja realmente remover este número?',
+                buttons: [
+                    {   text: 'Não' },
+                    {   text: '<b>Sim</b>',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            return true;
+                        }
+                    }
+                ]
+            });
+            confirmPopup.then(function(res) {
+                if(res) {
+                    vm.customer.Phones[position].Delete = true;
+                }
+            });
+        }
+        
+        function validadeNumbers(numbers){
+            var promises = numbers.map(function(number) {
+                return FoneclubeService.getCustomerByPhoneNumber({
+                    ddd: clearPhoneNumber(number.DDD),
+                    numero: clearPhoneNumber(number.Number)
+                });
+            });
+            return $q.all(promises);
+        }
+        
+        function validatePhoneNumber(position) {
+            if (vm.customer.Phones[position].NovoFormatoNumero.length < 14) return;
+            var number = {
+                ddd: getNumberJson(vm.customer.Phones[position].NovoFormatoNumero).DDD,
+                numero: getNumberJson(vm.customer.Phones[position].NovoFormatoNumero).Number
+            }
+            FoneclubeService.getCustomerByPhoneNumber(number).then(function(res) {
+                if (res.DocumentNumber && res.DocumentNumber != vm.customer.DocumentNumber) {
+                    showAlert('Aviso', 'Este telefone já pertence a um cliente.');
+                }
+            });
+        }
+        
+        function getNumberJson(param) {
+            var number = {
+                DDD: clearPhoneNumber(param).substring(0, 2),
+                Number: clearPhoneNumber(param).substring(2)
+            }
+            return number;
+        }
+        
+        function getNumberString(param) {
+            return param.DDD.concat(param.Number);
+        }
+        
+        function clearPhoneNumber(number) {
+            return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : '';
+        }
+        
+        function showAddNewPhone() {
+            function filterPhones(number) {
+                return number.IsFoneclube == true;
+            }
+            return vm.customer.Phones.filter(filterPhones);
+        }
+        
         function goBack() {
             FlowManagerService.goBack();
             FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
@@ -366,11 +390,8 @@
             });
         }
         
-        function showAddNewPhone() {
-            function filterPhones(number){
-                return number.IsFoneclube == true;
-            }
-            return vm.customer.Phones.filter(filterPhones);
+        function resizeScroll() {
+            $ionicScrollDelegate.resize();
         }
         
         //ToDo => colocar em uma service, ou utils
