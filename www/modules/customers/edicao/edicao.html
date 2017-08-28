@@ -129,8 +129,8 @@
                     <label class="item">
                         <span class="input-label">Deseja usar seu número atual com este plano (portabilidade)?</span>
                         <ion-list>
-                            <ion-radio name="{{'planoo' + phoneNumber.key}}" ng-model="phoneNumber.Portability" ng-value="'true'">{{'Portability' + phoneNumber.key}} {{phoneNumber.Portability}}Sim, vou fazer a "portabilidade" transferindo minha linha para o Foneclube.</ion-radio>
-                            <ion-radio name="{{'planoo' + phoneNumber.key}}"ng-model="phoneNumber.Portability" ng-value="'false'">{{'Portability' + phoneNumber.key}} {{phoneNumber.Portability}}Não, quero um número novo.</ion-radio>
+                            <ion-radio name="{{'planoo' + phoneNumber.key}}" ng-model="phoneNumber.Portability" ng-value="'true'">Sim, vou fazer a "portabilidade" transferindo minha linha para o Foneclube.</ion-radio>
+                            <ion-radio name="{{'planoo' + phoneNumber.key}}"ng-model="phoneNumber.Portability" ng-value="'false'">Não, quero um número novo.</ion-radio>
                         </ion-list>
                     </label>
                     <label class="item item-input" ng-show="!phoneNumber.Portability">

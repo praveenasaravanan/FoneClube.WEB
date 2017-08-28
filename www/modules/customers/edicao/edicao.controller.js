@@ -303,7 +303,7 @@
                     'Number': '',
                     'IsFoneclube': true,
                     'IdOperator': 0,
-                    'Portability': false,
+                    'Portability': 'false',
                     'NickName': '',
                     'IdPlanOption': 0,
                     'Inative': false,

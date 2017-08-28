@@ -863,12 +863,12 @@
         }
         
         function changePhoneNumber(position) {
-            if (vm.phoneNumbersView[position].DDD.length < 2 || vm.phoneNumbersView[position].Number.length < 9) {
+            if (vm.phoneNumbersView[position].NovoFormatoNumero.length < 14) {
                 return
             }
             var param = {
-                ddd: clearPhoneNumber(vm.phoneNumbersView[position].DDD),
-                numero: clearPhoneNumber(vm.phoneNumbersView[position].Number)
+                ddd: getNumberJson(vm.phoneNumbersView[position].NovoFormatoNumero).DDD,
+                numero: getNumberJson(vm.phoneNumbersView[position].NovoFormatoNumero).Number
             }
             FoneclubeService.getCustomerByPhoneNumber(param).then(function(res) {
                 if (res.DocumentNumber && res.DocumentNumber != vm.cpf.replace(/[-.,]/g , '')) {
@@ -902,25 +902,45 @@
             } else if (vm.etapaDadosPessoais) {
                 etapaComplementar();
             } else if (vm.etapaComplementar) {
-                FlowManagerService.changeHomeView();
                 var params = {
-                    title: 'Cadastro Realizado',
-                    template: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.',
+                    title: 'Pular Fase',
+                    template: 'Deseja realmente pular esta fase?',
                     buttons: [
                       {
-                        text: 'Ir para Home',
+                        text: 'Não',
                         type: 'button-positive',
                         onTap: function(e) {
 
                         }
                       },
                       {
-                        text: 'Visualizar Cadastro',
+                        text: 'Sim',
                         type: 'button-positive',
                         onTap: function(e) {
-                            FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
-                                ViewModelUtilsService.showModalCustomer(result);
-                            });
+                            FlowManagerService.changeHomeView();
+                            var params = {
+                                title: 'Cadastro Realizado',
+                                template: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.',
+                                buttons: [
+                                  {
+                                    text: 'Ir para Home',
+                                    type: 'button-positive',
+                                    onTap: function(e) {
+
+                                    }
+                                  },
+                                  {
+                                    text: 'Visualizar Cadastro',
+                                    type: 'button-positive',
+                                    onTap: function(e) {
+                                        FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
+                                            ViewModelUtilsService.showModalCustomer(result);
+                                        });
+                                    }
+                                  }
+                                ]
+                            }
+                            MainComponents.show(params);
                         }
                       }
                     ]
