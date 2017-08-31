@@ -650,7 +650,7 @@
             var totalPriceValidade = 0;
             
             for (var number in vm.phoneNumbersView) {
-                if(vm.phoneNumbersView[number].Nickname == '') {
+                if(!vm.phoneNumbersView[number].Nickname || vm.phoneNumbersView[number].Nickname == '') {
                     MainComponents.alert({titulo:'Linha ' + (number + 1), mensagem:'Nickname é um campo obrigario'});
                     vm.requesting = false;
                     MainComponents.hideLoader();
