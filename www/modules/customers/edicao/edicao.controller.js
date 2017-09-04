@@ -9,7 +9,6 @@
     function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate) {
         var vm = this;
         vm.onTapSendUser = onTapSendUser;
-        vm.validateData = validateData;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
         vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
         vm.validarCEP = validarCEP;
@@ -21,7 +20,7 @@
         
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
-        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '93152412746'; //64642412301 //10667103767
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '48716359615';
         vm.requesting = true;
         
         init();
@@ -37,8 +36,10 @@
                 vm.customer.Born = vm.customer.Born ? getFormatedDate(vm.customer.Born) : ''; //formata data de nasicmento
                 getPersonParent(vm.customer.IdContactParent); //ToDo falta ajustar a API para devolver o id do cliente parent;
                 vm.singlePriceLocal = vm.customer.SinglePrice ? vm.customer.SinglePrice : 0; //single place formatado;
-                for(var i=0; i < vm.customer.Adresses.length;i++){
-                    vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber); //deve ser int por causa da mascara
+                if (vm.customer.Adresses) {
+                    for(var i=0; i < vm.customer.Adresses.length;i++) {
+                        vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber); //deve ser int por causa da mascara
+                    }    
                 }
                 FoneclubeService.getPlans().then(function(result){
                     vm.plans = result;
@@ -64,7 +65,9 @@
                     }
                     console.info(vm.customer);
                     MainComponents.hideLoader();
-                    vm.requesting = false;
+                    $timeout(function () {
+                        vm.requesting = false;
+                    }, 2000)
                 });
             });
         };
@@ -96,25 +99,6 @@
             return day + '/' + month + '/' + year;
         }
         
-        function validateData() {
-            if (vm.requesting || vm.customer.DocumentNumber.length < 11) { return true }
-            
-            var totalPriceValidade = 0;
-            for (var i in vm.customer.Phones) {
-                vm.plans.find(function (element, index, array) {
-                    if (element.Id == vm.customer.Phones[i].IdPlanOption) {
-                        totalPriceValidade = totalPriceValidade + element.Value / 100;
-                    }
-                });
-            }
-            if (vm.singlePriceLocal) {
-                if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        
         function onTapSendUser(customer){
             vm.requesting = true;
             
@@ -139,6 +123,21 @@
                 "IdCommissionLevel": customer.IdCommissionLevel,
                 "SinglePrice": vm.singlePriceLocal,
                 "DescriptionSinglePrice": customer.DescriptionSinglePrice
+            }
+            
+            var totalPriceValidade = 0;
+            for (var i in vm.customer.Phones) {
+                vm.plans.find(function (element, index, array) {
+                    if (element.Id == vm.customer.Phones[i].IdPlanOption) {
+                        totalPriceValidade = totalPriceValidade + element.Value / 100;
+                    }
+                });
+            }
+            if (vm.singlePriceLocal) {
+                if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
+                    MainComponents.alert({mensagem:'Preço único não pode ser maior do que o preço de todos os planos somados.'});
+                    return;
+                }
             }
             
             //Regra: o telefone não pode ser incompleto, mass pode estar em branco
@@ -348,13 +347,13 @@
         }
         
         function validatePhoneNumber(position) {
-            if (vm.customer.Phones[position].NovoFormatoNumero.length < 14) return;
+            if (vm.requesting || vm.customer.Phones[position].NovoFormatoNumero.length < 14) return;
             var number = {
                 ddd: getNumberJson(vm.customer.Phones[position].NovoFormatoNumero).DDD,
                 numero: getNumberJson(vm.customer.Phones[position].NovoFormatoNumero).Number
             }
             FoneclubeService.getCustomerByPhoneNumber(number).then(function(res) {
-                if (res.DocumentNumber && res.DocumentNumber != vm.customer.DocumentNumber) {
+                if (res.DocumentNumber && res.DocumentNumber != clearDocumentNumber(vm.customer.DocumentNumber)) {
                     showAlert('Aviso', 'Este telefone já pertence a um cliente.');
                 }
             });
@@ -374,6 +373,10 @@
         
         function clearPhoneNumber(number) {
             return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : '';
+        }
+        
+        function clearDocumentNumber(documentNumber){
+            return documentNumber.replace(/[-.]/g, '');
         }
         
         function showAddNewPhone() {

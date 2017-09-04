@@ -23,7 +23,8 @@
         '$interval',
         'FlowManagerService',
         'ViewModelUtilsService',
-        '$ionicScrollDelegate'
+        '$ionicScrollDelegate',
+        'UtilsService'
     ];
 
     function CadastroController(
@@ -43,7 +44,8 @@
          $interval,
          FlowManagerService, 
          ViewModelUtilsService,
-         $ionicScrollDelegate
+         $ionicScrollDelegate,
+         UtilsService
     ) {
             
         var vm = this;
@@ -719,6 +721,9 @@
             var arrayFiltered = personCheckout.Phones.filter(function (number){
                 return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 9;
             });
+            if (personCheckout.IdParent == 0) {
+                delete personCheckout.IdParent;
+            }
             if (arrayFiltered.length == 0) {
                 FoneclubeService.postUpdatePerson(personCheckout)
                         .then(postUpdatePersonSucess)
@@ -763,6 +768,7 @@
                             onTap: function(e) {
                                 console.log('Realizar cobrança.');
                                 FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
+                                //FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
                                     if(vm.singlePrice) {
                                         result.CacheIn = vm.singlePrice;
                                         ViewModelUtilsService.showModalCustomer(result);
@@ -934,6 +940,7 @@
                                     type: 'button-positive',
                                     onTap: function(e) {
                                         FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
+                                        //FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
                                             ViewModelUtilsService.showModalCustomer(result);
                                         });
                                     }

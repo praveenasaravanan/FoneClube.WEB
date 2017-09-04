@@ -12,7 +12,7 @@
         </div>
         <label class="item item-input">
             <span class="input-label">CPF</span>
-            <input ng-model="vm.cpf" type="tel" ng-change="vm.validarCPF()" mask="99999999999999" restrict="reject" ng-disabled="vm.hasCPF">
+            <input ng-model="vm.cpf" type="tel" ng-change="vm.validarCPF()" mask="999.999.999-99" restrict="reject" ng-disabled="vm.hasCPF">
         </label>
         <label class="item item-input" ng-show="vm.hasCPF">
             <span class="input-label">Nome</span>
@@ -46,7 +46,7 @@
             </ion-list>
         </label>
         <div class="padding">
-            <button ng-show="!vm.hasCPF" class="button button-block button-positive" ng-disabled="vm.cpf.length < 11 || vm.requesting" on-tap="vm.onTapSearchDocument()">Buscar</button>
+            <button ng-show="!vm.hasCPF" class="button button-block button-positive" ng-disabled="vm.cpf.length < 14 || vm.requesting" on-tap="vm.onTapSearchDocument()">Buscar</button>
             <button ng-show="vm.hasCPF" class="button button-block button-positive" ng-disabled="vm.birthdate.length < 10 || vm.name.length == 0 || vm.email.length == 0 || vm.personalNumber.length < 14 || vm.requesting" on-tap="vm.onTapSendDocument()">Enviar</button>
         </div>
     </div>
