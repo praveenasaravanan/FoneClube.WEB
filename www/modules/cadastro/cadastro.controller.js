@@ -119,7 +119,7 @@
             vm.requesting = true;
             MainComponents.showLoader('Tentando preencher dados...');
             
-            var cpf = vm.cpf.replace(/[-.,]/g , '');
+            var cpf = UtilsService.clearDocumentNumber(vm.cpf);
             FoneclubeService.getCustomerByCPF(cpf).then(function(existentClient){
                 if (existentClient.Id == 0) {
                     HubDevService.validaCPF(cpf).then(function(result){
@@ -172,7 +172,7 @@
                 return;
             }
             var personCheckout = {
-                'DocumentNumber': vm.cpf.replace(/[-.,]/g , ''),
+                'DocumentNumber': UtilsService.clearDocumentNumber(vm.cpf),
                 'Name': vm.name,
                 'Born': vm.birthdate,
                 'Email': vm.email
@@ -230,7 +230,7 @@
 
         function onTapSendAddress() {
             vm.requesting = true;
-            var cpf = vm.cpf.replace(/[-.,]/g , '');
+            var cpf = UtilsService.clearDocumentNumber(vm.cpf);
 
             var personCheckout = {
                 'DocumentNumber': cpf,
@@ -271,7 +271,7 @@
 
         function onTapSendPersonalData(){
             vm.requesting = true;
-            var cpf = vm.cpf.replace(/[-.,]/g , '');
+            var cpf = UtilsService.clearDocumentNumber(vm.cpf);
             var personCheckout = {
                 'DocumentNumber': cpf,
                 'Images': [selfiePhotoName, frontPhotoName, versePhotoName]
@@ -647,7 +647,7 @@
         function onTapSendFoneclubeData(){
             vm.requesting = true;
             MainComponents.showLoader('Enviando dados...');
-            var cpf = vm.cpf.replace(/[-.,]/g , '');
+            var cpf = UtilsService.clearDocumentNumber(vm.cpf);
             var phones = [];
             var totalPriceValidade = 0;
             
@@ -697,6 +697,7 @@
                 'DocumentNumber': cpf,  
                 'NameContactParent': vm.whoinvite,
                 'IdParent': vm.IdParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
+                'IdContactParent': vm.IdParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
                 'Phones': phones,
                 'SinglePrice': vm.singlePrice,
                 'DescriptionSinglePrice': vm.descriptionSinglePrice
@@ -724,6 +725,7 @@
             if (personCheckout.IdParent == 0) {
                 delete personCheckout.IdParent;
             }
+            debugger;
             if (arrayFiltered.length == 0) {
                 FoneclubeService.postUpdatePerson(personCheckout)
                         .then(postUpdatePersonSucess)
@@ -732,7 +734,7 @@
                 validadeNumbers(arrayFiltered).then(function(result) {
                     var right = true;
                     for (var item in result) {
-                        if (result[item].DocumentNumber && result[item].DocumentNumber != vm.cpf.replace(/[-.,]/g , '')) {
+                        if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.cpf)) {
                             showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.');
                             right = false;
                             vm.requesting = false;
@@ -767,13 +769,12 @@
                             type: 'button-positive',
                             onTap: function(e) {
                                 console.log('Realizar cobrança.');
-                                FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
-                                //FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
+                                FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
                                     if(vm.singlePrice) {
                                         result.CacheIn = vm.singlePrice;
                                         ViewModelUtilsService.showModalCustomer(result);
                                     } else {
-                                        FoneclubeService.getCustomerPlans(vm.cpf).then(function(customerPlans){
+                                        FoneclubeService.getCustomerPlans(UtilsService.clearDocumentNumber(vm.cpf)).then(function(customerPlans){
                                             var valueTotal = 0;
                                             if(customerPlans.length > 0) {
                                                 for(var i=0; i<customerPlans.length;i++){
@@ -877,7 +878,7 @@
                 numero: getNumberJson(vm.phoneNumbersView[position].NovoFormatoNumero).Number
             }
             FoneclubeService.getCustomerByPhoneNumber(param).then(function(res) {
-                if (res.DocumentNumber && res.DocumentNumber != vm.cpf.replace(/[-.,]/g , '')) {
+                if (res.DocumentNumber && res.DocumentNumber != UtilsService.clearDocumentNumber(vm.cpf)) {
                     showAlert('Aviso', 'Este telefone já pertence a um cliente.');
                 }
             });
@@ -939,8 +940,7 @@
                                     text: 'Visualizar Cadastro',
                                     type: 'button-positive',
                                     onTap: function(e) {
-                                        FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
-                                        //FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
+                                        FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
                                             ViewModelUtilsService.showModalCustomer(result);
                                         });
                                     }

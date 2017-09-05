@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('EdicaoController', EdicaoController);
 
-    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate'];
-    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate) {
+    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService'];
+    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService) {
         var vm = this;
         vm.onTapSendUser = onTapSendUser;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
@@ -20,7 +20,7 @@
         
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
-        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '48716359615';
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : ''; //10667103767 //46637152226
         vm.requesting = true;
         
         init();
@@ -30,8 +30,8 @@
                 return;
             }
             MainComponents.showLoader('Carregando dados...');
-            FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
-                vm.DocumentNumberFreeze = result.DocumentNumber;
+            FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
+                vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
                 vm.customer = result;
                 vm.customer.Born = vm.customer.Born ? getFormatedDate(vm.customer.Born) : ''; //formata data de nasicmento
                 getPersonParent(vm.customer.IdContactParent); //ToDo falta ajustar a API para devolver o id do cliente parent;
@@ -73,7 +73,6 @@
         };
         
         function ajustaDados() {
-
             console.log(vm.customer); //log :D
         }
         
@@ -104,7 +103,7 @@
             
             var customerSend = {
                 "Id": customer.Id,
-                "DocumentNumber": customer.DocumentNumber,
+                "DocumentNumber": UtilsService.clearDocumentNumber(customer.DocumentNumber),
                 "Register": customer.Register,
                 "Name": customer.Name,
                 "NickName": customer.NickName,
@@ -162,7 +161,7 @@
                 validadeNumbers(arrayFiltered).then(function(result) {
                     var right = true;
                     for (var item in result) {
-                        if (result[item].DocumentNumber && result[item].DocumentNumber != vm.customer.DocumentNumber) {
+                        if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {
                             showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.');
                             right = false;
                             vm.requesting = false;
@@ -198,7 +197,7 @@
                                 type: 'button-positive',
                                 onTap: function(e) {
                                     FlowManagerService.changeCustomersView();
-                                    FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
+                                    FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
                                         ViewModelUtilsService.showModalCustomer(result);
                                     });
                                 }
@@ -247,14 +246,14 @@
         
         function validarCPF () {
             if (vm.customer.DocumentNumber.length < 11) { return }
-            FoneclubeService.getCustomerByCPF(vm.customer.DocumentNumber).then(function(existentClient){
+            FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)).then(function(existentClient){
                 if (existentClient.Id == 0) {
-                    HubDevService.validaCPF(vm.customer.DocumentNumber).then(function(result){
+                    HubDevService.validaCPF(UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)).then(function(result){
                         if(result.status){
                            vm.name = result.nome;
                         }
                     }, function(error){ });
-                } else {
+                } else if (existentClient.DocumentNumber != vm.DocumentNumberFreeze) {
                     MainComponents.hideLoader();
                     var confirmPopup = $ionicPopup.confirm({
                         title: 'CPF já cadastrado',
@@ -269,7 +268,8 @@
                         ]
                     });
                     confirmPopup.then(function(res) {
-                        vm.customer.DocumentNumber = angular.copy(vm.DocumentNumberFreeze);
+                        var cpf = angular.copy(vm.DocumentNumberFreeze);
+                        vm.customer.DocumentNumber = cpf.substr(0, 3) + '.' + cpf.substr(3, 3) + '.' + cpf.substr(6, 3) + '-' + cpf.substr(9)
                     });
                 }
             }, function (result) {
@@ -353,7 +353,7 @@
                 numero: getNumberJson(vm.customer.Phones[position].NovoFormatoNumero).Number
             }
             FoneclubeService.getCustomerByPhoneNumber(number).then(function(res) {
-                if (res.DocumentNumber && res.DocumentNumber != clearDocumentNumber(vm.customer.DocumentNumber)) {
+                if (res.DocumentNumber && res.DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {
                     showAlert('Aviso', 'Este telefone já pertence a um cliente.');
                 }
             });
@@ -373,10 +373,6 @@
         
         function clearPhoneNumber(number) {
             return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : '';
-        }
-        
-        function clearDocumentNumber(documentNumber){
-            return documentNumber.replace(/[-.]/g, '');
         }
         
         function showAddNewPhone() {
