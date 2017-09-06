@@ -725,7 +725,6 @@
             if (personCheckout.IdParent == 0) {
                 delete personCheckout.IdParent;
             }
-            debugger;
             if (arrayFiltered.length == 0) {
                 FoneclubeService.postUpdatePerson(personCheckout)
                         .then(postUpdatePersonSucess)
