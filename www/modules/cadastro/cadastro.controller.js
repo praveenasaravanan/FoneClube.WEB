@@ -720,7 +720,7 @@
             }*/
             
             var arrayFiltered = personCheckout.Phones.filter(function (number){
-                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 9;
+                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8;
             });
             if (personCheckout.IdParent == 0) {
                 delete personCheckout.IdParent;
@@ -739,6 +739,19 @@
                             right = false;
                             vm.requesting = false;
                             MainComponents.hideLoader();
+                        }
+                    }
+                    for(var x in arrayFiltered) {
+                        //nao deixa add o mesmo numero duas vezes para o mesmo cliente;
+                        var twiceNumber = arrayFiltered.filter(function (element, index, array) {
+                            return element.DDD == arrayFiltered[x].DDD && element.Number == arrayFiltered[x].Number;
+                        });
+                        if (twiceNumber.length > 1) {
+                            showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone duas vezes para o cliente.');
+                            right = false;
+                            vm.requesting = false;
+                            MainComponents.hideLoader();
+                            break;
                         }
                     }
                     if (right) {
@@ -877,6 +890,14 @@
                 ddd: getNumberJson(vm.phoneNumbersView[position].NovoFormatoNumero).DDD,
                 numero: getNumberJson(vm.phoneNumbersView[position].NovoFormatoNumero).Number
             }
+                //nao deixa add o mesmo numero duas vezes para o mesmo cliente;
+                var twiceNumber = vm.phoneNumbersView.filter(function (element, index, array) {
+                    return element.NovoFormatoNumero == vm.phoneNumbersView[position].NovoFormatoNumero;
+                });
+                if (twiceNumber.length > 1) {
+                    showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone duas vezes para o mesmo cliente.');
+                    return;
+                }
             FoneclubeService.getCustomerByPhoneNumber(param).then(function(res) {
                 if (res.DocumentNumber && res.DocumentNumber != UtilsService.clearDocumentNumber(vm.cpf)) {
                     showAlert('Aviso', 'Este telefone já pertence a um cliente.');

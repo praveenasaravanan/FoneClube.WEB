@@ -20,7 +20,7 @@
         
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
-        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : ''; //10667103767 //46637152226
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '130.568.077-43'; //10667103767 //46637152226
         vm.requesting = true;
         
         init();
@@ -99,7 +99,9 @@
         }
         
         function onTapSendUser(customer){
+            if (vm.requesting == true) return;
             vm.requesting = true;
+            MainComponents.showLoader('Enviando Dados...');
             
             var customerSend = {
                 "Id": customer.Id,
@@ -135,6 +137,8 @@
             if (vm.singlePriceLocal) {
                 if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
                     MainComponents.alert({mensagem:'Preço único não pode ser maior do que o preço de todos os planos somados.'});
+                    MainComponents.hideLoader();
+                    vm.requesting = false;
                     return;
                 }
             }
@@ -143,6 +147,7 @@
             for (var item in customerSend.Phones) {
                 if (customerSend.Phones[item].NovoFormatoNumero.length < 14 && customerSend.Phones[item].NovoFormatoNumero.length > 0) {
                     showAlert('Aviso', 'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.'));
+                    MainComponents.hideLoader();
                     vm.requesting = false;
                     return;
                 } else {
@@ -152,7 +157,7 @@
             }
             
             var arrayFiltered = customerSend.Phones.filter(function (number) {
-                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 9;
+                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8;
             });
             
             if (arrayFiltered.length == 0) {
@@ -165,6 +170,20 @@
                             showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.');
                             right = false;
                             vm.requesting = false;
+                            MainComponents.hideLoader();
+                        }
+                    }
+                    for(var x in arrayFiltered) {
+                        //nao deixa add o mesmo numero duas vezes para o mesmo cliente;
+                        var twiceNumber = arrayFiltered.filter(function (element, index, array) {
+                            return element.DDD == arrayFiltered[x].DDD && element.Number == arrayFiltered[x].Number;
+                        });
+                        if (twiceNumber.length > 1) {
+                            showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone duas vezes para o cliente.');
+                            right = false;
+                            vm.requesting = false;
+                            MainComponents.hideLoader();
+                            break;
                         }
                     }
                     if (right) {
@@ -207,11 +226,13 @@
                     MainComponents.show(params);
                 }
                 vm.requesting = false;
+                MainComponents.hideLoader();
             }
             
             function postUpdateCustomerError(error) {
                 MainComponents.alert({mensagem:error.statusText});
                 vm.requesting = false;
+                MainComponents.hideLoader();
             }
         };
         
@@ -351,6 +372,14 @@
             var number = {
                 ddd: getNumberJson(vm.customer.Phones[position].NovoFormatoNumero).DDD,
                 numero: getNumberJson(vm.customer.Phones[position].NovoFormatoNumero).Number
+            }
+            //nao deixa add o mesmo numero duas vezes para o mesmo cliente;
+            var twiceNumber = vm.customer.Phones.filter(function (element, index, array) {
+                return element.NovoFormatoNumero == vm.customer.Phones[position].NovoFormatoNumero;
+            });
+            if (twiceNumber.length > 1) {
+                showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone duas vezes para o cliente.');
+                return;
             }
             FoneclubeService.getCustomerByPhoneNumber(number).then(function(res) {
                 if (res.DocumentNumber && res.DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {
