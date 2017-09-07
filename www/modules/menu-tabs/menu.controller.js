@@ -8,7 +8,8 @@
     function menuController($scope, $window, $state) {
         let vm = this;     
         vm.compress = false;
-        vm.menuItemActive = 'home';
+        if (!vm.menuItemActive)
+            vm.menuItemActive = 'home';
         vm.menuCompress = function() {
             vm.compress = !vm.compress;
         }                      

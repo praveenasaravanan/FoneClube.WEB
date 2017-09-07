@@ -36,15 +36,18 @@
                  background-color: #35baf6;  
             }
         }
-       
-        .item-menu-active::before {
-            content: " ";
-            position: absolute;
-            display: block;
-            left: 0;            
-            width: 5px;
-            height: 62px;
-            background-color: #35baf6;
+        
+        .item-menu-active {
+            background-color: #475360;
+            &::before {
+                content: " ";
+                position: absolute;
+                display: block;
+                left: 0;            
+                width: 5px;
+                height: 62px;
+                background-color: #35baf6;
+            }
         }
         
     }

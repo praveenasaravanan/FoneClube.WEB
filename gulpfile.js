@@ -10,7 +10,8 @@ var browserSync = require('browser-sync').create();
 
 var filesCSS = [  
   'www/modules/login/login.scss',
-  'www/modules/menu-tabs/menu.scss'
+  'www/modules/menu-tabs/menu.scss',
+  'www/modules/lista-customer/lista-customer.scss'
 ]
 
 var paths = {

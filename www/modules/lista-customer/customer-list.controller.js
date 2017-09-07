@@ -11,7 +11,7 @@
         vm.onTapCustomer = onTapCustomer;
         vm.showLoader = true;
 
-        console.log('=== CustomerListController Controller ===');
+        console.log('=== CustomerListController Controller ===');    
 
         PagarmeService.getCustomers()
         .then(function(result){
