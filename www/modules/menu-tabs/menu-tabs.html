@@ -1,12 +1,47 @@
-<ion-tabs class="tabs-icon-top tabs-positive">
+<div class="menu-container">
+    <div ng-class="{'menu-open': vm.compress, 'menu-close':!vm.compress}"> 
+        <div class="menu-item" ng-click="vm.menuCompress()">            
+            <div>
+                <img src="./content/img/pi-logo.png" >
+                <span> FoneClube </span>                              
+            </div>
+        </div> 
+        <div class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'home'}" ng-click="vm.menuItemActive = 'home'" ui-sref="tabs.home">            
+            <div>
+                <i class="ion-ios-home" aria-hidden="true"></i>            
+                <span> Home </span>
+            </div>
+        </div>
+        <div class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'cadastro'}" ng-click="vm.menuItemActive = 'cadastro'" ui-sref="tabs.cadastro">  
+            <div>
+                <i class="ion-person-stalker" aria-hidden="true"></i>            
+                <span> Usuários </span>
+            </div>
+        </div>  
+        <div class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'list-customer'}" ng-click="vm.menuItemActive = 'list-customer'" ui-sref="tabs.list-customer">     
+            <div>       
+                <i class="ion-person-stalker" aria-hidden="true"></i>            
+                <span> Pagarme </span>
+            </div>
+        </div>  
+        <div class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'customer'}" ng-click="vm.menuItemActive = 'customer'" ui-sref="tabs.customers">            
+            <div>
+                <i class="ion-card" aria-hidden="true"></i>            
+                <span> Customers </span>
+            </div>
+        </div>     
+    </div>
+    <div class="menu-views">
+            <ion-nav-view name="menu-tab"></ion-nav-view>
+    </div>
+</div>
+
+
+<!-- <ion-tabs class="tabs-icon-top tabs-positive">
 
     <ion-tab title="Home" icon="ion-ios-home" href="#/tab/home">
         <ion-nav-view name="home-tab"></ion-nav-view>
     </ion-tab>
-
-    <!--<ion-tab title="Cadastro Old" icon="ion-card" href="#/tab/checkout-view">
-        <ion-nav-view name="checkout-view-tab"></ion-nav-view>
-    </ion-tab>-->
 
     <ion-tab title="Cadastro" icon="ion-card" ui-sref="tabs.cadastro">
         <ion-nav-view name="cadastro-tab"></ion-nav-view>
@@ -21,10 +56,4 @@
         <ion-nav-view name="edicao-tab"></ion-nav-view>
     </ion-tab>
 
-    
-        
-   
-
-
-
-</ion-tabs>
+</ion-tabs> -->

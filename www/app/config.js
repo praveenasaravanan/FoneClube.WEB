@@ -22,12 +22,13 @@
       .state('tabs', {
         url: "/tab",
         abstract: true,
-        templateUrl: "modules/menu-tabs/menu-tabs.html"
+        templateUrl: "modules/menu-tabs/menu-tabs.html",
+        controller:"MenuController as vm"
       })
       .state('tabs.checkout-view', {
         url: "/checkout-view",
         views: {
-          'checkout-view-tab': {
+          'menu-tab': {
             templateUrl: "modules/checkout/checkout.html",
             controller: 'CheckoutController as vm'
           }
@@ -36,7 +37,7 @@
       .state('tabs.home', {
         url: "/home",
         views: {
-          'home-tab': {
+          'menu-tab': {
             templateUrl: "modules/home/home.html",
             controller: 'HomeController as vm'
           }
@@ -45,7 +46,7 @@
       .state('tabs.cadastro', {
         url: "/cadastro",
         views: {
-          'cadastro-tab': {
+          'menu-tab': {
             templateUrl: "modules/cadastro/cadastro.html",
             controller: 'CadastroController as vm'
           }
@@ -54,7 +55,7 @@
       .state('tabs.list-customer', {
         url: "/list-customer",
         views: {
-          'list-customer-tab': {
+          'menu-tab': {
             templateUrl: "modules/lista-customer/lista-customer.html",
             controller: 'CustomerListController as vm'
           }
@@ -63,7 +64,7 @@
       .state('tabs.customers', {
         url: "/customers",
         views: {
-          'customers-tab': {
+          'menu-tab': {
             templateUrl: "modules/customers/customers.html",
             controller: 'CustomersController as vm'
           }

@@ -1,5 +1,29 @@
+
 <ion-view view-title="FoneClube" name="login-view">
-  <ion-content class="padding">
+    <div class="login-container">
+        <div class="box">
+                <div id="header">
+                    <div class="icon-header"><img src="./content/img/pi-logo.png" > FONECLUBE</div>      
+                    <div id="bottom-head"></div>              
+                </div> 
+                    <form novalidate name="vm.formLogin">
+                        <div class="form-group">
+                            <label for="usr">Name:</label>
+                            <input type="text" class="form-control" id="usr" ng-model="vm.user">
+                        </div>
+                        <div class="form-group">
+                            <label for="usr">Senha:</label>
+                            <input type="password" class="form-control" id="password" ng-model="vm.password">
+                        </div>
+                             
+                        <button class="btn btn-success col-md-3" ng-click="vm.login()"  ng-disabled="!vm.formLogin.$valid">Login</button>
+                    </form>
+                <div id="footer-box"></div>
+            </div>    
+        </div> 
+        </div>
+    </div>
+  <!-- <ion-content class="padding">
       <div class="list list-inset">
           <label class="item item-input">
               <input type="text" placeholder="Usuário" ng-model="vm.user">
@@ -10,8 +34,9 @@
       </div>
       <button class="button button-block button-calm" on-tap="vm.login()">Login</button>
 
-  </ion-content>
-  <div class="bar bar-footer">
-    <div class="title">[ v.0.2.3 ]</div>
-  </div>
+  </ion-content>   -->
 </ion-view>
+
+<!-- <div class="bar bar-footer">
+    <div class="title">[ v.0.2.3 ]</div>
+  </div> -->

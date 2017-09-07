@@ -1,0 +1,82 @@
+.login-container {
+    @mixin flexDefault() {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;    
+    }
+    background-color: #F7F7F7;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    @include flexDefault();
+
+    form {
+        color: #8c8c8c;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .box{        
+        position: relative;    
+        height: 410px;
+        top: 40px;
+        left: 0;
+        z-index: 200;
+        right: 0;
+        width:400px;
+        color: #FFF;
+        border-radius: 3px;
+        background: #FFF;
+        margin-bottom: 100px;        
+        overflow: hidden;
+
+        #header{
+            background: #35baf6;
+            position: relative;
+            height: 100px;
+            width: 100%;
+            margin-bottom: 30px;
+            .icon-header {
+                img {
+                    width: 40px;
+                    height: 40px;
+                }
+                @include flexDefault();
+                height: 88px;
+            }
+        }
+                    
+        #bottom-head{
+            position: relative;
+            background: #35baf6;
+            height: 18px;
+            color: white;
+        }
+        
+        #bottom-head::after{
+        content: '';
+            width: 0px;
+            height: 0px;
+            display: block;
+            position: absolute;
+            margin: auto;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-bottom: 7px solid white;
+            border-right: 7px solid rgba(0,0,0,0);
+            border-left: 7px solid rgba(0,0,0,0);
+            border-top: 7px solid rgba(0,0,0,0);
+        }
+        
+        #footer-box{
+            @include flexDefault();      
+            height: 30px;
+            background: #35baf6;
+            position: absolute;
+            bottom: 0;             
+        }
+    }  
+}
