@@ -31,7 +31,6 @@
         vm.result = {};
         vm.uploadGaleria = uploadGaleria;
 
-
         function addCheckout(){
 
             console.log('addCheckout');

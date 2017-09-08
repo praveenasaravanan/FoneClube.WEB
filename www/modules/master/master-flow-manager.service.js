@@ -5,8 +5,8 @@
         .module('foneClub')
         .service('FlowManagerService', FlowManagerService);
 
-    FlowManagerService.inject = ['LocationService', 'FireBaseManagerUtil', '$window'];
-    function FlowManagerService(LocationService, FireBaseManagerUtil, $window) {
+    FlowManagerService.inject = ['LocationService', 'FireBaseManagerUtil', '$window', 'localStorageService'];
+    function FlowManagerService(LocationService, FireBaseManagerUtil, $window, localStorageService) {
 
         this.changeLoginView = changeLoginView;
         this.changeHomeView = changeHomeView;
@@ -25,6 +25,7 @@
         }
 
         function changeHomeView(){
+            localStorageService.set('menuItemActive', 'home');
             LocationService.change('tabs.home');
         }
         

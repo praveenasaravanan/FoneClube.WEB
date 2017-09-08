@@ -8,7 +8,8 @@
     'ionic',
     'firebase',
     'ngCordova',
-    'ngMask'
+    'ngMask',
+    'LocalStorageModule'
 
   ]);
 

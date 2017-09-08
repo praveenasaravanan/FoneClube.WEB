@@ -9,10 +9,9 @@
     function CustomersController(PagarmeService, $ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils) {
         var vm = this;
         vm.onTapCustomer = onTapCustomer;
-        vm.showLoader = true;
+        vm.showLoader = true;        
 
-        console.log('=== Customers Controller Controller ===');
-
+        console.log('=== Customers Controller Controller ===');       
         FoneclubeService.getCustomers().then(function(result){
             vm.showLoader = false;
             vm.customers = result;
