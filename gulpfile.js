@@ -8,11 +8,13 @@ var rename = require('gulp-rename');
 var sh = require('shelljs');
 var browserSync = require('browser-sync').create();
 
-var filesCSS = [  
-  'www/modules/login/login.scss',
-  'www/modules/menu-tabs/menu.scss',
-  'www/modules/lista-customer/lista-customer.scss',
-  'www/modules/customers/customers.scss'
+var filesCSS = [
+    'www/css/app.scss',
+    'www/modules/login/login.scss',
+    'www/modules/menu-tabs/menu.scss',
+    'www/modules/lista-customer/lista-customer.scss',
+    'www/modules/customers/customers.scss',
+    'www/modules/cadastro/cadastro.scss'
 ]
 
 var paths = {

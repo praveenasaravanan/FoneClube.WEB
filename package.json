@@ -3,6 +3,7 @@
     "version": "1.1.1",
     "description": "FoneClubControll: An Ionic project",
     "dependencies": {
+        "angular-ui-bootstrap": "^2.5.0",
         "browser-sync": "^2.18.13",
         "cordova-android": "^6.2.3",
         "cordova-browser": "^4.1.0",

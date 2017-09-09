@@ -9,7 +9,8 @@
     'firebase',
     'ngCordova',
     'ngMask',
-    'LocalStorageModule'
+    'LocalStorageModule',
+    'ui.bootstrap'
 
   ]);
 

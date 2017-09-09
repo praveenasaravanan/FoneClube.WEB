@@ -1,91 +1,82 @@
-<ion-view>
-    
-<div class="bar bar-header bar-light">
-<h1 class="title">{{vm.viewName}}</h1>
-</div>
-
-<ion-content class="posicao-inicial" overflow-scroll="true" ng-enter="vm.enter()">
-    <div class="list list-inset">
-    <div ng-if="vm.etapaDocumento">
-        <div class="item item-divider">
-            Dados iniciais
-        </div>
-        <label class="item item-input">
-            <span class="input-label">CPF</span>
-            <input ng-model="vm.cpf" type="tel" ng-change="vm.validarCPF()" mask="999.999.999-99" restrict="reject" ng-disabled="vm.hasCPF">
-        </label>
-        <label class="item item-input" ng-show="vm.hasCPF">
-            <span class="input-label">Nome</span>
-            <input ng-model="vm.name" type="text">
-        </label>
-        <label class="item item-input" ng-show="vm.hasCPF">
-            <span class="input-label">Email</span>
-            <input ng-model="vm.email" type="text" placeholder="exemplo@email.com">
-        </label>
-        <label class="item item-input" ng-show="vm.hasCPF">
-            <span class="input-label">Data de Nascimento</span>
-            <input ng-model="vm.birthdate" type="tel"  name="date" mask="39/19/9999" restrict="reject" placeholder="dd/mm/aaaa">
-        </label>
-        <label class="item item-input" ng-show="vm.hasCPF">
-            <span class="input-label">Telefone "atual" de contato</span>
-            <input ng-model="vm.personalNumber" type="tel"  mask="(99) 9?9999-9999" restrict="reject" placeholder="(xx) 99999-9999">
-        </label>
-        <!--<label class="item item-input item-select" >
-            <div class="input-label">
-                Qual sua operadora atual?
-            </div>
-            <select ng-model="vm.operator">
-                <option value="">Selecione...</option>
-                <option ng-repeat="operator in vm.allOperatorOptions" value="{{operator.id}}">{{operator.nome}}</option>
-            </select>
-        </label>-->
-        <label class="item" ng-show="vm.hasCPF">
-            <span class="input-label">Qual sua operadora atual?</span>
-            <ion-list>
-                <ion-radio ng-repeat="operator in vm.allOperatorOptions" name="operadoraAtual" ng-model="vm.operator" ng-value="{{operator.id}}">{{operator.nome}}</ion-radio>
-            </ion-list>
-        </label>
-        <div class="padding">
-            <button ng-show="!vm.hasCPF" class="button button-block button-positive" ng-disabled="vm.cpf.length < 14 || vm.requesting" on-tap="vm.onTapSearchDocument()">Buscar</button>
-            <button ng-show="vm.hasCPF" class="button button-block button-positive" ng-disabled="vm.birthdate.length < 10 || vm.name.length == 0 || vm.email.length == 0 || vm.personalNumber.length < 14 || vm.requesting" on-tap="vm.onTapSendDocument()">Enviar</button>
-        </div>
+<div class="cadastro-container">
+    <div class="bar bar-header bar-light">
+        <h1 class="title">{{vm.viewName}}</h1>
     </div>
-
-<!--vm.etapaEndereco-->
+        
+    <div ng-if="vm.etapaDocumento">
+        <h1 class="form-group col-xs-12 display-4">Dados Iniciais</h1>
+        <div class="col-xs-12">
+            <div class="form-container">
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="cpf">CPF:</label>
+                    <input id="cpf" type="tel" class="form-control" ng-change="vm.validarCPF()" mask="999.999.999-99" ng-model="vm.cpf" restrict="reject" ng-disabled="vm.hasCPF">
+                </div> 
+                <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
+                    <label for="nome">Nome:</label>
+                    <input id="nome" ng-model="vm.name" type="text">
+                </div>             
+                <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
+                    <label for="email">Email:</label>
+                    <input id="email" ng-model="vm.email" type="text" placeholder="exemplo@email.com">
+                </div> 
+                <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
+                    <label for="dataNascimento">Data de Nascimento:</label>
+                    <input id="dataNascimento" ng-model="vm.birthdate" type="tel"  name="date" mask="39/19/9999" restrict="reject" placeholder="dd/mm/aaaa">
+                </div>  
+                <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
+                    <label for="telefone">Telefone "atual" de contato:</label>
+                    <input id="telefone" ng-model="vm.personalNumber" type="tel"  mask="(99) 9?9999-9999" restrict="reject" placeholder="(xx) 99999-9999">
+                </div>
+                <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF" >
+                    <label for="selectOperator">Selecione sua operadora:</label>
+                    <select class="form-control" ng-options="operator.id as operator.nome for operator in vm.allOperatorOptions" ng-model="vm.operator">
+                        <option value="">Selecione</option>
+                    </select>            
+                </div>  
+                <div class="form-group col-xs-12">
+                    <button class="btn btn-primary col-sm-2 col-xs-12" ng-click="vm.onTapSearchDocument()"  ng-show="!vm.hasCPF" ng-disabled="vm.cpf.length < 14 || vm.requesting">Buscar</button> 
+                    <button ng-show="vm.hasCPF" class="btn btn-primary col-sm-2 col-xs-12" ng-click="vm.onTapSendDocument()"  ng-show="!vm.hasCPF" ng-ng-disabled="vm.birthdate.length < 10 || vm.name.length == 0 || vm.email.length == 0 || vm.personalNumber.length < 14 || vm.requesting">Enviar</button>              
+                </div>
+            </div>
+        </div>       
+    </div>
+    <!--vm.etapaEndereco-->
     <div ng-if="vm.etapaEndereco">
-        <div class="item item-divider">
-            Endereço
-        </div>
-        <label class="item item-input">
-            <span class="input-label">CEP</span>
-            <input ng-model="vm.zipcode" type="tel"  name="CEP" mask="99999-999" ng-change="vm.validarCEP(vm.zipcode)" restrict="reject">
-        </label>
-        <label class="item item-input">
-            <span class="input-label">Rua</span>
-            <input ng-model="vm.street" type="text">
-        </label>
-        <label class="item item-input">
-            <span class="input-label">Número</span>
-            <input type="number" ng-model="vm.street_number" type="tel" >
-        </label>
-        <label class="item item-input">
-            <span class="input-label">Complemento</span>
-            <input ng-model="vm.complement" type="text">
-        </label>
-        <label class="item item-input">
-            <span class="input-label">Bairro</span>
-            <input ng-model="vm.neighborhood" type="text">
-        </label>
-        <label class="item item-input">
-            <span class="input-label">Cidade</span>
-            <input ng-model="vm.city" type="text">
-        </label>
-        <label class="item item-input">
-            <span class="input-label">Estado</span>
-            <input ng-model="vm.uf" type="text">
-        </label>
-        <div class="padding">
-            <button class="button button-block button-positive" ng-disabled="vm.street.length == 0 || vm.street_number.length == 0 || vm.neighborhood.length == 0 || vm.city.length == 0 || vm.uf.length == 0 || vm.zipcode.length < 9 || vm.requesting" on-tap="vm.onTapSendAddress()">Enviar</button>
+        <h1 class="form-group col-xs-12 display-4">Endereço</h1>
+        <div class="col-xs-12">
+            <div class="form-container">
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="cep">CEP:</label>
+                    <input id="cep" ng-model="vm.zipcode" type="tel"  name="CEP" mask="99999-999" ng-change="vm.validarCEP(vm.zipcode)" restrict="reject">
+                </div> 
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="rua">Rua:</label>
+                    <input id="rua" ng-model="vm.street" type="text">
+                </div> 
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="numero">Número:</label>
+                    <input id="numero" type="number" ng-model="vm.street_number" type="tel">
+                </div>    
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="complemento">Complemento:</label>
+                    <input id="complemento" ng-model="vm.complement" type="text">
+                </div>  
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="bairro">Bairro:</label>
+                    <input id="bairro" ng-model="vm.neighborhood" type="text">
+                </div>  
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="cidade">Cidade:</label>
+                    <input id="cidade" ng-model="vm.city" type="text">
+                </div>   
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="estado">Estado:</label>
+                    <input id="estado" ng-model="vm.uf" type="text">
+                </div>
+                <div class="form-group col-xs-12">
+                    <button class="btn btn-primary col-sm-2 col-xs-12" ng-disabled="vm.street.length == 0 || vm.street_number.length == 0 || vm.neighborhood.length == 0 || vm.city.length == 0 || vm.uf.length == 0 || vm.zipcode.length < 9 || vm.requesting" on-tap="vm.onTapSendAddress()">Enviar</button>                                
+                </div>                
+            </div> 
         </div>
     </div>
     <!--vm.etapaDadosPessoais-->
@@ -130,158 +121,114 @@
                 <img class="full-image" ng-src="{{vm.versePhotoURL}}" style="width: 650px">
             </div>
         </div>
-        <div class="padding">
-            <!--button class="button button-block button-positive" ng-disabled="vm.email.length == 0 || vm.personalDDD.length < 2 || vm.personalNumber.length < 9 || !vm.selfieSended || !vm.frontSended || !vm.verseSended"  on-tap="vm.onTapSendPersonalData()">Enviar</button-->
+        <div class="padding">            
             <button class="button button-block button-positive" ng-disabled="vm.requesting" on-tap="vm.onTapSendPersonalData()">Enviar</button>
         </div>
     </div>
-
     <!--vm.etapaComplementar-->
-    <div ng-if="vm.etapaComplementar">
-        <div class="item item-divider">
-            Convite Foneclube
-        </div>
-        <label class="item item-input">
-            <span class="input-label">Telefone de quem convidou</span>
-            <input ng-model="vm.phoneContactParent" type="tel"  placeholder="21-99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.getContactParentName()">
-        </label>
-        <label class="item item-input">
-            <span class="input-label">Nome de quem te convidou para o Foneclube</span>
-            <input ng-model="vm.whoinvite" type="text">
-        </label>
-        <label class="item item-input">
-            <span class="input-label">Preço único</span>
-            <input ng-model="vm.singlePrice" type="tel" money-input>
-        </label>
-        <label class="item item-input">
-            <span class="input-label">Comentário valor</span>
-            <input ng-model="vm.descriptionSinglePrice" type="text"  placeholder="Comentário sobre o Preço único">
-        </label>
-        <div class="item item-divider item-icon-right">
-            Informações nova linha Foneclube
-            <button ng-show="vm.showAddNewPhone.length == 0" on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
-        </div>
-        <div ng-repeat="phoneNumber in vm.phoneNumbersView track by $index">
-            <div class="item item-divider item-icon-right">
-                Linha {{$index + 1}}
-            </div>
-            <label class="item item-input item-icon-right">
-                <span class="input-label">Qual <b>pelido</b> para esta linha?</span>
-                <input ng-model="phoneNumber.Nickname" type="text" placeholder="Apelido">
-            </label>
-    <!--        <label class="item item-input item-select">
-                <span class="input-label">Qual operadora quer usar?</span>
-                <select ng-model="phoneNumber.operadora" ng-change="phoneNumber.plan = ''">
-                    <option value="">Selecione...</option>
-                    <option value="1">Vivo</option>
-                    <option value="2">Claro</option>
-                </select>
-            </label>
-            <label class="item item-input item-select">
-                <span class="input-label">Qual plano que deseja contratar?</span>
-                <select ng-model="phoneNumber.plan">
-                    <option value="">Selecione...</option>
-                    <option ng-repeat="plan in vm.plans" value="{{plan.Id}}" ng-show="plan.Description.endsWith(phoneNumber.operadora == '1' ? 'VIVO' : phoneNumber.operadora == '2' ? 'CLARO' : '')">{{plan.Description}}</option>
-                </select>
-            </label>-->
-            <label class="item">
-                <span class="input-label">Qual operadora quer usar?</span>
-                <ion-list>
-                    <ion-radio name="{{'operadora' + phoneNumber.key}}" ng-model="phoneNumber.operadora" ng-value="'1'" ng-change="phoneNumber.IdPlanOption = ''">Vivo</ion-radio>
-                    <ion-radio name="{{'operadora' + phoneNumber.key}}" ng-model="phoneNumber.operadora" ng-value="'2'" ng-change="phoneNumber.IdPlanOption = ''">Claro</ion-radio>
-                </ion-list>
-            </label>
-            <label class="item">
-                <span class="input-label">Qual plano que deseja contratar?</span>
-                <ion-radio ng-repeat="plan in vm.plans" 
-                           name="{{'planos' + phoneNumber.key}}"
-                           ng-model="phoneNumber.IdPlanOption" 
-                           ng-show="plan.Description.endsWith(phoneNumber.operadora == '1' ? 'VIVO' : phoneNumber.operadora == '2' ? 'CLARO' : '9')"
-                           ng-value="{{plan.Id}}">{{plan.Description}}</ion-radio>
-            </label>
-    <!--        <div class="item item-toggle">
-                Deseja usar seu número atual (portabilidade)?
-                <label class="toggle toggle-positive">
-                    <input type="checkbox" ng-model="phoneNumber.Portability" ng-change="vm.changeNumberPortabilty($index)">
-                    <div class="track">
-                        <div class="handle"></div>
-                    </div>
-                </label>
-            </div>-->
-    <!--        <div class="item item-toggle">
-                Deseja receber um número de telefone novo do Foneclube?
-                <label class="toggle toggle-positive">
-                    <input type="checkbox" ng-model="phoneNumber.NewNumber" ng-change="vm.changeNumberNew($index)">
-                    <div class="track">
-                        <div class="handle"></div>
-                    </div>
-                </label>
-            </div>
-            <label class="item item-input" ng-show="phoneNumber.NewNumber">
-                <span class="input-label"><b>Se você ainda não sabe o novo número de telefone pode deixar em branco.</b></span>
-            </label>-->
-            <label class="item">
-                <span class="input-label">Deseja usar seu número atual com este plano (portabilidade)?</span>
-                <ion-list >
-                    <ion-radio name="{{'Portability' + phoneNumber.key}}" ng-model="phoneNumber.Portability" ng-value="true">Sim, vou fazer a "portabilidade" transferindo minha linha para o Foneclube.</ion-radio>
-                    <ion-radio name="{{'Portability' + phoneNumber.key}}" ng-model="phoneNumber.Portability" ng-value="false">Não, quero um número novo.</ion-radio>
-                </ion-list>
-            </label>
-            <label class="item item-input" ng-show="!phoneNumber.Portability">
-                <span class="input-label"><b>Se você ainda não sabe o novo número de telefone pode deixar em branco.</b></span>
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Telefone</span>
-                <input ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.changePhoneNumber($index)">
-            </label>
-            <div class="item item-divider item-icon-right" style="height: 41px;">
-                <div>
-                    <button on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none; right: 53px;"></button>
-                    <button on-tap="vm.onTapRemoveNewNumber($index)" class="icon ion-minus" style="background: transparent; border: none;"></button>
+    <div ng-if="vm.etapaComplementar">        
+        <h1 class="form-group col-xs-12 display-4">Convite Foneclube</h1>
+        <div class="col-xs-12">
+            <div class="form-container">            
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="telefoneConvidou">Telefone de quem convidou:</label>
+                    <input id="telefoneConvidou" ng-model="vm.phoneContactParent" type="tel"  placeholder="21-99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.getContactParentName()">
                 </div>
-            </div>
-        </div>
-        <div class="padding">
-            <button class="button button-block button-positive" ng-disabled="vm.requesting"  on-tap="vm.onTapSendFoneclubeData()">Enviar</button>
-        </div>
-    </div>
-    </div>
-</ion-content>
-
-<!--=================== modal ======================-->
-<!--Extrair-->
-<!--====================================================-->
-<script id="templates/modal.html" type="text/ng-template">
-    <ion-modal-view>
-        <ion-header-bar class="bar bar-header bar-positive">
-            <h1 class="title">Adicionar foto</h1>
-            <button class="button button-clear button-primary" ng-click="vm.modal.hide()">Cancelar</button>
-        </ion-header-bar>
-        <ion-content class="padding">
-            <div class="item item-text-wrap">
-                De onde você deseja incluir sua foto?
-            </div>
-            <div class="button-bar">
-                <div class="fileUpload btn">
-                    <span class="button">Da galeria</span>
-                    <input id="input-file" type="file" name="file" file="vm.file" class="upload" />
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="nomeConvidou">Nome de quem te convidou para o Foneclube:</label>
+                    <input id="nomeConvidou" ng-model="vm.whoinvite" type="text">
                 </div>
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="precoUnico">Preço único:</label>
+                    <input id="precoUnico" ng-model="vm.singlePrice" type="tel" money-input>
+                </div> 
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="comentarioValor">Comentário valor:</label>
+                    <input id="comentarioValor" ng-model="vm.descriptionSinglePrice" type="text"  placeholder="Comentário sobre o Preço único">
+                </div>                 
+                <div class="item item-divider item-icon-right">
+                    Informações nova linha Foneclube
+                    <button ng-show="vm.showAddNewPhone.length == 0" on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
+                </div>
+                <uib-accordion close-others="oneAtATime">
+                    <div uib-accordion-group class="panel-default" ng-init="status.open = true" is-open="status.open" ng-repeat="phoneNumber in vm.phoneNumbersView track by $index">
+                        <uib-accordion-heading>
+                        Linha {{$index + 1}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
+                        </uib-accordion-heading>
+                        <div class="form-group col-sm-6 col-xs-12">
+                            <label for="apelidoLinha">Qual <b>apelido</b> para esta linha?:</label>
+                            <input id="apelidoLinha" ng-model="phoneNumber.Nickname" type="text" placeholder="Apelido">
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12">
+                            <label for="qualOperadoraUsar">Qual operadora quer usar?:</label>
+                            <select id="qualOperadoraUsar" class="form-control" ng-model="phoneNumber.operadora" ng-change="phoneNumber.IdPlanOption = ''">
+                                <option value="1">Vivo</option>
+                                <option value="2">Claro</option>
+                            </select> 
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12">
+                            <label for="qualPlanoContratar">Qual plano que deseja contratar?:</label>
+                            <select id="qualPlanoContratar" class="form-control" ng-options="plan.Id as plan.Description for plan in vm.plans | filter: phoneNumber.operadora == '1' ? 'VIVO' : phoneNumber.operadora == '2' ? 'CLARO' : '9'" ng-model="phoneNumber.IdPlanOption">
+                                <option value="">Selecione</option>
+                            </select> 
+                        </div> 
+                        <div class="form-group col-sm-6 col-xs-12">
+                            <label for="usarNumeroAtual">Deseja usar seu número atual com este plano (portabilidade)?:</label>
+                            <select class="form-control" ng-model="phoneNumber.Portability">                                      
+                                <option value="true">Sim, vou fazer a "portabilidade" transferindo minha linha para o Foneclube.</option>
+                                <option value="false">Não, quero um número novo.</option>
+                            </select> 
+                        </div>                       
+                        <div class="form-group col-xs-12">
+                            <span ng-show="phoneNumber.Portability == 'false'"><b>Se você ainda não sabe o novo número de telefone pode deixar em branco.</b></span> <br/>
+                            <span for="portabilidadeTelefone">Telefone:</span>
+                            <input id="portabilidadeTelefone" ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.changePhoneNumber($index)">
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <button class="btn btn-danger col-sm-2 col-xs-12" ng-click="vm.onTapRemoveNewNumber($index)">Deletar linha</button>          
+                        </div>
+                    </div>
+                </uib-accordion>
+                <div class="form-group col-xs-12">
+                    <button class="btn btn-primary col-sm-2 col-xs-12" ng-disabled="vm.requesting"  on-tap="vm.onTapSendFoneclubeData()">Enviar</button>                                
+                </div>                 
+            </div>
+        </div>
+    </div>  
+    <!--=================== modal ======================-->
+    <!--Extrair-->
+    <!--====================================================-->
+    <script id="templates/modal.html" type="text/ng-template">
+        <ion-modal-view>
+            <ion-header-bar class="bar bar-header bar-positive">
+                <h1 class="title">Adicionar foto</h1>
+                <button class="button button-clear button-primary" ng-click="vm.modal.hide()">Cancelar</button>
+            </ion-header-bar>
+            <ion-content class="padding">
+                <div class="item item-text-wrap">
+                    De onde você deseja incluir sua foto?
+                </div>
+                <div class="button-bar">
+                    <div class="fileUpload btn">
+                        <span class="button">Da galeria</span>
+                        <input id="input-file" type="file" name="file" file="vm.file" class="upload" />
+                    </div>
 
-                <!--div class="fileUpload btn">
-                <span class="button">Da camera</span>
-                <input id="input-file" type="file" name="file" file="vm.file" class="upload" accept="image/*;capture=camera" />
-                </div-->
-            </div>
-            <div class="padding">
-                <!--button class="button button-block button-positive" ng-disabled="(!vm.hasFileSelected && !vm.hasPhotoCaptured)"  on-tap="vm.onTapSendImage()">Enviar</button-->
-                <button class="button button-block button-positive" ng-disabled="(!vm.hasFileSelected && !vm.hasPhotoCaptured)"  on-tap="vm.onTapSendImage()">Enviar</button>
-                <button class="button button-block button-positive" on-tap="vm.onTapCancel()">Cancelar</button>
-            </div>
-            {{vm.msg}}
-        </ion-content>
-    </ion-modal-view>
-</script>
-<!--====================================================-->
-<!--====================================================-->
-<!--====================================================-->
-</ion-view>
+                    <!--div class="fileUpload btn">
+                    <span class="button">Da camera</span>
+                    <input id="input-file" type="file" name="file" file="vm.file" class="upload" accept="image/*;capture=camera" />
+                    </div-->
+                </div>
+                <div class="padding">
+                    <!--button class="button button-block button-positive" ng-disabled="(!vm.hasFileSelected && !vm.hasPhotoCaptured)"  on-tap="vm.onTapSendImage()">Enviar</button-->
+                    <button class="button button-block button-positive" ng-disabled="(!vm.hasFileSelected && !vm.hasPhotoCaptured)"  on-tap="vm.onTapSendImage()">Enviar</button>
+                    <button class="button button-block button-positive" on-tap="vm.onTapCancel()">Cancelar</button>
+                </div>
+                {{vm.msg}}
+            </ion-content>
+        </ion-modal-view>
+    </script>
+    <!--====================================================-->
+    <!--====================================================-->
+    <!--====================================================-->
+</div>

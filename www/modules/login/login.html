@@ -1,26 +1,22 @@
 
-<ion-view view-title="FoneClube" name="login-view">
-    <div class="login-container">
-        <div class="box">
-                <div id="header">
-                    <div class="icon-header"><img src="./content/img/pi-logo.png" > FONECLUBE</div>      
-                    <div id="bottom-head">[ v.0.2.3 ]</div>              
-                </div> 
-                    <form novalidate name="vm.formLogin">
-                        <div class="form-group">
-                            <label for="usr">Nome:</label>
-                            <input type="text" class="form-control" id="usr" ng-model="vm.user">
-                        </div>
-                        <div class="form-group">
-                            <label for="usr">Senha:</label>
-                            <input type="password" class="form-control" id="password" ng-model="vm.password">
-                        </div>
-                             
-                        <button class="btn btn-success col-md-3" ng-click="vm.login()"  ng-disabled="!vm.formLogin.$valid">Login</button>
-                    </form>
-                <div id="footer-box"></div>
-            </div>    
-        </div> 
-        </div>
-    </div>
-</ion-view>
+<div class="login-container">
+    <div class="box">
+    <div id="header">
+        <div class="icon-header"><img src="./content/img/pi-logo.png" > FONECLUBE</div>      
+        <div id="bottom-head">[ v.0.2.3 ]</div>              
+    </div> 
+        <form novalidate name="vm.formLogin">
+            <div class="form-group">
+                <label for="usr">Nome:</label>
+                <input type="text" class="form-control" id="usr" ng-model="vm.user">
+            </div>
+            <div class="form-group">
+                <label for="usr">Senha:</label>
+                <input type="password" class="form-control" id="password" ng-model="vm.password">
+            </div>
+
+            <button class="btn btn-success col-md-3" ng-click="vm.login()"  ng-disabled="!vm.formLogin.$valid">Login</button>
+        </form>
+    <div id="footer-box"></div>
+    </div>    
+</div>         

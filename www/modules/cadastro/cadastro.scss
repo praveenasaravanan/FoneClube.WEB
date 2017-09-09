@@ -1,0 +1,10 @@
+.pane {
+    overflow-y: auto;
+}
+.cadastro-container {   
+    display: flex;
+    flex: 1 1 auto;
+    height: 100%;     
+    flex-direction: column;                         
+    background-color: $background-default;   
+}

@@ -87,12 +87,12 @@
         
         vm.enter = enter;
         vm.onTapCancel = onTapCancel;
-
+           
         init();
 
         function init(){
             vm.hasCPF = false;
-            etapaDocumento();
+            etapaComplementar();
             vm.allOperatorOptions = MainUtils.operatorOptions();
             FoneclubeService.getPlans().then(function(result){
                 console.log(result)
@@ -843,7 +843,7 @@
                     'Number': '',
                     'IsFoneclube': true,
                     'IdOperator': 0,
-                    'Portability': false,
+                    'Portability': 'false',
                     'NickName': '',
                     'IdPlanOption': 0,
                     'Inative': false,
