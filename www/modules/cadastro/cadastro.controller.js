@@ -92,7 +92,7 @@
 
         function init(){
             vm.hasCPF = false;
-            etapaComplementar();
+            etapaDocumento();
             vm.allOperatorOptions = MainUtils.operatorOptions();
             FoneclubeService.getPlans().then(function(result){
                 console.log(result)
