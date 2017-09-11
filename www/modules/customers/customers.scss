@@ -5,7 +5,8 @@
     display: flex;
     flex: 1 1 auto;
     height: 100%;     
-    flex-direction: column;        
+    flex-direction: column; 
+    background-color: $background-default;       
     .form-container {
         margin-top: 15px;
     }
