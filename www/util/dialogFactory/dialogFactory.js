@@ -44,7 +44,7 @@
                     '<span>' + param.titulo +'</span><hr></div>' +
                     '<div class="corpo-mensagem">'+ param.mensagem +'</div>' +
                     '<div class="footer">' +
-                    '<button type="button" class="btnOk" ng-click="confirm(1)">Ok' +
+                    '<button type="button" class="btnOk" ng-click="closeThisDialog(0)">Ok' +
                     '</button></div></div></div>',
                     plain: true,
                     className: 'mensagens-dialog',
