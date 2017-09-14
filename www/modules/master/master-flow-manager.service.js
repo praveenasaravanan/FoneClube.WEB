@@ -30,7 +30,7 @@
         }
         
         function changeEdicaoView(param) {
-            LocationService.change('edicao', param);
+            LocationService.change('tabs.edicao', param);
         }
         
         function changeCustomersView(){

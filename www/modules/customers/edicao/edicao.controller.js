@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('EdicaoController', EdicaoController);
 
-    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService'];
-    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService) {
+    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory'];
+    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory) {
         var vm = this;
         vm.onTapSendUser = onTapSendUser;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
@@ -29,7 +29,7 @@
                 FlowManagerService.changeCustomersView();
                 return;
             }
-            MainComponents.showLoader('Carregando dados...');
+            var showDialog = DialogFactory.showLoader('Carregando dados...');
             FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
                 vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
                 vm.customer = result;
@@ -64,7 +64,7 @@
                         }
                     }
                     console.info(vm.customer);
-                    MainComponents.hideLoader();
+                    showDialog.close();
                     $timeout(function () {
                         vm.requesting = false;
                     }, 2000)
@@ -101,7 +101,7 @@
         function onTapSendUser(customer){
             if (vm.requesting == true) return;
             vm.requesting = true;
-            MainComponents.showLoader('Enviando Dados...');
+            var showLoader = DialogFactory.showLoader('Enviando Dados...');
             
             var customerSend = {
                 "Id": customer.Id,
@@ -136,8 +136,8 @@
             }
             if (vm.singlePriceLocal) {
                 if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
-                    MainComponents.alert({mensagem:'Preço único não pode ser maior do que o preço de todos os planos somados.'});
-                    MainComponents.hideLoader();
+                    DialogFactory.showMessageDialog({mensagem:'Preço único não pode ser maior do que o preço de todos os planos somados.'});
+                    showLoader.close();
                     vm.requesting = false;
                     return;
                 }
@@ -146,8 +146,8 @@
             //Regra: o telefone não pode ser incompleto, mass pode estar em branco
             for (var item in customerSend.Phones) {
                 if (customerSend.Phones[item].NovoFormatoNumero.length < 14 && customerSend.Phones[item].NovoFormatoNumero.length > 0) {
-                    showAlert('Aviso', 'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.'));
-                    MainComponents.hideLoader();
+                    DialogFactory.showMessageDialog({titulo:'Aviso', mensagem:'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.')});
+                    showLoader.close();
                     vm.requesting = false;
                     return;
                 } else {
@@ -167,10 +167,10 @@
                     var right = true;
                     for (var item in result) {
                         if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {
-                            showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.');
+                            DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'Você não pode cadastrar o mesmo telefone para dois clientes.'});
                             right = false;
                             vm.requesting = false;
-                            MainComponents.hideLoader();
+                            showLoader.close();
                         }
                     }
                     for(var x in arrayFiltered) {
@@ -179,10 +179,10 @@
                             return element.DDD == arrayFiltered[x].DDD && element.Number == arrayFiltered[x].Number;
                         });
                         if (twiceNumber.length > 1) {
-                            showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone duas vezes para o cliente.');
+                            DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'Você não pode cadastrar o mesmo telefone duas vezes para o cliente.'});
                             right = false;
                             vm.requesting = false;
-                            MainComponents.hideLoader();
+                            showLoader.close();
                             break;
                         }
                     }
@@ -226,13 +226,13 @@
                     MainComponents.show(params);
                 }
                 vm.requesting = false;
-                MainComponents.hideLoader();
+                showLoader.close();
             }
             
             function postUpdateCustomerError(error) {
-                MainComponents.alert({mensagem:error.statusText});
+                DialogFactory.showMessageDialog({mensagem:error.statusText});
                 vm.requesting = false;
-                MainComponents.hideLoader();
+                showLoader.close();
             }
         };
         
@@ -249,7 +249,7 @@
         
         function validarCEP(index) {
             if (vm.customer.Adresses[index].Cep.length < 9) return;
-            MainComponents.showLoader('Tentando preencher dados...');
+            var showLoader = DialogFactory.showLoader('Tentando preencher dados...');
             HubDevService.validaCEP(vm.customer.Adresses[index].Cep.replace(/[-.]/g , '')).then(function(result){
                 if (!result.erro) {
                     vm.customer.Adresses[index].Street = result.logradouro;
@@ -257,11 +257,11 @@
                     vm.customer.Adresses[index].City = result.localidade;
                     vm.customer.Adresses[index].State = result.uf;
                 } else {
-                    MainComponents.alert({mensagem: "CEP incorreto."});
+                    DialogFactory.showMessageDialog({mensagem:"CEP incorreto."});
                 }
-                MainComponents.hideLoader();
+                showLoader.close();
             }, function(error){
-                MainComponents.hideLoader();
+                showLoader.close();
             });
         }
         
@@ -274,24 +274,12 @@
                            vm.name = result.nome;
                         }
                     }, function(error){ });
-                } else if (existentClient.DocumentNumber != vm.DocumentNumberFreeze) {
-                    MainComponents.hideLoader();
-                    var confirmPopup = $ionicPopup.confirm({
-                        title: 'CPF já cadastrado',
-                        template: 'Você não pode cadastrar um cpf repetido.',
-                        buttons: [
-                            {   text: '<b>Ok</b>',
-                                type: 'button-positive',
-                                onTap: function(e) {
-                                    return true;
-                                }
-                            }
-                        ]
-                    });
-                    confirmPopup.then(function(res) {
+                } else if (existentClient.DocumentNumber != vm.DocumentNumberFreeze) {                    
+                    DialogFactory.showMessageConfirm({titulo: 'CPF já cadastrado', mensagem: 'Você não pode cadastrar um cpf repetido.'})
+                    .then(function(param) {
                         var cpf = angular.copy(vm.DocumentNumberFreeze);
                         vm.customer.DocumentNumber = cpf.substr(0, 3) + '.' + cpf.substr(3, 3) + '.' + cpf.substr(6, 3) + '-' + cpf.substr(9)
-                    });
+                    })                   
                 }
             }, function (result) {
                 FlowManagerService.changeHomeView();
@@ -337,24 +325,12 @@
         }
         
         function onTapRemoveNewNumber(position){
-            var confirmPopup = $ionicPopup.confirm( {
-                title: 'Excluir Número',
-                template: 'Deseja realmente remover este número?',
-                buttons: [
-                    {   text: 'Não' },
-                    {   text: '<b>Sim</b>',
-                        type: 'button-positive',
-                        onTap: function(e) {
-                            return true;
-                        }
-                    }
-                ]
-            });
-            confirmPopup.then(function(res) {
+            DialogFactory.showMessageConfirm({titulo: 'Excluir Número', mensagem: 'Deseja realmente remover este número?'})
+            .then(function(res){
                 if(res) {
                     vm.customer.Phones[position].Delete = true;
                 }
-            });
+            })           
         }
         
         function validadeNumbers(numbers){
@@ -378,12 +354,12 @@
                 return element.NovoFormatoNumero == vm.customer.Phones[position].NovoFormatoNumero;
             });
             if (twiceNumber.length > 1) {
-                showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone duas vezes para o cliente.');
+                DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'Você não pode cadastrar o mesmo telefone duas vezes para o cliente.'});
                 return;
             }
             FoneclubeService.getCustomerByPhoneNumber(number).then(function(res) {
                 if (res.DocumentNumber && res.DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {
-                    showAlert('Aviso', 'Este telefone já pertence a um cliente.');
+                    DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'Este telefone já pertence a um cliente.'});
                 }
             });
         }
@@ -421,13 +397,6 @@
         function resizeScroll() {
             $ionicScrollDelegate.resize();
         }
-        
-        //ToDo => colocar em uma service, ou utils
-        function showAlert(title, message){
-            return $ionicPopup.alert({
-                title: title,
-                template: message
-            });
-        }
+                
     }
 })();

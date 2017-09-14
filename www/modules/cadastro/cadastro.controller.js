@@ -24,7 +24,8 @@
         'FlowManagerService',
         'ViewModelUtilsService',
         '$ionicScrollDelegate',
-        'UtilsService'
+        'UtilsService',
+        'DialogFactory'
     ];
 
     function CadastroController(
@@ -45,13 +46,13 @@
          FlowManagerService, 
          ViewModelUtilsService,
          $ionicScrollDelegate,
-         UtilsService
+         UtilsService,
+         DialogFactory         
     ) {
             
         var vm = this;
         vm.viewName = 'Cadastro Foneclube';
-        vm.requesting = false;
-
+        vm.requesting = false;        
         vm.cpf = '';
         vm.birthdate = '';
         vm.zipcode = '';
@@ -117,7 +118,7 @@
 
         function onTapSearchDocument(){
             vm.requesting = true;
-            MainComponents.showLoader('Tentando preencher dados...');
+            var showLoader = DialogFactory.showLoader('Tentando preencher dados...');
             
             var cpf = UtilsService.clearDocumentNumber(vm.cpf);
             FoneclubeService.getCustomerByCPF(cpf).then(function(existentClient){
@@ -127,31 +128,21 @@
                            vm.name = result.nome;
                         }
                         etapaDocumentoFaseNome();
+                        showLoader.close();
                     }, function(error){
                         etapaDocumentoFaseNome();
+                        showLoader.close();
                     });
                 } else {
-                    MainComponents.hideLoader();
-                    var confirmPopup = $ionicPopup.confirm({
-                        title: 'Cliente já cadastrado',
-                        template: 'Deseja acrescentar novas linhas a este CPF?',
-                        buttons: [
-                            {   text: 'Não' },
-                            {   text: '<b>Sim</b>',
-                                type: 'button-positive',
-                                onTap: function(e) {
-                                    return true;
-                                }
-                            }
-                        ]
-                    });
-                    confirmPopup.then(function(res) {
+                    showLoader.close();
+                    DialogFactory.dialogConfirm({titulo:'Cliente já cadastrado', mensagem:'Deseja acrescentar novas linhas a este CPF?'})
+                    .then(function(res){
                         if(res) {
                             FlowManagerService.changeEdicaoView(existentClient);
                         } else {
                             FlowManagerService.changeHomeView();
                         }
-                    });
+                    })                    
                 }
             }, function (result) {
                 FlowManagerService.changeHomeView();
@@ -167,7 +158,7 @@
             var regexBirthday =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
             var dadosInvalidos = parseInt(dia) > 31 || parseInt(mes) > 12 || parseInt(mes) == 0 || parseInt(dia) == 0;
             if(!regexBirthday.test(vm.birthdate) || dadosInvalidos){
-                MainComponents.alert({mensagem:'Data de nascimento Inválida'});
+                DialogFactory.showMessageDialog({mensagem:'Data de nascimento Inválida'});                
                 vm.requesting = false;
                 return;
             }
@@ -190,14 +181,14 @@
             FoneclubeService.postBasePerson(personCheckout).then(function(result){
                 if(result) {
                     etapaEndereco();
-                    MainComponents.alert({titulo:'Andamento',mensagem:'Documento enviado, agora preencha os dados de Endereço.'});
+                    DialogFactory.showMessageDialog({titulo:'Andamento', mensagem:'Documento enviado, agora preencha os dados de Endereço.'});
                 }
             }).catch(function(error){
                 console.log('catch error');
                 console.log(error);
                 console.log(error.statusText);
                 vm.requesting = false;
-                MainComponents.alert({mensagem:error.statusText});
+                DialogFactory.showMessageDialog({mensagem:error.statusText});                
             });
         }
             
@@ -212,7 +203,7 @@
         function validarCEP() {
             if (vm.zipcode.length < 9) return;
             
-            MainComponents.showLoader('Tentando preencher dados...');
+            var showLoader = DialogFactory.showLoader('Tentando preencher dados...');
             HubDevService.validaCEP(vm.zipcode.replace(/[-.]/g , '')).then(function(result){
                 if (!result.erro) {
                     vm.street = result.logradouro;
@@ -220,11 +211,11 @@
                     vm.city = result.localidade;
                     vm.uf = result.uf;
                 } else {
-                    MainComponents.alert({mensagem: "CEP incorreto."});
+                    DialogFactory.showMessageDialog({mensagem: "CEP incorreto."});
                 }
-                MainComponents.hideLoader();
+                showLoader.close();
             }, function(error){
-                MainComponents.hideLoader();
+                showLoader.close();
             });
         }
 
@@ -255,14 +246,14 @@
             FoneclubeService.postUpdatePersonAdress(personCheckout).then(function(result){
                 if(result) {
                     etapaDadosPessoais();
-                    MainComponents.alert({titulo:'Andamento',mensagem:'Endereço enviado, agora preencha os dados pessoais.'});
+                    DialogFactory.showMessageDialog({titulo:'Andamento',mensagem:'Endereço enviado, agora preencha os dados pessoais.'});
                 }
             })
             .catch(function(error){
                 console.log('catch error');
                 console.log(error);
                 console.log(error.statusText); // mensagem de erro para tela, caso precise
-                MainComponents.alert({mensagem:error.statusText});
+                DialogFactory.showMessageDialog({mensagem:error.statusText});
                 vm.requesting = false;
             });
 
@@ -295,22 +286,21 @@
                 console.log(result);
                 if(result) {
                     etapaComplementar();
-                    MainComponents.alert({titulo:'Andamento',mensagem:'Dados pessoais enviados, agora preencha os dados Foneclube.'});
+                    DialogFactory.showMessageDialog({titulo:'Andamento',mensagem:'Dados pessoais enviados, agora preencha os dados Foneclube.'});
                 }
                 //post realizado com sucesso
             })
             .catch(function(error){
                 console.log('catch error');
                 console.log(error);
-                MainComponents.alert({mensagem:error.statusText});
+                DialogFactory.showMessageDialog({mensagem:error.statusText});
                 vm.requesting = false;
             });
         }
 
         function etapaDocumentoFaseNome(){
             vm.hasCPF = true;
-            vm.requesting = false;
-            MainComponents.hideLoader();
+            vm.requesting = false;            
         }
 
         function etapaDocumento(){
@@ -497,19 +487,19 @@
                 q.reject();
                 return q.promise;
             }
-            MainComponents.showLoader('Enviando...');
+            var showLoader = DialogFactory.showLoader('Enviando...');
             var imageUploader = new ImageUploader();
             imageUploader.push(file)
             .then((data) => {
                 console.debug('Upload complete. Data:', data);
                 // MainComponents.alert({mensagem:'Imagem enviada com sucesso'});
-                MainComponents.hideLoader();
+                showLoader.close();
                  q.resolve(data);
             })
             .catch((err) => {
                 console.error(err);
-                MainComponents.alert({mensagem:'Não foi possível enviar imagens'});
-                MainComponents.hideLoader();
+                DialogFactory.showMessageDialog({mensagem:'Não foi possível enviar imagens'});
+                showLoader.close();
                 q.reject(error);
             });
             return q.promise;
@@ -599,7 +589,7 @@
         }
 
         function startListUpload(photos){
-            MainComponents.showLoader('Enviando...');
+            var showLoader = DialogFactory.showLoader('Enviando...');
             if(photos.length > 0) {
                 var lastItemIndex = photos[photos.length - 1];
                 uploadImagePath(lastItemIndex).then(function(result){
@@ -607,7 +597,7 @@
                         continueListUpload(vm.fotos);
                 });
             } else {
-                MainComponents.hideLoader();
+                showLoader.close();
                 //MainComponents.alert({mensagem:'Imagem enviada com sucesso'});
                 console.log(listaImagens)
                 //conclusão de foto auqi
@@ -646,22 +636,22 @@
         vm.onTapSendFoneclubeData = onTapSendFoneclubeData;
         function onTapSendFoneclubeData(){
             vm.requesting = true;
-            MainComponents.showLoader('Enviando dados...');
+            var showLoader = DialogFactory.showLoader('Enviando dados...');
             var cpf = UtilsService.clearDocumentNumber(vm.cpf);
             var phones = [];
             var totalPriceValidade = 0;
             
             for (var number in vm.phoneNumbersView) {
                 if(!vm.phoneNumbersView[number].Nickname || vm.phoneNumbersView[number].Nickname == '') {
-                    MainComponents.alert({titulo:'Linha ' + (number + 1), mensagem:'Nickname é um campo obrigario'});
+                    DialogFactory.showMessageDialog({titulo:'Linha ' + (number + 1), mensagem:'Nickname é um campo obrigario'});
                     vm.requesting = false;
-                    MainComponents.hideLoader();
+                    showLoader.close();
                     return;
                 }
                 if(vm.phoneNumbersView[number].IdPlanOption == '') {
-                    MainComponents.alert({titulo:'Linha ' + (number + 1), mensagem:'A escolha do plano é obrigatória.'});
+                    DialogFactory.showMessageDialog({titulo:'Linha ' + (number + 1), mensagem:'A escolha do plano é obrigatória.'});
                     vm.requesting = false;
-                    MainComponents.hideLoader();
+                    showLoader.close();
                     return;
                 } else {
                     vm.plans.find(function (element, index, array) {
@@ -674,9 +664,9 @@
             if (vm.singlePrice) {
                 var price = parseFloat(vm.singlePrice) / 100;
                 if (price > totalPriceValidade) {
-                    MainComponents.alert({mensagem:'Preço único não pode ser maior do que o preço de todos os planos somados.'});
+                    DialogFactory.showMessageDialog({mensagem:'Preço único não pode ser maior do que o preço de todos os planos somados.'});
                     vm.requesting = false;
-                    MainComponents.hideLoader();
+                    showLoader.close();
                     return
                 }
                 
@@ -734,10 +724,10 @@
                     var right = true;
                     for (var item in result) {
                         if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.cpf)) {
-                            showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.');
+                            DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem:'Você não pode cadastrar o mesmo telefone para dois clientes.'});
                             right = false;
                             vm.requesting = false;
-                            MainComponents.hideLoader();
+                            showLoader.close();
                         }
                     }
                     for(var x in arrayFiltered) {
@@ -746,10 +736,10 @@
                             return element.DDD == arrayFiltered[x].DDD && element.Number == arrayFiltered[x].Number;
                         });
                         if (twiceNumber.length > 1) {
-                            showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone duas vezes para o cliente.');
+                            DialogFactory.showMessageDialog({titulo:'Aviso', mensagem:'Você não pode cadastrar o mesmo telefone duas vezes para o cliente.'});
                             right = false;
                             vm.requesting = false;
-                            MainComponents.hideLoader();
+                            showLoader.close();
                             break;
                         }
                     }
@@ -762,7 +752,7 @@
             }
             
             function postUpdatePersonSucess(result) {
-                MainComponents.hideLoader();
+                showLoader.close();
                 if(result) {
                     FlowManagerService.changeHomeView();
                     var params = {
@@ -808,8 +798,8 @@
             
             function postUpdatePersonError(error) {
                 vm.requesting = false;
-                MainComponents.hideLoader();
-                MainComponents.alert({mensagem:error.statusText});
+                showLoader.close();
+                DialogFactory.showMessageDialog({mensagem:error.statusText});
             }
         }
         
@@ -894,12 +884,12 @@
                     return element.NovoFormatoNumero == vm.phoneNumbersView[position].NovoFormatoNumero;
                 });
                 if (twiceNumber.length > 1) {
-                    showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone duas vezes para o mesmo cliente.');
+                    DialogFactory.showMessageDialog({titulo:'Aviso', mensagem:'Você não pode cadastrar o mesmo telefone duas vezes para o mesmo cliente.'});
                     return;
                 }
             FoneclubeService.getCustomerByPhoneNumber(param).then(function(res) {
                 if (res.DocumentNumber && res.DocumentNumber != UtilsService.clearDocumentNumber(vm.cpf)) {
-                    showAlert('Aviso', 'Este telefone já pertence a um cliente.');
+                    DialogFactory.showMessageDialog({titulo:'Aviso', mensagem:'Este telefone já pertence a um cliente.'});
                 }
             });
         }
@@ -986,14 +976,6 @@
         function resizeScroll() {
             $ionicScrollDelegate.resize();
         }
-        //ToDo => colocar em uma service, ou utils
-        function showAlert(title, message){
-            return $ionicPopup.alert({
-                title: title,
-                template: message
-            });
-        }
-        /////////////////////////////////////
-        /////////////////////////////////////
+               
     }
 })();

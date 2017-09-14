@@ -70,11 +70,15 @@
           }
         }
       })
-      .state('edicao', {
-        url: "/edicao",       
-        templateUrl: "modules/customers/edicao/edicao.html",
-        controller: 'EdicaoController as vm',
-        params: { data: null }      
+      .state('tabs.edicao', {
+        url: "/edicao", 
+        views: {      
+          'menu-tab': {
+            templateUrl: "modules/customers/edicao/edicao.html",
+            controller: 'EdicaoController as vm',
+            params: {data: null}
+          }
+        }            
       })
       .state('ordemservico', {
         url: "/ordemservico",       

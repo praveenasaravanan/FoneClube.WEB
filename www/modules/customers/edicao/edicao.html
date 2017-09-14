@@ -1,192 +1,132 @@
-<ion-view>
-
+<div class="edicao-container">
     <div class="bar bar-header bar-light">
-        <div class="buttons">
-            <button class="button icon ion-chevron-left" ng-click="vm.goBack()">Voltar</button>
-        </div>
-        <h1 class="title">Editar cadastro</h1>
-    </div>
-
-    <ion-content class="posicao-inicial" delegate-handle="mainScroll" overflow-scroll="true">     
-
-        <div class="list list-inset">
-        <div>
-            <div class="item item-divider">
-                Dados iniciais
+        <h1 class="title">Editar Cadastro</h1>
+    </div>    
+    <h2 class="form-group col-xs-12 display-3">Dados Iniciais</h2>                
+    <div class="col-xs-12">
+        <div class="form-container">            
+            <div class="form-group col-sm-6 col-xs-12">
+                <label for="cpf">CPF:</label>
+                <input id="cpf" class="form-control" ng-model="vm.customer.DocumentNumber" type="text" ng-change="vm.validarCPF()" mask="999.999.999-99" restrict="reject">
+            </div>             
+            <div class="form-group col-sm-6 col-xs-12">
+                <label for="nome">Nome:</label>
+                <input id="nome" class="form-control" ng-model="vm.customer.Name" type="text">
             </div>
-            <label class="item item-input">
-                <span class="input-label">CPF</span>
-                <input ng-model="vm.customer.DocumentNumber" type="text" ng-change="vm.validarCPF()" mask="999.999.999-99" restrict="reject">
-            </label>              
-            <label class="item item-input">
-                <span class="input-label">Nome</span>
-                <input ng-model="vm.customer.Name" type="text">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Email</span>
-                <input ng-model="vm.customer.Email" type="text">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Data de Nascimento</span>
-                <input ng-model="vm.customer.Born" type="text"  name="date" mask="39/19/9999" restrict="reject" placeholder="dd/mm/aaaa">
-            </label>
+            <div class="form-group col-sm-6 col-xs-12">
+                <label for="email">Email:</label>
+                <input id="email" class="form-control" ng-model="vm.customer.Email" type="text">
+            </div> 
+            <div class="form-group col-sm-6 col-xs-12">
+                <label for="dataNasc">Data de Nascimento:</label>
+                <input id="dataNasc" class="form-control" ng-model="vm.customer.Born" type="text"  name="date" mask="39/19/9999" restrict="reject" placeholder="dd/mm/aaaa">
+            </div>                                                                           
             <div ng-repeat="phoneNumber in vm.customer.Phones | filter: { IsFoneclube: null }">
-                <label class="item item-input">
-                    <span class="input-label">Telefone "atual" de contato</span>
-                    <input ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject">
-                </label>
-                <label class="item">
-                    <span class="input-label">Qual sua operadora atual?</span>
-                    <ion-list>
-                        <ion-radio ng-repeat="operator in vm.allOperatorOptions" name="operadoraAtual" ng-model="phoneNumber.IdOperator" ng-value="{{operator.id}}">{{operator.nome}}</ion-radio>
-                    </ion-list>
-                </label>
-            </div>
-            <div class="item item-divider" ng-show="vm.customer.Adresses.length > 0">
-                Endereço
-            </div>
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="dataNasc">Telefone "atual" de contato:</label>
+                    <input id="dataNasc" class="form-control" ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject">
+                </div>
+                <div class="form-group col-sm-6 col-xs-12" >
+                    <label for="selectOperator">Qual sua operadora atual?:</label>
+                    <select class="form-control" ng-options="operator.id as operator.nome for operator in vm.allOperatorOptions" ng-model="phoneNumber.IdOperator">
+                        <option value="">Selecione</option>
+                    </select>            
+                </div>                                
+            </div>          
+        </div>
+    </div> 
+    <h2 class="form-group col-xs-12 display-3">Endereço</h2>                
+    <div class="col-xs-12">
+        <div class="form-container">            
             <div ng-repeat="adress in vm.customer.Adresses track by $index">
-                <label class="item item-input">
-                    <span class="input-label">CEP</span>
-                    <input ng-model="adress.Cep" type="text" name="CEP" mask="99999-999" restrict="reject" ng-change="vm.validarCEP($index)">
-                </label>
-                <label class="item item-input">
-                  <span class="input-label">Rua</span>
-                  <input ng-model="adress.Street" type="text">
-                </label>
-                <label class="item item-input">
-                    <span class="input-label">Número</span>
-                    <input type="number" ng-model="adress.StreetNumber">
-                </label>
-                <label class="item item-input">
-                    <span class="input-label">Complemento</span>
-                    <input ng-model="adress.Complement" type="text">
-                </label>
-
-                <label class="item item-input">
-                    <span class="input-label">Bairro</span>
-                    <input ng-model="adress.Neighborhood" type="text">
-                </label>
-                <label class="item item-input">
-                    <span class="input-label">Cidade</span>
-                    <input ng-model="adress.City" type="text">
-                </label>
-                <label class="item item-input">
-                    <span class="input-label">Estado</span>
-                    <input ng-model="adress.State" type="text">
-                </label>
-            </div>
-            <div class="item item-divider">
-                Dados Pessoais
-            </div>
-            <!--Falta ajustar API-->
-            <!--<label class="item item-input">
-                <span class="input-label">Telefone de quem convidou</span>
-                <input ng-model="vm.contactParent" type="tel" placeholder="(21)99999-9999" mask="(99)9?9999-9999" restrict="reject" ng-change="vm.getContactParentName()">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Nome de quem te convidou para o Foneclube</span>
-                <input ng-model="vm.customer.NameContactParent" type="text">
-            </label>-->
-            <label class="item item-input">
-                <span class="input-label">Preço único</span>
-                <input id="singlePriceLocal" ng-model="vm.singlePriceLocal" money-input type="tel">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">Comentário valor</span>
-                <input ng-model="vm.customer.DescriptionSinglePrice" type="text"  placeholder="Comentário sobre o Preço único">
-            </label>
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="cep">CEP:</label>
+                    <input id="cep" class="form-control" ng-model="adress.Cep" type="text" name="CEP" mask="99999-999" restrict="reject" ng-change="vm.validarCEP($index)">
+                </div>
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="rua">Rua:</label>
+                    <input id="rua" class="form-control" ng-model="adress.Street" type="text">
+                </div>
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="numero">Número:</label>
+                    <input id="numero" class="form-control" type="number" ng-model="adress.StreetNumber">
+                </div>
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="complemento">Complemento:</label>
+                    <input id="complemento" class="form-control" type="number" ng-model="adress.StreetNumber">
+                </div>       
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="bairro">Bairro:</label>
+                    <input id="bairro" class="form-control" ng-model="adress.Neighborhood" type="text">
+                </div>
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="cidade">Cidade:</label>
+                    <input id="cidade" class="form-control" ng-model="adress.City" type="text">
+                </div>  
+                <div class="form-group col-sm-6 col-xs-12">
+                    <label for="uf">Estado:</label>
+                    <input id="uf" class="form-control" ng-model="adress.State" type="text">
+                </div>                                                             
+            </div>         
+        </div>
+    </div>
+    <h2 class="form-group col-xs-12 display-3">Dados Pessoais</h2>                
+    <div class="col-xs-12">
+        <div class="form-container">  
+            <div class="form-group col-sm-6 col-xs-12">
+                <label for="precoUnico">Preço único:</label>
+                <input id="precoUnico" class="form-control" ng-model="vm.singlePriceLocal" money-input type="tel">
+            </div> 
+            <div class="form-group col-sm-6 col-xs-12">
+                <label for="comentarioValor">Comentário valor:</label>
+                <input id="comentarioValor" class="form-control" ng-model="vm.customer.DescriptionSinglePrice" type="text"  placeholder="Comentário sobre o Preço único">
+            </div>                                  
             <div class="item item-divider item-icon-right">
                 Informações linha(s) Foneclube
                 <button ng-show="vm.showAddNewPhone.length == 0" on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
             </div>
-            <div ng-repeat="phoneNumber in vm.customer.Phones track by $index">
-                <div ng-hide="!phoneNumber.IsFoneclube || phoneNumber.Delete">
-                    <div class="item item-divider item-icon-right">
-                        Linha {{$index + 1}}
+            <uib-accordion close-others="oneAtATime">            
+                <div uib-accordion-group  class="panel-default" ng-hide="!phoneNumber.IsFoneclube || phoneNumber.Delete" ng-init="status.open = false" is-open="status.open" ng-repeat="phoneNumber in vm.customer.Phones track by $index">                    
+                    <uib-accordion-heading>
+                        Linha {{$index + 1}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
+                    </uib-accordion-heading>
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label for="comentarioValor">Qual apelido para está linha?:</label>
+                        <input id="comentarioValor" class="form-control" ng-model="phoneNumber.NickName" type="text" placeholder="Apelido">
                     </div>
-                    <label class="item item-input item-icon-right">
-                        <span class="input-label">Qual <b>apelido</b> para esta linha?</span>
-                        <input ng-model="phoneNumber.NickName" type="text" placeholder="Apelido">
-                    </label>
-                    <label class="item">
-                        <span class="input-label">Qual operadora quer usar?</span>
-                        <ion-list>
-                            <ion-radio name="{{'operadora' + phoneNumber.key}}" ng-model="phoneNumber.operadora" ng-value="'1'" ng-change="phoneNumber.IdPlanOption = ''">Vivo</ion-radio>
-                            <ion-radio name="{{'operadora' + phoneNumber.key}}" ng-model="phoneNumber.operadora" ng-value="'2'" ng-change="phoneNumber.IdPlanOption = ''">Claro</ion-radio>
-                        </ion-list>
-                    </label>
-                    <label class="item">
-                        <span class="input-label">Qual plano que deseja contratar?</span>
-                        <ion-radio ng-repeat="plan in vm.plans" 
-                                   name="{{'plano' + phoneNumber.key}}"
-                                   ng-model="phoneNumber.IdPlanOption" 
-                                   ng-show="plan.Description.endsWith(phoneNumber.operadora == '1' ? 'VIVO' : phoneNumber.operadora == '2' ? 'CLARO' : '9')"
-                                   ng-value="{{plan.Id}}">{{plan.Description}}</ion-radio>
-                        <!--<select ng-model="phoneNumber.IdPlanOption">
-                            <option ng-repeat="plan in vm.plans" value="{{plan.Id}}" ng-show="plan.Description.endsWith(phoneNumber.operadora == '1' ? 'VIVO' : phoneNumber.operadora == '2' ? 'CLARO' : '9')">{{plan.Description}}</option>
-                        </select>-->
-                    </label>
-                    <label class="item">
-                        <span class="input-label">Deseja usar seu número atual com este plano (portabilidade)?</span>
-                        <ion-list>
-                            <ion-radio name="{{'planoo' + phoneNumber.key}}" ng-model="phoneNumber.Portability" ng-value="'true'">Sim, vou fazer a "portabilidade" transferindo minha linha para o Foneclube.</ion-radio>
-                            <ion-radio name="{{'planoo' + phoneNumber.key}}"ng-model="phoneNumber.Portability" ng-value="'false'">Não, quero um número novo.</ion-radio>
-                        </ion-list>
-                    </label>
-                    <label class="item item-input" ng-show="!phoneNumber.Portability">
-                        <span class="input-label"><b>Se você ainda não sabe o novo número de telefone pode deixar em branco.</b></span>
-                    </label>
-                    <label class="item item-input">
-                        <span class="input-label">Telefone</span>
-                        <input ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.validatePhoneNumber($index)">
-                    </label>
-                    <div class="item item-divider item-icon-right" style="height: 41px;">
-                        <div>
-                            <button on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none; right: 53px;"></button>
-                            <button on-tap="vm.onTapRemoveNewNumber($index)" class="icon ion-minus" style="background: transparent; border: none;"></button>
-                        </div>
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label for="qualOperadoraUsar">Qual operadora quer usar?:</label>
+                        <select id="qualOperadoraUsar" class="form-control" ng-model="phoneNumber.operadora" ng-change="phoneNumber.IdPlanOption = ''">
+                            <option name="{{'operadora' + phoneNumber.key}}" value="'1'">Vivo</option>
+                            <option name="{{'operadora' + phoneNumber.key}}" value="'2'">Claro</option>
+                        </select> 
                     </div>
-<!--                    <div class="item item-divider item-icon-right">
-                        Linha {{$index + 1}}
-                        <button on-tap="vm.onTapRemoveNewNumber($index)" class="icon ion-minus" style="background: transparent; border: none;"></button>
-                    </div>
-                    <label class="item item-input item-icon-right">
-                        <span class="input-label">Usuário/Apelido</span>
-                        <input ng-model="phoneNumber.NickName" type="text">
-                    </label>
-                    <div class="item item-toggle">
-                        Deseja Portabilidade?
-                        <label class="toggle toggle-positive">
-                            <input type="checkbox" ng-model="phoneNumber.Portability">
-                            <div class="track">
-                                <div class="handle"></div>
-                            </div>
-                        </label>
-                    </div>
-                    <label class="item item-input">
-                        <span class="input-label">DDD</span>
-                        <input ng-model="phoneNumber.DDD" type="tel" mask="21">
-                    </label>
-                    <label class="item item-input">
-                        <span class="input-label">Telefone</span>
-                        <input ng-model="phoneNumber.Number" type="tel"  placeholder="99999-9999" mask="9?9999-9999"  restrict="reject">
-                    </label>
-                    <label class="item item-input item-select">
-                        <div class="input-label">
-                            Plano
-                        </div>
-                        <select ng-model="phoneNumber.IdPlanOption" ng-options="plan.Id as plan.Description for plan in vm.plans">
-
-                        </select>
-                    </label>-->
-                </div>
-            </div>
-            <div class="padding">              
-                <button class="button button-block button-positive" on-tap="vm.onTapSendUser(vm.customer)">Enviar</button>
-            </div>
-
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label for="qualPlanoContratar">Qual plano que deseja contratar?:</label>
+                        <select id="qualPlanoContratar" class="form-control" ng-options="plan.Id as plan.Description for plan in vm.plans | filter: phoneNumber.operadora == '1' ? 'VIVO' : phoneNumber.operadora == '2' ? 'CLARO' : '9'" ng-model="phoneNumber.IdPlanOption">
+                            <option value="">Selecione</option>
+                        </select> 
+                    </div>  
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label for="usarNumeroAtual">Deseja usar seu número atual com este plano (portabilidade)?:</label>
+                        <select class="form-control" ng-model="phoneNumber.Portability">                                      
+                            <option value="true">Sim, vou fazer a "portabilidade" transferindo minha linha para o Foneclube.</option>
+                            <option value="false">Não, quero um número novo.</option>
+                        </select> 
+                    </div>  
+                    <div class="form-group col-xs-12">
+                        <span ng-show="phoneNumber.Portability == 'false'"><b>Se você ainda não sabe o novo número de telefone pode deixar em branco.</b></span> <br/>
+                        <span for="portabilidadeTelefone">Telefone:</span>
+                        <input id="portabilidadeTelefone" class="form-control" ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.validatePhoneNumber($index)">
+                    </div>   
+                    <div class="form-group col-xs-12">
+                        <button class="btn btn-danger col-sm-2 col-xs-12" ng-click="vm.onTapRemoveNewNumber($index)">Deletar linha</button>          
+                    </div>                                                                                              
+                </div>                
+            </uib-accordion>                       
         </div>
-        </div>
-    </ion-content>
-</ion-view>
+    </div>   
+    <div class="form-group col-xs-12">
+        <button class="btn btn-primary col-sm-2 col-xs-12" ng-disabled="vm.requesting"  on-tap="vm.onTapSendUser(vm.customer)">Enviar</button>                                
+    </div>         
+</div>

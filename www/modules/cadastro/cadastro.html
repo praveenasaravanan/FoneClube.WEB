@@ -13,19 +13,19 @@
                 </div> 
                 <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
                     <label for="nome">Nome:</label>
-                    <input id="nome" ng-model="vm.name" type="text">
+                    <input id="nome" class="form-control" ng-model="vm.name" type="text">
                 </div>             
                 <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
                     <label for="email">Email:</label>
-                    <input id="email" ng-model="vm.email" type="text" placeholder="exemplo@email.com">
+                    <input id="email" class="form-control" ng-model="vm.email" type="text" placeholder="exemplo@email.com">
                 </div> 
                 <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
                     <label for="dataNascimento">Data de Nascimento:</label>
-                    <input id="dataNascimento" ng-model="vm.birthdate" type="tel"  name="date" mask="39/19/9999" restrict="reject" placeholder="dd/mm/aaaa">
+                    <input id="dataNascimento" class="form-control" ng-model="vm.birthdate" type="tel"  name="date" mask="39/19/9999" restrict="reject" placeholder="dd/mm/aaaa">
                 </div>  
                 <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
                     <label for="telefone">Telefone "atual" de contato:</label>
-                    <input id="telefone" ng-model="vm.personalNumber" type="tel"  mask="(99) 9?9999-9999" restrict="reject" placeholder="(xx) 99999-9999">
+                    <input id="telefone" class="form-control" ng-model="vm.personalNumber" type="tel"  mask="(99) 9?9999-9999" restrict="reject" placeholder="(xx) 99999-9999">
                 </div>
                 <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF" >
                     <label for="selectOperator">Selecione sua operadora:</label>
@@ -47,31 +47,31 @@
             <div class="form-container">
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="cep">CEP:</label>
-                    <input id="cep" ng-model="vm.zipcode" type="tel"  name="CEP" mask="99999-999" ng-change="vm.validarCEP(vm.zipcode)" restrict="reject">
+                    <input id="cep" class="form-control" ng-model="vm.zipcode" type="tel"  name="CEP" mask="99999-999" ng-change="vm.validarCEP(vm.zipcode)" restrict="reject">
                 </div> 
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="rua">Rua:</label>
-                    <input id="rua" ng-model="vm.street" type="text">
+                    <input id="rua" class="form-control" ng-model="vm.street" type="text">
                 </div> 
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="numero">Número:</label>
-                    <input id="numero" type="number" ng-model="vm.street_number" type="tel">
+                    <input id="numero" class="form-control" type="number" ng-model="vm.street_number" type="tel">
                 </div>    
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="complemento">Complemento:</label>
-                    <input id="complemento" ng-model="vm.complement" type="text">
+                    <input id="complemento" class="form-control" ng-model="vm.complement" type="text">
                 </div>  
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="bairro">Bairro:</label>
-                    <input id="bairro" ng-model="vm.neighborhood" type="text">
+                    <input id="bairro" class="form-control" ng-model="vm.neighborhood" type="text">
                 </div>  
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="cidade">Cidade:</label>
-                    <input id="cidade" ng-model="vm.city" type="text">
+                    <input id="cidade" class="form-control" ng-model="vm.city" type="text">
                 </div>   
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="estado">Estado:</label>
-                    <input id="estado" ng-model="vm.uf" type="text">
+                    <input id="estado" class="form-control" ng-model="vm.uf" type="text">
                 </div>
                 <div class="form-group col-xs-12">
                     <button class="btn btn-primary col-sm-2 col-xs-12" ng-disabled="vm.street.length == 0 || vm.street_number.length == 0 || vm.neighborhood.length == 0 || vm.city.length == 0 || vm.uf.length == 0 || vm.zipcode.length < 9 || vm.requesting" on-tap="vm.onTapSendAddress()">Enviar</button>                                
@@ -132,19 +132,19 @@
             <div class="form-container">            
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="telefoneConvidou">Telefone de quem convidou:</label>
-                    <input id="telefoneConvidou" ng-model="vm.phoneContactParent" type="tel"  placeholder="21-99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.getContactParentName()">
+                    <input id="telefoneConvidou" class="form-control" ng-model="vm.phoneContactParent" type="tel"  placeholder="21-99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.getContactParentName()">
                 </div>
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="nomeConvidou">Nome de quem te convidou para o Foneclube:</label>
-                    <input id="nomeConvidou" ng-model="vm.whoinvite" type="text">
+                    <input id="nomeConvidou" class="form-control" ng-model="vm.whoinvite" type="text">
                 </div>
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="precoUnico">Preço único:</label>
-                    <input id="precoUnico" ng-model="vm.singlePrice" type="tel" money-input>
+                    <input id="precoUnico" class="form-control" ng-model="vm.singlePrice" type="tel" money-input>
                 </div> 
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="comentarioValor">Comentário valor:</label>
-                    <input id="comentarioValor" ng-model="vm.descriptionSinglePrice" type="text"  placeholder="Comentário sobre o Preço único">
+                    <input id="comentarioValor" class="form-control" ng-model="vm.descriptionSinglePrice" type="text"  placeholder="Comentário sobre o Preço único">
                 </div>                 
                 <div class="item item-divider item-icon-right">
                     Informações nova linha Foneclube
@@ -157,7 +157,7 @@
                         </uib-accordion-heading>
                         <div class="form-group col-sm-6 col-xs-12">
                             <label for="apelidoLinha">Qual <b>apelido</b> para esta linha?:</label>
-                            <input id="apelidoLinha" ng-model="phoneNumber.Nickname" type="text" placeholder="Apelido">
+                            <input id="apelidoLinha" class="form-control" ng-model="phoneNumber.Nickname" type="text" placeholder="Apelido">
                         </div>
                         <div class="form-group col-sm-6 col-xs-12">
                             <label for="qualOperadoraUsar">Qual operadora quer usar?:</label>
@@ -182,7 +182,7 @@
                         <div class="form-group col-xs-12">
                             <span ng-show="phoneNumber.Portability == 'false'"><b>Se você ainda não sabe o novo número de telefone pode deixar em branco.</b></span> <br/>
                             <span for="portabilidadeTelefone">Telefone:</span>
-                            <input id="portabilidadeTelefone" ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.changePhoneNumber($index)">
+                            <input id="portabilidadeTelefone" class="form-control" ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.changePhoneNumber($index)">
                         </div>
                         <div class="form-group col-xs-12">
                             <button class="btn btn-danger col-sm-2 col-xs-12" ng-click="vm.onTapRemoveNewNumber($index)">Deletar linha</button>          

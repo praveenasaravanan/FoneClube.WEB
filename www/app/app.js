@@ -10,7 +10,8 @@
     'ngCordova',
     'ngMask',
     'LocalStorageModule',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ngDialog'
 
   ]);
 
