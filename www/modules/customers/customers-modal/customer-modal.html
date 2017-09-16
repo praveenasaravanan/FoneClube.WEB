@@ -1,12 +1,11 @@
-<ion-modal-view ng-controller="CustomerModalController as vm">
-    <ion-header-bar class="bar bar-header bar-positive">
+<div ng-controller="CustomerModalController as vm">
+    <div class="bar bar-header bar-positive">
         <h1 class="title">Detalhe cliente</h1>
-        <button class="button button-clear button-primary" ng-click="modal.hide()">Fechar</button>
-    </ion-header-bar>
+        <button class="button button-clear button-primary" ng-click="closeThisDialog(0)">Fechar</button>
+    </div>
 
 
-
-    <ion-content class="padding" overflow-scroll="true">
+    
         <div class="text-center">
             <h3 style="text-align: center;">{{vm.customer.Name}}</h3>
         </div>
@@ -78,6 +77,5 @@
 
         <div class="list">
             <h2>{{vm.message}}</h2>
-        </div>
-    </ion-content>
-</ion-modal-view>
+        </div>    
+</div>

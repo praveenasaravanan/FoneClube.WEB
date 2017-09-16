@@ -13,15 +13,21 @@
             function _dialogConfirm(param) {                
                 var defer = $q.defer();
                 if(param.titulo == undefined || !param.titulo) {
-                    titulo = 'Confirmação';
+                    param.titulo = 'Confirmação';
+                }
+                if(param.btn1 == undefined || !param.btn1) {
+                    param.btn1 = 'Cancelar';
+                }
+                if(param.btn2 == undefined || !param.btn2) {
+                    param.btn2 = 'Ok';
                 }
                 ngDialog.openConfirm({
                     template:'<div class="mensagens-dialog"><div class="mensagem-content"><div class="title-mensagem">'+
                     '<span>' + param.titulo +'</span><hr></div>' +
                     '<div class="corpo-mensagem">'+ param.mensagem +'</div>' +
-                    '<div class="footer">' +
-                    '<button type="button" class="btnCancelar" ng-click="closeThisDialog(0)"> Cancelar </button>' +
-                    '<button type="button" class="btnConfirmar" ng-click="confirm(1)"> Ok </button></div></div></div>',
+                    '<div class="footer">' +                    
+                    '<button type="button" class="btnCancelar" ng-click="closeThisDialog(0)"> '+ param.btn1 + ' </button>' +
+                    '<button type="button" class="btnConfirmar" ng-click="confirm(1)"> ' + param.btn2 + ' </button></div></div></div>',
                     plain: true,
                     className: 'mensagens-dialog',
                     closeByDocument: false,
@@ -88,11 +94,22 @@
                 return defer.promise;
             }
 
+            function _showTemplate(template) {
+                return ngDialog.open({                    
+                    template: template,   
+                    className: 'ngdialog-theme-default',                        
+                    closeByDocument: false,
+                    closeByEscape: false,
+                    showClose: false                    
+                })
+            }
+
             return {
                 dialogConfirm: _dialogConfirm,
                 showMessageDialog: _showMessageDialog,
                 showMessageConfirm: _showMessageConfirm,
-                showLoader: _showLoader
+                showLoader: _showLoader,
+                showTemplate: _showTemplate
             }
     
         }

@@ -1,11 +1,10 @@
-<ion-modal-view ng-controller="NewCardPaymentModalController as vm">
-    <ion-header-bar class="bar bar-header bar-positive">
+<div ng-controller="NewCardPaymentModalController as vm">
+    <div class="bar bar-header bar-positive">
         <h1 class="title" ng-if="!vm.etapaConfirmacao">Pagar com novo cartão</h1>
         <h1 class="title" ng-if="vm.etapaConfirmacao">Confirmação de pagamento</h1>
-        <button class="button button-clear button-primary" ng-click="modal.hide()">Fechar</button>
-    </ion-header-bar>
-
-    <ion-content overflow-scroll="true">
+        <button class="button button-clear button-primary" ng-click="closeThisDialog(0)">Fechar</button>
+    </div>
+    
 <!--ng-if="vm.fasePagamento"-->
     <div ng-if="vm.etapaDados">
             <!--remoção-->
@@ -102,6 +101,5 @@
             </div>
         </div>
 
-
-    </ion-content>
-</ion-modal-view>
+    
+</div>

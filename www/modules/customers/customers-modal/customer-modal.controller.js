@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('CustomerModalController', CustomerModalController);
 
-    CustomerModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'FoneclubeService', 'MainComponents', 'FlowManagerService'];
-    function CustomerModalController(ViewModelUtilsService, PagarmeService, FoneclubeService, MainComponents, FlowManagerService) {
+    CustomerModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'FoneclubeService', 'FlowManagerService', 'DialogFactory'];
+    function CustomerModalController(ViewModelUtilsService, PagarmeService, FoneclubeService, FlowManagerService, DialogFactory) {
         var vm = this;
         vm.onTapNewCardPayment = onTapNewCardPayment;
         vm.onTapBoleto = onTapBoleto;
@@ -88,32 +88,28 @@
             });
         }
 
-        function onTapExcluir(){
-            //alert('Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta.');
+        function onTapExcluir(){            
             var personCheckout = {
                     'DocumentNumber': customer.DocumentNumber
                 };
-
-            if (confirm('Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?')) {
-                FoneclubeService.postDeletePerson(personCheckout).then(function(result){
-                    console.log(result);
-                    if(result){
-                        alert('Usuário foi removido com sucesso, no próximo carregamento da lista ele não será mais exibido')
-                        ViewModelUtilsService.modalCustomer.hide();
-                    }                       
-                    else
-                        alert('Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber)
-                })
-                .catch(function(error){
-                    console.log('catch error');
-                    console.log(error);
-                });
-            } else {
-            // Do nothing!
-            }
-
-            //MainComponents.infoAlert({mensagem:'Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta.'});
-            //MainComponents.alert({titulo:'Andamento',mensagem:'Documento enviado, agora preencha os dados de Endereço.'});
+            DialogFactory.dialogConfirm({mensagem: 'Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?'})
+            .then(function(value) {
+                if(value) {
+                    FoneclubeService.postDeletePerson(personCheckout).then(function(result){
+                        console.log(result);
+                        if(result){
+                            DialogFactory.showMessageDialog({message: 'Usuário foi removido com sucesso, no próximo carregamento da lista ele não será mais exibido'});                            
+                            closeThisDialog(0);
+                        }                       
+                        else
+                            DialogFactory.showMessageDialog({message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber});                            
+                    })
+                    .catch(function(error){
+                        console.log('catch error');
+                        console.log(error);
+                    });
+                }
+            })           
         }
 
         function setStatusBoleto(history){
@@ -248,7 +244,7 @@
         
         function onTapEditar() {
             FlowManagerService.changeEdicaoView(customer);
-            ViewModelUtilsService.modalCustomer.hide();
+            closeThisDialog(0);
         }
         
 
@@ -258,7 +254,7 @@
 
         function onTapOrdemServico() {
             FlowManagerService.changeOrdemServicoView(customer);
-            ViewModelUtilsService.modalCustomer.hide();
+            closeThisDialog(0);
         }
 
     }

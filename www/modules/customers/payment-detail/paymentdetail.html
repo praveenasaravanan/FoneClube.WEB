@@ -1,9 +1,8 @@
-<ion-modal-view ng-controller="PaymentDetailController as vm">
-    <ion-header-bar class="bar bar-header bar-positive">
+<div ng-controller="PaymentDetailController as vm">
+    <div class="bar bar-header bar-positive">
         <h1 class="title">Detalhe de cobrança</h1>
-        <button class="button button-clear button-primary" ng-click="modal.hide()">Fechar</button>
-    </ion-header-bar>
-    <ion-content class="padding" overflow-scroll="true">
+        <button class="button button-clear button-primary" ng-click="closeThisDialog(0)">Fechar</button>
+    </div>    
 
         <div class="text-center">
             <h3 style="text-align: center;">{{vm.customer.Name}}</h3>
@@ -24,6 +23,5 @@
                     <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{vm.history.StatusPayment }} </strong> </p>
                 </div>
             </a>
-        </ul>
-    </ion-content>
-</ion-modal-view>
+        </ul>    
+</div>

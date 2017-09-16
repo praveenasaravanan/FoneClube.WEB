@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('EdicaoController', EdicaoController);
 
-    EdicaoController.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory'];
-    function EdicaoController($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory) {
+    EdicaoController.inject = ['$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory'];
+    function EdicaoController($scope, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory) {
         var vm = this;
         vm.onTapSendUser = onTapSendUser;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
@@ -199,31 +199,18 @@
             }
             
             function postUpdateCustomerSucess(result) {
-                if(result) {
-                    var params = {
-                        title: 'Edição Realizada',
-                        template: 'Todos dados pessoais enviados, edição Foneclube feita com sucesso.',
-                        buttons: [
-                            {
-                                text: 'Ir para Home',
-                                type: 'button-positive',
-                                onTap: function(e) {
-                                    FlowManagerService.changeHomeView();
-                                }
-                            },
-                            {
-                                text: 'Visualizar Cliente',
-                                type: 'button-positive',
-                                onTap: function(e) {
-                                    FlowManagerService.changeCustomersView();
-                                    FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
-                                        ViewModelUtilsService.showModalCustomer(result);
-                                    });
-                                }
-                            }
-                        ]
-                    }
-                    MainComponents.show(params);
+                if(result) {                    
+                    DialogFactory.dialogConfirm({title:'Edição Realizada', mensagem: 'Todos os dados pessoais enviados, edição Foneclube feita com sucesso.', btn1: 'Ir para Home', btn2: 'Visualizar Cliente'})
+                    .then(function(result) {
+                        if(result) {
+                            FlowManagerService.changeCustomersView();
+                            FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
+                                ViewModelUtilsService.showModalCustomer(result);
+                            });
+                        } else {
+                            FlowManagerService.changeHomeView();
+                        }
+                    })                    
                 }
                 vm.requesting = false;
                 showLoader.close();

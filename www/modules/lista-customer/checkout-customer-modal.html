@@ -1,41 +1,40 @@
-<ion-modal-view ng-controller="CheckoutCustomerModalController as vm">
-    <ion-header-bar class="bar bar-header bar-positive">
-        <h1 class="title">Novo checkout</h1>
-        <button class="button button-clear button-primary" ng-click="modal.hide()">Fechar</button>
-    </ion-header-bar>
-    <ion-content class="padding">
-        <ul class="list">
-                    <div>
-                        <h2>{{vm.customer.name}}</h2>
-                    </div>
-            </ul>
-
-        <div ng-if="vm.etapaEscolhaCartao">
-
+<div ng-controller="CheckoutCustomerModalController as vm">
+        <div class="bar bar-header bar-positive">
+            <h1 class="title">Novo checkout</h1>
+            <button class="button button-clear button-primary" ng-click="closeThisDialog(0)">Fechar</button>
+        </div>    
             <ul class="list">
-                <a class="item" ng-repeat="card in vm.cards">
-
-                    <div on-tap="vm.onTapCard(card)">
-                        <h2>Bandeira: {{card.brand}}</h2>
-                        <p>Final: {{card.last_digits}}</p>
-                        <p>{{card.valid ? 'Cartão válido' : 'Cartão inválido/vencido'}}</p>
-                    </div>
-                </a>
-            </ul>
-        </div>
-
-        <div ng-if="vm.etapaQuantia">
-            <label class="item item-input">
-                <span class="input-label">Quantia: </span>
-                <input ng-model="vm.amount" money-input type="text">
-            </label>
-            <button on-tap="vm.onTapPagar()" class="button button-block button-dark">
-                Pagar
-            </button>
-        </div>
-
-        <div class="list">
-            <h2>{{vm.message}}</h2>
-        </div>
-    </ion-content>
-</ion-modal-view>
+                        <div>
+                            <h2>{{vm.customer.name}}</h2>
+                        </div>
+                </ul>
+    
+            <div ng-if="vm.etapaEscolhaCartao">
+    
+                <ul class="list">
+                    <a class="item" ng-repeat="card in vm.cards">
+    
+                        <div on-tap="vm.onTapCard(card)">
+                            <h2>Bandeira: {{card.brand}}</h2>
+                            <p>Final: {{card.last_digits}}</p>
+                            <p>{{card.valid ? 'Cartão válido' : 'Cartão inválido/vencido'}}</p>
+                        </div>
+                    </a>
+                </ul>
+            </div>
+    
+            <div ng-if="vm.etapaQuantia">
+                <label class="item item-input">
+                    <span class="input-label">Quantia: </span>
+                    <input ng-model="vm.amount" money-input type="text">
+                </label>
+                <button on-tap="vm.onTapPagar()" class="button button-block button-dark">
+                    Pagar
+                </button>
+            </div>
+    
+            <div class="list">
+                <h2>{{vm.message}}</h2>
+            </div>    
+    </div>
+    

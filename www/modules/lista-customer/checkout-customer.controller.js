@@ -10,8 +10,7 @@
         var vm = this;
         var customer = ViewModelUtilsService.modalData;
         vm.onTapCard = onTapCard;
-        vm.onTapPagar = onTapPagar;
-                
+        vm.onTapPagar = onTapPagar;        
         initCardList();
         etapaEscolhaCartao();
 

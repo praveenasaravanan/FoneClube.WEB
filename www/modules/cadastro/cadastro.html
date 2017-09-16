@@ -202,7 +202,7 @@
         <ion-modal-view>
             <ion-header-bar class="bar bar-header bar-positive">
                 <h1 class="title">Adicionar foto</h1>
-                <button class="button button-clear button-primary" ng-click="vm.modal.hide()">Cancelar</button>
+                <button class="button button-clear button-primary" ng-click="vm.onTapCancel()">Cancelar</button>
             </ion-header-bar>
             <ion-content class="padding">
                 <div class="item item-text-wrap">
@@ -221,8 +221,8 @@
                 </div>
                 <div class="padding">
                     <!--button class="button button-block button-positive" ng-disabled="(!vm.hasFileSelected && !vm.hasPhotoCaptured)"  on-tap="vm.onTapSendImage()">Enviar</button-->
-                    <button class="button button-block button-positive" ng-disabled="(!vm.hasFileSelected && !vm.hasPhotoCaptured)"  on-tap="vm.onTapSendImage()">Enviar</button>
-                    <button class="button button-block button-positive" on-tap="vm.onTapCancel()">Cancelar</button>
+                    <button class="button button-block button-positive" ng-disabled="(!vm.hasFileSelected && !vm.hasPhotoCaptured)"  ng-click="vm.onTapSendImage()">Enviar</button>
+                    <button class="button button-block button-positive" ng-click="vm.onTapCancel()">Cancelar</button>
                 </div>
                 {{vm.msg}}
             </ion-content>

@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('NewCardPaymentModalController', NewCardPaymentModalController);
 
-    NewCardPaymentModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainComponents', 'MainUtils', 'FoneclubeService'];
-    function NewCardPaymentModalController(ViewModelUtilsService, PagarmeService, MainComponents, MainUtils, FoneclubeService) {
+    NewCardPaymentModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory'];
+    function NewCardPaymentModalController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory) {
 
         var vm = this;
         var customer = ViewModelUtilsService.modalNewCardPaymentData;
@@ -90,7 +90,7 @@
 
             if(parseInt(vm.amount) < 100)
             {
-                MainComponents.showSimpleToast('Não é permitido cobranças a baixo de 1 Real', 'Aviso');
+                DialogFactory.showMessageDialog({mensagem:'Não é permitido cobranças a baixo de 1 Real', titulo: 'Aviso'});                            
                 return;
             }
 
@@ -161,12 +161,12 @@
                         saveHistoryPayment();
                     })
                     .catch(function(error){
-                        try{                            
-                            MainComponents.showSimpleToast('Erro na captura da transação' + error.status, 'Aviso');
+                        try{        
+                            DialogFactory.showMessageDialog({mensagem:'Erro na captura da transação' + error.status, titulo: 'Aviso'});                                                  
 
                         }
-                        catch(erro){                            
-                            MainComponents.showSimpleToast('Erro na captura da transação', 'Aviso');
+                        catch(erro){  
+                            DialogFactory.showMessageDialog({mensagem:'Erro na captura da transação', titulo: 'Aviso'});                                                        
                         }
                         console.log(error);
 
@@ -181,7 +181,7 @@
                         vm.disableTapPay = false;
                         vm.etapaConfirmacao = false;
                         error.data.errors.forEach(function(erro) {
-                            MainComponents.showSimpleToast('Erro na transação: ' + erro.message, 'Aviso');
+                            DialogFactory.showMessageDialog({mensagem:'Erro na transação: ' + erro.message, titulo: 'Aviso'});                              
                         }, this);
 
                     }
@@ -189,7 +189,7 @@
                         vm.etapaDados = true;
                         vm.disableTapPay = false;
                         vm.etapaConfirmacao = false;
-                        MainComponents.showSimpleToast('Erro na transação', 'Aviso');
+                        DialogFactory.showMessageDialog({mensagem:'Erro na transação', titulo: 'Aviso'});                                                      
                     }
 
                     console.log(error);
@@ -206,8 +206,8 @@
                 }
                 vm.etapaDados = true;
                 vm.disableTapPay = false;
-                 vm.etapaConfirmacao = false;
-                MainComponents.showSimpleToast('Erro na transação'+ erro, 'Aviso');
+                vm.etapaConfirmacao = false;
+                DialogFactory.showMessageDialog({mensagem:'Erro na transação '+ erro, titulo: 'Aviso'});                 
 
             });
         }

@@ -5,8 +5,8 @@
         .module('foneClub')
         .service('ViewModelUtilsService', ViewModelUtilsService);
 
-    ViewModelUtilsService.inject = ['$ionicModal'];
-    function ViewModelUtilsService($ionicModal) {
+    ViewModelUtilsService.inject = ['$ionicModal', 'DialogFactory'];
+    function ViewModelUtilsService($ionicModal, DialogFactory) {
 
 
         //todo colocar cria~ção na hora do show garantindo sempre limpeza ao abrir
@@ -32,36 +32,21 @@
             this.modalData = data;
             var service = this;
 
-            $ionicModal.fromTemplateUrl('modules/lista-customer/checkout-customer-modal.html', {
-                scope: null
-            }).then(function(modal) {
-                service.modal = modal;
-                service.modal.show();
-            });
+            DialogFactory.showTemplate('modules/lista-customer/checkout-customer-modal.html');           
         }
 
         function showModalCustomer(data){
             this.modalCustomerData = data;
             var service = this;
-
-            $ionicModal.fromTemplateUrl('modules/customers/customers-modal/customer-modal.html', {
-                scope: null
-            }).then(function(modal) {
-                service.modalCustomer = modal;
-                service.modalCustomer.show();
-            });
+        
+            DialogFactory.showTemplate('modules/customers/customers-modal/customer-modal.html');
         }
 
         function showModalNewCardPayment(data){
             this.modalNewCardPaymentData = data;
             var service = this;
-
-            $ionicModal.fromTemplateUrl('modules/customers/new-card/new-card-payment.html', {
-                scope: null
-            }).then(function(modal) {
-                service.modalNewCardPayment = modal;
-                service.modalNewCardPayment.show();
-            });
+           
+            DialogFactory.showTemplate('modules/customers/new-card/new-card-payment.html');
         }
 
         function showModalExistentCardPayment(data,card){
@@ -69,24 +54,14 @@
             this.modalExistentCardData = card;
             var service = this;
 
-            $ionicModal.fromTemplateUrl('modules/customers/existent-card/existent-card.html', {
-                scope: null
-            }).then(function(modal) {
-                service.modalExistentCardPayment = modal;
-                service.modalExistentCardPayment.show();
-            });
+            DialogFactory.showTemplate('modules/customers/existent-card/existent-card.html');
         }
 
        function showModalBoleto(data){
             this.modalBoletoData = data;           
-            var service = this;
+            var service = this;           
 
-            $ionicModal.fromTemplateUrl('modules/customers/boleto/boleto.html', {
-                scope: null
-            }).then(function(modal) {
-                service.modalBoleto = modal;
-                service.modalBoleto.show();
-            });
+            DialogFactory.showTemplate('modules/customers/boleto/boleto.html');
         }
         
         function showModalPaymentHistoryDetail(history, customer) {
@@ -94,12 +69,7 @@
             this.modalPaymentDetailCustomer = customer;
             var service = this;
 
-            $ionicModal.fromTemplateUrl('modules/customers/payment-detail/paymentdetail.html', {
-                scope: null
-            }).then(function(modal) {
-                service.modalPaymentDetail = modal;
-                service.modalPaymentDetail.show();
-            });
+            DialogFactory.showTemplate('modules/customers/payment-detail/paymentdetail.html');
         }
 
     }

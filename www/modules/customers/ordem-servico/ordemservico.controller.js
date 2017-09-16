@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('OrdemServico', OrdemServico);
 
-    OrdemServico.inject = ['$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', '$stateParams', 'FlowManagerService'];
-    function OrdemServico($ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, $stateParams, FlowManagerService) {
+    OrdemServico.inject = ['$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService'];
+    function OrdemServico($scope, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService) {
         var vm = this;
         vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
         vm.requesting = true;
@@ -43,31 +43,19 @@
             FoneclubeService.postOrderServicePerson(order).then(function(data){
                 vm.requesting = false;
                 if(result) {
-                    FlowManagerService.changeCustomersView();
-                    var params = {
-                        title: 'Aviso',
-                        template: 'Ordem de serviço adicionada com sucesso.',
-                        buttons: [
-                            {
-                                text: 'Fechar',
-                                type: 'button-positive',
-                                onTap: function(e) {
-                                    FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
-                                        ViewModelUtilsService.showModalCustomer(result);
-                                    });
-                                }
-                            }
-                        ]
-                    }
-                    MainComponents.show(params);
+                    FlowManagerService.changeCustomersView();                    
+                    DialogFactory.showMessageConfirm({titulo:'Aviso', mensagem:'Ordem de serviço adicionada com sucesso.'})
+                    .then(function(result) {
+                        if(result) {
+                            FoneclubeService.getCustomerByCPF(vm.cpf).then(function(result){
+                                ViewModelUtilsService.showModalCustomer(result);
+                            });
+                        }
+                    })                    
                 }
             }).catch(function(error) {
-                FlowManagerService.changeCustomersView();
-                    var params = {
-                        title: 'Aviso',
-                        mensagem: 'Houve um erro.'
-                    }
-                    MainComponents.alert(params);
+                FlowManagerService.changeCustomersView();                   
+                DialogFactory.showMessageDialog({mensagem:'Houve um erro.', titulo: 'Aviso'});                                           
             });
         }
         

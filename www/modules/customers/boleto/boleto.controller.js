@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('BoletoModalController', BoletoModalController);
 
-    BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainComponents', 'MainUtils', 'FoneclubeService'];
-    function BoletoModalController(ViewModelUtilsService, PagarmeService, MainComponents, MainUtils, FoneclubeService) {
+    BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory'];
+    function BoletoModalController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory) {
 
         var vm = this;
         var customer = ViewModelUtilsService.modalBoletoData;
@@ -61,7 +61,7 @@
             console.log(parseInt(vm.amount))
             if(parseInt(vm.amount) < 100)
             {
-                MainComponents.showSimpleToast('Não é permitido cobranças a baixo de 1 Real', 'Aviso');
+                DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'Não é permitido cobranças a baixo de 1 Real'});                
                 return;
             }
 
@@ -83,14 +83,12 @@
                                 try{
                                     vm.message = 'Boleto gerado com sucesso. Sem envio de notificação'
                                     vm.cobrancaRealizada = true;
-                                    vm.disableTapPay = false;
-                                    //MainComponents.alert({mensagem:'Erro na notificação do boleto' + error.status});
+                                    vm.disableTapPay = false;                                    
                                 }
                                 catch(erro){
                                     vm.message = 'Boleto gerado com sucesso. Sem envio de notificação'
                                     vm.cobrancaRealizada = true;
-                                    vm.disableTapPay = false;
-                                    //MainComponents.alert({mensagem:'Erro na notificação do boleto'});
+                                    vm.disableTapPay = false;                                    
                                 }
                                 console.log(error);
 
@@ -108,10 +106,10 @@
                     })
                     .catch(function(error){
                         try{
-                            MainComponents.alert({mensagem:'Erro na captura da transação' + error.status});
+                            DialogFactory.showMessageDialog({mensagem: 'Erro na captura da transação' + error.status});                             
                         }
                         catch(erro){
-                            MainComponents.alert({mensagem:'Erro na captura da transação'});
+                            DialogFactory.showMessageDialog({mensagem:'Erro na captura da transação'});                             
                         }
                         console.log(error);
 

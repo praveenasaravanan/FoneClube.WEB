@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('CustomersController', CustomersController);
 
-    CustomersController.inject = ['PagarmeService', '$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils'];
-    function CustomersController(PagarmeService, $ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils) {
+    CustomersController.inject = ['PagarmeService', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils'];
+    function CustomersController(PagarmeService, $scope, ViewModelUtilsService, FoneclubeService, MainUtils) {
         var vm = this;
         vm.onTapCustomer = onTapCustomer;
         vm.showLoader = true;        

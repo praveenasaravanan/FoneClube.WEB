@@ -1,10 +1,9 @@
-<ion-modal-view ng-controller="BoletoModalController as vm">
-    <ion-header-bar class="bar bar-header bar-positive">
+<div ng-controller="BoletoModalController as vm">
+    <div class="bar bar-header bar-positive">
         <h1 class="title" ng-if="!vm.etapaConfirmacao">Pagamento por boleto</h1>
         <h1 class="title" ng-if="vm.etapaConfirmacao">Confirmação de pagamento</h1>
-        <button class="button button-clear button-primary" ng-click="modal.hide()">Fechar</button>
-    </ion-header-bar>
-    <ion-content class="padding" overflow-scroll="true">
+        <button class="button button-clear button-primary" ng-click="closeThisDialog(0)">Fechar</button>
+    </div>    
 
         <div class="text-center">
             <h3 style="text-align: center;">{{vm.customer.Name}}</h3>
@@ -66,6 +65,5 @@
                     Ok
                 </button>
             </div>
-        </div>
-    </ion-content>
-</ion-modal-view>
+        </div>    
+</div>

@@ -7,47 +7,43 @@
 
     CadastroController.inject = [
         '$scope',
-        'PagarmeService',
-        '$ionicPopup',
+        'PagarmeService',        
         'HubDevService',
-        'FoneclubeService',
-        '$ionicLoading',
+        'FoneclubeService',        
         'FileListUtil',
         'MainUtils',
         '$q',
         '$cordovaCamera',
         '$cordovaFile',
-        '$timeout',
-        'MainComponents',
+        '$timeout',        
         '$ionicModal',
         '$interval',
         'FlowManagerService',
         'ViewModelUtilsService',
         '$ionicScrollDelegate',
         'UtilsService',
-        'DialogFactory'
+        'DialogFactory',
+        'ngDialog'
     ];
 
     function CadastroController(
-        $scope,PagarmeService, 
-         $ionicPopup, 
+        $scope,PagarmeService,          
          HubDevService, 
-         FoneclubeService,
-         $ionicLoading, 
+         FoneclubeService,         
          FileListUtil,
          MainUtils, 
          $q, 
          $cordovaCamera, 
          $cordovaFile, 
-         $timeout, 
-         MainComponents, 
+         $timeout,          
          $ionicModal,
          $interval,
          FlowManagerService, 
          ViewModelUtilsService,
          $ionicScrollDelegate,
          UtilsService,
-         DialogFactory         
+         DialogFactory,
+         ngDialog
     ) {
             
         var vm = this;
@@ -108,12 +104,13 @@
             })
             .catch(function(error){
                 console.log(error.statusText);
-            });
+            });     
             $ionicModal.fromTemplateUrl('templates/modal.html', {
                 scope: $scope
             }).then(function(modal) {
                 vm.modal = modal;
-            });
+            });          
+            
         }
 
         function onTapSearchDocument(){
@@ -377,7 +374,7 @@
             vm.hasFileSelected = false;
             FileListUtil.set(undefined);
             vm.hasPhotoCaptured = false;
-            vm.modal.show();
+            vm.modal.show();            
             validadeFile();
 
         }
@@ -491,8 +488,7 @@
             var imageUploader = new ImageUploader();
             imageUploader.push(file)
             .then((data) => {
-                console.debug('Upload complete. Data:', data);
-                // MainComponents.alert({mensagem:'Imagem enviada com sucesso'});
+                console.debug('Upload complete. Data:', data);                
                 showLoader.close();
                  q.resolve(data);
             })
@@ -597,8 +593,7 @@
                         continueListUpload(vm.fotos);
                 });
             } else {
-                showLoader.close();
-                //MainComponents.alert({mensagem:'Imagem enviada com sucesso'});
+                showLoader.close();                
                 console.log(listaImagens)
                 //conclusão de foto auqi
                 setImageReleaseView(cameraPhotoName)
@@ -753,46 +748,32 @@
             
             function postUpdatePersonSucess(result) {
                 showLoader.close();
-                if(result) {
-                    FlowManagerService.changeHomeView();
-                    var params = {
-                        title: 'Cadastro Realizado',
-                        template: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.',
-                        buttons: [
-                          {
-                            text: 'Ir para Home',
-                            type: 'button-positive',
-                            onTap: function(e) {
-
-                            }
-                          },
-                          {
-                            text: 'Realizar Cobrança',
-                            type: 'button-positive',
-                            onTap: function(e) {
-                                console.log('Realizar cobrança.');
-                                FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
-                                    if(vm.singlePrice) {
-                                        result.CacheIn = vm.singlePrice;
-                                        ViewModelUtilsService.showModalCustomer(result);
-                                    } else {
-                                        FoneclubeService.getCustomerPlans(UtilsService.clearDocumentNumber(vm.cpf)).then(function(customerPlans){
-                                            var valueTotal = 0;
-                                            if(customerPlans.length > 0) {
-                                                for(var i=0; i<customerPlans.length;i++){
-                                                    valueTotal = valueTotal + customerPlans[i].Value;
-                                                }
+                if(result) { 
+                    DialogFactory.dialogConfirm({title:'Cadastro Realizado', mensagem: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.', btn1: 'Ir para Home', btn2: 'Realizar Cobrança'})
+                    .then(function(result) {
+                        if(result) {
+                            console.log('Realizar cobrança.');
+                            FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
+                                if(vm.singlePrice) {
+                                    result.CacheIn = vm.singlePrice;
+                                    ViewModelUtilsService.showModalCustomer(result);
+                                } else {
+                                    FoneclubeService.getCustomerPlans(UtilsService.clearDocumentNumber(vm.cpf)).then(function(customerPlans){
+                                        var valueTotal = 0;
+                                        if(customerPlans.length > 0) {
+                                            for(var i=0; i<customerPlans.length;i++){
+                                                valueTotal = valueTotal + customerPlans[i].Value;
                                             }
-                                            result.CacheIn = valueTotal;
-                                            ViewModelUtilsService.showModalCustomer(result);
-                                        });
-                                    }
-                                });
-                            }
-                          }
-                        ]
-                    }
-                    MainComponents.show(params);
+                                        }
+                                        result.CacheIn = valueTotal;
+                                        ViewModelUtilsService.showModalCustomer(result);
+                                    });
+                                }
+                            });
+                        } else {
+                            FlowManagerService.changeHomeView();
+                        }
+                    })                    
                 }
             }
             
@@ -846,24 +827,12 @@
         }
         //remove telefone do array que é exibido na view
         function onTapRemoveNewNumber(position){
-            var confirmPopup = $ionicPopup.confirm( {
-                title: 'Excluir Número',
-                template: 'Deseja realmente remover este número?',
-                buttons: [
-                    {   text: 'Não' },
-                    {   text: '<b>Sim</b>',
-                        type: 'button-positive',
-                        onTap: function(e) {
-                            return true;
-                        }
-                    }
-                ]
-            });
-            confirmPopup.then(function(res) {
-                if(res) {
+            DialogFactory.dialogConfirm({title:'Excluir Número', mensagem: 'Deseja realmente remover este número?'})       
+            .then(function(result) {
+                if (result) {
                     vm.phoneNumbersView.splice(position, 1);
                 }
-            });
+            })                 
         }
 
         //remove () - < > do numero de telefone
@@ -919,50 +888,21 @@
             } else if (vm.etapaDadosPessoais) {
                 etapaComplementar();
             } else if (vm.etapaComplementar) {
-                var params = {
-                    title: 'Pular Fase',
-                    template: 'Deseja realmente pular esta fase?',
-                    buttons: [
-                      {
-                        text: 'Não',
-                        type: 'button-positive',
-                        onTap: function(e) {
-
-                        }
-                      },
-                      {
-                        text: 'Sim',
-                        type: 'button-positive',
-                        onTap: function(e) {
-                            FlowManagerService.changeHomeView();
-                            var params = {
-                                title: 'Cadastro Realizado',
-                                template: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.',
-                                buttons: [
-                                  {
-                                    text: 'Ir para Home',
-                                    type: 'button-positive',
-                                    onTap: function(e) {
-
-                                    }
-                                  },
-                                  {
-                                    text: 'Visualizar Cadastro',
-                                    type: 'button-positive',
-                                    onTap: function(e) {
-                                        FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
-                                            ViewModelUtilsService.showModalCustomer(result);
-                                        });
-                                    }
-                                  }
-                                ]
+                DialogFactory.dialogConfirm({title:'Pular Fase', mensagem: 'Deseja realmente pular esta fase?'})
+                .then(function(result) {
+                    if(result) {
+                        DialogFactory.dialogConfirm({title:'Cadastro Realizado', mensagem: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.', btn1: 'Ir para Home', btn2: 'Visualizar Cadastro'})
+                        .then(function(result) {
+                            if (result){
+                                FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
+                                    ViewModelUtilsService.showModalCustomer(result);
+                                });
+                            } else {
+                                FlowManagerService.changeHomeView();
                             }
-                            MainComponents.show(params);
-                        }
-                      }
-                    ]
-                }
-                MainComponents.show(params);
+                        })
+                    }
+                })               
             }
         }
         

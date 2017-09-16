@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('LoginController', LoginController);
 
-    LoginController.inject = ['FlowManagerService', '$scope', '$ionicPopup', 'FireBaseManagerUtil', 'MainUtils'];
-    function LoginController(FlowManagerService, $scope, $ionicPopup, FireBaseManagerUtil, MainUtils) {
+    LoginController.inject = ['FlowManagerService', '$scope', 'FireBaseManagerUtil', 'MainUtils', 'DialogFactory'];
+    function LoginController(FlowManagerService, $scope, FireBaseManagerUtil, MainUtils, DialogFactory) {
         var vm = this;
         vm.login = login;
 
@@ -35,10 +35,7 @@
             }
             else
             {
-                var alertPopup = $ionicPopup.alert({
-                    title: 'Alerta',
-                    template: 'Usuário ou senha incorretos'
-                });
+                DialogFactory.showMessageDialog({mensagem: 'Usuário ou senha incorretos', titulo: 'Alerta'});                
             }
         }
 

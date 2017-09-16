@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('PaymentDetailController', PaymentDetailController);
 
-    PaymentDetailController.inject = ['ViewModelUtilsService', 'MainComponents', 'MainUtils'];
-    function PaymentDetailController(ViewModelUtilsService, MainComponents, MainUtils) {
+    PaymentDetailController.inject = ['ViewModelUtilsService', 'MainUtils'];
+    function PaymentDetailController(ViewModelUtilsService, MainUtils) {
         var vm = this;
         vm.customer = ViewModelUtilsService.modalPaymentDetailCustomer;
         vm.history = ViewModelUtilsService.modalPaymentDetailHistory;
