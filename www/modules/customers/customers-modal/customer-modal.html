@@ -1,81 +1,73 @@
-<div ng-controller="CustomerModalController as vm">
-    <div class="bar bar-header bar-positive">
-        <h1 class="title">Detalhe cliente</h1>
-        <button class="button button-clear button-primary" ng-click="closeThisDialog(0)">Fechar</button>
+<div class="customer-modal" ng-controller="CustomerModalController as vm">
+    <div class="header">
+        <span class="title">Detalhe Cliente</span>
+        <button ng-click="closeThisDialog(0)">X</button>
+    </div> 
+
+    <h3 class="nome-cliente">{{vm.customer.Name}}</h3>
+    <div class="modal-container">
+        <div class="container col-xs-12">
+            <div>
+                <button class="btn btn-primary col-xs-12" ng-click="vm.onTapNewCardPayment()" >Cobrança com novo cartão</button>
+                <button class="btn btn-primary col-xs-12" ng-click="vm.onTapBoleto()" >Cobrança com boleto</button>
+                <button ng-click="vm.onTapEditar()" class="btn btn-primary col-xs-12" >Editar cliente</button>
+                <button ng-click="vm.onTapExcluir()" class="btn btn-danger col-xs-12" >Excluir cliente</button>
+            </div>
+
+            <div ng-if="vm.etapaEscolhaCartao">
+
+                <h3>
+                    Cartões disponíveis
+                </h3>
+
+                <uib-accordion close-others="oneAtATime">
+                    <div uib-accordion-group class="panel-default" ng-init="vm.cards.length == 1 ? status.open = true : status.open = false" is-open="status.open" ng-repeat="card in vm.cards">
+                        <uib-accordion-heading>
+                            Cartão Final: {{card.last_digits}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
+                        </uib-accordion-heading>
+                        <div class="accordion-container">
+                            <p>Bandeira: {{card.brand}}</p>
+                            <p>Final: {{card.last_digits}}</p>
+                            <p>{{card.valid ? 'Cartão válido' : 'Cartão inválido/vencido'}}</p>
+                        </div>
+                        <button class="btn btn-success col-xs-12 col-sm-3" ng-click="vm.onTapCard(card)"> Pagar ! </button>
+                    </div> 
+                </uib-accordion>
+
+                <h3>Histórico de cobranças</h3>
+
+                <uib-accordion close-others="oneAtATime">
+                    <div uib-accordion-group class="panel-default" ng-init="vm.histories.length == 1 ? status.open = true : status.open = false" is-open="status.open" ng-repeat="history in vm.histories">
+                        <uib-accordion-heading>
+                            Cobrança {{$index+1}}<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
+                        </uib-accordion-heading>
+                        <div class="accordion-container">
+                            <p>Data e hora: <strong>{{history.PaymentDate}}.</strong> </p>
+                            <p>Comentário: <strong>{{history.Comment}}.</strong> </p>
+                            <p>Valor: <strong>{{history.Ammount / 100 }} R$ </strong> </p>
+                            <p>Tipo: <strong>{{history.descriptionType}} </strong> </p>
+                            <p>Agente: <strong>{{history.CollectorName }} </strong> </p>
+                            <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{history.StatusPayment }} </strong> </p>
+                        </div>
+                        <button class="btn btn-info col-xs-12 col-sm-3" ng-click="vm.onTapPaymentHistoryDetail(history);"> + Info </button>
+                    </div> 
+                </uib-accordion>
+            </div>
+
+            <div ng-if="vm.etapaQuantia" class="etapa-quantia"> 
+                <div class="form-group">
+                    <label for="quantia">Quantia:</label>
+                    <input id="quantia" class="form-control" ng-model="vm.amount" type="text"  money-input placeholder="Digite o valor a ser pago">
+                </div>  
+                <button ng-click="vm.onTapPagar()" class="btn btn-success">
+                    Pagar
+                </button>
+                <button ng-click="vm.cancelarPagamento()" class="btn btn-danger"> Cancelar</button>
+            </div>
+
+            <div class="list">
+                <h2>{{vm.message}}</h2>
+            </div>    
+        </div>
     </div>
-
-
-    
-        <div class="text-center">
-            <h3 style="text-align: center;">{{vm.customer.Name}}</h3>
-        </div>
-
-        <div class="padding">
-            <!--<div class="row">
-                <button class="button button-block button-positive" on-tap="vm.onTapOrdemServico()">Cadastrar Odem de Serviço</button>
-            </div>-->
-            <div class="row">
-                <button class="button button-block button-positive" on-tap="vm.onTapNewCardPayment()" style="margin-right:10px">Cobrança com novo cartão</button>
-                <button class="button button-block button-positive" on-tap="vm.onTapBoleto()" style="margin-left:10px">Cobrança com boleto</button>
-            </div>
-            <div class="row">
-                <button on-tap="vm.onTapEditar()" class="button button-block button-positive" style="margin-right:10px">Editar cliente</button>
-                <button on-tap="vm.onTapExcluir()" class="button button-block button-assertive" style="margin-left:10px">Excluir cliente</button>
-            </div>
-        </div>
-
-        <!--<ul class="list">
-                    <div>
-                        <h2>{{vm.customer.Name}}</h2>
-                    </div>
-            </ul>-->
-
-        <div ng-if="vm.etapaEscolhaCartao">
-
-            <div class="item item-divider">
-                Cartões disponíveis
-            </div>
-
-            <ul class="list">
-                <a class="item" ng-repeat="card in vm.cards">
-
-                    <div on-tap="vm.onTapCard(card)">
-                        <h2>Bandeira: {{card.brand}}</h2>
-                        <p>Final: {{card.last_digits}}</p>
-                        <p>{{card.valid ? 'Cartão válido' : 'Cartão inválido/vencido'}}</p>
-                    </div>
-                </a>
-            </ul>
-
-            <div class="item item-divider">
-                Hitórico de cobrança
-            </div>
-
-            <ul class="list">
-                <a class="item" ng-repeat="history in vm.histories">
-                    <div ng-click="vm.onTapPaymentHistoryDetail(history);">
-                        <p>Data e hora: <strong>{{history.PaymentDate}}.</strong> </p>
-                        <p>Comentário: <strong>{{history.Comment}}.</strong> </p>
-                        <p>Valor: <strong>{{history.Ammount / 100 }} R$ </strong> </p>
-                        <p>Tipo: <strong>{{history.descriptionType}} </strong> </p>
-                        <p>Agente: <strong>{{history.CollectorName }} </strong> </p>
-                        <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{history.StatusPayment }} </strong> </p>
-                    </div>
-                </a>
-            </ul>
-        </div>
-
-        <div ng-if="vm.etapaQuantia">
-            <label class="item item-input">
-                <span class="input-label">Quantia: </span>
-                <input ng-model="vm.amount" money-input type="text">
-            </label>
-            <button on-tap="vm.onTapPagar()" class="button button-block button-dark">
-                Cobrar
-            </button>
-        </div>
-
-        <div class="list">
-            <h2>{{vm.message}}</h2>
-        </div>    
 </div>

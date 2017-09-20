@@ -10,7 +10,8 @@
         var vm = this;
         var customer = ViewModelUtilsService.modalData;
         vm.onTapCard = onTapCard;
-        vm.onTapPagar = onTapPagar;        
+        vm.onTapPagar = onTapPagar;
+        vm.cancelarPagamento = etapaEscolhaCartao;        
         initCardList();
         etapaEscolhaCartao();
 
@@ -96,12 +97,12 @@
         function etapaEscolhaCartao(){
             vm.etapaEscolhaCartao = true;
             vm.etapaQuantia = false;
+            vm.amount = '';
         }
 
         function etapaQuantia(){
             vm.etapaEscolhaCartao = false;
             vm.etapaQuantia = true;
         }
-
     }
 })();

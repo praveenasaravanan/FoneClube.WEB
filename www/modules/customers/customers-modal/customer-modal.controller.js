@@ -15,7 +15,7 @@
         vm.onTapExcluir = onTapExcluir;
         vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
         vm.onTapOrdemServico = onTapOrdemServico;
-
+        vm.cancelarPagamento = etapaEscolhaCartao;
         var customer = ViewModelUtilsService.modalCustomerData;
         vm.customer = customer;
         var CARTAO = 1;
@@ -233,6 +233,7 @@
         }
 
         function etapaEscolhaCartao() {
+            vm.amount = '';
             vm.etapaEscolhaCartao = true;
             vm.etapaQuantia = false;
         }

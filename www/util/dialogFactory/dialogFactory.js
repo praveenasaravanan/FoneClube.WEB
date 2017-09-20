@@ -97,7 +97,7 @@
             function _showTemplate(template) {
                 return ngDialog.open({                    
                     template: template,   
-                    className: 'ngdialog-theme-default',                        
+                    className: 'show-template',                        
                     closeByDocument: false,
                     closeByEscape: false,
                     showClose: false                    
