@@ -16,8 +16,8 @@
         PagarmeService.getCustomers()
         .then(function(result){
             console.log(result);
-            vm.customers = result;
             vm.showLoader = false;
+            vm.customers = result;            
         })
         .catch(function(error){
             console.log(error);

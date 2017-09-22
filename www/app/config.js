@@ -80,7 +80,7 @@
           }
         }            
       })
-      .state('ordemservico', {
+      .state('tabs.ordemservico', {
         url: "/ordemservico",       
         templateUrl: "modules/customers/ordem-servico/ordemservico.html",
         controller: 'OrdemServico as vm',

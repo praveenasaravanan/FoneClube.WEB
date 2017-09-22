@@ -1,13 +1,13 @@
-<div class="lista-customer-container">
+<div class="lista-customer-container animate-bottom">
     <div class="bar bar-header bar-light">
         <h1 class="title">Clientes</h1>
     </div>
-    <ion-spinner icon="android" ng-if="vm.showLoader"></ion-spinner>
+    <div class="loader" ng-if="vm.showLoader"></div>   
     <div class="col-xs-12" ng-show="!vm.showLoader">
         <div class="form-container">
             <div class="form-group col-xs-12 col-sm-3">            
                 <div class="input-group">
-                    <span class="input-group-addon icon ion-search" id="sizing-addon2"></span>
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
                     <input type="text" class="form-control" placeholder="Buscar" ng-model="vm.search" aria-describedby="sizing-addon2">
                 </div>   
             </div>

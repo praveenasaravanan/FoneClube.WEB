@@ -14,10 +14,12 @@
         this.changeEdicaoView = changeEdicaoView;
         this.changeCustomersView = changeCustomersView;
         this.changeOrdemServicoView = changeOrdemServicoView;
+        this.changeListCustomer = changeListCustomer;
+        this.changeCadastro = changeCadastro;
         this.goBack = goBack;
 
         function changeLoginView(){
-            LocationService.change('login');
+            LocationService.change('login');                        
         }
 
         function changeCheckoutView(){
@@ -38,7 +40,15 @@
         }
         
         function changeOrdemServicoView(param){
-            LocationService.change('ordemservico', param);
+            LocationService.change('tabs.ordemservico', param);
+        }
+
+        function changeListCustomer(param) {
+            LocationService.change('tabs.list-customer', param);
+        }
+
+        function changeCadastro(param) {
+            LocationService.change('tabs.cadastro', param);
         }
         
         function goBack() {

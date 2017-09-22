@@ -85,7 +85,7 @@
             Dados Pessoais
         </div>
     <!--seção fotos-->
-        <div class="foto-selfie" on-tap="vm.onTapPhotoSelfie()">
+        <!-- <div class="foto-selfie" ng-click="vm.onTapPhotoSelfie()">
             <div class="item">
                 <a ng-if="vm.selfieSended" class="ion-android-done custom-icon"></a>
                 <a ng-if="!vm.selfieSended" class="ion-ios-plus-outline custom-icon-default"></a>
@@ -97,7 +97,7 @@
                 <img class="full-image" ng-src="{{vm.selfiePhotoURL}}" style="width: 650px">
             </div>
         </div>
-        <div class="foto-frente" on-tap="vm.onTapPhotoFront()">
+        <div class="foto-frente" ng-click="vm.onTapPhotoFront()">
             <div class="item">
                 <a ng-if="vm.frontSended" class="ion-android-done custom-icon"></a>
                 <a ng-if="!vm.frontSended" class="ion-ios-plus-outline custom-icon-default"></a>
@@ -109,7 +109,7 @@
                 <img class="full-image" ng-src="{{vm.frontPhotoURL}}" style="width: 650px">
             </div>
         </div>
-        <div class="foto-verso" on-tap="vm.onTapPhotoVerse()">
+        <div class="foto-verso" ng-click="vm.onTapPhotoVerse()">
             <div class="item">
                 <a ng-if="vm.verseSended" class="ion-android-done custom-icon"></a>
                 <a ng-if="!vm.verseSended" class="ion-ios-plus-outline custom-icon-default"></a>
@@ -124,7 +124,7 @@
         <div class="padding">            
             <button class="button button-block button-positive" ng-disabled="vm.requesting" on-tap="vm.onTapSendPersonalData()">Enviar</button>
         </div>
-    </div>
+    </div> -->
     <!--vm.etapaComplementar-->
     <div ng-if="vm.etapaComplementar">        
         <h1 class="form-group col-xs-12 display-4">Convite Foneclube</h1>
@@ -148,7 +148,7 @@
                 </div>                 
                 <div class="item item-divider item-icon-right">
                     Informações nova linha Foneclube
-                    <button ng-show="vm.showAddNewPhone.length == 0" on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
+                    <button ng-show="vm.showAddNewPhone.length == 0" on-tap="vm.onTapNewPhoneNumber()" style="background: transparent; border: none; position: absolute; right: 0; padding-right: 16px;"><i class="glyphicon glyphicon-plus"></i></i></button>
                 </div>
                 <uib-accordion close-others="oneAtATime">
                     <div uib-accordion-group class="panel-default" ng-init="status.open = true" is-open="status.open" ng-repeat="phoneNumber in vm.phoneNumbersView track by $index">

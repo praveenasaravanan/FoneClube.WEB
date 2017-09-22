@@ -6,32 +6,31 @@
                 <span> FoneClube </span>                              
             </div>
         </div> 
-        <div title="Home" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'home'}" ng-click="vm.setMenuItemActive('home')" ui-sref="tabs.home">            
+        <div title="Home" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'home'}" ng-click="vm.setMenuItemActive('home')">            
             <div>
-                <i class="ion-ios-home" aria-hidden="true"></i>            
+                <i class="glyphicon glyphicon-home" aria-hidden="true"></i>            
                 <span> Home </span>
             </div>
         </div>
-        <div title="Usuários" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'cadastro'}"  ng-click="vm.setMenuItemActive('cadastro')" ui-sref="tabs.cadastro">  
+        <div title="Usuários" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'cadastro'}"  ng-click="vm.setMenuItemActive('cadastro')">  
             <div>
-                <i class="ion-person-stalker" aria-hidden="true"></i>            
+                <i class="glyphicon glyphicon-user" aria-hidden="true"></i>            
                 <span> Usuários </span>
             </div>
         </div>  
-        <div title="Pagarme" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'list-customer'}" ng-click="vm.setMenuItemActive('list-customer')" ui-sref="tabs.list-customer">     
+        <div title="Pagarme" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'list-customer'}" ng-click="vm.setMenuItemActive('list-customer')">     
             <div>       
-                <i class="ion-person-stalker" aria-hidden="true"></i>            
+                <i class="glyphicon glyphicon-bitcoin" aria-hidden="true"></i>            
                 <span> Pagarme </span>
             </div>
         </div>  
-        <div title="Customers" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'customer'}"  ng-click="vm.setMenuItemActive('customer')" ui-sref="tabs.customers">            
+        <div title="Customers" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'customers'}"  ng-click="vm.setMenuItemActive('customers')">            
             <div>
-                <i class="ion-card" aria-hidden="true"></i>            
+                <i class="glyphicon glyphicon-credit-card" aria-hidden="true"></i>            
                 <span> Customers </span>
             </div>
         </div>     
     </div>    
-    <div class="menu-views" ng-class="{'menu-opened': vm.compress}">
-            <ion-nav-view name="menu-tab"></ion-nav-view>
+    <div class="menu-views" ng-class="{'menu-opened': vm.compress}" ui-view name="menu-tab">            
     </div>
 </div>

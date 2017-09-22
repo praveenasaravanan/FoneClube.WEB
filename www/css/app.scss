@@ -1,8 +1,80 @@
 $background-default: #ecf0f5;
+button {
+    outline: none;    
+}
+.loader {
+    content: url('../img/loading.gif');
+    height: 100px;
+    width: 100px;
+    left: 45%;
+    position: relative;
+}
+.bar.bar-light {
+    border-color: #ddd;
+    background-color: white;
+    background-image: linear-gradient(0deg, #ddd, #ddd 50%, transparent 50%);
+    color: #444;
+}
+.bar-header {
+    top: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+}
+.bar .title {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 0;
+    overflow: hidden;
+    margin: 0 10px;
+    min-width: 30px;
+    height: 43px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 44px;
+}
+.bar {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: absolute;
+    right: 0;
+    left: 0;
+    z-index: 9;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 5px;
+    width: 100%;
+    height: 44px;
+    border-width: 0;
+    border-style: solid;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid #ddd;
+    background-color: white;
+    background-size: 0;
+}
 .bar {
     position: initial;
     min-height: 43px;
 } 
+.nome-cliente {
+    padding-left: 10px;
+}
 .form-container {        
     background-color: white;
     margin-bottom: 15px;    
@@ -41,4 +113,37 @@ table {
    .form-group.col-sm-6:nth-child(1), .form-group.col-sm-6:nth-child(2), .form-group.col-xs-12:nth-child(1) {
         margin-top: 0px;
     } 
+}
+
+.item-divider {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    min-height: 30px;
+    background-color: #f5f5f5;
+    color: #222;
+    font-weight: 500;
+}
+
+.item-icon-right {
+    padding-right: 54px;
+}
+
+.item, .item h1, .item h2, .item h3, .item h4, .item h5, .item h6, .item p, .item-content, .item-content h1, .item-content h2, .item-content h3, .item-content h4, .item-content h5, .item-content h6, .item-content p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.item {
+    border-color: #ddd;
+    background-color: #f5f5f5;
+    color: #444;
+    position: relative;
+    z-index: 2;
+    display: block;
+    margin: -1px;
+    padding: 16px;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 16px;
 }

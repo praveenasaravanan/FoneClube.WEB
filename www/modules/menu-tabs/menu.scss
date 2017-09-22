@@ -12,21 +12,22 @@
     user-select: none;    
     cursor: default;
     color: white;
-    height: 100%;
+    height: 100vh;
     .menu-views {
         display: flex;
         flex: auto 1 1;
         height: 100%;  
         color: black;
-        ion-nav-view  {
-            width: calc(100vw - 70px);            
-        }        
+        overflow-y: auto;
+        // ion-nav-view  {
+        //     width: calc(100vw - 70px);            
+        // }        
     }
-    .menu-opened {
-        ion-nav-view{
-            width: calc(100vw - 150px);
-        }        
-    }
+    // .menu-opened {
+    //     ion-nav-view{
+    //         width: calc(100vw - 150px);
+    //     }        
+    // }
     .menu-open, .menu-close {
         display: flex;
         flex: 1 1;        

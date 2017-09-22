@@ -244,8 +244,7 @@
         }
         
         function onTapEditar() {
-            FlowManagerService.changeEdicaoView(customer);
-            closeThisDialog(0);
+            FlowManagerService.changeEdicaoView(customer);            
         }
         
 
@@ -254,8 +253,7 @@
         }
 
         function onTapOrdemServico() {
-            FlowManagerService.changeOrdemServicoView(customer);
-            closeThisDialog(0);
+            FlowManagerService.changeOrdemServicoView(customer);            
         }
 
     }

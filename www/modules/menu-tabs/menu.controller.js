@@ -3,9 +3,9 @@
     angular.module('foneClub')
     .controller('MenuController', menuController);
 
-    menuController.$inject = ['$scope', '$window', '$state', 'localStorageService'];
+    menuController.$inject = ['$scope', '$window', '$state', 'localStorageService', 'FlowManagerService'];
 
-    function menuController($scope, $window, $state, localStorageService) {
+    function menuController($scope, $window, $state, localStorageService, FlowManagerService) {
         var vm = this;     
         vm.compress = false;                
         vm.menuItemActive = localStorageService.get('menuItemActive');        
@@ -19,6 +19,17 @@
         vm.setMenuItemActive = function(screen) {
             vm.menuItemActive = screen;
             localStorageService.set('menuItemActive', screen);
+            
+            if(screen == 'home') {
+                FlowManagerService.changeHomeView();
+            } else if (screen == 'cadastro') {
+                FlowManagerService.changeCadastro();
+            } else if (screen == 'list-customer') {
+                FlowManagerService.changeListCustomer();
+            } else if (screen == 'customers') {
+                FlowManagerService.changeCustomersView();
+            }
+
         }
         
         angular.element($window).bind('resize', function(){            

@@ -1,27 +1,24 @@
-<div ng-controller="PaymentDetailController as vm">
-    <div class="bar bar-header bar-positive">
-        <h1 class="title">Detalhe de cobrança</h1>
-        <button class="button button-clear button-primary" ng-click="closeThisDialog(0)">Fechar</button>
-    </div>    
+<div class="payment-detail-modal" ng-controller="PaymentDetailController as vm"> 
+    <div class="header">
+        <span class="title">Detalhe de cobrança</span>        
+        <button ng-click="closeThisDialog(0)">X</button>
+    </div> 
 
-        <div class="text-center">
-            <h3 style="text-align: center;">{{vm.customer.Name}}</h3>
-        </div>
-        
-        <div class="item item-divider" style="margin-top: 60px;">
-            Hitórico de cobrança
-        </div>
+    <h3 class="nome-cliente">{{vm.customer.Name}}</h3>
 
-        <ul class="list">
-            <a class="item">
-                <div>
-                    <p>Data e hora: <strong>{{vm.history.PaymentDate}}.</strong> </p>
-                    <p style="text-overflow: clip; white-space: normal;">Comentário: <strong>{{vm.history.Comment}}.</strong> </p>
-                    <p>Valor: <strong>{{vm.history.Ammount / 100 }} R$ </strong> </p>
-                    <p>Tipo: <strong>{{vm.history.descriptionType}} </strong> </p>
-                    <p>Agente: <strong>{{vm.history.CollectorName }} </strong> </p>
-                    <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{vm.history.StatusPayment }} </strong> </p>
-                </div>
-            </a>
-        </ul>    
+    <uib-accordion close-others="oneAtATime">
+        <div uib-accordion-group class="panel-default" ng-init="status.open = true" is-open="status.open" ng-repeat="history in vm.customer.histories|limitTo:1">
+            <uib-accordion-heading>
+                Hitórico de cobrança<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
+            </uib-accordion-heading>
+            <div class="accordion-container">
+                <p>Data e hora: <strong>{{vm.history.PaymentDate}}.</strong> </p>
+                <p style="text-overflow: clip; white-space: normal;">Comentário: <strong>{{vm.history.Comment}}.</strong> </p>
+                <p>Valor: <strong>{{vm.history.Ammount / 100 }} R$ </strong> </p>
+                <p>Tipo: <strong>{{vm.history.descriptionType}} </strong> </p>
+                <p>Agente: <strong>{{vm.history.CollectorName }} </strong> </p>
+                <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{vm.history.StatusPayment }} </strong> </p>
+            </div>            
+        </div> 
+    </uib-accordion>   
 </div>

@@ -11,7 +11,8 @@
     'ngMask',
     'LocalStorageModule',
     'ui.bootstrap',
-    'ngDialog'
+    'ngDialog',
+    'ui.router'
 
   ]);
 
