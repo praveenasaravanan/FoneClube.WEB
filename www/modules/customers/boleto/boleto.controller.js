@@ -5,8 +5,13 @@
         .module('foneClub')
         .controller('BoletoModalController', BoletoModalController);
 
+// <<<<<<< HEAD
     BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory'];
     function BoletoModalController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory) {
+// =======
+//     BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainComponents', 'MainUtils', 'FoneclubeService', 'UtilsService'];
+//     function BoletoModalController(ViewModelUtilsService, PagarmeService, MainComponents, MainUtils, FoneclubeService, UtilsService) {
+// >>>>>>> release-branch
 
         var vm = this;
         var customer = ViewModelUtilsService.modalBoletoData;
@@ -27,20 +32,15 @@
                     'name' : customer.Name,
                     'document_number' : customer.DocumentNumber,
                     'email' : customer.Email,
-                    'address' : {
-                        'street' : customer.Adresses[0].Street,
-                        'street_number' : customer.Adresses[0].StreetNumber,
-                        'neighborhood' : customer.Adresses[0].Neighborhood,
-                        'zipcode' : customer.Adresses[0].Cep,
-                        'city': customer.Adresses[0].City,
-                        'uf': customer.Adresses[0].State
-
-                    },
+                    'address' : getAddress(customer),
                     'phone' : getContactPhone(customer)
 
              }
 
         function onTapConfirmarPagamento() {
+            if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
+                return;
+            }
             vm.etapaDados = false;
             vm.etapaConfirmacao = true;
         }
@@ -112,11 +112,14 @@
                             DialogFactory.showMessageDialog({mensagem:'Erro na captura da transação'});                             
                         }
                         console.log(error);
-
                     });
-
-
-             })
+            }, function (error) {
+                UtilsService.showAlert('Aviso', 'Erro ao realizar transação, verifique os dados do cliente.');
+                vm.disableTapPay = false;
+            }).catch(function (error) {
+                UtilsService.showAlert('Aviso', 'Erro ao realizar transação, verifique os dados do cliente.');
+                vm.disableTapPay = false;
+            });
 
         }
 
@@ -148,30 +151,31 @@
 
 
         function getContactPhone(customer){
-            for(var i in customer.Phones)
-            {
-                var phone = customer.Phones[i];
-                if(!phone.IsFoneclube)
-                {
-                    return {
-                        'ddd' : phone.DDD.toString(),
-                        'number' : phone.Number.toString()
-                    };
+            var contacts = UtilsService.getContactPhoneFromPhones(customer.Phones);
+            if (!contacts || contacts.length == 0  || contacts[0].DDD == '' || contacts[0].Number == '') {
+                UtilsService.showAlert('Aviso', 'É necessário cadastrar Telefone de Contato para este cliente.');
+                return null;
+            } else {
+                return {
+                    'ddd' : contacts[0].DDD.toString(),
+                    'number' : contacts[0].Number.toString()
                 }
-
             }
-
-            if(!contactPhone)
-            {
-                for(var i in customer.Phones)
-                {
-                    var phone = customer.Phones[i];
-
-                    return {
-                        'ddd' : phone.DDD.toString(),
-                        'number' : phone.Number.toString()
-                    };
-
+        }
+        
+        function getAddress(customer) {
+            var address = customer.Adresses;
+            if (!address || address.length == 0) {
+                UtilsService.showAlert('Aviso', 'É necessário cadastrar um Endereço para este cliente.');
+                return null;
+            } else {
+                return {
+                    'street' : address[0].Street,
+                    'street_number' : address[0].StreetNumber,
+                    'neighborhood' : address[0].Neighborhood,
+                    'zipcode' : address[0].Cep,
+                    'city': address[0].City,
+                    'uf': address[0].State
                 }
             }
         }

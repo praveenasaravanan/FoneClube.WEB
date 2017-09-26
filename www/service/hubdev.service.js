@@ -10,10 +10,10 @@
     function HubDevService($q, HTTPService) {
 
         //teste
-        var apiToken = '5ae973d7a997af13f0aaf2bf60e65803';
+        //var apiToken = '5ae973d7a997af13f0aaf2bf60e65803';
 
         //prod
-        //var apiToken = '74817fbeb42c87d0a61f20684d3309e3';
+        var apiToken = '74817fbeb42c87d0a61f20684d3309e3';
 
         this.validaCPF = validaCPF;
         this.validaCEP = validaCEP;

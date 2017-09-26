@@ -16,7 +16,7 @@
         '$cordovaCamera',
         '$cordovaFile',
         '$timeout',        
-        '$ionicModal',
+        // '$ionicModal',
         '$interval',
         'FlowManagerService',
         'ViewModelUtilsService',
@@ -36,7 +36,7 @@
          $cordovaCamera, 
          $cordovaFile, 
          $timeout,          
-         $ionicModal,
+        //  $ionicModal,
          $interval,
          FlowManagerService, 
          ViewModelUtilsService,
@@ -105,11 +105,11 @@
             .catch(function(error){
                 console.log(error.statusText);
             });     
-            $ionicModal.fromTemplateUrl('templates/modal.html', {
-                scope: $scope
-            }).then(function(modal) {
-                vm.modal = modal;
-            });          
+            // $ionicModal.fromTemplateUrl('templates/modal.html', {
+            //     scope: $scope
+            // }).then(function(modal) {
+            //     vm.modal = modal;
+            // });          
             
         }
 
@@ -163,9 +163,16 @@
                 'DocumentNumber': UtilsService.clearDocumentNumber(vm.cpf),
                 'Name': vm.name,
                 'Born': vm.birthdate,
-                'Email': vm.email
+                'Email': vm.email,
+                'Phones' : [{
+                    'DDD': getNumberJson(vm.personalNumber).DDD,
+                    'Number': getNumberJson(vm.personalNumber).Number,
+                    'IsFoneclube': null,
+                    'Id': null,
+                    'IdOperator': vm.operator
+                }]
             };
-            if(vm.personalNumber.length >= 14) {
+            /*if(vm.personalNumber.length >= 14) {
                 personCheckout['Phones'] = [
                     {
                         'DDD': getNumberJson(vm.personalNumber).DDD,
@@ -174,7 +181,7 @@
                         'IsFoneclube': null
                     }
                 ];
-            }
+            }*/
             FoneclubeService.postBasePerson(personCheckout).then(function(result){
                 if(result) {
                     etapaEndereco();
@@ -719,7 +726,16 @@
                     var right = true;
                     for (var item in result) {
                         if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.cpf)) {
-                            DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem:'Você não pode cadastrar o mesmo telefone para dois clientes.'});
+
+                            var msg = 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
+                                .concat(getNumberComMascara(arrayFiltered[item])).concat('</strong>, pertence ao cliente ')
+                                .concat(result[item].DocumentNumber).concat(', ').concat(result[item].Name).concat('.');
+                            DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: msg});
+                            
+                            // showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
+                            //             .concat(getNumberComMascara(arrayFiltered[item])).concat('</strong>, pertence ao cliente ')
+                            //             .concat(result[item].DocumentNumber).concat(', ').concat(result[item].Name).concat('.'));
+                            
                             right = false;
                             vm.requesting = false;
                             showLoader.close();
@@ -858,7 +874,12 @@
                 }
             FoneclubeService.getCustomerByPhoneNumber(param).then(function(res) {
                 if (res.DocumentNumber && res.DocumentNumber != UtilsService.clearDocumentNumber(vm.cpf)) {
+                    var msg = 'Este telefone já pertence ao cliente '.concat(UtilsService.getDocumentNumerWithMask(res.DocumentNumber)).concat(', ').concat(res.Name).concat('.');
                     DialogFactory.showMessageDialog({titulo:'Aviso', mensagem:'Este telefone já pertence a um cliente.'});
+// =======
+//                     showAlert('Aviso', 'Este telefone já pertence ao cliente '
+//                         .concat(UtilsService.getDocumentNumerWithMask(res.DocumentNumber)).concat(', ').concat(res.Name).concat('.'));
+// >>>>>>> release-branch
                 }
             });
         }
@@ -916,6 +937,19 @@
         function resizeScroll() {
             $ionicScrollDelegate.resize();
         }
-               
+
+        //ToDo => colocar em uma service, ou utils
+        // function showAlert(title, message){
+        //     return $ionicPopup.alert({
+        //         title: title,
+        //         template: message
+        //     });
+        // }
+            
+        // function getNumberComMascara(param) {
+        //     return "(" + param.DDD + ") " + param.Number;
+        // }
+        /////////////////////////////////////
+        /////////////////////////////////////
     }
 })();

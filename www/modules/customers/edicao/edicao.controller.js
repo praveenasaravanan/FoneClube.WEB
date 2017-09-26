@@ -20,9 +20,9 @@
         
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
-        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '130.568.077-43'; //10667103767 //46637152226
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
         vm.requesting = true;
-        
+        debugger;
         init();
         function init(){
             if (!vm.cpf) {
@@ -34,13 +34,14 @@
                 vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
                 vm.customer = result;
                 vm.customer.Born = vm.customer.Born ? getFormatedDate(vm.customer.Born) : ''; //formata data de nasicmento
-                getPersonParent(vm.customer.IdContactParent); //ToDo falta ajustar a API para devolver o id do cliente parent;
+                getPersonParent(vm.customer.IdParent); //ToDo falta ajustar a API para devolver o id do cliente parent;
                 vm.singlePriceLocal = vm.customer.SinglePrice ? vm.customer.SinglePrice : 0; //single place formatado;
                 if (vm.customer.Adresses) {
                     for(var i=0; i < vm.customer.Adresses.length;i++) {
                         vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber); //deve ser int por causa da mascara
                     }    
                 }
+
                 FoneclubeService.getPlans().then(function(result){
                     vm.plans = result;
                     for(var number in vm.customer.Phones) {
@@ -64,7 +65,48 @@
                         }
                     }
                     console.info(vm.customer);
+// <<<<<<< HEAD
                     showDialog.close();
+// =======
+                    //MainComponents.hideLoader();
+                    
+                    
+                    // Fix caso não exista numero de telefone -- É necessário manter esse fix por causa de clientes que tenham esse array vazio
+                    var dontHaveContact = vm.customer.Phones.filter(function (element, index, array) {
+                        return element.IsFoneclube == null || element.IsFoneclube == false;
+                    });
+                    if (dontHaveContact.length == 0) {
+                        vm.customer.Phones.push({
+                            'Id': null,
+                            'DDD': '',
+                            'Number': '',
+                            'IsFoneclube': null,
+                            'IdOperator': 0,
+                            'Portability': 'false',
+                            'NickName': '',
+                            'IdPlanOption': 0,
+                            'Inative': false,
+                            'Delete': false,
+                            'NovoFormatoNumero': '',
+                            'operadora': '1',
+                            'key' : Math.random()
+                        });
+                    }
+                    
+                    // Fix caso não exista endereço -- É necessário manter esse fix por causa de clientes que tenham esse array vazio
+                    if (vm.customer.Adresses.length == 0) {
+                        vm.customer.Adresses.push({
+                            Cep: '',
+                            Street: '',
+                            StreetNumber: '',
+                            Complement: '',
+                            Neighborhood: '',
+                            City: '',
+                            State: ''
+                        });
+                    }
+
+// >>>>>>> release-branch
                     $timeout(function () {
                         vm.requesting = false;
                     }, 2000)
@@ -119,13 +161,11 @@
                 "Phones": customer.Phones,
                 "Images": customer.Images,
                 "IdParent": customer.IdParent,
-                "IdContactParent": customer.IdContactParent,
                 "NameContactParent": customer.NameContactParent,
                 "IdCommissionLevel": customer.IdCommissionLevel,
                 "SinglePrice": vm.singlePriceLocal,
                 "DescriptionSinglePrice": customer.DescriptionSinglePrice
             }
-            
             var totalPriceValidade = 0;
             for (var i in vm.customer.Phones) {
                 vm.plans.find(function (element, index, array) {
@@ -157,8 +197,13 @@
             }
             
             var arrayFiltered = customerSend.Phones.filter(function (number) {
-                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8;
+                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8 && number.Delete == null;
             });
+            //Fix se o usuario não add CEP o array deve estar vazio;
+            for(var i in customerSend.Adresses) {
+                if (customerSend.Adresses[i].Cep == '')
+                    customerSend.Adresses.splice(i, 1);
+            }
             
             if (arrayFiltered.length == 0) {
                 runPostUpdateCustomer(customerSend);
@@ -166,8 +211,18 @@
                 validadeNumbers(arrayFiltered).then(function(result) {
                     var right = true;
                     for (var item in result) {
+// <<<<<<< HEAD
                         if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {
-                            DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'Você não pode cadastrar o mesmo telefone para dois clientes.'});
+                            var msg = 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
+                                .concat(arrayFiltered[item].NovoFormatoNumero).concat('</strong>, pertence ao cliente ')
+                                .concat(result[item].DocumentNumber).concat(', ').concat(result[item].Name).concat('.');
+                            DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: msg});
+// =======
+//                         if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {                            
+//                             showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
+//                                         .concat(arrayFiltered[item].NovoFormatoNumero).concat('</strong>, pertence ao cliente ')
+//                                         .concat(result[item].DocumentNumber).concat(', ').concat(result[item].Name).concat('.'));
+// >>>>>>> release-branch
                             right = false;
                             vm.requesting = false;
                             showLoader.close();
@@ -338,7 +393,9 @@
             }
             //nao deixa add o mesmo numero duas vezes para o mesmo cliente;
             var twiceNumber = vm.customer.Phones.filter(function (element, index, array) {
-                return element.NovoFormatoNumero == vm.customer.Phones[position].NovoFormatoNumero;
+                return element.NovoFormatoNumero == vm.customer.Phones[position].NovoFormatoNumero 
+                        && element.IsFoneclube == true
+                        && element.Delete == null;
             });
             if (twiceNumber.length > 1) {
                 DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'Você não pode cadastrar o mesmo telefone duas vezes para o cliente.'});
