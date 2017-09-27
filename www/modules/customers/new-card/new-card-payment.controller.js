@@ -100,7 +100,7 @@
         function getContactPhone(customer){
             var contacts = UtilsService.getContactPhoneFromPhones(customer.Phones);
             if (!contacts || contacts.length == 0  || contacts[0].DDD == '' || contacts[0].Number == '') {
-                UtilsService.showAlert('Aviso', 'É necessário cadastrar Telefone de Contato para este cliente.');
+                DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'É necessário cadastrar Telefone de Contato para este cliente.'});
                 return null;
             } else {
                 return {
@@ -113,7 +113,7 @@
         function getAddress(customer) {
             var address = customer.Adresses;
             if (!address || address.length == 0 ) {
-                UtilsService.showAlert('Aviso', 'É necessário cadastrar um Endereço para este cliente.');
+                DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'É necessário cadastrar um Endereço para este cliente.'});
                 return null;
             } else {
                 return {
