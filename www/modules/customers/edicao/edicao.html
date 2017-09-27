@@ -135,7 +135,7 @@
 >>>>>>> release-branch -->
             <div class="item item-divider item-icon-right">
                 Informações linha(s) Foneclube
-                <button  on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
+                <button  on-tap="vm.onTapNewPhoneNumber()" style="background: transparent; border: none; position: absolute; right: 0; padding-right: 16px;"><i class="glyphicon glyphicon-plus"></i></i></button>                
             </div>
             <uib-accordion close-others="oneAtATime">            
                 <div uib-accordion-group  class="panel-default" ng-hide="!phoneNumber.IsFoneclube || phoneNumber.Delete" ng-init="status.open = false" is-open="status.open" ng-repeat="phoneNumber in vm.customer.Phones track by $index">                    
