@@ -131,11 +131,11 @@
             <label class="item item-input">
                 <span class="input-label">Comentário valor</span>
                 <input ng-model="vm.customer.DescriptionSinglePrice" type="text"  placeholder="Comentário sobre o Preço único">
-            </label>
+            </label>ng-show="vm.showAddNewPhone.length == 0"
 >>>>>>> release-branch -->
             <div class="item item-divider item-icon-right">
                 Informações linha(s) Foneclube
-                <button ng-show="vm.showAddNewPhone.length == 0" on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
+                <button  on-tap="vm.onTapNewPhoneNumber()" class="icon ion-plus" style="background: transparent; border: none;"></button>
             </div>
             <uib-accordion close-others="oneAtATime">            
                 <div uib-accordion-group  class="panel-default" ng-hide="!phoneNumber.IsFoneclube || phoneNumber.Delete" ng-init="status.open = false" is-open="status.open" ng-repeat="phoneNumber in vm.customer.Phones track by $index">                    
