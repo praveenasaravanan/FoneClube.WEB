@@ -875,7 +875,7 @@
             FoneclubeService.getCustomerByPhoneNumber(param).then(function(res) {
                 if (res.DocumentNumber && res.DocumentNumber != UtilsService.clearDocumentNumber(vm.cpf)) {
                     var msg = 'Este telefone já pertence ao cliente '.concat(UtilsService.getDocumentNumerWithMask(res.DocumentNumber)).concat(', ').concat(res.Name).concat('.');
-                    DialogFactory.showMessageDialog({titulo:'Aviso', mensagem:'Este telefone já pertence a um cliente.'});
+                    DialogFactory.showMessageDialog({titulo:'Aviso', mensagem: msg});
 // =======
 //                     showAlert('Aviso', 'Este telefone já pertence ao cliente '
 //                         .concat(UtilsService.getDocumentNumerWithMask(res.DocumentNumber)).concat(', ').concat(res.Name).concat('.'));

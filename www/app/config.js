@@ -75,10 +75,10 @@
         views: {      
           'menu-tab': {
             templateUrl: "modules/customers/edicao/edicao.html",
-            controller: 'EdicaoController as vm',
-            params: {data: null}
+            controller: 'EdicaoController as vm'
           }
-        }            
+        },
+        params: {data: null}
       })
       .state('tabs.ordemservico', {
         url: "/ordemservico",       
