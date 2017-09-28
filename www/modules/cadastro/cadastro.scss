@@ -14,11 +14,12 @@
     width: 198px;
     background-color: #dfdfdf;
     text-align: center;
+    margin-left: 12px;
     img {
         height: 40px;
         width: 40px;
         position: absolute;
-        left: 23px;
+        left: 35px;
         top: 14px;
     }
     input {
@@ -33,6 +34,9 @@
     }
 }
 .thumb-image {
-    height: 480px;
+    height: 363px;
     border: solid;
+    width: 462px;
+    margin-top: 10px;
+    border-width: 2px;
 }

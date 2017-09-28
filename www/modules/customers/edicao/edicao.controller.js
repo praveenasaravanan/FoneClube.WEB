@@ -431,6 +431,30 @@
         function resizeScroll() {
             $ionicScrollDelegate.resize();
         }
+
+        vm.imageSelf;
+        vm.base64Self;
+        vm.imageFrente;
+        vm.base64Frente;
+        vm.imageVerso;
+        vm.base64Verso;
+
+        vm.getImageOftype = getImageOftype;
+        function getImageOftype(type) {
+            var img = vm.customer.Photos.filter(function (element) {
+                return element.Tipo == type;
+            });
+            function base64img (type) {
+                if (type == 1) {
+                    return vm.base64Self;
+                } else if (type == 2) {
+                    return vm.base64Frente;
+                } else if (type == 3) {
+                    return vm.base64Verso;
+                }
+            }
+            return img[0] ? 'https://s3-sa-east-1.amazonaws.com/fone-clube-bucket/' + img[0].Name : base64img(type) || '../../content/img/upload.png';
+        }
                 
     }
 })();

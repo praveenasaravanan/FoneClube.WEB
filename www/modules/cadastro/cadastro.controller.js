@@ -10,14 +10,9 @@
         'PagarmeService',        
         'HubDevService',
         'FoneclubeService',        
-        'FileListUtil',
         'MainUtils',
         '$q',
-        '$cordovaCamera',
-        '$cordovaFile',
         '$timeout',        
-        // '$ionicModal',
-        '$interval',
         'FlowManagerService',
         'ViewModelUtilsService',
         '$ionicScrollDelegate',
@@ -27,23 +22,19 @@
     ];
 
     function CadastroController(
-        $scope,PagarmeService,          
-         HubDevService, 
-         FoneclubeService,         
-         FileListUtil,
-         MainUtils, 
-         $q, 
-         $cordovaCamera, 
-         $cordovaFile, 
-         $timeout,          
-        //  $ionicModal,
-         $interval,
-         FlowManagerService, 
-         ViewModelUtilsService,
-         $ionicScrollDelegate,
-         UtilsService,
-         DialogFactory,
-         ngDialog
+        $scope,
+        PagarmeService,          
+        HubDevService, 
+        FoneclubeService,
+        MainUtils, 
+        $q, 
+        $timeout,          
+        FlowManagerService, 
+        ViewModelUtilsService,
+        $ionicScrollDelegate,
+        UtilsService,
+        DialogFactory,
+        ngDialog
     ) {
             
         var vm = this;
@@ -82,7 +73,7 @@
         vm.getContactParentName = getContactParentName;
         vm.showAddNewPhone = showAddNewPhone;
         
-        vm.enter = enter;
+        // vm.enter = enter;
         vm.onTapCancel = onTapCancel;
            
         init();
@@ -104,19 +95,13 @@
             })
             .catch(function(error){
                 console.log(error.statusText);
-            });     
-            // $ionicModal.fromTemplateUrl('templates/modal.html', {
-            //     scope: $scope
-            // }).then(function(modal) {
-            //     vm.modal = modal;
-            // });          
-            
+            });                 
         }
 
+        //Busca o cpf na base foneclube, se existir envia pra edição senão consulta na API de cpfs e retorna o nome;
         function onTapSearchDocument(){
             vm.requesting = true;
             var showLoader = DialogFactory.showLoader('Tentando preencher dados...');
-            
             var cpf = UtilsService.clearDocumentNumber(vm.cpf);
             FoneclubeService.getCustomerByCPF(cpf).then(function(existentClient){
                 if (existentClient.Id == 0) {
@@ -148,25 +133,26 @@
             });
         }
 
+        //envia o CPF com os dados basico para cadastro no Foneclube
         function onTapSendDocument(){
             vm.requesting = true;
-            var dia = vm.birthdate.split('/')[0];
-            var mes = vm.birthdate.split('/')[1];
-            var regexBirthday =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
-            var dadosInvalidos = parseInt(dia) > 31 || parseInt(mes) > 12 || parseInt(mes) == 0 || parseInt(dia) == 0;
-            if(!regexBirthday.test(vm.birthdate) || dadosInvalidos){
-                DialogFactory.showMessageDialog({mensagem:'Data de nascimento Inválida'});                
-                vm.requesting = false;
-                return;
-            }
+            // var dia = vm.birthdate.split('/')[0];
+            // var mes = vm.birthdate.split('/')[1];
+            // var regexBirthday =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+            // var dadosInvalidos = parseInt(dia) > 31 || parseInt(mes) > 12 || parseInt(mes) == 0 || parseInt(dia) == 0;
+            // if(!regexBirthday.test(vm.birthdate) || dadosInvalidos){
+            //     DialogFactory.showMessageDialog({mensagem:'Data de nascimento Inválida'});                
+            //     vm.requesting = false;
+            //     return;
+            // }
             var personCheckout = {
                 'DocumentNumber': UtilsService.clearDocumentNumber(vm.cpf),
                 'Name': vm.name,
-                'Born': vm.birthdate,
+                'Born': '12/12/1950',
                 'Email': vm.email,
                 'Phones' : [{
-                    'DDD': getNumberJson(vm.personalNumber).DDD,
-                    'Number': getNumberJson(vm.personalNumber).Number,
+                    'DDD': UtilsService.getPhoneNumberFromStringToJson(vm.personalNumber).DDD,
+                    'Number': UtilsService.getPhoneNumberFromStringToJson(vm.personalNumber).Number,
                     'IsFoneclube': null,
                     'Id': null,
                     'IdOperator': vm.operator
@@ -188,21 +174,12 @@
                     DialogFactory.showMessageDialog({titulo:'Andamento', mensagem:'Documento enviado, agora preencha os dados de Endereço.'});
                 }
             }).catch(function(error){
-                console.log('catch error');
-                console.log(error);
-                console.log(error.statusText);
                 vm.requesting = false;
                 DialogFactory.showMessageDialog({mensagem:error.statusText});                
             });
         }
             
-        function getNumberJson(param) {
-            var number = {
-                DDD: clearPhoneNumber(param).substring(0, 2),
-                Number: clearPhoneNumber(param).substring(2)
-            }
-            return number;
-        }
+        
 
         function validarCEP() {
             if (vm.zipcode.length < 9) return;
@@ -300,9 +277,9 @@
         function sendImageToUpload() {
             var q = $q.defer();
             var toUpload = [];
-            if (vm.imageSelf) toUpload.push({img: vm.imageSelf, tipo: 0});
-            if (vm.imageFrente) toUpload.push({img: vm.imageFrente, tipo: 1});
-            if (vm.imageVerso) toUpload.push({img: vm.imageVerso, tipo: 2});
+            if (vm.imageSelf) toUpload.push({img: vm.imageSelf, tipo: 1});
+            if (vm.imageFrente) toUpload.push({img: vm.imageFrente, tipo: 2});
+            if (vm.imageVerso) toUpload.push({img: vm.imageVerso, tipo: 3});
             if (toUpload.length == 0) {
                 q.resolve();
             }
@@ -342,48 +319,42 @@
         }
         // ETAPA IMAGENS
 
+
         function etapaDocumentoFaseNome(){
             vm.hasCPF = true;
-            vm.requesting = false;            
+            vm.requesting = false;
         }
-
         function etapaDocumento(){
             limpaEtapas();
-            resizeScroll();
-            $ionicScrollDelegate.scrollTop(true);
+            // resizeScroll();
+            // $ionicScrollDelegate.scrollTop(true);
             vm.etapaDocumento = true;
         }
-
         function etapaEndereco(){
             limpaEtapas();
             vm.etapaBuscarCEP = true;
             vm.etapaEndereco = true;
-            resizeScroll();
-            $ionicScrollDelegate.scrollTop(true);
-            vm.requesting = false;
+            // resizeScroll();
+            // $ionicScrollDelegate.scrollTop(true);
         }
-
         function etapaDadosPessoais(){
             limpaEtapas();
             vm.etapaDadosPessoais = true;
-            resizeScroll();
-            $ionicScrollDelegate.scrollTop(true);
-            vm.requesting = false;
+            // resizeScroll();
+            // $ionicScrollDelegate.scrollTop(true);
         }
-
         function etapaComplementar(){
             limpaEtapas();
             vm.etapaComplementar = true;
-            resizeScroll();
-            $ionicScrollDelegate.scrollTop(true);
-            vm.requesting = false;
+            // resizeScroll();
+            // $ionicScrollDelegate.scrollTop(true);
         }
-
         function limpaEtapas(){
             vm.etapaDocumento = false;
             vm.etapaEndereco = false;
             vm.etapaDadosPessoais = false;
             vm.etapaComplementar = false;
+            vm.requesting = false;
         }
 
         /////////////////////////
@@ -712,8 +683,8 @@
 
             vm.phoneNumbersView.forEach(function (element, index, array) {
                 phones.push({
-                    'DDD': getNumberJson(element.NovoFormatoNumero).DDD,
-                    'Number': getNumberJson(element.NovoFormatoNumero).Number,
+                    'DDD': UtilsService.getPhoneNumberFromStringToJson(element.NovoFormatoNumero).DDD,
+                    'Number': UtilsService.getPhoneNumberFromStringToJson(element.NovoFormatoNumero).Number,
                     'Portability': element.Portability,
                     'IsFoneclube': true,
                     'Nickname': element.Nickname,
@@ -897,8 +868,8 @@
                 return
             }
             var param = {
-                ddd: getNumberJson(vm.phoneNumbersView[position].NovoFormatoNumero).DDD,
-                numero: getNumberJson(vm.phoneNumbersView[position].NovoFormatoNumero).Number
+                ddd: UtilsService.getPhoneNumberFromStringToJson(vm.phoneNumbersView[position].NovoFormatoNumero).DDD,
+                numero: UtilsService.getPhoneNumberFromStringToJson(vm.phoneNumbersView[position].NovoFormatoNumero).Number
             }
                 //nao deixa add o mesmo numero duas vezes para o mesmo cliente;
                 var twiceNumber = vm.phoneNumbersView.filter(function (element, index, array) {
@@ -939,29 +910,29 @@
             vm.modal.hide();
         }
         
-        function enter() {
-            if (vm.etapaEndereco) {
-                etapaDadosPessoais();
-            } else if (vm.etapaDadosPessoais) {
-                etapaComplementar();
-            } else if (vm.etapaComplementar) {
-                DialogFactory.dialogConfirm({title:'Pular Fase', mensagem: 'Deseja realmente pular esta fase?'})
-                .then(function(result) {
-                    if(result) {
-                        DialogFactory.dialogConfirm({title:'Cadastro Realizado', mensagem: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.', btn1: 'Ir para Home', btn2: 'Visualizar Cadastro'})
-                        .then(function(result) {
-                            if (result){
-                                FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
-                                    ViewModelUtilsService.showModalCustomer(result);
-                                });
-                            } else {
-                                FlowManagerService.changeHomeView();
-                            }
-                        })
-                    }
-                })               
-            }
-        }
+        // function enter() {
+        //     if (vm.etapaEndereco) {
+        //         etapaDadosPessoais();
+        //     } else if (vm.etapaDadosPessoais) {
+        //         etapaComplementar();
+        //     } else if (vm.etapaComplementar) {
+        //         DialogFactory.dialogConfirm({title:'Pular Fase', mensagem: 'Deseja realmente pular esta fase?'})
+        //         .then(function(result) {
+        //             if(result) {
+        //                 DialogFactory.dialogConfirm({title:'Cadastro Realizado', mensagem: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.', btn1: 'Ir para Home', btn2: 'Visualizar Cadastro'})
+        //                 .then(function(result) {
+        //                     if (result){
+        //                         FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
+        //                             ViewModelUtilsService.showModalCustomer(result);
+        //                         });
+        //                     } else {
+        //                         FlowManagerService.changeHomeView();
+        //                     }
+        //                 })
+        //             }
+        //         })               
+        //     }
+        // }
         
         function showAddNewPhone() {
             function filterPhones(number){
@@ -970,9 +941,9 @@
             return personCheckout.Phones.filter(filterPhones);
         }
             
-        function resizeScroll() {
-            $ionicScrollDelegate.resize();
-        }
+        // function resizeScroll() {
+        //     $ionicScrollDelegate.resize();
+        // }
 
         //ToDo => colocar em uma service, ou utils
         // function showAlert(title, message){
