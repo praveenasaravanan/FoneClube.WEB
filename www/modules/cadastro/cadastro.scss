@@ -8,3 +8,31 @@
     flex-direction: column;                         
     background-color: $background-default;   
 }
+
+.botao-upload-cadastro {
+    height: 69px;
+    width: 198px;
+    background-color: #dfdfdf;
+    text-align: center;
+    img {
+        height: 40px;
+        width: 40px;
+        position: absolute;
+        left: 23px;
+        top: 14px;
+    }
+    input {
+        position: absolute;
+        top: 0;
+        width: 198px;
+        height: 69px;
+        font-size: 23px;
+        cursor: pointer;
+        opacity: 0;
+        direction: ltr;
+    }
+}
+.thumb-image {
+    height: 480px;
+    border: solid;
+}

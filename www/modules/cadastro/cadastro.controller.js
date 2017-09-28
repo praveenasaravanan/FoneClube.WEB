@@ -71,9 +71,9 @@
 
         vm.onTapSendPersonalData = onTapSendPersonalData;
 
-        vm.onTapPhotoSelfie = onTapPhotoSelfie;
-        vm.onTapPhotoFront = onTapPhotoFront;
-        vm.onTapPhotoVerse = onTapPhotoVerse;
+        // vm.onTapPhotoSelfie = onTapPhotoSelfie;
+        // vm.onTapPhotoFront = onTapPhotoFront;
+        // vm.onTapPhotoVerse = onTapPhotoVerse;
 
         vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
@@ -243,9 +243,9 @@
             };
             
             //Remove os atributos falsy
-            if (personCheckout.Adresses[0].Complement == '' || !personCheckout.Adresses[0].Complement) {
-                delete personCheckout.Adresses[0].Complement;
-            }
+            // if (personCheckout.Adresses[0].Complement == '' || !personCheckout.Adresses[0].Complement) {
+            //     delete personCheckout.Adresses[0].Complement;
+            // }
 
             FoneclubeService.postUpdatePersonAdress(personCheckout).then(function(result){
                 if(result) {
@@ -254,53 +254,93 @@
                 }
             })
             .catch(function(error){
-                console.log('catch error');
-                console.log(error);
-                console.log(error.statusText); // mensagem de erro para tela, caso precise
                 DialogFactory.showMessageDialog({mensagem:error.statusText});
                 vm.requesting = false;
             });
-
-            console.log(personCheckout)
         }
 
-        function onTapSendPersonalData(){
+        // ETAPA IMAGENS
+        vm.imageSelf;
+        vm.base64Self;
+        vm.imageFrente;
+        vm.base64Frente;
+        vm.imageVerso;
+        vm.base64Verso;
+
+        function onTapSendPersonalData() {
+            var showLoader = DialogFactory.showLoader('Enviando Imagens...');
             vm.requesting = true;
-            var cpf = UtilsService.clearDocumentNumber(vm.cpf);
-            var personCheckout = {
-                'DocumentNumber': cpf,
-                'Images': [selfiePhotoName, frontPhotoName, versePhotoName]
-            };
-            
-            //Remove os atributos falsy
-            for(var i = personCheckout.Images.length - 1; i >= 0; i--) {
-                if(personCheckout.Images[i] == "" || !personCheckout.Images[i]) {
-                    personCheckout.Images.splice(i, 1);
+            sendImageToUpload().then(function(result) {
+                var personCheckout = {
+                    'DocumentNumber': UtilsService.clearDocumentNumber(vm.cpf),
+                    'Photos': []
+                };
+                for(var i in result) {
+                    personCheckout.Photos.push({Name:result[i].filename, Tipo: result[i].tipo});
                 }
-            } 
-            if (personCheckout.Images.length == 0) {
-                delete personCheckout.Images
-            }
-
-            /**var selfiePhotoName = '';
-            var frontPhotoName = '';
-            var versePhotoName = ''; */
-            console.log(personCheckout);
-            FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
-                console.log(result);
-                if(result) {
-                    etapaComplementar();
-                    DialogFactory.showMessageDialog({titulo:'Andamento',mensagem:'Dados pessoais enviados, agora preencha os dados Foneclube.'});
-                }
-                //post realizado com sucesso
-            })
-            .catch(function(error){
-                console.log('catch error');
-                console.log(error);
-                DialogFactory.showMessageDialog({mensagem:error.statusText});
-                vm.requesting = false;
+                debugger;
+                FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
+                    showLoader.close();
+                    if(result) {
+                        etapaComplementar();
+                        DialogFactory.showMessageDialog({titulo:'Andamento',mensagem:'Dados pessoais enviados, agora preencha os dados Foneclube.'});
+                    }
+                })
+                .catch(function(error){
+                    DialogFactory.showMessageDialog({mensagem:error.statusText}); //TODO
+                    vm.requesting = false;
+                    showLoader.close();
+                });
+            }, function(result) {
+                showLoader.close();
+                DialogFactory.showMessageDialog({mensagem: 'fazer validações para mensagens de erro;'}); //TODO
             });
         }
+
+        function sendImageToUpload() {
+            var q = $q.defer();
+            var toUpload = [];
+            if (vm.imageSelf) toUpload.push({img: vm.imageSelf, tipo: 0});
+            if (vm.imageFrente) toUpload.push({img: vm.imageFrente, tipo: 1});
+            if (vm.imageVerso) toUpload.push({img: vm.imageVerso, tipo: 2});
+            if (toUpload.length == 0) {
+                q.resolve();
+            }
+            var promises = toUpload.map(function(image) {
+                return uploadImage(image);
+            });
+            $q.all(promises).then(function (result){
+                console.log(result);
+                q.resolve(result);
+            }, function (result){
+                console.log(result);
+                q.reject(result);
+            });
+            return q.promise;
+        }
+
+        function uploadImage(imagem) {
+            var q = $q.defer();
+            var holdId = imagem.tipo;
+            function isInvalidName(str){
+                return /\s/.test(str);
+            }
+            if(isInvalidName(imagem.img.name)){
+                q.reject("Não foi possivel enviar sua imagem, por favor envie uma imagem sem espaço no nome do arquivo");
+                return q.promise;
+            }
+            var imageUploader = new ImageUploader();
+            imageUploader.push(imagem.img)
+            .then((data) => {
+                data.tipo = holdId;
+                q.resolve(data);
+            })
+            .catch((err) => {
+                q.reject('Não foi possível enviar imagens');
+            });
+            return q.promise;
+        }
+        // ETAPA IMAGENS
 
         function etapaDocumentoFaseNome(){
             vm.hasCPF = true;
@@ -349,287 +389,283 @@
         /////////////////////////
         /////FOTOS FASE
         //MOVER PRA CONSTATNS
-        var PHOTO_SELFIE = 1;
-        var PHOTO_FRONT = 2;
-        var PHOTO_VERSE = 3;
-        var interval;
-        vm.currentPhoto;
+        // var PHOTO_SELFIE = 1;
+        // var PHOTO_FRONT = 2;
+        // var PHOTO_VERSE = 3;
+        // var interval;
+        // vm.currentPhoto;
 
-        function onTapPhotoSelfie(){
-            console.log('onTapPhotoSelfie');
-            if(!vm.selfieSended)
-                launchModal(PHOTO_SELFIE);
-        }
+        // function onTapPhotoSelfie(){
+        //     console.log('onTapPhotoSelfie');
+        //     if(!vm.selfieSended)
+        //         launchModal(PHOTO_SELFIE);
+        // }
 
-        function onTapPhotoFront(){
-            console.log('onTapPhotoFront');
-            if(!vm.frontSended)
-                launchModal(PHOTO_FRONT);
-        }
+        // function onTapPhotoFront(){
+        //     console.log('onTapPhotoFront');
+        //     if(!vm.frontSended)
+        //         launchModal(PHOTO_FRONT);
+        // }
 
-        function onTapPhotoVerse(){
-            console.log('onTapPhotoVerse');
-            if(!vm.verseSended)
-                launchModal(PHOTO_VERSE);
-                //deseja trocar imagem?
-        }
+        // function onTapPhotoVerse(){
+        //     console.log('onTapPhotoVerse');
+        //     if(!vm.verseSended)
+        //         launchModal(PHOTO_VERSE);
+        //         //deseja trocar imagem?
+        // }
 
-        function launchModal(photoType){
-            console.log('launchModal ' + photoType);
-            vm.currentPhoto = photoType;
-            //limpa seleção de arquivo em variável local e em variável global
-            vm.hasFileSelected = false;
-            FileListUtil.set(undefined);
-            vm.hasPhotoCaptured = false;
-            vm.modal.show();            
-            validadeFile();
+        // function launchModal(photoType){
+        //     console.log('launchModal ' + photoType);
+        //     vm.currentPhoto = photoType;
+        //     //limpa seleção de arquivo em variável local e em variável global
+        //     vm.hasFileSelected = false;
+        //     FileListUtil.set(undefined);
+        //     vm.hasPhotoCaptured = false;
+        //     vm.modal.show();            
+        //     validadeFile();
 
-        }
+        // }
 
-        function validadeFile(){
-            try{
-                $interval.cancel(interval);
-            }
-            catch(error){ }
-            interval = $interval(function() {
-                //console.log('say hello');
-                //console.log(FileListUtil.get())
-                if(FileListUtil.get())
-                {
-                    vm.hasFileSelected = true;
-                }
-            }, 500);
-        }
+        // function validadeFile(){
+        //     try{
+        //         $interval.cancel(interval);
+        //     }
+        //     catch(error){ }
+        //     interval = $interval(function() {
+        //         //console.log('say hello');
+        //         //console.log(FileListUtil.get())
+        //         if(FileListUtil.get())
+        //         {
+        //             vm.hasFileSelected = true;
+        //         }
+        //     }, 500);
+        // }
 
-        vm.onTapPhotoGalley = onTapPhotoGalley;
-        vm.onTapPhotoCamera = onTapPhotoCamera;
-        function onTapPhotoGalley(){
-            console.log('onTapPhotoGalley');
-            //não precisu file upload abre direto do DOM
-        }
-        function onTapPhotoCamera(){
-            console.log('onTapPhotoCamera');
-            //startCameraPhoto(); não precisa file upload abre direto do DOM
-        }
+        // vm.onTapPhotoGalley = onTapPhotoGalley;
+        // vm.onTapPhotoCamera = onTapPhotoCamera;
+        // function onTapPhotoGalley(){
+        //     console.log('onTapPhotoGalley');
+        //     //não precisu file upload abre direto do DOM
+        // }
+        // function onTapPhotoCamera(){
+        //     console.log('onTapPhotoCamera');
+        //     //startCameraPhoto(); não precisa file upload abre direto do DOM
+        // }
 
         ////PHOTO PROCCESS
         /////////////////////////////////////
         /////////////////////////////////////
 
         ///GALERIA
-        var personCheckout = {};
-        personCheckout.Images = [];
-        var selfiePhotoName = '';
-        var frontPhotoName = '';
-        var versePhotoName = '';
-        var listaImagens = [];
-        var cameraPhotoName;
-        vm.fotos = [];
-        vm.images = []
-        vm.onTapSendImage = onTapSendImage;
-        function uploadIdentidadeGaleria(){
-            console.log('uploadIdentidadeGaleria')
-            var file = FileListUtil.get();
-            if(!file)
-             return;
-            uploadFile(file).then(function(result){
-                console.log('result')
-                console.log(result.filename);
-                setImageReleaseView(result);
-                //https://s3-sa-east-1.amazonaws.com/fone-clube-bucket/lsUbxLxh-IMG_20170420_162617843.jpg
-            });
+        
+        
+        // var personCheckout = {};
+        // personCheckout.Images = [];
+        // var selfiePhotoName = '';
+        // var frontPhotoName = '';
+        // var versePhotoName = '';
+        // var listaImagens = [];
+        // var cameraPhotoName;
+        // vm.fotos = [];
+        // vm.images = []
+        // vm.onTapSendImage = onTapSendImage;
+        // function uploadIdentidadeGaleria(){
+        //     console.log('uploadIdentidadeGaleria')
+        //     var file = FileListUtil.get();
+        //     if(!file)
+        //      return;
+        //     uploadFile(file).then(function(result){
+        //         console.log('result')
+        //         console.log(result.filename);
+        //         setImageReleaseView(result);
+        //         //https://s3-sa-east-1.amazonaws.com/fone-clube-bucket/lsUbxLxh-IMG_20170420_162617843.jpg
+        //     });
 
-        }
+        // }
 
-        function setImageReleaseView(result){
-            switch(vm.currentPhoto) {
-                    case PHOTO_SELFIE:
-                        console.log('PHOTO_SELFIE');
-                        vm.selfieSended = true;
-                        vm.showSelfiePhoto = true;
-                        selfiePhotoName = result.filename;
-                        vm.selfiePhotoURL = 'https://s3-sa-east-1.amazonaws.com/fone-clube-bucket/' + selfiePhotoName;
-                        vm.modal.hide();
-                        //code
-                        break;
+        // function setImageReleaseView(result){
+        //     switch(vm.currentPhoto) {
+        //             case PHOTO_SELFIE:
+        //                 console.log('PHOTO_SELFIE');
+        //                 vm.selfieSended = true;
+        //                 vm.showSelfiePhoto = true;
+        //                 selfiePhotoName = result.filename;
+        //                 vm.selfiePhotoURL = 'https://s3-sa-east-1.amazonaws.com/fone-clube-bucket/' + selfiePhotoName;
+        //                 vm.modal.hide();
+        //                 //code
+        //                 break;
 
-                    case PHOTO_FRONT:
-                        console.log('PHOTO_FRONT');
-                        vm.frontSended = true;
-                        vm.showFrontPhoto = true;
-                        frontPhotoName = result.filename;
-                        vm.frontPhotoURL = 'https://s3-sa-east-1.amazonaws.com/fone-clube-bucket/' + frontPhotoName;
-                        vm.modal.hide();
-                        //code
-                        break;
+        //             case PHOTO_FRONT:
+        //                 console.log('PHOTO_FRONT');
+        //                 vm.frontSended = true;
+        //                 vm.showFrontPhoto = true;
+        //                 frontPhotoName = result.filename;
+        //                 vm.frontPhotoURL = 'https://s3-sa-east-1.amazonaws.com/fone-clube-bucket/' + frontPhotoName;
+        //                 vm.modal.hide();
+        //                 //code
+        //                 break;
 
-                    case PHOTO_VERSE:
-                        console.log('PHOTO_VERSE');
-                        versePhotoName = result.filename;
-                        vm.verseSended = true;
-                        vm.showVersePhoto = true;
-                        vm.versePhotoURL = 'https://s3-sa-east-1.amazonaws.com/fone-clube-bucket/' + versePhotoName;
-                        vm.modal.hide();
-                        //code
-                        break;
-                }
-        }
-
-        function isInvalidName(str){
-            return /\s/.test(str);
-        }
+        //             case PHOTO_VERSE:
+        //                 console.log('PHOTO_VERSE');
+        //                 versePhotoName = result.filename;
+        //                 vm.verseSended = true;
+        //                 vm.showVersePhoto = true;
+        //                 vm.versePhotoURL = 'https://s3-sa-east-1.amazonaws.com/fone-clube-bucket/' + versePhotoName;
+        //                 vm.modal.hide();
+        //                 //code
+        //                 break;
+        //         }
+        // }
 
 
-        function uploadFile(file){
-            console.log('-- uploadFile galeria')
-            var q = $q.defer();
-            console.log(file);
 
-            if(isInvalidName(file.name)){
-                vm.file = null;
-                vm.msg = "Não foi possivel enviar sua imagem, por favor envie uma imagem sem espaço no nome do arquivo"
-                q.reject();
-                return q.promise;
-            }
-            var showLoader = DialogFactory.showLoader('Enviando...');
-            var imageUploader = new ImageUploader();
-            imageUploader.push(file)
-            .then((data) => {
-                console.debug('Upload complete. Data:', data);                
-                showLoader.close();
-                 q.resolve(data);
-            })
-            .catch((err) => {
-                console.error(err);
-                DialogFactory.showMessageDialog({mensagem:'Não foi possível enviar imagens'});
-                showLoader.close();
-                q.reject(error);
-            });
-            return q.promise;
-        }
 
-        function onTapSendImage(){
-            vm.msg = "";
-            console.log('onTapSendImage ');
-            if(vm.hasPhotoCaptured)
-                startListUpload(vm.fotos);
-            if(vm.hasFileSelected)
-                uploadIdentidadeGaleria();
-        }
+        // function uploadFile(file){
+        //     var q = $q.defer();
 
-        /////////////////////////////////////
-        ///foto de camera
-        //extrair
-        function startCameraPhoto() {
-            console.log('fotoIdentidadeCamera')
-            // 2
-            var options = {
-                destinationType : Camera.DestinationType.FILE_URI,
-                sourceType : Camera.PictureSourceType.CAMERA, // Camera.PictureSourceType.PHOTOLIBRARY
-                allowEdit : false,
-                encodingType: Camera.EncodingType.JPEG,
-                popoverOptions: CameraPopoverOptions,
-            };
+        //     if(isInvalidName(file.name)){
+        //         vm.file = null;
+        //         vm.msg = "Não foi possivel enviar sua imagem, por favor envie uma imagem sem espaço no nome do arquivo"
+        //         q.reject();
+        //         return q.promise;
+        //     }
+        //     var showLoader = DialogFactory.showLoader('Enviando...');
+        //     var imageUploader = new ImageUploader();
+        //     imageUploader.push(file)
+        //     .then((data) => {
+        //         showLoader.close();
+        //          q.resolve(data);
+        //     })
+        //     .catch((err) => {
+        //         DialogFactory.showMessageDialog({mensagem:'Não foi possível enviar imagens'});
+        //         showLoader.close();
+        //         q.reject(error);
+        //     });
+        //     return q.promise;
+        // }
 
-            // 3
-            $cordovaCamera.getPicture(options).then(function(imageData) {
-                console.log('cordovaCamera.getPicture')
-                console.log(imageData)
-                // 4
-                onImageSuccess(imageData);
+        // function onTapSendImage(){
+        //     vm.msg = "";
+        //     console.log('onTapSendImage ');
+        //     if(vm.hasPhotoCaptured)
+        //         startListUpload(vm.fotos);
+        //     if(vm.hasFileSelected)
+        //         uploadIdentidadeGaleria();
+        // }
 
-                function onImageSuccess(fileURI) {
-                    createFileEntry(fileURI);
-                }
-                function createFileEntry(fileURI) {
-                    window.resolveLocalFileSystemURL(fileURI, copyFile, fail);
-                }
-                // 5
-                function copyFile(fileEntry) {
-                    var newName = MainUtils.guid() + '.jpg'; //todo fazer tratamento pra nome jpg /png
-                    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(fileSystem2) {
-                        fileEntry.copyTo(
-                            fileSystem2,
-                            newName,
-                            onCopySuccess,
-                            fail
-                        );
-                    },
-                    fail);
-                }
+        // /////////////////////////////////////
+        // ///foto de camera
+        // //extrair
+        // function startCameraPhoto() {
+        //     console.log('fotoIdentidadeCamera')
+        //     // 2
+        //     var options = {
+        //         destinationType : Camera.DestinationType.FILE_URI,
+        //         sourceType : Camera.PictureSourceType.CAMERA, // Camera.PictureSourceType.PHOTOLIBRARY
+        //         allowEdit : false,
+        //         encodingType: Camera.EncodingType.JPEG,
+        //         popoverOptions: CameraPopoverOptions,
+        //     };
 
-                // 6
-                function onCopySuccess(entry) {
-                    console.log('onCopySuccess ' );
-                    console.log(entry);
-                    console.log(entry.nativeURL);
-                    var listName = entry.nativeURL.split('/');
-                    vm.fotos.push(entry.nativeURL);
-                    listaImagens.push(listName[listName.length - 1]);
-                    $scope.$apply(function () {
-                        vm.images.push(entry.nativeURL);
-                    });
-                    vm.hasPhotoCaptured = true;
-                    //startListUpload(vm.fotos);
-                }
+        //     // 3
+        //     $cordovaCamera.getPicture(options).then(function(imageData) {
+        //         console.log('cordovaCamera.getPicture')
+        //         console.log(imageData)
+        //         // 4
+        //         onImageSuccess(imageData);
 
-                function fail(error) {
-                    console.log("fail: " + error.code);
-                }
+        //         function onImageSuccess(fileURI) {
+        //             createFileEntry(fileURI);
+        //         }
+        //         function createFileEntry(fileURI) {
+        //             window.resolveLocalFileSystemURL(fileURI, copyFile, fail);
+        //         }
+        //         // 5
+        //         function copyFile(fileEntry) {
+        //             var newName = MainUtils.guid() + '.jpg'; //todo fazer tratamento pra nome jpg /png
+        //             window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(fileSystem2) {
+        //                 fileEntry.copyTo(
+        //                     fileSystem2,
+        //                     newName,
+        //                     onCopySuccess,
+        //                     fail
+        //                 );
+        //             },
+        //             fail);
+        //         }
 
-                function makeid() {
-                    var text = "";
-                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                    for (var i=0; i < 5; i++) {
-                        text += possible.charAt(Math.floor(Math.random() * possible.length));
-                    }
-                    return text;
-                }
+        //         // 6
+        //         function onCopySuccess(entry) {
+        //             console.log('onCopySuccess ' );
+        //             console.log(entry);
+        //             console.log(entry.nativeURL);
+        //             var listName = entry.nativeURL.split('/');
+        //             vm.fotos.push(entry.nativeURL);
+        //             listaImagens.push(listName[listName.length - 1]);
+        //             $scope.$apply(function () {
+        //                 vm.images.push(entry.nativeURL);
+        //             });
+        //             vm.hasPhotoCaptured = true;
+        //             //startListUpload(vm.fotos);
+        //         }
 
-            }, function(err) {
-                console.log(err);
-            });
-        }
+        //         function fail(error) {
+        //             console.log("fail: " + error.code);
+        //         }
 
-        function startListUpload(photos){
-            var showLoader = DialogFactory.showLoader('Enviando...');
-            if(photos.length > 0) {
-                var lastItemIndex = photos[photos.length - 1];
-                uploadImagePath(lastItemIndex).then(function(result){
-                    if(result)
-                        continueListUpload(vm.fotos);
-                });
-            } else {
-                showLoader.close();                
-                console.log(listaImagens)
-                //conclusão de foto auqi
-                setImageReleaseView(cameraPhotoName)
-            }
-        }
+        //         function makeid() {
+        //             var text = "";
+        //             var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        //             for (var i=0; i < 5; i++) {
+        //                 text += possible.charAt(Math.floor(Math.random() * possible.length));
+        //             }
+        //             return text;
+        //         }
 
-        function continueListUpload(photos){
-            photos.pop();
-            startListUpload(vm.fotos);
-        }
+        //     }, function(err) {
+        //         console.log(err);
+        //     });
+        // }
 
-        function uploadImagePath(path){
-            var q = $q.defer();
-            var guidName = MainUtils.guid();
-            MainUtils.pathToDataURI(path, function(dataUri) {
-                var blob = MainUtils.dataURIToBlob(dataUri);
-                blob.name = guidName.concat('.jpg');
-                MainUtils.uploadFile(blob).then(function(result){
-                    console.log(' MainUtils.uploadFile(blob)')
-                    console.log(result)
-                    personCheckout.Images.push(blob.name);
-                    setImageReleaseView(result);
-                    q.resolve(true);
-                }).catch(function(result){
-                    q.resolve(false);
-                });
-            });
-            return q.promise;
-        }
+        // function startListUpload(photos){
+        //     var showLoader = DialogFactory.showLoader('Enviando...');
+        //     if(photos.length > 0) {
+        //         var lastItemIndex = photos[photos.length - 1];
+        //         uploadImagePath(lastItemIndex).then(function(result){
+        //             if(result)
+        //                 continueListUpload(vm.fotos);
+        //         });
+        //     } else {
+        //         showLoader.close();                
+        //         console.log(listaImagens)
+        //         //conclusão de foto auqi
+        //         setImageReleaseView(cameraPhotoName)
+        //     }
+        // }
+
+        // function continueListUpload(photos){
+        //     photos.pop();
+        //     startListUpload(vm.fotos);
+        // }
+
+        // function uploadImagePath(path){
+        //     var q = $q.defer();
+        //     var guidName = MainUtils.guid();
+        //     MainUtils.pathToDataURI(path, function(dataUri) {
+        //         var blob = MainUtils.dataURIToBlob(dataUri);
+        //         blob.name = guidName.concat('.jpg');
+        //         MainUtils.uploadFile(blob).then(function(result){
+        //             console.log(' MainUtils.uploadFile(blob)')
+        //             console.log(result)
+        //             personCheckout.Images.push(blob.name);
+        //             setImageReleaseView(result);
+        //             q.resolve(true);
+        //         }).catch(function(result){
+        //             q.resolve(false);
+        //         });
+        //     });
+        //     return q.promise;
+        // }
 
 
         /////////////////////////////////////
@@ -952,4 +988,31 @@
         /////////////////////////////////////
         /////////////////////////////////////
     }
+
+    angular.module('foneClub').directive("fileread", [function () {
+        return {
+            scope: {
+                fileread: "=",
+                base64: "="
+            },
+            link: function (scope, element, attributes) {
+                element.bind("change", function (changeEvent) {
+                    scope.$apply(function () {
+                        scope.fileread = changeEvent.target.files[0];
+                    });
+                    var reader = new FileReader();
+                    reader.onload = function (loadEvent) {
+                        scope.$apply(function () {
+                            scope.base64 = loadEvent.target.result;
+                        });
+                    }
+                    reader.readAsDataURL(changeEvent.target.files[0]);
+                });
+                
+            }
+        }
+    }]);
+
 })();
+
+

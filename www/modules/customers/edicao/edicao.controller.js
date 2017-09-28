@@ -20,9 +20,9 @@
         
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
-        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '27344828197';
         vm.requesting = true;
-        debugger;
+
         init();
         function init(){
             if (!vm.cpf) {
@@ -33,12 +33,11 @@
             FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
                 vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
                 vm.customer = result;
-                vm.customer.Born = vm.customer.Born ? getFormatedDate(vm.customer.Born) : ''; //formata data de nasicmento
-                getPersonParent(vm.customer.IdParent); //ToDo falta ajustar a API para devolver o id do cliente parent;
+                getPersonParent(vm.customer.IdParent);
                 vm.singlePriceLocal = vm.customer.SinglePrice ? vm.customer.SinglePrice : 0; //single place formatado;
                 if (vm.customer.Adresses) {
                     for(var i=0; i < vm.customer.Adresses.length;i++) {
-                        vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber); //deve ser int por causa da mascara
+                        //vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber); //deve ser int por causa da mascara
                     }    
                 }
 
@@ -46,8 +45,8 @@
                     vm.plans = result;
                     for(var number in vm.customer.Phones) {
                         vm.customer.Phones[number].key = Math.random();
-                        vm.customer.Phones[number].IdOperator = vm.customer.Phones[number].IdOperator.toString(); //deve ser string por causa do ng-options
-                        vm.customer.Phones[number].IdPlanOption = vm.customer.Phones[number].IdPlanOption.toString(); //deve ser string por causa do ng-options
+                        //vm.customer.Phones[number].IdOperator = vm.customer.Phones[number].IdOperator.toString(); //deve ser string por causa do ng-options
+                        //vm.customer.Phones[number].IdPlanOption = vm.customer.Phones[number].IdPlanOption.toString(); //deve ser string por causa do ng-options
                         if (vm.customer.Phones[number].Portability) {
                             vm.customer.Phones[number].Portability = 'true';
                         } else {
@@ -65,12 +64,7 @@
                         }
                     }
                     console.info(vm.customer);
-// <<<<<<< HEAD
                     showDialog.close();
-// =======
-                    //MainComponents.hideLoader();
-                    
-                    
                     // Fix caso não exista numero de telefone -- É necessário manter esse fix por causa de clientes que tenham esse array vazio
                     var dontHaveContact = vm.customer.Phones.filter(function (element, index, array) {
                         return element.IsFoneclube == null || element.IsFoneclube == false;
@@ -106,18 +100,13 @@
                         });
                     }
 
-// >>>>>>> release-branch
                     $timeout(function () {
                         vm.requesting = false;
                     }, 2000)
                 });
             });
         };
-        
-        function ajustaDados() {
-            console.log(vm.customer); //log :D
-        }
-        
+
         function getPersonParent(id) {
             if (id) {
                 FoneclubeService.getCustomerById(id).then(function (result) {
@@ -248,6 +237,7 @@
             }
             
             function runPostUpdateCustomer(customerSend) {
+                debugger;
                 FoneclubeService.postUpdateCustomer(customerSend)
                     .then(postUpdateCustomerSucess)
                     .catch(postUpdateCustomerError);

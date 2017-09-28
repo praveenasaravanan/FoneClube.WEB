@@ -2,7 +2,7 @@
     <div class="bar bar-header bar-light">
         <h1 class="title">{{vm.viewName}}</h1>
     </div>
-        
+    <!-- vm.etapaDocumento -->
     <div ng-if="vm.etapaDocumento">
         <h1 class="form-group col-xs-12 display-4">Dados Iniciais</h1>
         <div class="col-xs-12">
@@ -80,49 +80,38 @@
         </div>
     </div>
     <!--vm.etapaDadosPessoais-->
-    <div ng-if="vm.etapaDadosPessoais">
-        <div class="item item-divider">
-            Dados Pessoais
+    <div ng-if="true">
+        <h1 class="form-group col-xs-12 display-4">Imagens</h1>
+        <div class="col-xs-12">
+            <div class="form-container">
+                <div class="form-group col-sm-12 col-xs-12">
+                    <div class="botao-upload-cadastro">
+                        <img src="../../content/img/upload.png" alt="">
+                        <span>Selfie</span>
+                        <input id="input-file" type="file" name="file" fileread="vm.imageSelf" base64="vm.base64Self"/>
+                    </div>
+                    <img class="thumb-image" ng-src="{{vm.base64Self}}" ng-if="vm.base64Self">
+                </div> 
+                <div class="form-group col-sm-12 col-xs-12">
+                    <div class="botao-upload-cadastro">
+                        <img src="../../content/img/upload.png" alt="">
+                        <span>Frente</span>
+                        <input id="input-file" type="file" name="file" fileread="vm.imageFrente" base64="vm.base64Frente" />
+                    </div>
+                    <img class="thumb-image" ng-src="{{vm.base64Frente}}" ng-if="vm.base64Frente">
+                </div> 
+                <div class="form-group col-sm-12 col-xs-12">
+                    <div class="botao-upload-cadastro">
+                        <img src="../../content/img/upload.png" alt="">
+                        <span>Verso</span>
+                        <input id="input-file" type="file" name="file" fileread="vm.imageVerso" base64="vm.base64Verso"/>
+                    </div>
+                    <img class="thumb-image" ng-src="{{vm.base64Verso}}" ng-if="vm.base64Verso">
+                </div> 
+            </div> 
         </div>
-    <!--seção fotos-->
-        <!-- <div class="foto-selfie" ng-click="vm.onTapPhotoSelfie()">
-            <div class="item">
-                <a ng-if="vm.selfieSended" class="ion-android-done custom-icon"></a>
-                <a ng-if="!vm.selfieSended" class="ion-ios-plus-outline custom-icon-default"></a>
-                <h2 class="text-item">Selfie</h2>
-                <p class="text-sub-item">Foto sua segurando o documento</p>
-            </div>
-
-            <div class="item item-body" ng-if="vm.showSelfiePhoto" style="text-align: center;">
-                <img class="full-image" ng-src="{{vm.selfiePhotoURL}}" style="width: 650px">
-            </div>
-        </div>
-        <div class="foto-frente" ng-click="vm.onTapPhotoFront()">
-            <div class="item">
-                <a ng-if="vm.frontSended" class="ion-android-done custom-icon"></a>
-                <a ng-if="!vm.frontSended" class="ion-ios-plus-outline custom-icon-default"></a>
-                <h2 class="text-item">Frente</h2>
-                <p class="text-sub-item">do RG, CNH ou RNE</p>
-            </div>
-
-            <div class="item item-body" ng-if="vm.showFrontPhoto" style="text-align: center;">
-                <img class="full-image" ng-src="{{vm.frontPhotoURL}}" style="width: 650px">
-            </div>
-        </div>
-        <div class="foto-verso" ng-click="vm.onTapPhotoVerse()">
-            <div class="item">
-                <a ng-if="vm.verseSended" class="ion-android-done custom-icon"></a>
-                <a ng-if="!vm.verseSended" class="ion-ios-plus-outline custom-icon-default"></a>
-                <h2 class="text-item">Verso</h2>
-                <p class="text-sub-item">do RG, CNH ou RNE</p>
-            </div>
-
-            <div class="item item-body" ng-if="vm.showVersePhoto" style="text-align: center;">
-                <img class="full-image" ng-src="{{vm.versePhotoURL}}" style="width: 650px">
-            </div>
-        </div>-->
-        <div class="padding">            
-            <button class="button button-block button-positive" ng-disabled="vm.requesting" on-tap="vm.onTapSendPersonalData()">Enviar</button>
+        <div class="form-group col-xs-12">            
+            <button class="btn btn-primary col-sm-2 col-xs-12" ng-disabled="vm.requesting" on-tap="vm.onTapSendPersonalData()">Enviar</button>
         </div>
     </div>
     <!--vm.etapaComplementar-->
