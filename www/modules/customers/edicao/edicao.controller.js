@@ -20,7 +20,7 @@
         
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
-        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '69584945556';
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '76945586790';
         vm.requesting = true;
 
         init();
