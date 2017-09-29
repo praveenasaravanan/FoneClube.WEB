@@ -1,4 +1,15 @@
 ================================================================Notas Entrega================================================================
+Data Produção: Previsão dia 30/09
+
+Novo Dev
+> Novo layout;
+> Merge no novo layout;
+> Edição/adição de imagens na tela de edição;
+> Quem convidou pode ser editado ou adicionado na tela de edição;
+> Remoção da data de aniversário na tela de cadastro base e na tela de edição;
+
+===========================================================================================================================================
+===========================================================================================================================================
 Data Produção: Previsão dia 22/09
 
 Novo Dev
@@ -6,9 +17,6 @@ Novo Dev
 
 Correções
 > Fix nas modais de pagamento(boleto, cartão novo e existente), ao tentar realizar pagamento com dados de cliente incompletos o sistema avisa.
-
-Não foi Desenvolvido
->
 
 ===========================================================================================================================================
 ===========================================================================================================================================
