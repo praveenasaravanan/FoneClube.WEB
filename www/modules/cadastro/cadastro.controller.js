@@ -62,10 +62,6 @@
 
         vm.onTapSendPersonalData = onTapSendPersonalData;
 
-        // vm.onTapPhotoSelfie = onTapPhotoSelfie;
-        // vm.onTapPhotoFront = onTapPhotoFront;
-        // vm.onTapPhotoVerse = onTapPhotoVerse;
-
         vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
         vm.setPlansList = setPlansList;
@@ -136,15 +132,6 @@
         //envia o CPF com os dados basico para cadastro no Foneclube
         function onTapSendDocument(){
             vm.requesting = true;
-            // var dia = vm.birthdate.split('/')[0];
-            // var mes = vm.birthdate.split('/')[1];
-            // var regexBirthday =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
-            // var dadosInvalidos = parseInt(dia) > 31 || parseInt(mes) > 12 || parseInt(mes) == 0 || parseInt(dia) == 0;
-            // if(!regexBirthday.test(vm.birthdate) || dadosInvalidos){
-            //     DialogFactory.showMessageDialog({mensagem:'Data de nascimento Inválida'});                
-            //     vm.requesting = false;
-            //     return;
-            // }
             var personCheckout = {
                 'DocumentNumber': UtilsService.clearDocumentNumber(vm.cpf),
                 'Name': vm.name,
@@ -158,16 +145,6 @@
                     'IdOperator': vm.operator
                 }]
             };
-            /*if(vm.personalNumber.length >= 14) {
-                personCheckout['Phones'] = [
-                    {
-                        'DDD': getNumberJson(vm.personalNumber).DDD,
-                        'Number': getNumberJson(vm.personalNumber).Number,
-                        'IdOperator': vm.operator,
-                        'IsFoneclube': null
-                    }
-                ];
-            }*/
             FoneclubeService.postBasePerson(personCheckout).then(function(result){
                 if(result) {
                     etapaEndereco();
@@ -180,10 +157,8 @@
         }
             
         
-
         function validarCEP() {
             if (vm.zipcode.length < 9) return;
-            
             var showLoader = DialogFactory.showLoader('Tentando preencher dados...');
             HubDevService.validaCEP(vm.zipcode.replace(/[-.]/g , '')).then(function(result){
                 if (!result.erro) {
@@ -203,7 +178,6 @@
         function onTapSendAddress() {
             vm.requesting = true;
             var cpf = UtilsService.clearDocumentNumber(vm.cpf);
-
             var personCheckout = {
                 'DocumentNumber': cpf,
                 'Adresses': [
@@ -218,11 +192,6 @@
                     }
                 ]
             };
-            
-            //Remove os atributos falsy
-            // if (personCheckout.Adresses[0].Complement == '' || !personCheckout.Adresses[0].Complement) {
-            //     delete personCheckout.Adresses[0].Complement;
-            // }
 
             FoneclubeService.postUpdatePersonAdress(personCheckout).then(function(result){
                 if(result) {
@@ -247,7 +216,7 @@
         function onTapSendPersonalData() {
             var showLoader = DialogFactory.showLoader('Enviando Imagens...');
             vm.requesting = true;
-            sendImageToUpload().then(function(result) {
+            UtilsService.sendImageToUpload(vm.imageSelf, vm.imageFrente, vm.imageVerso).then(function(result) {
                 var personCheckout = {
                     'DocumentNumber': UtilsService.clearDocumentNumber(vm.cpf),
                     'Photos': []
@@ -255,7 +224,6 @@
                 for(var i in result) {
                     personCheckout.Photos.push({Name:result[i].filename, Tipo: result[i].tipo});
                 }
-                debugger;
                 FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
                     showLoader.close();
                     if(result) {
@@ -273,81 +241,27 @@
                 DialogFactory.showMessageDialog({mensagem: 'fazer validações para mensagens de erro;'}); //TODO
             });
         }
-
-        function sendImageToUpload() {
-            var q = $q.defer();
-            var toUpload = [];
-            if (vm.imageSelf) toUpload.push({img: vm.imageSelf, tipo: 1});
-            if (vm.imageFrente) toUpload.push({img: vm.imageFrente, tipo: 2});
-            if (vm.imageVerso) toUpload.push({img: vm.imageVerso, tipo: 3});
-            if (toUpload.length == 0) {
-                q.resolve();
-            }
-            var promises = toUpload.map(function(image) {
-                return uploadImage(image);
-            });
-            $q.all(promises).then(function (result){
-                console.log(result);
-                q.resolve(result);
-            }, function (result){
-                console.log(result);
-                q.reject(result);
-            });
-            return q.promise;
-        }
-
-        function uploadImage(imagem) {
-            var q = $q.defer();
-            var holdId = imagem.tipo;
-            function isInvalidName(str){
-                return /\s/.test(str);
-            }
-            if(isInvalidName(imagem.img.name)){
-                q.reject("Não foi possivel enviar sua imagem, por favor envie uma imagem sem espaço no nome do arquivo");
-                return q.promise;
-            }
-            var imageUploader = new ImageUploader();
-            imageUploader.push(imagem.img)
-            .then((data) => {
-                data.tipo = holdId;
-                q.resolve(data);
-            })
-            .catch((err) => {
-                q.reject('Não foi possível enviar imagens');
-            });
-            return q.promise;
-        }
         // ETAPA IMAGENS
-
-
         function etapaDocumentoFaseNome(){
             vm.hasCPF = true;
             vm.requesting = false;
         }
         function etapaDocumento(){
             limpaEtapas();
-            // resizeScroll();
-            // $ionicScrollDelegate.scrollTop(true);
             vm.etapaDocumento = true;
         }
         function etapaEndereco(){
             limpaEtapas();
             vm.etapaBuscarCEP = true;
             vm.etapaEndereco = true;
-            // resizeScroll();
-            // $ionicScrollDelegate.scrollTop(true);
         }
         function etapaDadosPessoais(){
             limpaEtapas();
             vm.etapaDadosPessoais = true;
-            // resizeScroll();
-            // $ionicScrollDelegate.scrollTop(true);
         }
         function etapaComplementar(){
             limpaEtapas();
             vm.etapaComplementar = true;
-            // resizeScroll();
-            // $ionicScrollDelegate.scrollTop(true);
         }
         function limpaEtapas(){
             vm.etapaDocumento = false;
@@ -642,43 +556,80 @@
         /////////////////////////////////////
         /////////////////////////////////////
 
-        vm.onTapSendFoneclubeData = onTapSendFoneclubeData;
-        function onTapSendFoneclubeData(){
-            vm.requesting = true;
-            var showLoader = DialogFactory.showLoader('Enviando dados...');
-            var cpf = UtilsService.clearDocumentNumber(vm.cpf);
-            var phones = [];
-            var totalPriceValidade = 0;
-            
+        function getFoneclubePhonesOnly(array) {
+            return array.filter(function (number) {
+                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8;
+            });
+        }
+
+        function validadeMinInfos() {
             for (var number in vm.phoneNumbersView) {
                 if(!vm.phoneNumbersView[number].Nickname || vm.phoneNumbersView[number].Nickname == '') {
                     DialogFactory.showMessageDialog({titulo:'Linha ' + (number + 1), mensagem:'Nickname é um campo obrigario'});
-                    vm.requesting = false;
-                    showLoader.close();
-                    return;
+                    return false;
                 }
                 if(vm.phoneNumbersView[number].IdPlanOption == '') {
                     DialogFactory.showMessageDialog({titulo:'Linha ' + (number + 1), mensagem:'A escolha do plano é obrigatória.'});
-                    vm.requesting = false;
-                    showLoader.close();
-                    return;
-                } else {
-                    vm.plans.find(function (element, index, array) {
-                        if (element.Id == vm.phoneNumbersView[number].IdPlanOption) {
-                            totalPriceValidade = totalPriceValidade + element.Value / 100;
-                        }
-                    });
+                    return false;
+                }
+                if (vm.phoneNumbersView[number].NovoFormatoNumero.length < 14 && vm.phoneNumbersView[number].NovoFormatoNumero.length > 0) {
+                    DialogFactory.showMessageDialog({titulo:'Aviso', mensagem:'O telefone: '.concat(vm.phoneNumbersView[number].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.')});
+                    return false;
                 }
             }
-            if (vm.singlePrice) {
-                var price = parseFloat(vm.singlePrice) / 100;
-                if (price > totalPriceValidade) {
-                    DialogFactory.showMessageDialog({mensagem:'Preço único não pode ser maior do que o preço de todos os planos somados.'});
-                    vm.requesting = false;
-                    showLoader.close();
-                    return
+            return true;
+        }
+
+        function validateUniquePriceLessThanPhones() {
+            if (!vm.singlePrice) return true;
+            var totalPriceValidade = 0;
+            for (var number in vm.phoneNumbersView) {
+                vm.plans.find(function (element, index, array) {
+                    if (element.Id == vm.phoneNumbersView[number].IdPlanOption) {
+                        totalPriceValidade = totalPriceValidade + element.Value / 100;
+                    }
+                });
+            }
+            var price = parseFloat(vm.singlePrice) / 100;
+            if (price > totalPriceValidade) {
+                DialogFactory.showMessageDialog({mensagem:'Preço único não pode ser maior do que o preço de todos os planos somados.'});
+                return false;
+            }
+            return true;
+        }
+
+        function dontLetAddTheSameNumberTwice(arrayFiltered) {
+            for(var x in arrayFiltered) {
+                var twiceNumber = arrayFiltered.filter(function (element, index, array) {
+                    return element.DDD == arrayFiltered[x].DDD && element.Number == arrayFiltered[x].Number;
+                });
+                if (twiceNumber.length > 1) {
+                    DialogFactory.showMessageDialog({titulo:'Aviso', mensagem:'Você não pode cadastrar o mesmo telefone duas vezes para o cliente.'});
+                    return false;
                 }
-                
+            }
+            return true;
+        }
+
+        vm.onTapSendFoneclubeData = onTapSendFoneclubeData;
+        function onTapSendFoneclubeData(){
+            vm.requesting = true;
+            
+            var cpf = UtilsService.clearDocumentNumber(vm.cpf);
+            var phones = [];
+            
+            //valida se nickname e apelido está preenchido
+            if (!validadeMinInfos()) {
+                vm.requesting = false;
+                //showLoader.close();
+                return;
+            }
+            
+            //valida se a soma dos planos não é maior do que o preço unico;
+            if (!validateUniquePriceLessThanPhones()) {
+                vm.requesting = false;
+                //showLoader.close();
+                return;
             }
 
             vm.phoneNumbersView.forEach(function (element, index, array) {
@@ -693,7 +644,7 @@
             });
 
             var personCheckout = {
-                'DocumentNumber': cpf,  
+                'DocumentNumber': UtilsService.clearDocumentNumber(vm.cpf),  
                 'NameContactParent': vm.whoinvite,
                 'IdParent': vm.IdParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
                 'IdContactParent': vm.IdParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
@@ -702,59 +653,30 @@
                 'DescriptionSinglePrice': vm.descriptionSinglePrice
             };
             
-            //Remove os atributos falsy
-            /*for (var key in personCheckout) {
-                if (!personCheckout[key]) {
-                    delete personCheckout[key];
-                }
-                if (personCheckout[key] && personCheckout[key].constructor === Array) {
-                    for (var i in personCheckout[key]) {
-                        for (var x in personCheckout[key][i]) {
-                            if (!personCheckout[key][i][x]) {
-                                delete personCheckout[key][i][x];
-                            }
-                        }
-                    }    
-                }
-            }*/
-            
-            var arrayFiltered = personCheckout.Phones.filter(function (number){
-                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8;
-            });
-            if (personCheckout.IdParent == 0) {
-                delete personCheckout.IdParent;
+            //busca apenas telefones foneclube e que estão ativos
+            var arrayFiltered = getFoneclubePhonesOnly(phones);
+
+            //Não deixa adicionar o mesmo numero duas vezes;
+            if (!dontLetAddTheSameNumberTwice(arrayFiltered)) {
+                vm.requesting = false;
+                //showLoader.close();
+                return;
             }
+            var showLoader = DialogFactory.showLoader('Enviando dados...');
+            // if (personCheckout.IdParent == 0) {
+            //     delete personCheckout.IdParent;
+            // }
             if (arrayFiltered.length == 0) {
-                FoneclubeService.postUpdatePerson(personCheckout)
-                        .then(postUpdatePersonSucess)
-                        .catch(postUpdatePersonError);
+                FoneclubeService.postUpdatePerson(personCheckout).then(postUpdatePersonSucess).catch(postUpdatePersonError);
             } else {
                 validadeNumbers(arrayFiltered).then(function(result) {
                     var right = true;
                     for (var item in result) {
                         if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.cpf)) {
-
                             var msg = 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
                                 .concat(getNumberComMascara(arrayFiltered[item])).concat('</strong>, pertence ao cliente ')
                                 .concat(result[item].DocumentNumber).concat(', ').concat(result[item].Name).concat('.');
                             DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: msg});
-                            
-                            // showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
-                            //             .concat(getNumberComMascara(arrayFiltered[item])).concat('</strong>, pertence ao cliente ')
-                            //             .concat(result[item].DocumentNumber).concat(', ').concat(result[item].Name).concat('.'));
-                            
-                            right = false;
-                            vm.requesting = false;
-                            showLoader.close();
-                        }
-                    }
-                    for(var x in arrayFiltered) {
-                        //nao deixa add o mesmo numero duas vezes para o mesmo cliente;
-                        var twiceNumber = arrayFiltered.filter(function (element, index, array) {
-                            return element.DDD == arrayFiltered[x].DDD && element.Number == arrayFiltered[x].Number;
-                        });
-                        if (twiceNumber.length > 1) {
-                            DialogFactory.showMessageDialog({titulo:'Aviso', mensagem:'Você não pode cadastrar o mesmo telefone duas vezes para o cliente.'});
                             right = false;
                             vm.requesting = false;
                             showLoader.close();
@@ -762,9 +684,7 @@
                         }
                     }
                     if (right) {
-                        FoneclubeService.postUpdatePerson(personCheckout)
-                            .then(postUpdatePersonSucess)
-                            .catch(postUpdatePersonError);
+                        FoneclubeService.postUpdatePerson(personCheckout).then(postUpdatePersonSucess).catch(postUpdatePersonError);
                     }
                 });
             }
@@ -772,10 +692,8 @@
             function postUpdatePersonSucess(result) {
                 showLoader.close();
                 if(result) { 
-                    DialogFactory.dialogConfirm({title:'Cadastro Realizado', mensagem: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.', btn1: 'Ir para Home', btn2: 'Realizar Cobrança'})
-                    .then(function(result) {
+                    DialogFactory.dialogConfirm({title:'Cadastro Realizado', mensagem: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.', btn1: 'Ir para Home', btn2: 'Realizar Cobrança'}).then(function(result) {
                         if(result) {
-                            console.log('Realizar cobrança.');
                             FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
                                 if(vm.singlePrice) {
                                     result.CacheIn = vm.singlePrice;
@@ -810,8 +728,8 @@
         function validadeNumbers(numbers){
             var promises = numbers.map(function(number) {
                 return FoneclubeService.getCustomerByPhoneNumber({
-                    ddd: clearPhoneNumber(number.DDD),
-                    numero: clearPhoneNumber(number.Number)
+                    ddd: UtilsService.clearPhoneNumber(number.DDD),
+                    numero: UtilsService.clearPhoneNumber(number.Number)
                 });
             });
             return $q.all(promises);
@@ -843,8 +761,7 @@
                     'Inative': false,
                     'Delete': false,
                     'NovoFormatoNumero': '',
-                    'operadora': '1',
-                    'key': Math.random()
+                    'operadora': '1'
                 }
             );
         }
@@ -856,11 +773,6 @@
                     vm.phoneNumbersView.splice(position, 1);
                 }
             })                 
-        }
-
-        //remove () - < > do numero de telefone
-        function clearPhoneNumber(number) {
-            return number ? number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '') : '';
         }
         
         function changePhoneNumber(position) {
@@ -883,10 +795,6 @@
                 if (res.DocumentNumber && res.DocumentNumber != UtilsService.clearDocumentNumber(vm.cpf)) {
                     var msg = 'Este telefone já pertence ao cliente '.concat(UtilsService.getDocumentNumerWithMask(res.DocumentNumber)).concat(', ').concat(res.Name).concat('.');
                     DialogFactory.showMessageDialog({titulo:'Aviso', mensagem: msg});
-// =======
-//                     showAlert('Aviso', 'Este telefone já pertence ao cliente '
-//                         .concat(UtilsService.getDocumentNumerWithMask(res.DocumentNumber)).concat(', ').concat(res.Name).concat('.'));
-// >>>>>>> release-branch
                 }
             });
         }
@@ -897,8 +805,8 @@
                 return 
             }
             var param = {
-                ddd: clearPhoneNumber(vm.phoneContactParent).substring(0, 2),
-                numero: clearPhoneNumber(vm.phoneContactParent).substring(2)
+                ddd: UtilsService.getPhoneNumberFromStringToJson(vm.phoneContactParent).DDD,
+                numero: UtilsService.getPhoneNumberFromStringToJson(vm.phoneContactParent).Number
             }
             FoneclubeService.getCustomerByPhoneNumber(param).then(function(result) {
                 vm.IdParent = result.Id;
@@ -909,55 +817,13 @@
         function onTapCancel(){
             vm.modal.hide();
         }
-        
-        // function enter() {
-        //     if (vm.etapaEndereco) {
-        //         etapaDadosPessoais();
-        //     } else if (vm.etapaDadosPessoais) {
-        //         etapaComplementar();
-        //     } else if (vm.etapaComplementar) {
-        //         DialogFactory.dialogConfirm({title:'Pular Fase', mensagem: 'Deseja realmente pular esta fase?'})
-        //         .then(function(result) {
-        //             if(result) {
-        //                 DialogFactory.dialogConfirm({title:'Cadastro Realizado', mensagem: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.', btn1: 'Ir para Home', btn2: 'Visualizar Cadastro'})
-        //                 .then(function(result) {
-        //                     if (result){
-        //                         FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
-        //                             ViewModelUtilsService.showModalCustomer(result);
-        //                         });
-        //                     } else {
-        //                         FlowManagerService.changeHomeView();
-        //                     }
-        //                 })
-        //             }
-        //         })               
-        //     }
-        // }
-        
+               
         function showAddNewPhone() {
             function filterPhones(number){
                 return number.IsFoneclube == true;
             }
             return personCheckout.Phones.filter(filterPhones);
         }
-            
-        // function resizeScroll() {
-        //     $ionicScrollDelegate.resize();
-        // }
-
-        //ToDo => colocar em uma service, ou utils
-        // function showAlert(title, message){
-        //     return $ionicPopup.alert({
-        //         title: title,
-        //         template: message
-        //     });
-        // }
-            
-        // function getNumberComMascara(param) {
-        //     return "(" + param.DDD + ") " + param.Number;
-        // }
-        /////////////////////////////////////
-        /////////////////////////////////////
     }
 
     angular.module('foneClub').directive("fileread", [function () {

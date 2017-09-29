@@ -20,7 +20,7 @@
         
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
-        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '27344828197';
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '69584945556';
         vm.requesting = true;
 
         init();
@@ -37,7 +37,7 @@
                 vm.singlePriceLocal = vm.customer.SinglePrice ? vm.customer.SinglePrice : 0; //single place formatado;
                 if (vm.customer.Adresses) {
                     for(var i=0; i < vm.customer.Adresses.length;i++) {
-                        //vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber); //deve ser int por causa da mascara
+                        vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber); //deve ser int por causa da mascara
                     }    
                 }
 
@@ -132,7 +132,7 @@
         function onTapSendUser(customer){
             if (vm.requesting == true) return;
             vm.requesting = true;
-            var showLoader = DialogFactory.showLoader('Enviando Dados...');
+            
             
             var customerSend = {
                 "Id": customer.Id,
@@ -148,7 +148,7 @@
                 "IdRole": customer.IdRole,
                 "Adresses": customer.Adresses,
                 "Phones": customer.Phones,
-                "Images": customer.Images,
+                "Photos": customer.Photos,
                 "IdParent": customer.IdParent,
                 "NameContactParent": customer.NameContactParent,
                 "IdCommissionLevel": customer.IdCommissionLevel,
@@ -166,7 +166,7 @@
             if (vm.singlePriceLocal) {
                 if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
                     DialogFactory.showMessageDialog({mensagem:'Preço único não pode ser maior do que o preço de todos os planos somados.'});
-                    showLoader.close();
+                    //showLoader.close();
                     vm.requesting = false;
                     return;
                 }
@@ -176,42 +176,36 @@
             for (var item in customerSend.Phones) {
                 if (customerSend.Phones[item].NovoFormatoNumero.length < 14 && customerSend.Phones[item].NovoFormatoNumero.length > 0) {
                     DialogFactory.showMessageDialog({titulo:'Aviso', mensagem:'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.')});
-                    showLoader.close();
+                    //showLoader.close();
                     vm.requesting = false;
                     return;
                 } else {
-                    customerSend.Phones[item].DDD = getNumberJson(customerSend.Phones[item].NovoFormatoNumero).DDD;
-                    customerSend.Phones[item].Number = getNumberJson(customerSend.Phones[item].NovoFormatoNumero).Number;
+                    customerSend.Phones[item].DDD = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).DDD;
+                    customerSend.Phones[item].Number = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).Number;
                 }
             }
             
             var arrayFiltered = customerSend.Phones.filter(function (number) {
                 return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8 && number.Delete == null;
             });
+
             //Fix se o usuario não add CEP o array deve estar vazio;
             for(var i in customerSend.Adresses) {
                 if (customerSend.Adresses[i].Cep == '')
                     customerSend.Adresses.splice(i, 1);
             }
-            
+            var showLoader = DialogFactory.showLoader('Enviando Dados...');
             if (arrayFiltered.length == 0) {
                 runPostUpdateCustomer(customerSend);
             } else {
                 validadeNumbers(arrayFiltered).then(function(result) {
                     var right = true;
                     for (var item in result) {
-// <<<<<<< HEAD
                         if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {
                             var msg = 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
                                 .concat(arrayFiltered[item].NovoFormatoNumero).concat('</strong>, pertence ao cliente ')
                                 .concat(result[item].DocumentNumber).concat(', ').concat(result[item].Name).concat('.');
                             DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: msg});
-// =======
-//                         if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {                            
-//                             showAlert('Aviso', 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
-//                                         .concat(arrayFiltered[item].NovoFormatoNumero).concat('</strong>, pertence ao cliente ')
-//                                         .concat(result[item].DocumentNumber).concat(', ').concat(result[item].Name).concat('.'));
-// >>>>>>> release-branch
                             right = false;
                             vm.requesting = false;
                             showLoader.close();
@@ -237,10 +231,15 @@
             }
             
             function runPostUpdateCustomer(customerSend) {
-                debugger;
-                FoneclubeService.postUpdateCustomer(customerSend)
-                    .then(postUpdateCustomerSucess)
-                    .catch(postUpdateCustomerError);
+                UtilsService.sendImageToUpload(vm.imageSelf, vm.imageFrente, vm.imageVerso).then(function (result) {
+                    for(var i in result) {
+                        for (var x in customerSend.Photos) {
+                            if (result[i].tipo == customerSend.Photos[x].tipo) customerSend.Photos.splice(x, 1);
+                        }
+                        customerSend.Photos.push({Name:result[i].filename, Tipo: result[i].tipo});
+                    }
+                    FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
+                })
             }
             
             function postUpdateCustomerSucess(result) {
@@ -357,7 +356,7 @@
         }
         
         function onTapRemoveNewNumber(position){
-            DialogFactory.showMessageConfirm({titulo: 'Excluir Número', mensagem: 'Deseja realmente remover este número?'})
+            DialogFactory.dialogConfirm({titulo: 'Excluir Número', mensagem: 'Deseja realmente remover este número?'})
             .then(function(res){
                 if(res) {
                     vm.customer.Phones[position].Delete = true;
@@ -378,8 +377,8 @@
         function validatePhoneNumber(position) {
             if (vm.requesting || vm.customer.Phones[position].NovoFormatoNumero.length < 14) return;
             var number = {
-                ddd: getNumberJson(vm.customer.Phones[position].NovoFormatoNumero).DDD,
-                numero: getNumberJson(vm.customer.Phones[position].NovoFormatoNumero).Number
+                ddd: UtilsService.getPhoneNumberFromStringToJson(vm.customer.Phones[position].NovoFormatoNumero).DDD,
+                numero: UtilsService.getPhoneNumberFromStringToJson(vm.customer.Phones[position].NovoFormatoNumero).Number
             }
             //nao deixa add o mesmo numero duas vezes para o mesmo cliente;
             var twiceNumber = vm.customer.Phones.filter(function (element, index, array) {
@@ -397,15 +396,7 @@
                 }
             });
         }
-        
-        function getNumberJson(param) {
-            var number = {
-                DDD: clearPhoneNumber(param).substring(0, 2),
-                Number: clearPhoneNumber(param).substring(2)
-            }
-            return number;
-        }
-        
+
         function getNumberString(param) {
             return param.DDD.concat(param.Number);
         }
@@ -441,19 +432,26 @@
 
         vm.getImageOftype = getImageOftype;
         function getImageOftype(type) {
+            function base64img (tipo) {
+                if (tipo == 1) {
+                    return vm.base64Self;
+                } else if (tipo == 2) {
+                    return vm.base64Frente;
+                } else if (tipo == 3) {
+                    return vm.base64Verso;
+                }
+                return null;
+            }
+            if (base64img(type)) {
+                return base64img(type);
+            }
             var img = vm.customer.Photos.filter(function (element) {
                 return element.Tipo == type;
             });
-            function base64img (type) {
-                if (type == 1) {
-                    return vm.base64Self;
-                } else if (type == 2) {
-                    return vm.base64Frente;
-                } else if (type == 3) {
-                    return vm.base64Verso;
-                }
+            if (img[0]) {
+                return 'https://s3-sa-east-1.amazonaws.com/fone-clube-bucket/' + img[0].Name;
             }
-            return img[0] ? 'https://s3-sa-east-1.amazonaws.com/fone-clube-bucket/' + img[0].Name : base64img(type) || '../../content/img/upload.png';
+            return '../../content/img/upload-cloud.png';
         }
                 
     }

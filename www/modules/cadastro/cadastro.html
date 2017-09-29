@@ -7,32 +7,38 @@
         <h1 class="form-group col-xs-12 display-4">Dados Iniciais</h1>
         <div class="col-xs-12">
             <div class="form-container">
-                <div class="form-group col-sm-6 col-xs-12">
-                    <label for="cpf">CPF:</label>
-                    <input id="cpf" type="tel" class="form-control" ng-change="vm.validarCPF()" mask="999.999.999-99" ng-model="vm.cpf" restrict="reject" ng-disabled="vm.hasCPF">
-                </div> 
-                <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
-                    <label for="nome">Nome:</label>
-                    <input id="nome" class="form-control" ng-model="vm.name" type="text">
-                </div>             
-                <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
-                    <label for="email">Email:</label>
-                    <input id="email" class="form-control" ng-model="vm.email" type="text" placeholder="exemplo@email.com">
-                </div> 
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12">
+                        <label for="cpf">CPF:</label>
+                        <input id="cpf" type="tel" class="form-control" ng-change="vm.validarCPF()" mask="999.999.999-99" ng-model="vm.cpf" restrict="reject" ng-disabled="vm.hasCPF">
+                    </div> 
+                    <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
+                        <label for="nome">Nome:</label>
+                        <input id="nome" class="form-control" ng-model="vm.name" type="text">
+                    </div>
+                </div>  
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
+                        <label for="email">Email:</label>
+                        <input id="email" class="form-control" ng-model="vm.email" type="text" placeholder="exemplo@email.com">
+                    </div> 
+                </div>
                 <!-- <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
                     <label for="dataNascimento">Data de Nascimento:</label>
                     <input id="dataNascimento" class="form-control" ng-model="vm.birthdate" type="tel"  name="date" mask="39/19/9999" restrict="reject" placeholder="dd/mm/aaaa">
                 </div>   -->
-                <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
-                    <label for="telefone">Telefone "atual" de contato:</label>
-                    <input id="telefone" class="form-control" ng-model="vm.personalNumber" type="tel"  mask="(99) 9?9999-9999" restrict="reject" placeholder="(xx) 99999-9999">
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
+                        <label for="telefone">Telefone "atual" de contato:</label>
+                        <input id="telefone" class="form-control" ng-model="vm.personalNumber" type="tel"  mask="(99) 9?9999-9999" restrict="reject" placeholder="(xx) 99999-9999">
+                    </div>
+                    <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF" >
+                        <label for="selectOperator">Selecione sua operadora:</label>
+                        <select class="form-control" ng-options="operator.id as operator.nome for operator in vm.allOperatorOptions" ng-model="vm.operator">
+                            <option value="">Selecione</option>
+                        </select>            
+                    </div>  
                 </div>
-                <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF" >
-                    <label for="selectOperator">Selecione sua operadora:</label>
-                    <select class="form-control" ng-options="operator.id as operator.nome for operator in vm.allOperatorOptions" ng-model="vm.operator">
-                        <option value="">Selecione</option>
-                    </select>            
-                </div>  
                 <div class="form-group col-xs-12">
                     <button class="btn btn-primary col-sm-2 col-xs-12" ng-click="vm.onTapSearchDocument()"  ng-show="!vm.hasCPF" ng-disabled="vm.cpf.length < 14 || vm.requesting">Buscar</button> 
                     <button ng-show="vm.hasCPF" class="btn btn-primary col-sm-2 col-xs-12" ng-click="vm.onTapSendDocument()"  ng-show="!vm.hasCPF" ng-ng-disabled="vm.birthdate.length < 10 || vm.name.length == 0 || vm.email.length == 0 || vm.personalNumber.length < 14 || vm.requesting">Enviar</button>              
@@ -89,7 +95,7 @@
                         <div class="botao-upload-cadastro">
                             <img src="../../content/img/upload.png" alt="">
                             <span>Selfie</span>
-                            <input id="input-file" type="file" name="file" fileread="vm.imageSelf" base64="vm.base64Self"/>
+                            <input id="input-file" type="file" name="file" fileread="vm.imageSelf" base64="vm.base64Self" accept="image/*"/>
                         </div>
                     </div>
                     <div class="form-group col-sm-8 col-xs-12">
@@ -101,7 +107,7 @@
                         <div class="botao-upload-cadastro">
                             <img src="../../content/img/upload.png" alt="">
                             <span>Frente</span>
-                            <input id="input-file" type="file" name="file" fileread="vm.imageFrente" base64="vm.base64Frente" />
+                            <input id="input-file" type="file" name="file" fileread="vm.imageFrente" base64="vm.base64Frente" accept="image/*"/>
                         </div>
                     </div> 
                     <div class="form-group col-sm-8 col-xs-12">
@@ -113,7 +119,7 @@
                         <div class="botao-upload-cadastro">
                             <img src="../../content/img/upload.png" alt="">
                             <span>Verso</span>
-                            <input id="input-file" type="file" name="file" fileread="vm.imageVerso" base64="vm.base64Verso"/>
+                            <input id="input-file" type="file" name="file" fileread="vm.imageVerso" base64="vm.base64Verso" accept="image/*"/>
                         </div>
                     </div> 
                     <div class="form-group col-sm-8 col-xs-12">
