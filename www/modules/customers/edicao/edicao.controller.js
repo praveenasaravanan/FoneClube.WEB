@@ -233,9 +233,15 @@
             function runPostUpdateCustomer(customerSend) {
                 UtilsService.sendImageToUpload(vm.imageSelf, vm.imageFrente, vm.imageVerso).then(function (result) {
                     for(var i in result) {
-                        for (var x in customerSend.Photos) {
-                            if (result[i].tipo == customerSend.Photos[x].tipo) customerSend.Photos.splice(x, 1);
-                        }
+                        customerSend.Photos = customerSend.Photos.filter(function (element) {
+                            return element.Tipo != result[i].tipo;
+                        });
+                        // for (var x in customerSend.Photos) {
+                        //     if (result[i].tipo == customerSend.Photos[x].Tipo) {
+                        //         debugger;
+                        //         customerSend.Photos.splice(x, 1);
+                        //     }
+                        // }
                         customerSend.Photos.push({Name:result[i].filename, Tipo: result[i].tipo});
                     }
                     FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
