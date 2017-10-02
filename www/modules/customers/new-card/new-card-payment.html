@@ -5,7 +5,7 @@
         <button ng-click="closeThisDialog(0)">X</button>
     </div> 
     
-    <h3 class="nome-cliente">{{vm.customer.Name}}</h3>
+    <h4 class="nome-cliente">{{vm.customer.Name}}</h4>
     <div class="modal-container">
         <div class="container col-xs-12">
             <div ng-if="vm.etapaDados">
@@ -13,7 +13,7 @@
                 <!--<div class="item item-divider">
                     -- Daqui pra baixo tudo será movido --
                 </div>-->             
-                <h3>Dados Cartão de Crédito</h3>
+                <h4>Dados Cartão de Crédito</h4>
                 <div class="form-group col-xs-12">
                     <label for="nomeCartao">Nome como no cartão:</label>
                     <input id="nomeCartao" class="form-control" ng-model="vm.cardHolderName" type="text">
@@ -35,7 +35,7 @@
                     <input id="codigoVerificacao" class="form-control" ng-model="vm.cardCVV" type="tel">
                 </div>                                                   
 
-                <h3>Valor</h3>
+                <h4>Valor</h4>
 
                 <div class="form-group col-xs-12">
                     <label for="quantia">Quantia:</label>

@@ -27,8 +27,7 @@
             return false;
         }
 
-        function login(){
-
+        function login(){            
             if(validaLogin())
             {
                 FlowManagerService.changeHomeView();
@@ -36,7 +35,7 @@
             else
             {
                 DialogFactory.showMessageDialog({mensagem: 'Usuário ou senha incorretos', titulo: 'Alerta'});                
-            }
+            }            
         }
 
     }

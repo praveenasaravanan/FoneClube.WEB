@@ -12,7 +12,8 @@ var filesCSS = [
   'www/css/app.scss',
   'www/modules/**/*.scss',
   'www/modules/**/**/*.scss',
-  'www/util/**/*.scss'
+  'www/util/**/*.scss',
+  'www/components/**/*.scss'
 
 ]
 var filesJS = [

@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('EdicaoController', EdicaoController);
 
-    EdicaoController.inject = ['$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory'];
-    function EdicaoController($scope, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory) {
+    EdicaoController.inject = ['$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog'];
+    function EdicaoController($scope, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog) {
         var vm = this;
         vm.onTapSendUser = onTapSendUser;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
@@ -101,8 +101,12 @@
                     }
 
                     $timeout(function () {
-                        vm.requesting = false;
+                        vm.requesting = false;                        
                     }, 2000)
+
+                    $timeout(function() {
+                        document.getElementById('cpf').focus();
+                    }, 200);
                 });
             });
         };
@@ -429,7 +433,25 @@
         vm.base64Frente;
         vm.imageVerso;
         vm.base64Verso;
-
+        vm.uploadImg = uploadImg;
+        vm.viewImg = viewImg;
+        function viewImg(img) {            
+            ngDialog.open({
+                template: '<div class="popup-lista-imagens ngdialog-close"><img ng-src="{{img}}"/></div>',
+                controller: ['$scope', 'DataFactory', function($scope, DataFactory) {                    
+                    $scope.img = $scope.ngDialogData.img;            
+                }],
+                className: 'ngDialog-custom-width popup-lista-imagens',
+                plain: true,
+                closeByDocument: true,
+                data: {
+                    img: img
+                }
+            });
+        }
+        function uploadImg(param) {
+            document.getElementById(param).click();
+        }
         vm.getImageOftype = getImageOftype;
         function getImageOftype(type) {
             function base64img (tipo) {

@@ -5,8 +5,8 @@
         .module('foneClub')
         .service('FlowManagerService', FlowManagerService);
 
-    FlowManagerService.inject = ['LocationService', 'FireBaseManagerUtil', '$window', 'localStorageService'];
-    function FlowManagerService(LocationService, FireBaseManagerUtil, $window, localStorageService) {
+    FlowManagerService.inject = ['LocationService', 'FireBaseManagerUtil', '$window', 'localStorageService', '$rootScope'];
+    function FlowManagerService(LocationService, FireBaseManagerUtil, $window, localStorageService, $rootScope) {
 
         this.changeLoginView = changeLoginView;
         this.changeHomeView = changeHomeView;
@@ -29,6 +29,7 @@
         function changeHomeView(){
             localStorageService.set('menuItemActive', 'home');
             LocationService.change('tabs.home');
+            $rootScope.$broadcast('changeMenuItem', 'home');
         }
         
         function changeEdicaoView(param) {
@@ -37,6 +38,7 @@
         
         function changeCustomersView(){
             LocationService.change('tabs.customers');
+            $rootScope.$broadcast('changeMenuItem', 'customers');
         }
         
         function changeOrdemServicoView(param){
@@ -45,10 +47,12 @@
 
         function changeListCustomer(param) {
             LocationService.change('tabs.list-customer', param);
+            $rootScope.$broadcast('changeMenuItem', 'list-customer');
         }
 
         function changeCadastro(param) {
             LocationService.change('tabs.cadastro', param);
+            $rootScope.$broadcast('changeMenuItem', 'cadastro');
         }
         
         function goBack() {

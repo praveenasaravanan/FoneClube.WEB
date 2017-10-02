@@ -27,11 +27,11 @@
                     '<div class="corpo-mensagem">'+ param.mensagem +'</div>' +
                     '<div class="footer">' +                    
                     '<button type="button" class="btnCancelar" ng-click="closeThisDialog(0)"> '+ param.btn1 + ' </button>' +
-                    '<button type="button" class="btnConfirmar" ng-click="confirm(1)"> ' + param.btn2 + ' </button></div></div></div>',
+                    '<button type="button" id="openConfirm-btn-confirm" class="btnConfirmar" ng-enter-all="confirm(1)" ng-click="confirm(1)"> ' + param.btn2 + ' </button></div></div></div>',
                     plain: true,
                     className: 'mensagens-dialog',
                     closeByDocument: false,
-                    closeByEscape: false
+                    closeByEscape: false                    
                 }).then(function(param) {
                     defer.resolve(param);
                 }, function(param) {
@@ -50,7 +50,7 @@
                     '<span>' + param.titulo +'</span><hr></div>' +
                     '<div class="corpo-mensagem">'+ param.mensagem +'</div>' +
                     '<div class="footer">' +
-                    '<button type="button" class="btnOk" ng-click="closeThisDialog(0)">Ok' +
+                    '<button type="button" class="btnOk" ng-enter-all="closeThisDialog(0)" ng-click="closeThisDialog(0)">Ok' +
                     '</button></div></div></div>',
                     plain: true,
                     className: 'mensagens-dialog',
@@ -81,7 +81,7 @@
                     '<span>' + param.titulo +'</span><hr></div>' +
                     '<div class="corpo-mensagem">'+ param.mensagem +'</div>' +
                     '<div class="footer">' +                    
-                    '<button type="button" class="btnOk" ng-click="confirm(1)"> Ok </button></div></div></div>',
+                    '<button type="button" class="btnOk" ng-enter-all="confirm(1)" ng-click="confirm(1)"> Ok </button></div></div></div>',
                     plain: true,
                     className: 'mensagens-dialog',
                     closeByDocument: false,
