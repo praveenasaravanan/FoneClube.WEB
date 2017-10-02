@@ -29,18 +29,18 @@
                         <input id="email" ng-enter="vm.onTapSendDocument()" class="form-control" ng-model="vm.email" type="text" placeholder="exemplo@email.com">
                     </div> 
                 </div>                  
-                <!-- <div class="row">
-                    <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
+                <div class="row">
+                    <!-- <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
                         <label for="dataNascimento">Data de Nascimento:</label>
                         <input id="dataNascimento" class="form-control" ng-model="vm.birthdate" type="tel"  name="date" mask="39/19/9999" restrict="reject" placeholder="dd/mm/aaaa">
-                    </div>  
-                    <div class="form-group col-sm-12 col-xs-12" ng-show="vm.hasCPF" >
+                    </div>   -->
+                    <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF" >
                         <label for="selectOperator">Selecione sua operadora:</label>
                         <select class="form-control" ng-options="operator.id as operator.nome for operator in vm.allOperatorOptions" ng-model="vm.operator">
                             <option value="">Selecione</option>
                         </select>            
                     </div>  
-                </div> -->
+                </div>
                 <div class="form-group col-xs-12">
                     <button id="btn-buscar" class="btn btn-primary col-sm-2 col-xs-12" ng-enter="vm.onTapSearchDocument()" ng-click="vm.onTapSearchDocument()"  ng-if="!vm.hasCPF" ng-disabled="vm.cpf.length < 14 || vm.requesting || vm.clicked">Buscar</button> 
                     <button ng-if="vm.hasCPF" class="btn btn-primary col-sm-2 col-xs-12" ng-enter="vm.onTapSendDocument()" ng-click="vm.onTapSendDocument()"  ng-disabled="vm.name.length == 0 || vm.email.length == 0 || vm.personalNumber.length < 14 || vm.requesting">Enviar</button>              

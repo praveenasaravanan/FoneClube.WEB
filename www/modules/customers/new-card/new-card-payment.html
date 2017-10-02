@@ -16,34 +16,34 @@
                 <h4>Dados Cartão de Crédito</h4>
                 <div class="form-group col-xs-12">
                     <label for="nomeCartao">Nome como no cartão:</label>
-                    <input id="nomeCartao" class="form-control" ng-model="vm.cardHolderName" type="text">
+                    <input id="nomeCartao" next-on-enter class="form-control" ng-model="vm.cardHolderName" type="text">
                 </div>
                 <div class="form-group col-xs-12">
                     <label for="numeroCartao">Número do cartão:</label>
-                    <input id="numeroCartao" class="form-control" ng-model="vm.cardNumber" type="tel">
+                    <input id="numeroCartao" next-on-enter class="form-control" ng-model="vm.cardNumber" type="tel">
                 </div>         
                 <div class="form-group col-xs-12">
                     <label for="mesExpericao">Mês expiração:</label>
-                    <input id="mesExpericao" class="form-control" ng-model="vm.cardExpirationMonth" type="tel" placeholder="01">
+                    <input id="mesExpericao" next-on-enter class="form-control" ng-model="vm.cardExpirationMonth" type="tel" placeholder="01">
                 </div>                           
                 <div class="form-group col-xs-12">
                     <label for="anoExpericao">Ano expiração:</label>
-                    <input id="anoExpericao" class="form-control" ng-model="vm.cardExpirationYear" type="tel" placeholder="2019">
+                    <input id="anoExpericao" next-on-enter class="form-control" ng-model="vm.cardExpirationYear" type="tel" placeholder="2019">
                 </div>                                       
                 <div class="form-group col-xs-12">
                     <label for="codigoVerificacao">Código de verificação:</label>
-                    <input id="codigoVerificacao" class="form-control" ng-model="vm.cardCVV" type="tel">
+                    <input id="codigoVerificacao" next-on-enter class="form-control" ng-model="vm.cardCVV" type="tel">
                 </div>                                                   
 
                 <h4>Valor</h4>
 
                 <div class="form-group col-xs-12">
                     <label for="quantia">Quantia:</label>
-                    <input id="quantia" class="form-control" ng-model="vm.amount" money-input type="tel">
+                    <input id="quantia" next-on-enter class="form-control" ng-model="vm.amount" money-input type="tel">
                 </div> 
                 <div class="form-group col-xs-12">
                     <label for="observacao">Observação:</label>
-                    <input id="observacao" class="form-control" ng-model="vm.comment" type="text">
+                    <input id="observacao" ng-enter="vm.onTapConfirmarPagamento()" class="form-control" ng-model="vm.comment" type="text">
                 </div> 
                 <button ng-click="vm.onTapConfirmarPagamento()" ng-disabled="vm.comment.length == 0 || vm.amount.length == 0 || vm.disableTapPay" class="btn btn-success col-xs-12">
                         Cobrar
@@ -78,7 +78,7 @@
                 </uib-accordion>
 
                 <div ng-show="vm.statusTransaction" class="list">
-                    <h2>{{vm.statusTransaction}}</h2>
+                    <h4>{{vm.statusTransaction}}</h4>
                 </div>
 
                 <div ng-if="vm.disableTapPay || !vm.cobrancaRealizada">

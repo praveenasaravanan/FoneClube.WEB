@@ -14,11 +14,11 @@
             <div ng-if="vm.etapaDados">
                 <div class="form-group col-xs-12">
                     <label for="quantia">Quantia:</label>
-                    <input id="quantia" class="form-control" ng-model="vm.amount" money-input type="tel">
+                    <input id="quantia" next-on-enter class="form-control" ng-model="vm.amount" money-input type="tel">
                 </div> 
                 <div class="form-group col-xs-12">
                     <label for="observacao">Observação:</label>
-                    <input id="observacao" class="form-control" ng-model="vm.comment" type="text">
+                    <input id="observacao" ng-enter="vm.onTapConfirmarPagamento()" class="form-control" ng-model="vm.comment" type="text">
                 </div> 
                 <button ng-click="vm.onTapConfirmarPagamento()" ng-disabled="vm.comment.length == 0 || vm.amount.length == 0 || vm.disableTapPay" class="btn btn-success col-xs-12">
                     Cobrar
@@ -53,7 +53,7 @@
                 </uib-accordion>  
 
                 <div ng-show="vm.message" class="list">
-                    <h2>{{vm.message}}</h2>
+                    <h4>{{vm.message}}</h4>
                 </div>
                 <div ng-if="vm.disableTapPay || !vm.cobrancaRealizada">
                     <button ng-click="vm.onTapPagar()" class="btn btn-success col-xs-12" ng-disabled="vm.disableTapPay">
