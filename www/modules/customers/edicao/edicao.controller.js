@@ -250,6 +250,7 @@
                     }
                     FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
                 })
+
             }
             
             function postUpdateCustomerSucess(result) {

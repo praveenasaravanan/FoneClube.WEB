@@ -95,7 +95,7 @@
                         <img src="../../content/img/upload.png" alt="">                                                       
                         <input id="upload-selfie" type="file" name="file" fileread="vm.imageSelf" base64="vm.base64Self" accept="image/*"/>
                     </div>
-                    <img class="thumb-image" ng-show="vm.base64Self" ng-src="{{vm.base64Self}}" alt="x" ng-click="vm.viewImg(vm.base64Self)">
+                    <img class="thumb-image" ng-src="{{vm.getImageOftype(1)}}" alt="x" ng-click="vm.viewImg(vm.getImageOftype(1))">
                 </div>                    
             </div>
             <div class="row">
@@ -105,7 +105,7 @@
                         <img src="../../content/img/upload.png" alt="">                                                     
                         <input id="upload-frente" type="file" name="file" fileread="vm.imageFrente" base64="vm.base64Frente" accept="image/*"/>
                     </div>
-                    <img class="thumb-image" ng-show="vm.base64Frente" ng-src="{{vm.base64Frente}}" alt="x" ng-click="vm.viewImg(vm.base64Frente)">
+                    <img class="thumb-image" ng-src="{{vm.getImageOftype(2)}}" alt="x" ng-click="vm.viewImg(vm.getImageOftype(2))">
                 </div>                    
             </div>
             <div class="row">
@@ -115,7 +115,7 @@
                         <img src="../../content/img/upload.png" alt="">                                                     
                         <input id="upload-verso" type="file" name="file" fileread="vm.imageVerso" base64="vm.base64Verso" accept="image/*"/>
                     </div>
-                    <img class="thumb-image" ng-show="vm.base64Verso" ng-src="{{vm.base64Verso}}" alt="x" ng-click="vm.viewImg(vm.base64Verso)">
+                    <img class="thumb-image" ng-src="{{vm.getImageOftype(3)}}" alt="x" ng-click="vm.viewImg(vm.getImageOftype(3))">
                 </div>                    
             </div>                 
         </div>         
