@@ -9,9 +9,7 @@
                     <div class="form-group col-sm-6 col-xs-12">
                         <label for="cpf">CPF:</label>
                         <input id="cpf" ng-enter="vm.onTapSearchDocument('12321')" type="tel" class="form-control" ng-change="vm.validarCPF()" mask="999.999.999-99" ng-model="vm.cpf" restrict="reject" ng-disabled="vm.hasCPF">
-                    </div> 
-                </div>
-                <div class="row">
+                    </div>
                     <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
                         <label for="nome">Nome:</label>
                         <input id="nome" next-on-enter class="form-control" ng-model="vm.name" type="text">
@@ -19,17 +17,15 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
-                        <label for="telefone">Telefone "atual" de contato:</label>
-                        <input id="telefone" next-on-enter class="form-control" ng-model="vm.personalNumber" type="tel"  mask="(99) 9?9999-9999" restrict="reject" placeholder="(xx) 99999-9999">
-                    </div>
-                </div>                    
-                <div class="row">
-                    <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
                         <label for="email">Email:</label>
                         <input id="email" ng-enter="vm.onTapSendDocument()" class="form-control" ng-model="vm.email" type="text" placeholder="exemplo@email.com">
                     </div> 
                 </div>                  
                 <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
+                        <label for="telefone">Telefone "atual" de contato:</label>
+                        <input id="telefone" next-on-enter class="form-control" ng-model="vm.personalNumber" type="tel"  mask="(99) 9?9999-9999" restrict="reject" placeholder="(xx) 99999-9999">
+                    </div>
                     <!-- <div class="form-group col-sm-6 col-xs-12" ng-show="vm.hasCPF">
                         <label for="dataNascimento">Data de Nascimento:</label>
                         <input id="dataNascimento" class="form-control" ng-model="vm.birthdate" type="tel"  name="date" mask="39/19/9999" restrict="reject" placeholder="dd/mm/aaaa">
