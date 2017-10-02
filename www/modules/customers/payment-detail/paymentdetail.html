@@ -4,7 +4,7 @@
         <button ng-click="closeThisDialog(0)">X</button>
     </div> 
 
-    <h3 class="nome-cliente">{{vm.customer.Name}}</h3>
+    <h4 class="nome-cliente">{{vm.customer.Name}}</h4>
 
     <uib-accordion close-others="oneAtATime">
         <div uib-accordion-group class="panel-default" ng-init="status.open = true" is-open="status.open" ng-repeat="history in vm.customer.histories|limitTo:1">

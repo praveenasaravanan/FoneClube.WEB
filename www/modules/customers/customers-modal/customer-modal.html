@@ -4,7 +4,7 @@
         <button ng-click="closeThisDialog(0)">X</button>
     </div> 
 
-    <h3 class="nome-cliente">{{vm.customer.Name}}</h3>
+    <h4 class="nome-cliente">{{vm.customer.Name}}</h4>
     <div class="modal-container">
         <div class="container col-xs-12">
             <div>
@@ -16,9 +16,9 @@
 
             <div ng-if="vm.etapaEscolhaCartao">
 
-                <h3>
+                <h4>
                     Cartões disponíveis
-                </h3>
+                </h4>
 
                 <uib-accordion close-others="oneAtATime">
                     <div uib-accordion-group class="panel-default" ng-init="vm.cards.length == 1 ? status.open = true : status.open = false" is-open="status.open" ng-repeat="card in vm.cards">
@@ -34,7 +34,7 @@
                     </div> 
                 </uib-accordion>
 
-                <h3>Histórico de cobranças</h3>
+                <h4>Histórico de cobranças</h4>
 
                 <uib-accordion close-others="oneAtATime">
                     <div uib-accordion-group class="panel-default" ng-init="vm.histories.length == 1 ? status.open = true : status.open = false" is-open="status.open" ng-repeat="history in vm.histories">

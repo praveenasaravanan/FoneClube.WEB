@@ -52,8 +52,7 @@
         vm.email = '';
         vm.personalNumber = '';
         vm.phoneNumbersView =[ ];
-        onTapNewPhoneNumber();
-
+        onTapNewPhoneNumber();        
         vm.onTapSearchDocument = onTapSearchDocument;
         vm.onTapSendDocument = onTapSendDocument;
 
@@ -76,7 +75,7 @@
 
         function init(){
             vm.hasCPF = false;
-            etapaDocumento();
+            etapaDocumento();            
             vm.allOperatorOptions = MainUtils.operatorOptions();
             FoneclubeService.getPlans().then(function(result){
                 console.log(result)
@@ -95,8 +94,8 @@
         }
 
         //Busca o cpf na base foneclube, se existir envia pra edição senão consulta na API de cpfs e retorna o nome;
-        function onTapSearchDocument(){
-            vm.requesting = true;
+        function onTapSearchDocument() {            
+            vm.requesting = true;            
             var showLoader = DialogFactory.showLoader('Tentando preencher dados...');
             var cpf = UtilsService.clearDocumentNumber(vm.cpf);
             FoneclubeService.getCustomerByCPF(cpf).then(function(existentClient){
@@ -148,7 +147,12 @@
             FoneclubeService.postBasePerson(personCheckout).then(function(result){
                 if(result) {
                     etapaEndereco();
-                    DialogFactory.showMessageDialog({titulo:'Andamento', mensagem:'Documento enviado, agora preencha os dados de Endereço.'});
+                    DialogFactory.showMessageConfirm({titulo:'Andamento', mensagem:'Documento enviado, agora preencha os dados de Endereço.'})
+                    .then(function() {
+                        $timeout(function(){
+                            document.getElementById('cep').focus();
+                        }, 200);
+                    });
                 }
             }).catch(function(error){
                 vm.requesting = false;
@@ -166,6 +170,9 @@
                     vm.neighborhood = result.bairro;
                     vm.city = result.localidade;
                     vm.uf = result.uf;
+                    $timeout(function(){
+                        document.getElementById('numero').focus();
+                    }, 200);
                 } else {
                     DialogFactory.showMessageDialog({mensagem: "CEP incorreto."});
                 }
@@ -196,7 +203,7 @@
             FoneclubeService.postUpdatePersonAdress(personCheckout).then(function(result){
                 if(result) {
                     etapaDadosPessoais();
-                    DialogFactory.showMessageDialog({titulo:'Andamento',mensagem:'Endereço enviado, agora preencha os dados pessoais.'});
+                    DialogFactory.showMessageConfirm({titulo:'Andamento',mensagem:'Endereço enviado, agora preencha os dados pessoais.'});                    
                 }
             })
             .catch(function(error){
@@ -211,8 +218,26 @@
         vm.imageFrente;
         vm.base64Frente;
         vm.imageVerso;
-        vm.base64Verso;
-
+        vm.base64Verso;        
+        vm.uploadImg = uploadImg;
+        vm.viewImg = viewImg;
+        function viewImg(img) {            
+            ngDialog.open({
+                template: '<div class="popup-lista-imagens ngdialog-close"><img ng-src="{{img}}"/></div>',
+                controller: ['$scope', 'DataFactory', function($scope, DataFactory) {                    
+                    $scope.img = $scope.ngDialogData.img;            
+                }],
+                className: 'ngDialog-custom-width popup-lista-imagens',
+                plain: true,
+                closeByDocument: true,
+                data: {
+                    img: img
+                }
+            });
+        }
+        function uploadImg(param) {
+            document.getElementById(param).click();
+        }
         function onTapSendPersonalData() {
             var showLoader = DialogFactory.showLoader('Enviando Imagens...');
             vm.requesting = true;
@@ -228,13 +253,19 @@
                     showLoader.close();
                     if(result) {
                         etapaComplementar();
-                        DialogFactory.showMessageDialog({titulo:'Andamento',mensagem:'Dados pessoais enviados, agora preencha os dados Foneclube.'});
+                        DialogFactory.showMessageConfirm({titulo:'Andamento',mensagem:'Dados pessoais enviados, agora preencha os dados Foneclube.'})
+                        .then(function() {
+                            $timeout(function(){
+                                document.getElementById('telefoneConvidou').focus();
+                            }, 200); 
+                        })
                     }
                 })
                 .catch(function(error){
                     DialogFactory.showMessageDialog({mensagem:error.statusText}); //TODO
                     vm.requesting = false;
                     showLoader.close();
+
                 });
             }, function(result) {
                 showLoader.close();
@@ -243,8 +274,11 @@
         }
         // ETAPA IMAGENS
         function etapaDocumentoFaseNome(){
-            vm.hasCPF = true;
+            vm.hasCPF = true;            
             vm.requesting = false;
+            $timeout(function(){
+                document.getElementById('nome').focus();
+            }, 200);            
         }
         function etapaDocumento(){
             limpaEtapas();
@@ -253,7 +287,7 @@
         function etapaEndereco(){
             limpaEtapas();
             vm.etapaBuscarCEP = true;
-            vm.etapaEndereco = true;
+            vm.etapaEndereco = true;                          
         }
         function etapaDadosPessoais(){
             limpaEtapas();
@@ -261,7 +295,8 @@
         }
         function etapaComplementar(){
             limpaEtapas();
-            vm.etapaComplementar = true;
+            vm.etapaComplementar = true;           
+            
         }
         function limpaEtapas(){
             vm.etapaDocumento = false;

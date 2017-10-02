@@ -14,10 +14,11 @@
         'FileListUtil',
         'MainUtils',
         'FoneclubeService',
-        '$q'
+        '$q',
+        '$rootScope'
     ];
 
-    function HomeController($scope, $cordovaCamera, $cordovaFile, $ionicLoading, FileListUtil, MainUtils, FoneclubeService, $q) {
+    function HomeController($scope, $cordovaCamera, $cordovaFile, $ionicLoading, FileListUtil, MainUtils, FoneclubeService, $q, $rootScope) {
         var vm = this;
         console.log('=== HomeController Controller ===');
         vm.images = [];
@@ -25,7 +26,7 @@
         vm.addCheckout = addCheckout;
         vm.addPhoto = addPhoto;
         vm.urlForImage = urlForImage;
-        vm.testeData = testeData;
+        vm.testeData = testeData;        
 
         var imageUploader = new ImageUploader();
         vm.result = {};

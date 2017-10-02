@@ -1,5 +1,5 @@
 <div class="menu-container">
-    <div ng-class="{'menu-open': vm.compress, 'menu-close':!vm.compress}"> 
+    <div ng-class="{'menu-open': vm.compress && !vm.mobile, 'menu-close': (!vm.compress && !vm.mobile) || (vm.mobile && vm.compressMobile), 'menu-close-mobile': vm.mobile && !vm.compressMobile}"> 
         <div class="menu-item logo" ng-click="vm.menuCompress()">            
             <div>
                 <img src="./content/img/pi-logo.png" >
@@ -30,7 +30,8 @@
                 <span> Customers </span>
             </div>
         </div>     
-    </div>    
-    <div class="menu-views" ng-class="{'menu-opened': vm.compress}" ui-view name="menu-tab">            
+    </div>  
+     
+    <div class="menu-views" ui-view name="menu-tab">                            
     </div>
 </div>
