@@ -681,13 +681,18 @@
             var personCheckout = {
                 'DocumentNumber': UtilsService.clearDocumentNumber(vm.cpf),  
                 'NameContactParent': vm.whoinvite,
-                'IdParent': vm.IdParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
-                'IdContactParent': vm.IdParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
+                //'IdParent': vm.IdParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
+                //'IdContactParent': vm.IdParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
                 'Phones': phones,
                 'SinglePrice': vm.singlePrice,
                 'DescriptionSinglePrice': vm.descriptionSinglePrice
             };
             
+            if (vm.IdParent) {
+                personCheckout.IdParent = vm.IdParent;
+                personCheckout.IdContactParent = vm.IdParent;
+            }
+
             //busca apenas telefones foneclube e que estão ativos
             var arrayFiltered = getFoneclubePhonesOnly(phones);
 
@@ -880,7 +885,6 @@
                     }
                     reader.readAsDataURL(changeEvent.target.files[0]);
                 });
-                
             }
         }
     }]);
