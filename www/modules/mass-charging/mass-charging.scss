@@ -1,0 +1,25 @@
+.mass-charging-container {   
+    display: flex;
+    flex: 1 1 auto;
+    height: 100%;     
+    flex-direction: column;                         
+    background-color: $background-default;
+
+    .cliente {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+
+    .linhas {
+        display: flex;
+        flex-direction: row;
+        margin-left: 20px;
+        justify-content: space-between;
+        margin-top: 5px;
+    }
+
+    .botao-cobrar {
+        width: 160px;
+    } 
+}

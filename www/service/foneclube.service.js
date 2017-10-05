@@ -8,10 +8,10 @@
     FoneclubeService.inject = ['$q','HTTPService'];
     function FoneclubeService($q,HTTPService) {
 
-        //var urlApi = 'http://localhost:58949/api';
+        var urlApi = 'http://localhost:57078/api';
 
         //API HOMOL TEMP
-        var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+        //var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API QUE VAI SER PROD
         //var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
@@ -24,6 +24,8 @@
         this.postDeletePerson = postDeletePerson;
         this.postUpdateCustomer = postUpdateCustomer;
         this.postOrderServicePerson = postOrderServicePerson;
+        this.postChargingClient = postChargingClient;
+        this.postChargingClientCommitCard = postChargingClientCommitCard;
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
         this.getOperators = getOperators;
@@ -32,6 +34,7 @@
         this.getHistoryPayment = getHistoryPayment;
         this.getCustomerByPhoneNumber = getCustomerByPhoneNumber;
         this.getCustomerById = getCustomerById;
+        this.getChargingClients = getChargingClients;
         
         function postUpdatePerson(personCheckout){
             var q = $q.defer();
@@ -142,6 +145,30 @@
                 q.reject(error);
             });
 
+            return q.promise;
+        }
+
+        function postChargingClient(year, month, param) {
+            var q = $q.defer();
+            HTTPService.post(urlApi.concat('/charging/').concat(year).concat('/').concat(month).concat('/clients/').concat(param.ClientId).concat('/charging'), param)
+            .then(function(data){
+                q.resolve(data);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+            return q.promise;
+        }
+
+        function postChargingClientCommitCard(year, month, chargingId, param) {
+            var q = $q.defer();
+            HTTPService.post(urlApi.concat('/charging/').concat(year).concat('/').concat(month).concat('/clients/').concat(param.ClientId).concat('/charging/').concat(chargingId), param)
+            .then(function(data){
+                q.resolve(data);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
             return q.promise;
         }
 
@@ -259,7 +286,19 @@
             return q.promise;
         }
 
+        function getChargingClients(param){
+            var q = $q.defer();
+            
+            HTTPService.get(urlApi.concat('/charging/').concat(param.year).concat('/').concat(param.month).concat('/clients'))
+            .then(function(result){
+                q.resolve(result);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
 
+            return q.promise;
+        }
 
     }
 })();

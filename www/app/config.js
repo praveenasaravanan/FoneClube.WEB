@@ -86,6 +86,15 @@
         controller: 'OrdemServico as vm',
         params: { data: null }      
       })
+      .state('tabs.mass-charging', {
+        url: "/mass-charging",
+        views: {
+          'menu-tab': {
+            templateUrl: "modules/mass-charging/mass-charging.html",
+            controller: 'MassChargingController as vm'
+          }
+        }
+      })
 
       $urlRouterProvider.otherwise('/');
       configErrorHandler($provide);

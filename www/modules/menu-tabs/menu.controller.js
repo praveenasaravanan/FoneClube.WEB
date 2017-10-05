@@ -42,8 +42,9 @@
                 FlowManagerService.changeListCustomer();
             } else if (screen == 'customers') {
                 FlowManagerService.changeCustomersView();
+            } else if (screen == 'mass-charging') {
+                FlowManagerService.changeMassChargingView();
             }
-
         }
         
         angular.element($window).bind('resize', function(){            

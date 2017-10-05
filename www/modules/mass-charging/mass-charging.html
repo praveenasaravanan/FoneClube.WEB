@@ -1,0 +1,36 @@
+<div class="mass-charging-container">
+    <fone-header title="{{vm.viewName}}"></fone-header> 
+    <div class="loader" ng-if="vm.loading"></div>
+    <div class="col-xs-12" ng-show="!vm.loading">
+        <h1 class="form-group col-xs-12 display-4">Dados Iniciais</h1>
+        <div class="form-container">
+            <div class="form-group shadow-z-1 col-xs-12">
+                <div ng-repeat="customer in vm.lista" class="cliente">
+                    <div>{{customer.Name}}</div>
+                    <div ng-repeat="phone in customer.Phones" class="linhas">
+                        <div>Nickaname</div>
+                        <div>({{phone.DDD}}) {{phone.Number}}</div>
+                        <div>
+                            <input type="radio" name="formaCobranca{{phone.Id}}" value="boleto" id="radioBoleto{{phone.Id}}" ng-model="phone.typeCharging" ng-disabled="phone.statusOnCharging">
+                            <label for="radioBoleto{{phone.Id}}">Boleto</label>
+                            <input type="radio" name="formaCobranca{{phone.Id}}" value="cartao" id="radioCartao{{phone.Id}}" ng-model="phone.typeCharging" ng-disabled="phone.statusOnCharging">
+                            <label for="radioCartao{{phone.Id}}">Cartão de Crédito</label>
+                        </div>
+                        <div>
+                            Comentário: 
+                            <input type="text" ng-disabled="phone.typeCharging == 'cartao' || phone.statusOnCharging" ng-model="phone.commentBoleto">
+                        </div>
+                        <div>
+                            <label>Valor {{phone.Chargings[0].Ammount / 100 | currency :"R$":2}}</label>
+                        </div>
+                        <div>
+                            <button class="btn botao-cobrar" ng-class="{'btn-primary' : !phone.statusOnCharging, 'btn-warning' : phone.statusOnCharging == 1, 'btn-info' : phone.statusOnCharging == 2, 'btn-success' : phone.statusOnCharging == 3, 'btn-danger' : phone.statusOnCharging == 4,}" ng-click="vm.chargePhoneNumber(customer, phone)" ng-disabled="phone.statusOnCharging == 2 || phone.statusOnCharging == 3 || phone.statusOnCharging == 4">
+                                {{phone.statusOnCharging == 4 ? 'Erro na Cobrança' : phone.statusOnCharging == 3 ? 'Sucesso' : phone.statusOnCharging == 2 ? 'Processando...' : phone.statusOnCharging == 1 ? 'Confirmar Cobrança?' : 'Realizar Cobrança' }}    
+                            </button> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
