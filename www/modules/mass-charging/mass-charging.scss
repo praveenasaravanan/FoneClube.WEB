@@ -22,4 +22,21 @@
     .botao-cobrar {
         width: 160px;
     } 
+
+    .simple-toast {
+        position: absolute;
+        width: 70%;
+        height: 42px;
+        top: 38px;
+        background-color: rgba(0, 0, 0, 0.52);
+        border-radius: 8px;
+        color: #d4d3d3;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        align-self: center;
+        font-size: 16px;
+    }
 }

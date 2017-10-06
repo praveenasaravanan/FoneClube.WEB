@@ -1,6 +1,9 @@
 <div class="mass-charging-container">
     <fone-header title="{{vm.viewName}}"></fone-header> 
     <div class="loader" ng-if="vm.loading"></div>
+    <div class="simple-toast" ng-show="vm.toastShow">
+        <p>{{vm.toastMsg}}</p>
+    </div>
     <div class="col-xs-12" ng-show="!vm.loading">
         <h1 class="form-group col-xs-12 display-4">Dados Iniciais</h1>
         <div class="form-container">
@@ -8,8 +11,8 @@
                 <div ng-repeat="customer in vm.lista" class="cliente">
                     <div>{{customer.Name}}</div>
                     <div ng-repeat="phone in customer.Phones" class="linhas">
-                        <div>Nickaname</div>
-                        <div>({{phone.DDD}}) {{phone.Number}}</div>
+                        <div style="width: 146px;">{{phone.NickName}}</div>
+                        <div style="width: 110px;">({{phone.DDD}}) {{phone.Number}}</div>
                         <div>
                             <input type="radio" name="formaCobranca{{phone.Id}}" value="boleto" id="radioBoleto{{phone.Id}}" ng-model="phone.typeCharging" ng-disabled="phone.statusOnCharging">
                             <label for="radioBoleto{{phone.Id}}">Boleto</label>

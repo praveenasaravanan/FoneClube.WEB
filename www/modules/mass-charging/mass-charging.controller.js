@@ -5,9 +5,9 @@
         .module('foneClub')
         .controller('MassChargingController', MassChargingController);
 
-    MassChargingController.inject = ['$scope', 'FoneclubeService', 'PagarmeService', '$q', 'UtilsService'];
+    MassChargingController.inject = ['$scope', 'FoneclubeService', 'PagarmeService', '$q', 'UtilsService', '$timeout'];
 
-    function MassChargingController($scope, FoneclubeService, PagarmeService, $q, UtilsService) {
+    function MassChargingController($scope, FoneclubeService, PagarmeService, $q, UtilsService, $timeout) {
         var vm = this;
         vm.chargePhoneNumber = chargePhoneNumber;
         vm.viewName = "Cobrança em massa";
@@ -29,8 +29,10 @@
 
         function validations(phone) {
             if (!phone.typeCharging) {
+                showSimpleToast("É obrigatório informar o tipo de cobrança.")
                 return false;
             } else if (phone.typeCharging == 'boleto' && (!phone.commentBoleto || phone.commentBoleto.length == 0 )) {
+                showSimpleToast("É obrigatório informar comentário para cobrança por boleto.")
                 return false;
             }
             return true;
@@ -64,7 +66,8 @@
                 FoneclubeService.postChargingClient(mock.year, mock.month, param).then(function (result) {
                     phone.statusOnCharging = 3;
                 }).catch(function (error) {
-                    console.log(result); //TODO toast
+                    console.log(error); //TODO toast
+                    showSimpleToast(error);
                     phone.statusOnCharging = 4;
                 });
             } else {
@@ -73,32 +76,39 @@
         }
 
         function chargeCreditCart(customer, phone) {
-            if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
+            if (!getAddress(customer) || !getContactPhone(customer)) {
                 delete phone.statusOnCharging;
                 return;
             }
-            // if (!customer.pagarmeId) {
-            //     console.log('Não há conta pagar-me para o cliente: ' + customer.Name);
-            //     delete phone.statusOnCharging;
-            //     return
-            // }
+            if (!customer.IdPagarme) {
+                console.log('Não há conta pagar-me para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
+                showSimpleToast('Não há conta pagar-me para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
+                delete phone.statusOnCharging;
+                return
+            }
             var card = null;
             PagarmeService.getCard(326405).then(function(result){
                 if (result.length == 0) {
-                    console.log('Não há cartão de crédito cadastrado para o cliente: ' + customer.Name);
+                    console.log('Não há cartão de crédito cadastrado para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
+                    showSimpleToast('Não há cartão de crédito cadastrado para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
                     delete phone.statusOnCharging;
                 } else {
                     card = result[0];
                     debugger;
                     doCreditCardCharge(customer, phone, card).then(function (result) {
                         phone.statusOnCharging = 3;
+                    }, function (reject) {
+                        showSimpleToast(reject);
+                        phone.statusOnCharging = 4;
                     }).catch(function (error) {
                         phone.statusOnCharging = 4;
                         console.log(error);
+                        showSimpleToast(error);
                     });
                 }
             }).catch(function(error){
-                console.log('falha ao recuperar cartão do cliente: ' + customer.Name);
+                console.log('falha ao recuperar cartão do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
+                showSimpleToast('falha ao recuperar cartão do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
                 delete phone.statusOnCharging;
             });
         }
@@ -145,7 +155,7 @@
                         }
                     });
                 }).catch(function (error) {
-                    defer.reject('Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name);
+                    defer.reject('Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
                 });
             }).catch(function (error) {
                 defer.reject(error);
@@ -156,7 +166,8 @@
         function getContactPhone(customer){
             var contacts = UtilsService.getContactPhoneFromPhones(customer.Phones);
             if (!contacts || contacts.length == 0 || contacts[0].DDD == '' || contacts[0].Number == '') {
-                console.log('É necessário cadastrar Telefone de Contato para este cliente: ' + customer.Name);
+                console.log('É necessário cadastrar Telefone de Contato para este cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
+                showSimpleToast('É necessário cadastrar Telefone de Contato para este cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
                 return null;
             } else {
                 return {
@@ -169,7 +180,8 @@
         function getAddress(customer) {
             var address = customer.Adresses;
             if (!address || address.length == 0) {
-                console.log('É necessário cadastrar um Endereço para este cliente: ' + customer.Name);
+                console.log('É necessário cadastrar um Endereço para este cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
+                showSimpleToast('É necessário cadastrar um Endereço para este cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
                 return null;
             } else {
                 return {
@@ -181,6 +193,19 @@
                     'uf': address[0].State
                 }
             }
+        }
+
+        vm.toastShow = false;
+        vm.toastTimeOut = null;
+        vm.toastMsg = ""
+        function showSimpleToast(msg) {
+            $timeout.cancel(vm.toastTimeOut);
+            vm.toastMsg = msg;
+            vm.toastShow = true;
+            vm.toastTimeOut = $timeout(function () {
+                vm.toastMsg = "";
+                vm.toastShow = false;
+            }, 2000);
         }
 
         //326405 pagarme
