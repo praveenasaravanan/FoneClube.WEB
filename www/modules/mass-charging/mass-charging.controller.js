@@ -10,20 +10,23 @@
     function MassChargingController($scope, FoneclubeService, PagarmeService, $q, UtilsService, $timeout) {
         var vm = this;
         vm.chargePhoneNumber = chargePhoneNumber;
+        vm.searchMassCharging = searchMassCharging
         vm.viewName = "Cobrança em massa";
         vm.loading = true;
-
-        var mock = {
-            year: '2017',
-            month: '08'
-        }
+        vm.year = new Date().getFullYear();
+        vm.month = new Date().getMonth() + 1;
 
         init();
         function init() {
-            FoneclubeService.getChargingClients(mock).then(function(result) {
+            vm.loading = true;
+            FoneclubeService.getChargingClients({month: vm.month, year: vm.year}).then(function(result) {
                 console.log(result);
                 vm.lista = result;
                 vm.loading = false;
+            }).catch(function (error) {
+                vm.lista = [];
+                vm.loading = false;
+                console.log(error);
             });
         }
 
@@ -33,6 +36,9 @@
                 return false;
             } else if (phone.typeCharging == 'boleto' && (!phone.commentBoleto || phone.commentBoleto.length == 0 )) {
                 showSimpleToast("É obrigatório informar comentário para cobrança por boleto.")
+                return false;
+            } else if (!phone.Chargings[0].Ammount) {
+                showSimpleToast("É obrigatório informar a quantia para cobrança.");
                 return false;
             }
             return true;
@@ -45,12 +51,14 @@
             }
             if (phone.statusOnCharging == 1) {
                 if (!validations(phone)) {
-                    console.log('>> colocar em um toast: >> DADOS DOS CLIENTE/TRANSAÇÃO INCOMPLETOS'); //TODO toast
                     delete phone.statusOnCharging;
                     return;
                 }
                 phone.statusOnCharging = 2;
                 processCharging(customer, phone);
+            }
+            if (phone.statusOnCharging == 4) {
+                showSimpleToast(phone.errorMsg);
             }
         }
 
@@ -63,7 +71,7 @@
                     "Comment": phone.commentBoleto || '',
                     "PaymentType":  2
                 }
-                FoneclubeService.postChargingClient(mock.year, mock.month, param).then(function (result) {
+                FoneclubeService.postChargingClient(vm.year, vm.month, param).then(function (result) {
                     phone.statusOnCharging = 3;
                 }).catch(function (error) {
                     console.log(error); //TODO toast
@@ -99,6 +107,7 @@
                         phone.statusOnCharging = 3;
                     }, function (reject) {
                         showSimpleToast(reject);
+                        phone.errorMsg = reject
                         phone.statusOnCharging = 4;
                     }).catch(function (error) {
                         phone.statusOnCharging = 4;
@@ -130,7 +139,7 @@
                 'address' : getAddress(customer),
                 'phone' : getContactPhone(customer)
             }
-            FoneclubeService.postChargingClient(mock.year, mock.month, foneclubeCustomer).then(function (result) {
+            FoneclubeService.postChargingClient(vm.year, vm.month, foneclubeCustomer).then(function (result) {
                 console.log(result);
                 phone.transactionId = result;
                 PagarmeService.postTransactionExistentCard(phone.Chargings[0].Ammount, card.id, pagarmeCustomer).then(function(result) {
@@ -141,7 +150,7 @@
                             'PaymentStatus': 2,
                             'TransactionComment': "OK"
                         }
-                        FoneclubeService.postChargingClientCommitCard(mock.year, mock.month, phone.transactionId, confirmCharge).then(function (result) {
+                        FoneclubeService.postChargingClientCommitCard(vm.year, vm.month, phone.transactionId, confirmCharge).then(function (result) {
                             console.log(result);
                             defer.resolve('Cobrança realizada com sucesso;');
                         }).catch(function (error) {
@@ -215,5 +224,9 @@
         // 2 = processando;
         // 3 = sucesso;
         // 4 = erro;
+
+        function searchMassCharging() {
+            init()
+        }
     }
 })();
