@@ -12,11 +12,11 @@
         vm.chargePhoneNumber = chargePhoneNumber;
         vm.searchMassCharging = searchMassCharging
         vm.viewName = "Cobrança em massa";
-        vm.loading = true;
+        //vm.loading = true;
         vm.year = new Date().getFullYear();
         vm.month = new Date().getMonth() + 1;
 
-        init();
+        //init();
         function init() {
             vm.loading = true;
             FoneclubeService.getChargingClients({month: vm.month, year: vm.year}).then(function(result) {

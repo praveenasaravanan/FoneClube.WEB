@@ -17,6 +17,7 @@
         margin-left: 20px;
         justify-content: space-between;
         margin-top: 5px;
+        align-items: baseline;
     }
 
     .botao-cobrar {
@@ -39,4 +40,24 @@
         align-self: center;
         font-size: 16px;
     }
+    div .striped:nth-child(odd) {
+        background-color: #d8d8d8;
+    }
+
+    .btn-buscar {
+        margin-left: 15px;
+    }
+
+    .no-data {
+        display: flex;
+        align-self: center;
+        justify-content: center;
+        margin-bottom: 30px;
+        margin-top: 30px;
+    }
+
+    .margin-top {
+        margin-top: 42px;
+    }
+
 }

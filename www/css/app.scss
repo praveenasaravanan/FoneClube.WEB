@@ -89,7 +89,7 @@ button {
 .form-container {        
     background-color: white;
     margin-bottom: 15px;    
-    .form-group.col-sm-6:nth-child(1), .form-group.col-sm-6:nth-child(2), .form-group.col-xs-12:nth-child(1), .form-group.col-sm-3:nth-child(1) {
+    .form-group.col-sm-6:nth-child(1), .form-group.col-sm-6:nth-child(2), .form-group.col-xs-12:nth-child(1), .form-group.col-sm-3:nth-child(1), .form-group.col-sm-3:nth-child(2) {
         margin-top: 10px;
     }       
     @media screen and (max-width: 767px) {
