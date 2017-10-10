@@ -801,7 +801,8 @@
                     'Inative': false,
                     'Delete': false,
                     'NovoFormatoNumero': '',
-                    'operadora': '1'
+                    'operadora': '1',
+                    'LinhaAtiva': true
                 }
             );
         }
