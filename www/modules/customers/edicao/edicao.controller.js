@@ -360,7 +360,8 @@
                     'Delete': null,
                     'NovoFormatoNumero': '',
                     'operadora': '1',
-                    'key' : Math.random()
+                    'key' : Math.random(),
+                    'LinhaAtiva': true
                 }
             );
             resizeScroll();
