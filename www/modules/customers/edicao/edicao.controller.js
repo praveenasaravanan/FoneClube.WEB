@@ -357,7 +357,7 @@
                     'NickName': '',
                     'IdPlanOption': 0,
                     'Inative': false,
-                    'Delete': false,
+                    'Delete': null,
                     'NovoFormatoNumero': '',
                     'operadora': '1',
                     'key' : Math.random()

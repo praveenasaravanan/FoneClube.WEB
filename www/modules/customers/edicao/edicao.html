@@ -145,6 +145,9 @@
                     <uib-accordion-heading>
                         Linha {{$index + 1}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
                     </uib-accordion-heading>
+                    <div class="col-xs-12">
+                        Linha Ativa: <toggle ng-model="phoneNumber.LinhaAtiva" on="On" off="Off" ng-change="changed()"></toggle>
+                    </div>                    
                     <div class="form-group col-sm-6 col-xs-12">
                         <label for="comentarioValor">Qual apelido para está linha?:</label>
                         <input id="comentarioValor" next-on-enter class="form-control" ng-model="phoneNumber.NickName" type="text" placeholder="Apelido">

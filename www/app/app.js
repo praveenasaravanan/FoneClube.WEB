@@ -12,7 +12,8 @@
     'LocalStorageModule',
     'ui.bootstrap',
     'ngDialog',
-    'ui.router'
+    'ui.router',
+    'ui.toggle'
 
   ]);
 
