@@ -21,8 +21,19 @@
     }
 
     .botao-cobrar {
-        width: 160px;
-    } 
+        width: 141px;
+        outline: none;
+    }
+
+    .checkbox {
+        outline: none !important;
+    }
+
+    .tipo-cobranca {
+        input {
+            outline: none;
+        }
+    }
 
     .simple-toast {
         position: absolute;
@@ -40,9 +51,9 @@
         align-self: center;
         font-size: 16px;
     }
-    div .striped:nth-child(odd) {
-        background-color: #d8d8d8;
-    }
+    // div .striped:nth-child(odd) {
+    //     background-color: #d8d8d8;
+    // }
 
     .btn-buscar {
         margin-left: 15px;
@@ -58,6 +69,10 @@
 
     .margin-top {
         margin-top: 42px;
+    }
+
+    .btn-cobranca-massa {
+        margin-top: 40px;
     }
 
 }
