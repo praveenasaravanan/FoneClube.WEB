@@ -47,12 +47,12 @@
 
         function validationsCustomer(customer) {
             if (!getAddress(customer) || !getContactPhone(customer)) {
-                delete phone.statusOnCharging;
+                //delete phone.statusOnCharging;
                 return false;
             }
             if (!customer.IdPagarme) {
                 showSimpleToast('Não há conta pagar-me para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
-                delete phone.statusOnCharging;
+                //delete phone.statusOnCharging;
                 return false;
             }
             return true;
@@ -72,18 +72,23 @@
                 processCharging(customer, phone);
             }
             if (phone.statusOnCharging == 4) {
+                debugger;
                 showSimpleToast(phone.errorMsg);
             }
         }
 
         function processCharging(customer, phone) {
-            if (!validationsCustomer(customer)) return;
+            if (!validationsCustomer(customer)) {
+                delete phone.statusOnCharging;
+                return;
+            }
 
             if (phone.typeCharging == 'boletoBS') {
                 chargeBoletoBS(customer, phone).then(function (result) {
                     phone.statusOnCharging = 3;
                 }).catch(function (error) {
                     phone.statusOnCharging = 4;
+                    phone.errorMsg = error;
                     showSimpleToast(error);
                 })
             } else if (phone.typeCharging == 'boletoPG') {
@@ -132,7 +137,7 @@
             FoneclubeService.postChargingClient(vm.year, vm.month, param).then(function (result) {
                 defer.resolve({result: 'sucesso', phoneId: phone.Id, customerId: customer.Id});
             }).catch(function (error) {
-                defer.reject(error);
+                defer.reject(error.data.Message);
             });
             return defer.promise; 
         }
