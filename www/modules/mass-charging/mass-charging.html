@@ -22,7 +22,7 @@
             
             <div class="loader" ng-if="vm.loading"></div>
             <div ng-if="!vm.loading && vm.lista.length == 0" class="no-data">Não há itens para exibir</div>
-            <div class="form-group shadow-z-1 col-xs-12 margin-top" ng-show="!vm.loading">
+            <div class="form-group shadow-z-1 col-xs-12 margin-top" ng-show="!vm.loading && vm.lista.length > 0">
                 <div>
                     <div class="check-all" ng-click="vm.checkAllCustomers()">Marcar/Desmarcar Todos</div>
                 </div>

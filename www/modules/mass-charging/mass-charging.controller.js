@@ -15,7 +15,7 @@
         vm.doMassCharge = doMassCharge;
         //vm.loading = true;
         vm.year = new Date().getFullYear();
-        vm.month = new Date().getMonth() + 1 - 3;
+        vm.month = new Date().getMonth() + 1;
         vm.checkedAll = false;
         vm.checkAllCustomers = checkAllCustomers;
 
