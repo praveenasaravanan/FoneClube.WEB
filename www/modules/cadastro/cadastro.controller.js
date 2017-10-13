@@ -807,7 +807,7 @@
             );
         }
         //remove telefone do array que é exibido na view
-        function onTapRemoveNewNumber(position){
+        function onTapRemoveNewNumber(position) {
             DialogFactory.dialogConfirm({title:'Excluir Número', mensagem: 'Deseja realmente remover este número?'})       
             .then(function(result) {
                 if (result) {
