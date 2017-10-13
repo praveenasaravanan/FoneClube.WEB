@@ -23,9 +23,12 @@
             <div class="loader" ng-if="vm.loading"></div>
             <div ng-if="!vm.loading && vm.lista.length == 0" class="no-data">Não há itens para exibir</div>
             <div class="form-group shadow-z-1 col-xs-12 margin-top" ng-show="!vm.loading">
+                <div>
+                    <div class="check-all" ng-click="vm.checkAllCustomers()">Marcar/Desmarcar Todos</div>
+                </div>
                 <div ng-repeat="customer in vm.lista" class="cliente">
-                    <div>{{customer.Name}}</div>
-                    <div ng-repeat="phone in customer.Phones" class="linhas">
+                    <div class="fundo-verde">{{customer.Name}}</div>
+                    <div ng-repeat="phone in customer.Phones" class="linhas striped">
                         <div>
                             <input type="checkbox" class="checkbox" ng-disabled="phone.statusOnCharging || vm.resquenting || phone.Chargings[0].Charged" ng-model="phone.checked" id="checkbox{{phone.Id}}">
                         </div>

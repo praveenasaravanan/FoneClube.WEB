@@ -16,6 +16,8 @@
         //vm.loading = true;
         vm.year = new Date().getFullYear();
         vm.month = new Date().getMonth() + 1 - 3;
+        vm.checkedAll = false;
+        vm.checkAllCustomers = checkAllCustomers;
 
         init();
         function init() {
@@ -29,6 +31,17 @@
                 vm.loading = false;
                 console.log(error);
             });
+        }
+
+        function checkAllCustomers() {
+            vm.checkedAll = !vm.checkedAll;
+            for (var i in vm.lista) {
+                for (var y in vm.lista[i].Phones) {
+                    if (!vm.lista[i].Phones[y].statusOnCharging && !vm.lista[i].Phones[y].Chargings[0].Charged) {
+                        vm.lista[i].Phones[y].checked = vm.checkedAll;
+                    }
+                }
+            }
         }
 
         function validationPhone(phone) {
@@ -312,7 +325,7 @@
             vm.toastTimeOut = $timeout(function () {
                 vm.toastMsg = "";
                 vm.toastShow = false;
-            }, 2000);
+            }, 3000);
         }
 
         //326405 pagarme

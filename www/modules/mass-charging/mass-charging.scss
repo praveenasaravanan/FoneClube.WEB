@@ -16,17 +16,32 @@
         flex-direction: row;
         margin-left: 20px;
         justify-content: space-between;
-        margin-top: 5px;
-        align-items: baseline;
+        align-items: center;
+        height: 39px;
+        border-radius: 3px;
+
+        label {
+            margin-bottom: 0px !important;
+        }
     }
 
     .botao-cobrar {
-        width: 141px;
+        width: 150px;
         outline: none;
+        margin-right: 6px;
     }
 
     .checkbox {
         outline: none !important;
+        margin-left: 4px;
+    }
+
+    .check-all {
+        margin-bottom: 22px;
+        color: blue;
+        text-decoration: underline;
+        cursor: pointer;
+        width: 159px;
     }
 
     .tipo-cobranca {
@@ -50,10 +65,23 @@
         margin: auto;
         align-self: center;
         font-size: 16px;
+
+        p {
+            margin: 0px !important;
+        }
     }
-    // div .striped:nth-child(odd) {
-    //     background-color: #d8d8d8;
-    // }
+
+    .striped:nth-child(odd) {
+        background-color: #dedede;
+    }
+
+    .fundo-verde {
+        background-color: #c1ffc1;
+        border-radius: 3px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+    }
 
     .btn-buscar {
         margin-left: 15px;
