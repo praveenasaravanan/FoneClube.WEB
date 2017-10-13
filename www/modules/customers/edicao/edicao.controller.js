@@ -371,7 +371,12 @@
             DialogFactory.dialogConfirm({titulo: 'Excluir Número', mensagem: 'Deseja realmente remover este número?'})
             .then(function(res){
                 if(res) {
-                    vm.customer.Phones[position].Delete = true;
+                    if (vm.customer.Phones[position].Id !== null) {
+                        vm.customer.Phones[position].Delete = true;
+                    } else {
+                        vm.customer.Phones.splice(position, 1);
+                    }
+                    
                 }
             })           
         }

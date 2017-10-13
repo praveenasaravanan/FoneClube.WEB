@@ -140,6 +140,7 @@
                 Informações linha(s) Foneclube
                 <button  ng-enter="vm.onTapNewPhoneNumber()" ng-click="vm.onTapNewPhoneNumber()" style="background: transparent; border: none; position: absolute; right: 0; padding-right: 16px;"><i class="glyphicon glyphicon-plus"></i></i></button>                
             </div>
+
             <uib-accordion close-others="oneAtATime">            
                 <div uib-accordion-group  class="panel-default" ng-hide="!phoneNumber.IsFoneclube || phoneNumber.Delete" ng-init="status.open = false" is-open="status.open" ng-repeat="phoneNumber in vm.customer.Phones track by $index">                    
                     <uib-accordion-heading>
@@ -177,9 +178,9 @@
                         <span for="portabilidadeTelefone">Telefone:</span>
                         <input id="portabilidadeTelefone" next-on-enter class="form-control" ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.validatePhoneNumber($index)">
                     </div>   
-                    <!-- <div class="form-group col-xs-12">
+                    <div class="form-group col-xs-12">
                         <button class="btn btn-danger col-sm-2 col-xs-12"  ng-click="vm.onTapRemoveNewNumber($index)">Deletar linha</button>          
-                    </div>                                                                                               -->
+                    </div>                                                                                              
                 </div>                
             </uib-accordion>                       
         </div>
