@@ -42,12 +42,13 @@
                             <input type="radio" name="formaCobranca{{phone.Id}}" value="cartao" id="radioCartao{{phone.Id}}" ng-model="phone.typeCharging" ng-disabled="phone.statusOnCharging || vm.resquenting || phone.Chargings[0].Charged">
                             <label for="radioCartao{{phone.Id}}">Cartão de Crédito</label>
                         </div>
-                        <div>
-                            Comentário: 
+                        <div class="column-comentario">
+                            <label>Comentário:</label>
                             <input type="text" ng-disabled="phone.typeCharging == 'cartao' || phone.statusOnCharging || vm.resquenting || phone.Chargings[0].Charged" ng-model="phone.commentBoleto">
                         </div>
-                        <div style="width: 112px;">
-                            <label>Valor {{phone.Chargings[0].Ammount / 100 | currency :"R$":2}}</label>
+                        <div class="column-valor">
+                            <label>Valor:</label><!--{{phone.Chargings[0].Ammount / 100 | currency :"R$":2}} -->
+                            <input ng-model="phone.Chargings[0].Ammount" money-input>
                         </div>
                         <div>
                             <button class="btn botao-cobrar" ng-class="{'btn-primary' : !phone.statusOnCharging, 'btn-warning' : phone.statusOnCharging == 1, 'btn-info' : phone.statusOnCharging == 2, 'btn-success' : phone.statusOnCharging == 3, 'btn-danger' : phone.statusOnCharging == 4,}" ng-click="vm.chargePhoneNumber(customer, phone)" ng-disabled="phone.statusOnCharging == 2 || phone.statusOnCharging == 3 || vm.resquenting || phone.Chargings[0].Charged">

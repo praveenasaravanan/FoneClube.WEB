@@ -17,11 +17,31 @@
         margin-left: 20px;
         justify-content: space-between;
         align-items: center;
-        height: 39px;
+        height: 52px;
         border-radius: 3px;
 
         label {
             margin-bottom: 0px !important;
+        }
+    }
+
+    .column-comentario {
+        display: flex;
+        flex-direction: column;
+        width: 180px;
+
+        input {
+            width: 180px;
+        }
+    }
+
+    .column-valor {
+        display: flex;
+        flex-direction: column;
+        width: 95px;
+
+        input {
+            width: 95px;
         }
     }
 
