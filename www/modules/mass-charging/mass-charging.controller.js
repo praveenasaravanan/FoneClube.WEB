@@ -63,11 +63,6 @@
                 //delete phone.statusOnCharging;
                 return false;
             }
-            if (!customer.IdPagarme) {
-                showSimpleToast('Não há conta pagar-me para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
-                //delete phone.statusOnCharging;
-                return false;
-            }
             return true;
         }
 
@@ -101,15 +96,22 @@
                     phone.statusOnCharging = 3;
                 }).catch(function (error) {
                     phone.statusOnCharging = 4;
+                    phone.checked = false;
                     phone.errorMsg = error;
                     showSimpleToast(error);
                 })
             } else if (phone.typeCharging == 'boletoPG') {
+                if (!customer.IdPagarme) {
+                    showSimpleToast('Não há conta pagar-me para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
+                    delete phone.statusOnCharging;
+                    return;
+                }
                 chargeBoletoPG(customer, phone).then(function (result) {
                     phone.statusOnCharging = 3;
                 }, function (reject) {
                     showSimpleToast(reject.msg);
                     phone.errorMsg = reject.msg;
+                    phone.checked = false;
                     if (reject.block) {
                         phone.statusOnCharging = 4;
                     } else {
@@ -117,9 +119,15 @@
                     }
                 }).catch(function (error) {
                     phone.statusOnCharging = 4;
+                    phone.checked = false;
                     showSimpleToast(error);
                 });
             } else if (phone.typeCharging == 'cartao') {
+                if (!customer.IdPagarme) {
+                    showSimpleToast('Não há conta pagar-me para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
+                    delete phone.statusOnCharging;
+                    return;
+                }
                 chargeCreditCart(customer, phone).then(function (result) {
                     phone.statusOnCharging = 3;
                 }, function (reject) {
@@ -127,11 +135,13 @@
                     phone.errorMsg = reject.msg;
                     if (reject.block) {
                         phone.statusOnCharging = 4;
+                        phone.checked = false;
                     } else {
                         delete phone.statusOnCharging;
                     }
                 }).catch(function (error) {
                     phone.statusOnCharging = 4;
+                    phone.checked = false;
                     console.log(error);
                     showSimpleToast(error);
                 });
@@ -150,7 +160,7 @@
             FoneclubeService.postChargingClient(vm.year, vm.month, param).then(function (result) {
                 defer.resolve({result: 'sucesso', phoneId: phone.Id, customerId: customer.Id});
             }).catch(function (error) {
-                defer.reject(error.data.Message);
+                defer.reject({errorMsg: error.data.Message, customerId: customer.Id, phoneId: phone.Id});
             });
             return defer.promise; 
         }
@@ -207,15 +217,15 @@
                             console.log("Houve erro mas a cobrança foi realizada");//Falar com Cardozo;
                         });
                     }).catch(function(error) {
-                        defer.reject({block: true , msg: 'Erro na captura da transação ' + error.status});
+                        defer.reject({block: true , msg: 'Erro na captura da transação ' + error.status, customerId: customer.Id, phoneId: phone.Id});
                     });
                 }, function (error) {
-                    defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber});
+                    defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id, phoneId: phone.Id});
                 }).catch(function (error) {
-                    defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber});
+                    defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id, phoneId: phone.Id});
                 });
             }).catch(function() {
-                defer.reject({block: true , msg: error});
+                defer.reject({block: true , msg: error, customerId: customer.Id, phoneId: phone.Id});
             });
             return defer.promise;
         }
@@ -238,10 +248,9 @@
             }
 
             var card = null;
-            //TODO REMOVER ID DO CARTAO DE CREDITO!!!!!!!!!!!!!!!!!!!!!!!!!!
-            PagarmeService.getCard(326405).then(function(result) {
+            PagarmeService.getCard(customer.IdPagarme).then(function(result) {
                 if (result.length == 0) {
-                    reject({block: true, msg:'Não há cartão de crédito cadastrado para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber});
+                    defer.reject({block: true, msg:'Não há cartão de crédito cadastrado para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id, phoneId: phone.Id});
                 } else {
                     card = result[0];
                     FoneclubeService.postChargingClient(vm.year, vm.month, foneclubeCustomer).then(function (result) {
@@ -265,20 +274,20 @@
                                 });
                             }).catch(function(error){
                                 try{
-                                    defer.reject({block: true , msg: 'Erro na captura da transação' + error.status});
+                                    defer.reject({block: true , msg: 'Erro na captura da transação' + error.status, customerId: customer.Id, phoneId: phone.Id});
                                 } catch(erro) {
-                                    defer.reject({block: true , msg: 'Erro na captura da transação'});
+                                    defer.reject({block: true , msg: 'Erro na captura da transação', customerId: customer.Id, phoneId: phone.Id});
                                 }
                             });
                         }).catch(function (error) {
-                            defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber});
+                            defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id, phoneId: phone.Id});
                         });
                     }).catch(function (error) {
-                        defer.reject({block: true , msg: error});
+                        defer.reject({block: true , msg: error, customerId: customer.Id, phoneId: phone.Id});
                     });
                 }
             }).catch(function(error){
-                reject({block: false, msg:'falha ao recuperar cartão do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber});
+                defer.reject({block: false, msg:'falha ao recuperar cartão do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id, phoneId: phone.Id});
             });
             return defer.promise;
         }
@@ -346,7 +355,7 @@
             var novaLista = [];
             for (var i in lista) {
                 var toCharge = lista[i].Phones.filter(function (element) {
-                    return element.checked == true;
+                    return element.checked == true && element.Charging != true;
                 });
                 if (toCharge.length > 0) {
                     var novoCliente = lista[i];
@@ -395,38 +404,43 @@
                     for (var y in customer.Phones) {
                         if (customer.Phones[y].Id == promisesResult[i].phoneId) {
                             customer.Phones[y].statusOnCharging = 3;
+                            customer.Phones[y].checked = false;
                         }
                     }
                 }
                 vm.resquenting = false;
             }, function (promisesResult) {
-                for(var i in promisesResult) {
-                    var customer = vm.lista.find(function (customerRaiz) {
-                        return promisesResult[i].customerId == customerRaiz.Id;
-                    });
-                    for (var y in customer.Phones) {
-                        if (customer.Phones[y].Id == promisesResult[i].phoneId) {
-                            showSimpleToast(promisesResult[i].msg);
-                            customer.Phones[y].errorMsg = promisesResult[i].msg;
-                            if (promisesResult[i].block) {
-                                customer.Phones[y].statusOnCharging = 4;
-                            } else {
-                                delete customer.Phones[y].statusOnCharging;
-                            }
-                        }
-                    }
+                var customer = vm.lista.find(function (element) {
+                    return promisesResult.customerId == element.Id;
+                });
+
+                var phone = customer.Phones.find(function (element) {
+                    return element.Id == promisesResult.phoneId;
+                });
+
+                phone.errorMsg = promisesResult.msg;
+                phone.checked = false;
+                if (promisesResult.block) {
+                    phone.statusOnCharging = 4;
+                } else {
+                    delete phone.statusOnCharging;
                 }
                 vm.resquenting = false;
             }).catch(function (promisesResult) {
-                for(var i in promisesResult) {
-                    var customer = vm.lista.find(function (customerRaiz) {
-                        return promisesResult[i].customerId == customerRaiz.Id;
-                    });
-                    for (var y in customer.Phones) {
-                        customer.Phones[y].statusOnCharging = 4;
-                        console.log(promisesResult[i]);
-                        showSimpleToast(promisesResult[i]);
-                    }
+                var customer = vm.lista.find(function (element) {
+                    return promisesResult.customerId == element.Id;
+                });
+
+                var phone = customer.Phones.find(function (element) {
+                    return element.Id == promisesResult.phoneId;
+                });
+
+                phone.errorMsg = promisesResult.msg;
+                phone.checked = false;
+                if (promisesResult.block) {
+                    phone.statusOnCharging = 4;
+                } else {
+                    delete phone.statusOnCharging;
                 }
                 vm.resquenting = false;
             });
