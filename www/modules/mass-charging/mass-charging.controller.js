@@ -63,6 +63,10 @@
                 //delete phone.statusOnCharging;
                 return false;
             }
+            if (!customer.Email) {
+                showSimpleToast("O Cliente: " + customer.Name +", deve ter cadastrado o E-mail.");
+                return false;
+            }
             return true;
         }
 
