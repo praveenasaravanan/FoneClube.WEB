@@ -60,13 +60,13 @@ angular.module('foneClub').directive('nextOnEnter', function () {
 angular.module('foneClub').directive('escKey', function () {
     return function (scope, element, attrs) {
         angular.element(document).find('body').bind("keydown", function (event) {            
-            if(event.which === 13) {
+            if(event.which === 27) {
                 scope.$apply(function (){
                     scope.$eval(attrs.escKey);
                 });
- 
+
                 event.preventDefault();
             }
         });
     };
-  })
+});
