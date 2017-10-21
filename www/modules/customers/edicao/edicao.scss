@@ -7,4 +7,16 @@
     .form-container {
         margin-top: 15px;
     }
+
+    .accordion-container-close {
+        max-height: 0px;
+        transition: max-height 0.15s ease-out;
+        .form-container {
+            display: none;
+        }
+    }
+    .accordion-container-open {
+        max-height: auto;
+        transition: max-height 0.25s ease-in;
+    }
 }

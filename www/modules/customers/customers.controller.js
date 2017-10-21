@@ -22,11 +22,21 @@
 
 //         console.log('=== Customers Controller Controller ===');
 // >>>>>>> release-branch
-
+        vm.removeCaracteres = function() {
+            if (!vm.search)
+                return;
+            return vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
+        }
         console.log('=== Customers Controller Controller ===');       
         FoneclubeService.getCustomers().then(function(result){
             vm.showLoader = false;
-            vm.customers = result;
+            // vm.customers = result;
+            vm.customers = result.map(function(user) {
+                user.Phones = user.Phones.map(function(phone) {
+                    return phone.phoneFull = phone.DDD.concat(phone.Number);
+                })
+                return user;
+            })
             console.log('getCustomers')
             console.log(result)
             //post realizado com sucesso

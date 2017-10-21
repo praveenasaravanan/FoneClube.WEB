@@ -1,7 +1,7 @@
 <div class="customer-modal" ng-controller="CustomerModalController as vm">
     <div class="header">
         <span class="title">Detalhe Cliente</span>
-        <button ng-click="closeThisDialog(0)">X</button>
+        <button ng-click="closeThisDialog(0)" esc-key="closeThisDialog(0)">X</button>
     </div> 
 
     <h4 class="nome-cliente">{{vm.customer.Name}}</h4>
@@ -30,7 +30,7 @@
                             <p>Final: {{card.last_digits}}</p>
                             <p>{{card.valid ? 'Cartão válido' : 'Cartão inválido/vencido'}}</p>
                         </div>
-                        <button class="btn btn-success col-xs-12 col-sm-3" ng-click="vm.onTapCard(card)"> Pagar ! </button>
+                        <button class="btn btn-success col-xs-12 col-sm-3" ng-click="vm.onTapCard(card)"> Nova cobrança </button>
                     </div> 
                 </uib-accordion>
 
@@ -39,7 +39,7 @@
                 <uib-accordion close-others="oneAtATime">
                     <div uib-accordion-group class="panel-default" ng-init="vm.histories.length == 1 ? status.open = true : status.open = false" is-open="status.open" ng-repeat="history in vm.histories">
                         <uib-accordion-heading>
-                            Cobrança {{$index+1}}<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
+                                {{vm.histories.length-$index}}ª Cobrança<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
                         </uib-accordion-heading>
                         <div class="accordion-container">
                             <p>Data e hora: <strong>{{history.PaymentDate}}.</strong> </p>

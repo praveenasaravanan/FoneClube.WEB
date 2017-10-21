@@ -20,7 +20,7 @@
                         </tr>
                     </thead>
                     <tbody> 
-                        <tr ng-click="vm.onTapCustomer(customer)" ng-repeat="customer in vm.customers | orderBy : 'name' | filter: vm.search">
+                        <tr ng-click="vm.onTapCustomer(customer)" ng-repeat="customer in vm.customers | orderBy : 'name' | filter: vm.removeCaracteres()">
                             <td data-title="Nome"> {{customer.Name}} </td>
                             <td data-title="Email"> {{customer.Email}}</td>
                             <td data-title="Documento"> {{customer.DocumentNumber}} </td>                

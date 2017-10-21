@@ -21,6 +21,7 @@ var filesJS = [
   'www/modules/**/*.js',  
   'www/modules/**/**/*.js',
   'www/service/*.js',
+  'www/filter/*.js',
   'www/util/*.js',
   'www/util/**/*.js',
   'www/components/*.js',
