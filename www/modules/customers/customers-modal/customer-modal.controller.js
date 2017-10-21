@@ -25,7 +25,6 @@
 
         init();
 
-
         function init(){
             if(!customer.IdPagarme)
             {

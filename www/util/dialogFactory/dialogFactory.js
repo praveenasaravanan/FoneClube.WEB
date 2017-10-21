@@ -99,7 +99,7 @@
                     template: template,   
                     className: 'show-template',                        
                     closeByDocument: false,
-                    closeByEscape: false,
+                    closeByEscape: true,
                     showClose: false                    
                 })
             }
