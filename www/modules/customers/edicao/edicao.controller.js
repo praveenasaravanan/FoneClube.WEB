@@ -5,9 +5,10 @@
         .module('foneClub')
         .controller('EdicaoController', EdicaoController);
 
-    EdicaoController.inject = ['$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog'];
-    function EdicaoController($scope, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog) {
+    EdicaoController.inject = ['$scope', 'DataFactory', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog'];
+    function EdicaoController($scope, DataFactory, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog) {
         var vm = this;
+        vm.data = DataFactory;
         vm.onTapSendUser = onTapSendUser;
         vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
         vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
@@ -17,18 +18,18 @@
         vm.getContactParentName = getContactParentName;
         vm.showAddNewPhone = showAddNewPhone;
         vm.goBack = goBack;
-        
+        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
+        var index = $stateParams.data ? $stateParams.data.index : '';
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
-        vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
         vm.requesting = true;
 
         init();
-        function init(){
+        function init() {            
             if (!vm.cpf) {
                 FlowManagerService.changeCustomersView();
                 return;
-            }
+            }                        
             var showDialog = DialogFactory.showLoader('Carregando dados...');
             FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
                 vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
@@ -259,7 +260,8 @@
                     .then(function(result) {
                         if(result) {
                             FlowManagerService.changeCustomersView();
-                            FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
+                            FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result) {
+                                vm.data.customers.splice(index, 1, result);
                                 ViewModelUtilsService.showModalCustomer(result);
                             });
                         } else {

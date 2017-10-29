@@ -11,6 +11,7 @@
         console.log('--- Master controller --- ' + FlowManagerService);
         FlowManagerService.changeLoginView();
 
+        
         ////////
         //MainUtils.setAgent('Cardozo');
         //FlowManagerService.changeHomeView();

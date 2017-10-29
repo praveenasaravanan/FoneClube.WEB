@@ -6,9 +6,10 @@
         .controller('CustomersController', CustomersController);
 
 // <<<<<<< HEAD
-    CustomersController.inject = ['PagarmeService', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils'];
-    function CustomersController(PagarmeService, $scope, ViewModelUtilsService, FoneclubeService, MainUtils) {
+    CustomersController.inject = ['PagarmeService', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory'];
+    function CustomersController(PagarmeService, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory) {
         var vm = this;
+        vm.data = DataFactory;
         vm.onTapCustomer = onTapCustomer;
         vm.showLoader = true;        
 // =======
@@ -27,31 +28,46 @@
                 return;
             return vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~\s]/g, '');
         }
-        console.log('=== Customers Controller Controller ===');       
-        FoneclubeService.getCustomers().then(function(result){
-            vm.showLoader = false;
-            // vm.customers = result;
-            vm.customers = result.map(function(user) {
-                user.Phones = user.Phones.map(function(phone) {
-                    phone.phoneFull = phone.DDD.concat(phone.Number);
-                    return phone;
-                })
-                return user;
-            })
-            console.log('getCustomers')
-            console.log(result)
-            //post realizado com sucesso
-        })
-        .catch(function(error){
-            console.log('catch error');
-            console.log(error);
-            console.log(error.statusText); // mensagem de erro para tela, caso precise
-        });
 
-        function onTapCustomer(customer){
+        var getCustomers = $scope.$watch(function() {
+            return vm.data.customers;
+        }, function(data) {
+            if(data && data.length > 0) {
+                vm.showLoader = false;
+                getCustomers();
+                if (vm.data.customersCache) {
+                    vm.data.customers = angular.copy(vm.data.customersCache);
+                }
+            }            
+        })
+
+        
+
+        console.log('=== Customers Controller Controller ===');       
+        // FoneclubeService.getCustomers().then(function(result){
+        //     vm.showLoader = false;
+        //     // vm.customers = result;
+        //     vm.customers = result.map(function(user) {
+        //         user.Phones = user.Phones.map(function(phone) {
+        //             phone.phoneFull = phone.DDD.concat(phone.Number);
+        //             return phone;
+        //         })
+        //         return user;
+        //     })
+        //     console.log('getCustomers')
+        //     console.log(result)
+        //     //post realizado com sucesso
+        // })
+        // .catch(function(error){
+        //     console.log('catch error');
+        //     console.log(error);
+        //     console.log(error.statusText); // mensagem de erro para tela, caso precise
+        // });
+
+        function onTapCustomer(customer, index){
             console.log('customer')
             console.log(customer)
-            ViewModelUtilsService.showModalCustomer(customer);
+            ViewModelUtilsService.showModalCustomer(customer, index);
         }
         
         function clearDocumentField(documentNumber) {

@@ -10,7 +10,7 @@
 
 
         //todo colocar cria~ção na hora do show garantindo sempre limpeza ao abrir
-        this.modalCustomerData = {};
+        this.modalCustomerData = {};        
         this.showModalCustomer = showModalCustomer;
 
         this.modalNewCardPaymentData = {};
@@ -35,8 +35,9 @@
             DialogFactory.showTemplate('modules/lista-customer/checkout-customer-modal.html');           
         }
 
-        function showModalCustomer(data){
+        function showModalCustomer(data, index){
             this.modalCustomerData = data;
+            this.modalCustomerData.index = index;
             var service = this;
         
             DialogFactory.showTemplate('modules/customers/customers-modal/customer-modal.html');
