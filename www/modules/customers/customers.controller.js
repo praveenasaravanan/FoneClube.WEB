@@ -6,12 +6,15 @@
         .controller('CustomersController', CustomersController);
 
 // <<<<<<< HEAD
-    CustomersController.inject = ['PagarmeService', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory'];
-    function CustomersController(PagarmeService, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory) {
+    CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory'];
+    function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory) {
         var vm = this;
         vm.data = DataFactory;
         vm.onTapCustomer = onTapCustomer;
-        vm.showLoader = true;        
+        vm.showLoader = true;
+        vm.onTapBoleto = onTapBoleto;
+        vm.onTapNewCardPayment = onTapNewCardPayment;
+        vm.onTapExcluir = onTapExcluir;
 // =======
 //     CustomersController.inject = ['PagarmeService', '$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', 'UtilsService'];
 //     function CustomersController(PagarmeService, $ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, UtilsService) {
@@ -38,12 +41,12 @@
                 if (vm.data.customersCache) {
                     vm.data.customers = angular.copy(vm.data.customersCache);
                 }
-            }            
+            }
         })
 
-        
 
-        console.log('=== Customers Controller Controller ===');       
+
+        console.log('=== Customers Controller Controller ===');
         // FoneclubeService.getCustomers().then(function(result){
         //     vm.showLoader = false;
         //     // vm.customers = result;
@@ -69,9 +72,43 @@
             console.log(customer)
             ViewModelUtilsService.showModalCustomer(customer, index);
         }
-        
+
         function clearDocumentField(documentNumber) {
             vm.documentClear =  UtilsService.clearDocumentNumber(documentNumber);
+        }
+
+        function onTapNewCardPayment(customer){
+            console.log('onTapNewCardPayment');
+            ViewModelUtilsService.showModalNewCardPayment(customer);
+        }
+
+        function onTapBoleto(customer){
+          console.log('onTapBoleto')
+          ViewModelUtilsService.showModalBoleto(customer);
+        }
+
+        function onTapExcluir(customer){
+          var personCheckout = {
+              'DocumentNumber': customer.DocumentNumber
+          };
+          DialogFactory.dialogConfirm({mensagem: 'Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?'})
+          .then(function(value) {
+              if(value) {
+                  FoneclubeService.postDeletePerson(personCheckout).then(function(result){
+                      console.log(result);
+                      if(result){
+                          DialogFactory.showMessageDialog({message: 'Usuário foi removido com sucesso, no próximo carregamento da lista ele não será mais exibido'});
+                          closeThisDialog(0);
+                      }
+                      else
+                          DialogFactory.showMessageDialog({message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber});
+                  })
+                  .catch(function(error){
+                      console.log('catch error');
+                      console.log(error);
+                  });
+              }
+          })
         }
 
 
