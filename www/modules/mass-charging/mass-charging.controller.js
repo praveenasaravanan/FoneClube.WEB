@@ -9,21 +9,33 @@
 
     function MassChargingController($scope, FoneclubeService, PagarmeService, $q, UtilsService, $timeout) {
         var vm = this;
-        vm.chargePhoneNumber = chargePhoneNumber;
         vm.searchMassCharging = searchMassCharging
         vm.viewName = "Cobrança em massa";
         vm.doMassCharge = doMassCharge;
         //vm.loading = true;
         vm.year = new Date().getFullYear();
-        vm.month = new Date().getMonth() + 1;
+        vm.month = new Date().getMonth() + 1 - 1;
         vm.checkedAll = false;
         vm.checkAllCustomers = checkAllCustomers;
-        vm.chargeWholeCustomer = chargeWholeCustomer;
+
+
+        vm.chargeCustomer = chargeCustomer;
 
         init();
         function init() {
             vm.loading = true;
+            vm.paymentMethod = [
+                { id:'boletoBS', description: 'Boleto BS' },
+                { id:'boletoPG', description: 'Boleto PG' },
+                { id:'cartao', description: 'Cartão de Crédito' }
+            ]
             FoneclubeService.getChargingClients({month: vm.month, year: vm.year}).then(function(result) {
+                for (var i in result) {
+                    result[i].Ammount = 0;
+                    for (var x in result[i].Phones) {
+                        result[i].Ammount = parseFloat(result[i].Phones[x].Ammount) + parseFloat(result[i].Ammount);
+                    }
+                }
                 console.log(result);
                 vm.lista = result;
                 vm.loading = false;
@@ -34,150 +46,121 @@
             });
         }
 
-        function checkAllCustomers() {
-            vm.checkedAll = !vm.checkedAll;
-            for (var i in vm.lista) {
-                for (var y in vm.lista[i].Phones) {
-                    if (!vm.lista[i].Phones[y].statusOnCharging && !vm.lista[i].Phones[y].Chargings[0].Charged) {
-                        vm.lista[i].Phones[y].checked = vm.checkedAll;
-                    }
-                }
-            }
+        function searchMassCharging() {
+            init()
         }
 
-        function validationPhone(phone) {
-            if (!phone.typeCharging) {
-                showSimpleToast("É obrigatório informar o tipo de cobrança. Linha: " + phone.NickName);
-                return false;
-            } else if ((phone.typeCharging == 'boletoBS' || phone.typeCharging == 'boletoPG') && (!phone.commentBoleto || phone.commentBoleto.length == 0 )) {
-                showSimpleToast("É obrigatório informar comentário para cobrança por boleto. Linha: " + phone.NickName);
-                return false;
-            } else if (!phone.Chargings[0].Ammount) {
-                showSimpleToast("É obrigatório informar a quantia para cobrança. Linha: " + phone.NickName);
-                return false;
-            }
-            return true;
-        }
+        function chargeCustomer(customer) {
 
-        function validationsCustomer(customer) {
-            if (!getAddress(customer) || !getContactPhone(customer)) {
-                //delete phone.statusOnCharging;
-                return false;
-            }
-            if (!customer.Email) {
-                showSimpleToast("O Cliente: " + customer.Name +", deve ter cadastrado o E-mail.");
-                return false;
-            }
-            return true;
-        }
-
-        function chargePhoneNumber(customer, phone) {
-            if (!phone.statusOnCharging) {
-                phone.statusOnCharging = 1;
+            //Realizar Cobrança;
+            if (!customer.statusOnCharging) {
+                customer.statusOnCharging = 1;
                 return;
             }
-            if (phone.statusOnCharging == 1) {
-                if (!validationPhone(phone)) {
-                    delete phone.statusOnCharging;
+
+            //Confirmar Cobrança;
+            if (customer.statusOnCharging == 1) {
+                if (!validationsCustomer(customer)) {
+                    delete customer.statusOnCharging;
                     return;
                 }
-                phone.statusOnCharging = 2;
-                processCharging(customer, phone);
-            }
-            if (phone.statusOnCharging == 4) {
-                showSimpleToast(phone.errorMsg);
-            }
-        }
-
-        function processCharging(customer, phone) {
-            if (!validationsCustomer(customer)) {
-                delete phone.statusOnCharging;
+                if (!validateOperation(customer)) {
+                    delete customer.statusOnCharging;
+                    return;
+                }
+                customer.statusOnCharging = 2;
+                processCharging(customer);
                 return;
             }
 
-            if (phone.typeCharging == 'boletoBS') {
-                chargeBoletoBS(customer, phone).then(function (result) {
-                    phone.statusOnCharging = 3;
+            //Envia mensagem de Erro;
+            if (customer.statusOnCharging == 4) {
+                showSimpleToast(customer.errorMsg);
+            }
+        }
+
+        function processCharging(customer) {
+            if (customer.typeCharging == 'boletoBS') {
+                chargeBoletoBS(customer).then(function (result) {
+                    customer.statusOnCharging = 3;
                 }).catch(function (error) {
-                    phone.statusOnCharging = 4;
-                    phone.checked = false;
-                    phone.errorMsg = error;
+                    customer.statusOnCharging = 4;
+                    customer.checked = false;
+                    customer.errorMsg = error;
                     showSimpleToast(error);
                 })
-            } else if (phone.typeCharging == 'boletoPG') {
+            } else if (customer.typeCharging == 'boletoPG') {
                 if (!customer.IdPagarme) {
                     showSimpleToast('Não há conta pagar-me para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
-                    delete phone.statusOnCharging;
+                    delete customer.statusOnCharging;
                     return;
                 }
-                chargeBoletoPG(customer, phone).then(function (result) {
-                    phone.statusOnCharging = 3;
+                chargeBoletoPG(customer).then(function (result) {
+                    customer.statusOnCharging = 3;
                 }, function (reject) {
                     showSimpleToast(reject.msg);
-                    phone.errorMsg = reject.msg;
-                    phone.checked = false;
+                    customer.errorMsg = reject.msg;
+                    customer.checked = false;
                     if (reject.block) {
-                        phone.statusOnCharging = 4;
+                        customer.statusOnCharging = 4;
                     } else {
-                        delete phone.statusOnCharging;
+                        delete customer.statusOnCharging;
                     }
                 }).catch(function (error) {
-                    phone.statusOnCharging = 4;
-                    phone.checked = false;
+                    customer.statusOnCharging = 4;
+                    customer.checked = false;
                     showSimpleToast(error);
                 });
-            } else if (phone.typeCharging == 'cartao') {
+            } else if (customer.typeCharging == 'cartao') {
                 if (!customer.IdPagarme) {
                     showSimpleToast('Não há conta pagar-me para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
-                    delete phone.statusOnCharging;
+                    delete customer.statusOnCharging;
                     return;
                 }
-                chargeCreditCart(customer, phone).then(function (result) {
-                    phone.statusOnCharging = 3;
+                chargeCreditCart(customer).then(function (result) {
+                    customer.statusOnCharging = 3;
                 }, function (reject) {
                     showSimpleToast(reject.msg);
-                    phone.errorMsg = reject.msg;
+                    customer.errorMsg = reject.msg;
+                    customer.checked = false;
                     if (reject.block) {
-                        phone.statusOnCharging = 4;
-                        phone.checked = false;
+                        customer.statusOnCharging = 4;
                     } else {
-                        delete phone.statusOnCharging;
+                        delete customer.statusOnCharging;
                     }
                 }).catch(function (error) {
-                    phone.statusOnCharging = 4;
-                    phone.checked = false;
-                    console.log(error);
+                    customer.statusOnCharging = 4;
+                    customer.checked = false;
                     showSimpleToast(error);
                 });
             }
         }
 
-        function chargeBoletoBS(customer, phone) {
-            var defer = $q.defer();
+        function getAPIParansClient(customer, PaymentType) {
             var param = {
                 "ClientId" : customer.Id,
-                "PhoneId" : phone.Id,
-                "Ammount": phone.Chargings[0].Ammount,
-                "Comment": phone.commentBoleto || '',
-                "PaymentType": 3
+                "Ammount": '55.55',
+                "Comment": customer.commentBoleto || 'teste',
+                "ChargingComment": customer.Charging.ChargingComment || 'teste',
+                "PaymentType": PaymentType
             }
+            return param;
+        }
+
+        function chargeBoletoBS(customer) {
+            var defer = $q.defer();
+            var param = getAPIParansClient(customer, 3);
             FoneclubeService.postChargingClient(vm.year, vm.month, param).then(function (result) {
-                defer.resolve({result: 'sucesso', phoneId: phone.Id, customerId: customer.Id});
+                defer.resolve({result: 'sucesso',customerId: customer.Id});
             }).catch(function (error) {
-                defer.reject({errorMsg: error.data.Message, customerId: customer.Id, phoneId: phone.Id});
+                defer.reject({errorMsg: error.data.Message, customerId: customer.Id});
             });
             return defer.promise; 
         }
 
-        function chargeBoletoPG(customer, phone) {
+        function chargeBoletoPG(customer) {
             var defer = $q.defer();
-            var foneclubeCustomer = {
-                "ClientId" : customer.Id,
-                "PhoneId" : phone.Id,
-                "Ammount": phone.Chargings[0].Ammount,
-                "Comment": phone.commentBoleto || '',
-                "PaymentType":  2
-            }
+            var foneclubeCustomer = getAPIParansClient(customer, 2);
             var pagarmeCustomer = {
                 'name' : customer.Name,
                 'document_number' : customer.DocumentNumber,
@@ -188,11 +171,9 @@
             var instructions = 'FoneClub - 2017'
 
             FoneclubeService.postChargingClient(vm.year, vm.month, foneclubeCustomer).then(function (result) {
-                console.log(result);
-                phone.transactionId = result;
-                PagarmeService.postBoleto(phone.Chargings[0].Ammount, instructions, pagarmeCustomer).then(function(result) {
-                    console.log(result);
-                    PagarmeService.postCaptureTransaction(result.token, phone.Chargings[0].Ammount).then(function(resultCapture) {
+                customer.transactionId = result;
+                PagarmeService.postBoleto(foneclubeCustomer.Ammount, instructions, pagarmeCustomer).then(function(result) {
+                    PagarmeService.postCaptureTransaction(result.token, foneclubeCustomer.Ammount).then(function(resultCapture) {
                         try{
                             PagarmeService.notifyCustomerBoleto(resultCapture.id, pagarmeCustomer.email).then(function(resultNotify) {
                                 console.log('Boleto gerado com sucesso');
@@ -207,42 +188,36 @@
                         //CONFIRMAR COM CARDOZO O LOCAL DESSA PROXIMA CHAMADA;
                         var confirmCharge = {
                             'ClientId': customer.Id,
-                            'PaymentStatus': 3,
+                            'PaymentStatus': foneclubeCustomer.PaymentType,
                             'TransactionComment': "OK",
                             'BoletoId': resultCapture.id,
                             'AcquireId': resultCapture.acquirer_id
                         }
-                        FoneclubeService.postChargingClientCommitCard(vm.year, vm.month, phone.transactionId, confirmCharge).then(function (result) {
+                        FoneclubeService.postChargingClientCommitCard(vm.year, vm.month, customer.transactionId, confirmCharge).then(function (result) {
                             console.log(result);
-                            defer.resolve({result: 'sucesso', phoneId: phone.Id, customerId: customer.Id});
+                            defer.resolve({result: 'sucesso', customerId: customer.Id});
                         }).catch(function (error) {
-                            defer.resolve({result: 'sucesso', phoneId: phone.Id, customerId: customer.Id});
+                            defer.resolve({result: 'sucesso', customerId: customer.Id});
                             console.log(error);
                             console.log("Houve erro mas a cobrança foi realizada");//Falar com Cardozo;
                         });
                     }).catch(function(error) {
-                        defer.reject({block: true , msg: 'Erro na captura da transação ' + error.status, customerId: customer.Id, phoneId: phone.Id});
+                        defer.reject({block: true , msg: 'Erro na captura da transação ' + error.status, customerId: customer.Id});
                     });
                 }, function (error) {
-                    defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id, phoneId: phone.Id});
+                    defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id});
                 }).catch(function (error) {
-                    defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id, phoneId: phone.Id});
+                    defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id});
                 });
             }).catch(function() {
-                defer.reject({block: true , msg: error, customerId: customer.Id, phoneId: phone.Id});
+                defer.reject({block: true , msg: error, customerId: customer.Id});
             });
             return defer.promise;
         }
 
-        function chargeCreditCart(customer, phone) {
+        function chargeCreditCart(customer) {
             var defer = $q.defer();
-            var foneclubeCustomer = {
-                "ClientId" : customer.Id,
-                "PhoneId" : phone.Id,
-                "Ammount": phone.Chargings[0].Ammount,
-                "Comment": phone.commentBoleto || '',
-                "PaymentType":  1
-            }
+            var foneclubeCustomer = getAPIParansClient(customer, 1);
             var pagarmeCustomer = {
                 'name' : customer.Name,
                 'document_number' : customer.DocumentNumber,
@@ -254,62 +229,88 @@
             var card = null;
             PagarmeService.getCard(customer.IdPagarme).then(function(result) {
                 if (result.length == 0) {
-                    defer.reject({block: true, msg:'Não há cartão de crédito cadastrado para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id, phoneId: phone.Id});
+                    defer.reject({block: true, msg:'Não há cartão de crédito cadastrado para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id});
                 } else {
                     card = result[0];
                     FoneclubeService.postChargingClient(vm.year, vm.month, foneclubeCustomer).then(function (result) {
                         console.log(result);
-                        phone.transactionId = result;
-                        PagarmeService.postTransactionExistentCard(phone.Chargings[0].Ammount, card.id, pagarmeCustomer).then(function(result) {
-                            PagarmeService.postCaptureTransaction(result.token, phone.Chargings[0].Ammount).then(function(result) {
+                        customer.transactionId = result;
+                        PagarmeService.postTransactionExistentCard(foneclubeCustomer.Ammount, card.id, pagarmeCustomer).then(function(result) {
+                            PagarmeService.postCaptureTransaction(result.token, foneclubeCustomer.Ammount).then(function(result) {
                                 //saveHistoryPayment();
                                 var confirmCharge = {
                                     'ClientId': customer.Id,
                                     'PaymentStatus': 2,
                                     'TransactionComment': "OK"
                                 }
-                                FoneclubeService.postChargingClientCommitCard(vm.year, vm.month, phone.transactionId, confirmCharge).then(function (result) {
+                                FoneclubeService.postChargingClientCommitCard(vm.year, vm.month, customer.transactionId, confirmCharge).then(function (result) {
                                     console.log(result);
-                                    defer.resolve({result: 'sucesso', phoneId: phone.Id, customerId: customer.Id});
+                                    defer.resolve({result: 'sucesso', customerId: customer.Id});
                                 }).catch(function (error) {
-                                    defer.resolve({result: 'sucesso', phoneId: phone.Id, customerId: customer.Id});
+                                    defer.resolve({result: 'sucesso', customerId: customer.Id});
                                     console.log(error);
                                     console.log("Houve erro mas a cobrança foi realizada");//Falar com Cardozo;
                                 });
                             }).catch(function(error){
                                 try{
-                                    defer.reject({block: true , msg: 'Erro na captura da transação' + error.status, customerId: customer.Id, phoneId: phone.Id});
+                                    defer.reject({block: true , msg: 'Erro na captura da transação' + error.status, customerId: customer.Id});
                                 } catch(erro) {
-                                    defer.reject({block: true , msg: 'Erro na captura da transação', customerId: customer.Id, phoneId: phone.Id});
+                                    defer.reject({block: true , msg: 'Erro na captura da transação', customerId: customer.Id});
                                 }
                             });
                         }).catch(function (error) {
-                            defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id, phoneId: phone.Id});
+                            defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id});
                         });
                     }).catch(function (error) {
-                        defer.reject({block: true , msg: error, customerId: customer.Id, phoneId: phone.Id});
+                        defer.reject({block: true , msg: error, customerId: customer.Id});
                     });
                 }
             }).catch(function(error){
-                defer.reject({block: false, msg:'falha ao recuperar cartão do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id, phoneId: phone.Id});
+                defer.reject({block: false, msg:'falha ao recuperar cartão do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id});
             });
             return defer.promise;
         }
 
-        function getContactPhone(customer){
-            var contacts = UtilsService.getContactPhoneFromPhones(customer.Phones);
-            if (!contacts || contacts.length == 0 || contacts[0].DDD == '' || contacts[0].Number == '') {
-                console.log('É necessário cadastrar Telefone de Contato para este cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
-                showSimpleToast('É necessário cadastrar Telefone de Contato para este cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
-                return null;
-            } else {
-                return {
-                    'ddd' : contacts[0].DDD.toString(),
-                    'number' : contacts[0].Number.toString()
-                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // Utils =====================================================================================================
+        function validationsCustomer(customer) {
+            if (!getAddress(customer) || !getContactPhone(customer)) {
+                return false;
             }
+            if (!customer.Email) {
+                showSimpleToast("O Cliente: " + customer.Name +", deve ter cadastrado o E-mail.");
+                return false;
+            }
+            return true;
         }
-        
+        function validateOperation(customer) {
+            if (!customer.typeCharging || customer.typeCharging.length == 0) {
+                showSimpleToast("Selecione uma forma de pagamento para o cliente: " + customer.Name + ".");
+                return false;
+            }
+            if (!customer.commentBoleto || (customer.commentBoleto != 1 && customer.commentBoleto.length == 0)) {
+                showSimpleToast("Para cobranças por boleto é necessário informar o 'Comentário Boleto'.");
+                return false;
+            }
+            if (!customer.Ammount || customer.Ammount == 0) {
+                showSimpleToast("Obrigátio informar a quantia para cobrança. Cliente: " + customer.Name + ".");
+                return false;
+            }
+            return true;
+        }
         function getAddress(customer) {
             var address = customer.Adresses;
             if (!address || address.length == 0) {
@@ -327,6 +328,19 @@
                 }
             }
         }
+        function getContactPhone(customer){
+            var contacts = UtilsService.getContactPhoneFromPhones(customer.Phones);
+            if (!contacts || contacts.length == 0 || contacts[0].DDD == '' || contacts[0].Number == '') {
+                console.log('É necessário cadastrar Telefone de Contato para este cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
+                showSimpleToast('É necessário cadastrar Telefone de Contato para este cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber);
+                return null;
+            } else {
+                return {
+                    'ddd' : contacts[0].DDD.toString(),
+                    'number' : contacts[0].Number.toString()
+                }
+            }
+        }
 
         vm.toastShow = false;
         vm.toastTimeOut = null;
@@ -341,6 +355,78 @@
             }, 3000);
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // OLD
+
+
+
+        // function validationPhone(phone) {
+        //     if (!phone.typeCharging) {
+        //         showSimpleToast("É obrigatório informar o tipo de cobrança. Linha: " + phone.NickName);
+        //         return false;
+        //     } else if ((phone.typeCharging == 'boletoBS' || phone.typeCharging == 'boletoPG') && (!phone.commentBoleto || phone.commentBoleto.length == 0 )) {
+        //         showSimpleToast("É obrigatório informar comentário para cobrança por boleto. Linha: " + phone.NickName);
+        //         return false;
+        //     } else if (!phone.Chargings[0].Ammount) {
+        //         showSimpleToast("É obrigatório informar a quantia para cobrança. Linha: " + phone.NickName);
+        //         return false;
+        //     }
+        //     return true;
+        // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
         //326405 pagarme
         //postChargingClientCommitCard
 
@@ -349,53 +435,46 @@
         // 3 = sucesso;
         // 4 = erro;
 
-        function searchMassCharging() {
-            init()
+        function checkAllCustomers() {
+            vm.checkedAll = !vm.checkedAll;
+            for (var i in vm.lista) {
+                for (var y in vm.lista[i].Phones) {
+                    if (!vm.lista[i].Phones[y].statusOnCharging && !vm.lista[i].Phones[y].Chargings[0].Charged) {
+                        vm.lista[i].Phones[y].checked = vm.checkedAll;
+                    }
+                }
+            }
         }
 
         function doMassCharge() {
             vm.resquenting = true;
             var lista = angular.copy(vm.lista)
-            var novaLista = [];
-            for (var i in lista) {
-                var toCharge = lista[i].Phones.filter(function (element) {
-                    return element.checked == true && element.Charging != true;
-                });
-                if (toCharge.length > 0) {
-                    var novoCliente = lista[i];
-                    novoCliente.Phones = toCharge;
-                    novaLista.push(novoCliente);
-                }
-            }
-            if (novaLista.length == 0) {
+
+            var toChargeList = lista.filter(function (element) {
+                return element.checked == true && element.Charging.Charged != true;
+            });
+
+            if (toChargeList.length == 0) {
                 showSimpleToast("Selecione ao menos uma linha.");
                 vm.resquenting = false;
             }
-            var params = [];
-            for (var i in novaLista) {
-                if (!validationsCustomer(novaLista[i])) {
+
+            for (var i in toChargeList) {
+                if (!validationsCustomer(toChargeList[i])) {
                     vm.resquenting = false;
                     return;
-                }
-                for (var y in novaLista[i].Phones) {
-                    if (!validationPhone(novaLista[i].Phones[y])) {
-                        vm.resquenting = false;
-                        return;
-                    } else {
-                        params.push({customer: novaLista[i], linha: novaLista[i].Phones[y]});
-                    }
                 }
             }
 
             var promises = [];
-            angular.forEach(params , function(param) {
+            angular.forEach(toChargeList , function(customer) {
                 var promise = null
-                if (param.linha.typeCharging == 'boletoBS') {
-                    promise = chargeBoletoBS(param.customer, param.linha)
-                } else if (param.linha.typeCharging == 'boletoPG') {
-                    promise = chargeBoletoPG(param.customer, param.linha)
-                } else if (param.linha.typeCharging == 'cartao') {
-                    promise = chargeCreditCart(param.customer, param.linha)
+                if (customer.typeCharging == 'boletoBS') {
+                    promise = chargeBoletoBS(customer)
+                } else if (customer.typeCharging == 'boletoPG') {
+                    promise = chargeBoletoPG(customer)
+                } else if (customer.typeCharging == 'cartao') {
+                    promise = chargeCreditCart(customer)
                 }
                 promises.push(promise);
             });
@@ -406,131 +485,129 @@
                         return promisesResult[i].customerId == customerRaiz.Id;
                     });
                     for (var y in customer.Phones) {
-                        if (customer.Phones[y].Id == promisesResult[i].phoneId) {
-                            customer.Phones[y].statusOnCharging = 3;
-                            customer.Phones[y].checked = false;
-                        }
+                        customer.statusOnCharging = 3;
+                        customer.checked = false;
                     }
                 }
                 vm.resquenting = false;
             }, function (promisesResult) {
-                var customer = vm.lista.find(function (element) {
-                    return promisesResult.customerId == element.Id;
-                });
+                // var customer = vm.lista.find(function (element) {
+                //     return promisesResult.customerId == element.Id;
+                // });
 
-                var phone = customer.Phones.find(function (element) {
-                    return element.Id == promisesResult.phoneId;
-                });
+                // var phone = customer.Phones.find(function (element) {
+                //     return element.Id == promisesResult.phoneId;
+                // });
 
-                phone.errorMsg = promisesResult.msg;
-                phone.checked = false;
-                if (promisesResult.block) {
-                    phone.statusOnCharging = 4;
-                } else {
-                    delete phone.statusOnCharging;
-                }
+                // phone.errorMsg = promisesResult.msg;
+                // phone.checked = false;
+                // if (promisesResult.block) {
+                //     phone.statusOnCharging = 4;
+                // } else {
+                //     delete phone.statusOnCharging;
+                // }
                 vm.resquenting = false;
             }).catch(function (promisesResult) {
-                var customer = vm.lista.find(function (element) {
-                    return promisesResult.customerId == element.Id;
-                });
+                // var customer = vm.lista.find(function (element) {
+                //     return promisesResult.customerId == element.Id;
+                // });
 
-                var phone = customer.Phones.find(function (element) {
-                    return element.Id == promisesResult.phoneId;
-                });
+                // var phone = customer.Phones.find(function (element) {
+                //     return element.Id == promisesResult.phoneId;
+                // });
 
-                phone.errorMsg = promisesResult.msg;
-                phone.checked = false;
-                if (promisesResult.block) {
-                    phone.statusOnCharging = 4;
-                } else {
-                    delete phone.statusOnCharging;
-                }
+                // phone.errorMsg = promisesResult.msg;
+                // phone.checked = false;
+                // if (promisesResult.block) {
+                //     phone.statusOnCharging = 4;
+                // } else {
+                //     delete phone.statusOnCharging;
+                // }
                 vm.resquenting = false;
             });
         }
 
-        function chargeWholeCustomer(customer, phones) {
-             if (!customer.statusOnCharging) {
-                customer.Ammount = getTotalAmmountCustomer(phones);
-                if (customer.Ammount == 0) {
-                    showSimpleToast('Não há cobranças a serem realizadas para este cliente.');
-                    return;
-                }
-                customer.statusOnCharging = 11
-            } else if (customer.statusOnCharging == 11) {
-                customer.statusOnCharging = 1
-            } else if (customer.statusOnCharging == 1) {
-                customer.statusOnCharging = 2
-                if (!validationsCustomer(customer)) {
-                    customer.statusOnCharging = 11
-                    return;
-                }
-                if (!customer.typeCharging) {
-                    showSimpleToast("É obrigatório informar o tipo de cobrança.");
-                    customer.statusOnCharging = 11
-                    return;
-                } else if ((customer.typeCharging == 'boletoBS' || customer.typeCharging == 'boletoPG') && (!customer.commentBoleto || customer.commentBoleto.length == 0 )) {
-                    showSimpleToast("É obrigatório informar comentário para cobrança por boleto.");
-                    customer.statusOnCharging = 11
-                    return;
-                } else if (!customer.Ammount) {
-                    showSimpleToast("É obrigatório informar a quantia para cobrança.");
-                    customer.statusOnCharging = 11
-                    return;
-                }
-                if (customer.typeCharging == 'boletoBS') {
-                    chargeBoletoBS(customer, { Chargings: [{Ammount: customer.Ammount}], commentBoleto: customer.commentBoleto}).then(function (result) {
-                        customer.statusOnCharging = 3;
-                    }).catch(function (error) {
-                        customer.statusOnCharging = 4;
-                        customer.errorMsg = error;
-                        showSimpleToast(error);
-                    })
-                } else if (customer.typeCharging == 'boletoPG') {
-                    chargeBoletoPG(customer, { Chargings: [{Amount: customer.Ammount}], commentBoleto: customer.commentBoleto}).then(function (result) {
-                        customer.statusOnCharging = 3;
-                    }, function (reject) {
-                        showSimpleToast(reject.msg);
-                        customer.errorMsg = reject.msg;
-                        if (reject.block) {
-                            customer.statusOnCharging = 4;
-                        } else {
-                            delete customer.statusOnCharging;
-                        }
-                    }).catch(function (error) {
-                        customer.statusOnCharging = 4;
-                        showSimpleToast(error);
-                    });
-                } else if (customer.typeCharging == 'cartao') {
-                    chargeCreditCart(customer, { Chargings: [{Amount: customer.Ammount}], commentBoleto: customer.commentBoleto}).then(function (result) {
-                        customer.statusOnCharging = 3;
-                    }, function (reject) {
-                        showSimpleToast(reject.msg);
-                        customer.errorMsg = reject.msg;
-                        if (reject.block) {
-                            customer.statusOnCharging = 4;
-                        } else {
-                            delete customer.statusOnCharging;
-                        }
-                    }).catch(function (error) {
-                        customer.statusOnCharging = 4;
-                        showSimpleToast(error);
-                    });
-                }
-             } else if (customer.statusOnCharging == 4) {
-                showSimpleToast(customer.errorMsg);
-            }
-        }
+        // function chargeWholeCustomer(customer, phones) {
+        //      if (!customer.statusOnCharging) {
+        //         customer.Ammount = getTotalAmmountCustomer(phones);
+        //         if (customer.Ammount == 0) {
+        //             showSimpleToast('Não há cobranças a serem realizadas para este cliente.');
+        //             return;
+        //         }
+        //         customer.statusOnCharging = 11
+        //     } else if (customer.statusOnCharging == 11) {
+        //         customer.statusOnCharging = 1
+        //     } else if (customer.statusOnCharging == 1) {
+        //         customer.statusOnCharging = 2
+        //         if (!validationsCustomer(customer)) {
+        //             customer.statusOnCharging = 11
+        //             return;
+        //         }
+        //         if (!customer.typeCharging) {
+        //             showSimpleToast("É obrigatório informar o tipo de cobrança.");
+        //             customer.statusOnCharging = 11
+        //             return;
+        //         } else if ((customer.typeCharging == 'boletoBS' || customer.typeCharging == 'boletoPG') && (!customer.commentBoleto || customer.commentBoleto.length == 0 )) {
+        //             showSimpleToast("É obrigatório informar comentário para cobrança por boleto.");
+        //             customer.statusOnCharging = 11
+        //             return;
+        //         } else if (!customer.Ammount) {
+        //             showSimpleToast("É obrigatório informar a quantia para cobrança.");
+        //             customer.statusOnCharging = 11
+        //             return;
+        //         }
+        //         if (customer.typeCharging == 'boletoBS') {
+        //             chargeBoletoBS(customer, { Chargings: [{Ammount: customer.Ammount}], commentBoleto: customer.commentBoleto}).then(function (result) {
+        //                 customer.statusOnCharging = 3;
+        //             }).catch(function (error) {
+        //                 customer.statusOnCharging = 4;
+        //                 customer.errorMsg = error;
+        //                 showSimpleToast(error);
+        //             })
+        //         } else if (customer.typeCharging == 'boletoPG') {
+        //             chargeBoletoPG(customer, { Chargings: [{Amount: customer.Ammount}], commentBoleto: customer.commentBoleto}).then(function (result) {
+        //                 customer.statusOnCharging = 3;
+        //             }, function (reject) {
+        //                 showSimpleToast(reject.msg);
+        //                 customer.errorMsg = reject.msg;
+        //                 if (reject.block) {
+        //                     customer.statusOnCharging = 4;
+        //                 } else {
+        //                     delete customer.statusOnCharging;
+        //                 }
+        //             }).catch(function (error) {
+        //                 customer.statusOnCharging = 4;
+        //                 showSimpleToast(error);
+        //             });
+        //         } else if (customer.typeCharging == 'cartao') {
+        //             chargeCreditCart(customer, { Chargings: [{Amount: customer.Ammount}], commentBoleto: customer.commentBoleto}).then(function (result) {
+        //                 customer.statusOnCharging = 3;
+        //             }, function (reject) {
+        //                 showSimpleToast(reject.msg);
+        //                 customer.errorMsg = reject.msg;
+        //                 if (reject.block) {
+        //                     customer.statusOnCharging = 4;
+        //                 } else {
+        //                     delete customer.statusOnCharging;
+        //                 }
+        //             }).catch(function (error) {
+        //                 customer.statusOnCharging = 4;
+        //                 showSimpleToast(error);
+        //             });
+        //         }
+        //      } else if (customer.statusOnCharging == 4) {
+        //         showSimpleToast(customer.errorMsg);
+        //     }
+        // }
 
-        function getTotalAmmountCustomer(phones) {
-            var total = 0;
-            for (var i in phones) {
-                if (!phones[i].Chargings[0].Charged) {
-                    total = total + phones[i].Chargings[0].Ammount;
-                }
-            }
-            return total;
-        }
+        // function getTotalAmmountCustomer(phones) {
+        //     var total = 0;
+        //     for (var i in phones) {
+        //         if (!phones[i].Chargings[0].Charged) {
+        //             total = total + phones[i].Chargings[0].Ammount;
+        //         }
+        //     }
+        //     return total;
+        // }
     }
 })();

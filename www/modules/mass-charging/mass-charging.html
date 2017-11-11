@@ -22,66 +22,64 @@
             
             <div class="loader" ng-if="vm.loading"></div>
             <div ng-if="!vm.loading && vm.lista.length == 0" class="no-data">Não há itens para exibir</div>
+
             <div class="form-group shadow-z-1 col-xs-12 margin-top" ng-show="!vm.loading && vm.lista.length > 0">
                 <div>
                     <div class="check-all" ng-click="vm.checkAllCustomers()">Marcar/Desmarcar Todos</div>
                 </div>
                 <div ng-repeat="customer in vm.lista" class="cliente">
                     <div class="row-cliente">
-                        <div>{{customer.Name}}</div>
-                        <div class="tipo-cobranca" ng-show="customer.statusOnCharging">
-                            <input type="radio" name="formaCobrancaCliente{{customer.Id}}" value="boletoBS" id="radioBoletoBSCliente{{customer.Id}}" ng-model="customer.typeCharging" ng-disabled="vm.resquenting || customer.statusOnCharging == 2 || customer.statusOnCharging == 3  || customer.statusOnCharging == 4">
-                            <label for="radioBoletoBSCliente{{customer.Id}}">Boleto BS</label>
-                            <input type="radio" name="formaCobrancaCliente{{customer.Id}}" value="boletoPG" id="radioBoletoPGCliente{{customer.Id}}" ng-model="customer.typeCharging" ng-disabled="vm.resquenting || customer.statusOnCharging == 2 || customer.statusOnCharging == 3  || customer.statusOnCharging == 4">
-                            <label for="radioBoletoPGCliente{{customer.Id}}">Boleto PG</label>
-                            <input type="radio" name="formaCobrancaCliente{{customer.Id}}" value="cartao" id="radioCartaoCliente{{customer.Id}}" ng-model="customer.typeCharging" ng-disabled="vm.resquenting || customer.statusOnCharging == 2 || customer.statusOnCharging == 3  || customer.statusOnCharging == 4">
-                            <label for="radioCartaoCliente{{customer.Id}}">Cartão de Crédito</label>
+                        <div class="cliente">
+                            {{customer.Name}}
                         </div>
-                        <div class="column-comentario" ng-show="customer.statusOnCharging">
-                            <label>Comentário:</label>
-                            <input type="text" ng-disabled="customer.typeCharging == 'cartao' || customer.statusOnCharging == 2 || customer.statusOnCharging == 3  || customer.statusOnCharging == 4 || vm.resquenting" ng-model="customer.commentBoleto">
+
+                        <div class="linhas">
+                            <div ng-repeat="phone in customer.Phones" class="linha">
+                                <div class="linha-info">{{'(' + phone.DDD + ') ' + phone.Number}}</div>
+                                <div class="linha-info">{{phone.NickName}}</div>
+                                <div class="linha-info">{{phone.IdOperator}}</div>
+                                <div class="linha-info">{{phone.Ammount}}</div>
+                            </div>
                         </div>
-                        <div class="column-valor" ng-show="customer.statusOnCharging">
-                            <label>Valor:</label><!--{{phone.Chargings[0].Ammount / 100 | currency :"R$":2}} -->
-                            <input ng-model="customer.Ammount" money-input ng-disabled="customer.statusOnCharging == 2 || customer.statusOnCharging == 3  || customer.statusOnCharging == 4 || vm.resquenting">
+
+                        <div class="payment-set">
+                            <div class="column-payment">
+                                <label>Forma Pagamento:</label>
+                                <select id="selectPaymentMethod" class="form-control" ng-options="payment.id as payment.description for payment in vm.paymentMethod" ng-model="customer.typeCharging">
+                                    <option value="">Selecione</option>
+                                </select>
+                            </div>
+    
+                            <div class="column-payment">
+                                <label>Comentário Interno:</label>
+                                <input class="form-control" type="text" ng-disabled="vm.resquenting" ng-model="customer.Charging.ChargingComment">
+                            </div>
+
+                            <div class="column-payment">
+                                <label>Comentário Boleto:</label>
+                                <input class="form-control" type="text" ng-disabled="customer.typeCharging == 'cartao' || vm.resquenting" ng-model="customer.commentBoleto">
+                            </div>
+
+                            <div class="column-payment">
+                                <label>Valor Total:</label>
+                                <input class="form-control" ng-model="customer.Ammount" ng-disabled="vm.resquenting">
+                            </div>
                         </div>
-                        <button class="btn botao-cobrar-cliente btn-primary" ng-click="vm.chargeWholeCustomer(customer, customer.Phones)" ng-disabled="vm.resquenting || customer.statusOnCharging == 2 || customer.statusOnCharging == 3  || customer.statusOnCharging == 4">
-                                {{customer.statusOnCharging == 4 ? 'Erro na Cobrança' : customer.statusOnCharging == 3 ? 'Sucesso' : customer.statusOnCharging == 2 ? 'Processando...' : customer.statusOnCharging == 1 ? 'Confirmar Cobrança?' : 'Realizar Cobrança'}}
+
+                        <button class="btn botao-cobrar-cliente btn-primary" ng-click="vm.chargeCustomer(customer)" ng-disabled="vm.resquenting" ng-class="{'btn-primary' : !customer.statusOnCharging, 'btn-warning' : customer.statusOnCharging == 1, 'btn-info' : customer.statusOnCharging == 2, 'btn-success' : customer.statusOnCharging == 3, 'btn-danger' : customer.statusOnCharging == 4}">
+                                {{  customer.statusOnCharging == 4 ? 'Erro na Cobrança' :
+                                    customer.statusOnCharging == 3 ? 'Sucesso' : 
+                                    customer.statusOnCharging == 2 ? 'Processando...' :
+                                    customer.statusOnCharging == 1 ? 'Confirmar Cobrança?' :
+                                    customer.Charging.Charged ? 'Já Cobrado' : 'Realizar Cobrança'
+                                }}
                         </button> 
-                    </div>
-                    <div ng-repeat="phone in customer.Phones" class="linhas striped">
-                        <div>
-                            <input type="checkbox" class="checkbox" ng-disabled="phone.statusOnCharging || vm.resquenting || phone.Chargings[0].Charged || customer.statusOnCharging > 0" ng-model="phone.checked" id="checkbox{{phone.Id}}">
-                        </div>
-                        <div style="width: 82px;"><label for="checkbox{{phone.Id}}">{{phone.NickName}}</label></div>
-                        <div style="width: 110px;">({{phone.DDD}}) {{phone.Number}}</div>
-                        <div class="tipo-cobranca">
-                            <input type="radio" name="formaCobranca{{phone.Id}}" value="boletoBS" id="radioBoletoBS{{phone.Id}}" ng-model="phone.typeCharging" ng-disabled="phone.statusOnCharging || vm.resquenting || phone.Chargings[0].Charged || customer.statusOnCharging > 0">
-                            <label for="radioBoletoBS{{phone.Id}}">Boleto BS</label>
-                            <input type="radio" name="formaCobranca{{phone.Id}}" value="boletoPG" id="radioBoletoPG{{phone.Id}}" ng-model="phone.typeCharging" ng-disabled="phone.statusOnCharging || vm.resquenting || phone.Chargings[0].Charged || customer.statusOnCharging > 0">
-                            <label for="radioBoletoPG{{phone.Id}}">Boleto PG</label>
-                            <input type="radio" name="formaCobranca{{phone.Id}}" value="cartao" id="radioCartao{{phone.Id}}" ng-model="phone.typeCharging" ng-disabled="phone.statusOnCharging || vm.resquenting || phone.Chargings[0].Charged || customer.statusOnCharging > 0">
-                            <label for="radioCartao{{phone.Id}}">Cartão de Crédito</label>
-                        </div>
-                        <div class="column-comentario">
-                            <label>Comentário:</label>
-                            <input type="text" ng-disabled="phone.typeCharging == 'cartao' || phone.statusOnCharging || vm.resquenting || phone.Chargings[0].Charged || customer.statusOnCharging > 0" ng-model="phone.commentBoleto">
-                        </div>
-                        <div class="column-valor">
-                            <label>Valor:</label><!--{{phone.Chargings[0].Ammount / 100 | currency :"R$":2}} -->
-                            <input ng-model="phone.Chargings[0].Ammount" money-input ng-disabled="phone.statusOnCharging || vm.resquenting || phone.Chargings[0].Charged || customer.statusOnCharging > 0">
-                        </div>
-                        <div>
-                            <button class="btn botao-cobrar" ng-class="{'btn-primary' : !phone.statusOnCharging, 'btn-warning' : phone.statusOnCharging == 1, 'btn-info' : phone.statusOnCharging == 2, 'btn-success' : phone.statusOnCharging == 3, 'btn-danger' : phone.statusOnCharging == 4,}" ng-click="vm.chargePhoneNumber(customer, phone)" ng-disabled="phone.statusOnCharging == 2 || phone.statusOnCharging == 3 || vm.resquenting || phone.Chargings[0].Charged || customer.statusOnCharging > 0">
-                                {{phone.statusOnCharging == 4 ? 'Erro na Cobrança' : phone.statusOnCharging == 3 ? 'Sucesso' : phone.statusOnCharging == 2 ? 'Processando...' : phone.statusOnCharging == 1 ? 'Confirmar Cobrança?' : phone.Chargings[0].Charged ? 'Já Cobrado' : 'Realizar Cobrança'}}    
-                            </button> 
-                        </div>
                     </div>
                 </div>
 
-                <button class="btn btn-primary btn-cobranca-massa" ng-click="vm.doMassCharge()" ng-disabled="vm.resquenting">
+                <!-- <button class="btn btn-primary btn-cobranca-massa" ng-click="vm.doMassCharge()" ng-disabled="vm.resquenting">
                     {{ vm.resquenting ? 'Processando...' : 'Realizar Cobrança em Massa' }}
-                </button> 
+                </button>  -->
             </div>
         </div>
     </div>
