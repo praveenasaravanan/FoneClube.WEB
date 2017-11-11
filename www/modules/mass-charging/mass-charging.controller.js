@@ -18,6 +18,7 @@
         vm.month = new Date().getMonth() + 1;
         vm.checkedAll = false;
         vm.checkAllCustomers = checkAllCustomers;
+        vm.chargeWholeCustomer = chargeWholeCustomer;
 
         init();
         function init() {
@@ -84,7 +85,6 @@
                 processCharging(customer, phone);
             }
             if (phone.statusOnCharging == 4) {
-                debugger;
                 showSimpleToast(phone.errorMsg);
             }
         }
@@ -448,6 +448,89 @@
                 }
                 vm.resquenting = false;
             });
+        }
+
+        function chargeWholeCustomer(customer, phones) {
+             if (!customer.statusOnCharging) {
+                customer.Ammount = getTotalAmmountCustomer(phones);
+                if (customer.Ammount == 0) {
+                    showSimpleToast('Não há cobranças a serem realizadas para este cliente.');
+                    return;
+                }
+                customer.statusOnCharging = 11
+            } else if (customer.statusOnCharging == 11) {
+                customer.statusOnCharging = 1
+            } else if (customer.statusOnCharging == 1) {
+                customer.statusOnCharging = 2
+                if (!validationsCustomer(customer)) {
+                    customer.statusOnCharging = 11
+                    return;
+                }
+                if (!customer.typeCharging) {
+                    showSimpleToast("É obrigatório informar o tipo de cobrança.");
+                    customer.statusOnCharging = 11
+                    return;
+                } else if ((customer.typeCharging == 'boletoBS' || customer.typeCharging == 'boletoPG') && (!customer.commentBoleto || customer.commentBoleto.length == 0 )) {
+                    showSimpleToast("É obrigatório informar comentário para cobrança por boleto.");
+                    customer.statusOnCharging = 11
+                    return;
+                } else if (!customer.Ammount) {
+                    showSimpleToast("É obrigatório informar a quantia para cobrança.");
+                    customer.statusOnCharging = 11
+                    return;
+                }
+                if (customer.typeCharging == 'boletoBS') {
+                    chargeBoletoBS(customer, { Chargings: [{Ammount: customer.Ammount}], commentBoleto: customer.commentBoleto}).then(function (result) {
+                        customer.statusOnCharging = 3;
+                    }).catch(function (error) {
+                        customer.statusOnCharging = 4;
+                        customer.errorMsg = error;
+                        showSimpleToast(error);
+                    })
+                } else if (customer.typeCharging == 'boletoPG') {
+                    chargeBoletoPG(customer, { Chargings: [{Amount: customer.Ammount}], commentBoleto: customer.commentBoleto}).then(function (result) {
+                        customer.statusOnCharging = 3;
+                    }, function (reject) {
+                        showSimpleToast(reject.msg);
+                        customer.errorMsg = reject.msg;
+                        if (reject.block) {
+                            customer.statusOnCharging = 4;
+                        } else {
+                            delete customer.statusOnCharging;
+                        }
+                    }).catch(function (error) {
+                        customer.statusOnCharging = 4;
+                        showSimpleToast(error);
+                    });
+                } else if (customer.typeCharging == 'cartao') {
+                    chargeCreditCart(customer, { Chargings: [{Amount: customer.Ammount}], commentBoleto: customer.commentBoleto}).then(function (result) {
+                        customer.statusOnCharging = 3;
+                    }, function (reject) {
+                        showSimpleToast(reject.msg);
+                        customer.errorMsg = reject.msg;
+                        if (reject.block) {
+                            customer.statusOnCharging = 4;
+                        } else {
+                            delete customer.statusOnCharging;
+                        }
+                    }).catch(function (error) {
+                        customer.statusOnCharging = 4;
+                        showSimpleToast(error);
+                    });
+                }
+             } else if (customer.statusOnCharging == 4) {
+                showSimpleToast(customer.errorMsg);
+            }
+        }
+
+        function getTotalAmmountCustomer(phones) {
+            var total = 0;
+            for (var i in phones) {
+                if (!phones[i].Chargings[0].Charged) {
+                    total = total + phones[i].Chargings[0].Ammount;
+                }
+            }
+            return total;
         }
     }
 })();
