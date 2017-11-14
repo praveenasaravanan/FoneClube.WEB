@@ -61,17 +61,32 @@
             display: flex;
             flex-direction: column;
             min-width: 400px;
+            width: 40%;
+
             .linha {
                 display: flex;
                 flex-direction: row;
             }
-            .linha-info {
+            .linha-number {
                 margin-right: 10px;
+                margin-left: 20px;
+                width: 104px;
+            }
+
+            .linha-nickname {
+                margin-right: 10px;
+                width: 150px;
+            }
+            
+            .linha-valor {
+                margin-right: 10px;
+                width: 60px;
             }
         }
 
         .payment-set {
             min-width: 370px;
+            width: 40%;
 
             .form-control {
                 font-size: 13px !important;
@@ -89,6 +104,10 @@
                 width: 100%;
                 margin-bottom: 3px;
             }
+        }
+
+        .button-box {
+            width: 20%;
         }
     
 

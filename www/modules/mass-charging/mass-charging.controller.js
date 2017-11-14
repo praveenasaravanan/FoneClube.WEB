@@ -13,13 +13,14 @@
         vm.viewName = "Cobrança em massa";
         vm.doMassCharge = doMassCharge;
         //vm.loading = true;
-        vm.year = new Date().getFullYear();
-        vm.month = new Date().getMonth() + 1 - 1;
+
         vm.checkedAll = false;
         vm.checkAllCustomers = checkAllCustomers;
 
-
         vm.chargeCustomer = chargeCustomer;
+        vm.plans = [];
+        vm.year = new Date().getFullYear();
+        vm.month = new Date().getMonth() + 1;
 
         init();
         function init() {
@@ -29,13 +30,17 @@
                 { id:'boletoPG', description: 'Boleto PG' },
                 { id:'cartao', description: 'Cartão de Crédito' }
             ]
+            // FoneclubeService.getPlans().then(function(result){
+            //     console.log(result);
+            //     vm.plans = result;
+            // });
             FoneclubeService.getChargingClients({month: vm.month, year: vm.year}).then(function(result) {
-                for (var i in result) {
-                    result[i].Ammount = 0;
-                    for (var x in result[i].Phones) {
-                        result[i].Ammount = parseFloat(result[i].Phones[x].Ammount) + parseFloat(result[i].Ammount);
-                    }
-                }
+                // for (var i in result) {
+                //     result[i].Ammount = 0;
+                //     for (var x in result[i].Phones) {
+                //         result[i].Ammount = parseFloat(result[i].Phones[x].Ammount) + parseFloat(result[i].Ammount);
+                //     }
+                // }
                 console.log(result);
                 vm.lista = result;
                 vm.loading = false;
@@ -137,14 +142,13 @@
         }
 
         function getAPIParansClient(customer, PaymentType) {
-            var param = {
+            return {
                 "ClientId" : customer.Id,
-                "Ammount": '55.55',
-                "Comment": customer.commentBoleto || 'teste',
-                "ChargingComment": customer.Charging.ChargingComment || 'teste',
+                "Ammount": customer.Charging.Ammount,
+                "Comment": customer.commentBoleto || '',
+                "ChargingComment": customer.Charging.ChargingComment || '',
                 "PaymentType": PaymentType
             }
-            return param;
         }
 
         function chargeBoletoBS(customer) {
@@ -205,9 +209,9 @@
                         defer.reject({block: true , msg: 'Erro na captura da transação ' + error.status, customerId: customer.Id});
                     });
                 }, function (error) {
-                    defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id});
+                    defer.reject({block: true , msg: 'Erro ao realizar transação, Cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber + 'Msg Pagarme: ' + error.data.errors[0].message, customerId: customer.Id});
                 }).catch(function (error) {
-                    defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id});
+                    defer.reject({block: true , msg: 'Erro ao realizar transação, Cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber + 'Msg Pagarme: ' + error.data.errors[0].message, customerId: customer.Id});
                 });
             }).catch(function() {
                 defer.reject({block: true , msg: error, customerId: customer.Id});
@@ -259,7 +263,7 @@
                                 }
                             });
                         }).catch(function (error) {
-                            defer.reject({block: true , msg: 'Erro ao realizar transação, verifique os dados do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id});
+                            defer.reject({block: true , msg: 'Erro ao realizar transação, Cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber + 'Msg Pagarme: ' + error.data.errors[0].message, customerId: customer.Id});
                         });
                     }).catch(function (error) {
                         defer.reject({block: true , msg: error, customerId: customer.Id});
@@ -270,20 +274,6 @@
             });
             return defer.promise;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         // Utils =====================================================================================================
         function validationsCustomer(customer) {
@@ -301,11 +291,11 @@
                 showSimpleToast("Selecione uma forma de pagamento para o cliente: " + customer.Name + ".");
                 return false;
             }
-            if (!customer.commentBoleto || (customer.commentBoleto != 1 && customer.commentBoleto.length == 0)) {
+            if (customer.typeCharging != 'cartao' && !customer.commentBoleto && customer.commentBoleto.length == 0) {
                 showSimpleToast("Para cobranças por boleto é necessário informar o 'Comentário Boleto'.");
                 return false;
             }
-            if (!customer.Ammount || customer.Ammount == 0) {
+            if (!customer.Charging.Ammount || customer.Charging.Ammount == 0) {
                 showSimpleToast("Obrigátio informar a quantia para cobrança. Cliente: " + customer.Name + ".");
                 return false;
             }
@@ -340,6 +330,11 @@
                     'number' : contacts[0].Number.toString()
                 }
             }
+        }
+        function getOperator(id) {
+            return vm.plans.find(function (element) {
+                return element.id == id;
+            });
         }
 
         vm.toastShow = false;
@@ -438,10 +433,8 @@
         function checkAllCustomers() {
             vm.checkedAll = !vm.checkedAll;
             for (var i in vm.lista) {
-                for (var y in vm.lista[i].Phones) {
-                    if (!vm.lista[i].Phones[y].statusOnCharging && !vm.lista[i].Phones[y].Chargings[0].Charged) {
-                        vm.lista[i].Phones[y].checked = vm.checkedAll;
-                    }
+                if (!vm.lista[i].statusOnCharging && !vm.lista[i].Charging.Charged) {
+                    vm.lista[i].checked = vm.checkedAll;
                 }
             }
         }
@@ -457,6 +450,7 @@
             if (toChargeList.length == 0) {
                 showSimpleToast("Selecione ao menos uma linha.");
                 vm.resquenting = false;
+                return;
             }
 
             for (var i in toChargeList) {
@@ -470,11 +464,11 @@
             angular.forEach(toChargeList , function(customer) {
                 var promise = null
                 if (customer.typeCharging == 'boletoBS') {
-                    promise = chargeBoletoBS(customer)
+                    promise = chargeBoletoBS(customer);
                 } else if (customer.typeCharging == 'boletoPG') {
-                    promise = chargeBoletoPG(customer)
+                    promise = chargeBoletoPG(customer);
                 } else if (customer.typeCharging == 'cartao') {
-                    promise = chargeCreditCart(customer)
+                    promise = chargeCreditCart(customer);
                 }
                 promises.push(promise);
             });
@@ -491,38 +485,38 @@
                 }
                 vm.resquenting = false;
             }, function (promisesResult) {
-                // var customer = vm.lista.find(function (element) {
-                //     return promisesResult.customerId == element.Id;
-                // });
+                var customer = vm.lista.find(function (element) {
+                    return promisesResult.customerId == element.Id;
+                });
 
                 // var phone = customer.Phones.find(function (element) {
                 //     return element.Id == promisesResult.phoneId;
                 // });
 
-                // phone.errorMsg = promisesResult.msg;
-                // phone.checked = false;
-                // if (promisesResult.block) {
-                //     phone.statusOnCharging = 4;
-                // } else {
-                //     delete phone.statusOnCharging;
-                // }
+                customer.errorMsg = promisesResult.msg;
+                customer.checked = false;
+                if (promisesResult.block) {
+                    customer.statusOnCharging = 4;
+                } else {
+                    delete customer.statusOnCharging;
+                }
                 vm.resquenting = false;
             }).catch(function (promisesResult) {
-                // var customer = vm.lista.find(function (element) {
-                //     return promisesResult.customerId == element.Id;
-                // });
+                var customer = vm.lista.find(function (element) {
+                    return promisesResult.customerId == element.Id;
+                });
 
                 // var phone = customer.Phones.find(function (element) {
                 //     return element.Id == promisesResult.phoneId;
                 // });
 
-                // phone.errorMsg = promisesResult.msg;
-                // phone.checked = false;
-                // if (promisesResult.block) {
-                //     phone.statusOnCharging = 4;
-                // } else {
-                //     delete phone.statusOnCharging;
-                // }
+                customer.errorMsg = promisesResult.msg;
+                customer.checked = false;
+                if (promisesResult.block) {
+                    customer.statusOnCharging = 4;
+                } else {
+                    delete customer.statusOnCharging;
+                }
                 vm.resquenting = false;
             });
         }
