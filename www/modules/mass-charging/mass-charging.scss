@@ -5,57 +5,6 @@
     flex-direction: column;                         
     background-color: $background-default;
 
-    .cliente {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 15px;
-    }
-
-    .linhas {
-        display: flex;
-        flex-direction: row;
-        margin-left: 20px;
-        justify-content: space-between;
-        align-items: center;
-        height: 52px;
-        border-radius: 3px;
-
-        label {
-            margin-bottom: 0px !important;
-        }
-    }
-
-    .column-comentario {
-        display: flex;
-        flex-direction: column;
-        width: 180px;
-
-        input {
-            width: 180px;
-        }
-    }
-
-    .column-valor {
-        display: flex;
-        flex-direction: column;
-        width: 95px;
-
-        input {
-            width: 95px;
-        }
-    }
-
-    .botao-cobrar {
-        width: 150px;
-        outline: none;
-        margin-right: 6px;
-    }
-
-    .checkbox {
-        outline: none !important;
-        margin-left: 4px;
-    }
-
     .check-all {
         margin-bottom: 22px;
         color: blue;
@@ -64,11 +13,6 @@
         width: 159px;
     }
 
-    .tipo-cobranca {
-        input {
-            outline: none;
-        }
-    }
 
     .simple-toast {
         position: absolute;
@@ -95,12 +39,89 @@
         background-color: #dedede;
     }
 
-    .fundo-verde {
+    .row-cliente {
         background-color: #c1ffc1;
         border-radius: 3px;
-        height: 30px;
+        min-height: 143px;
         display: flex;
         align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        width: 100%;
+        position: relative;
+
+        .cliente {
+            position: absolute;
+            display: block;
+            top: 4px;
+            left: 10px;
+        }
+
+        .linhas {
+            display: flex;
+            flex-direction: column;
+            min-width: 400px;
+            width: 40%;
+
+            .linha {
+                display: flex;
+                flex-direction: row;
+            }
+            .linha-number {
+                margin-right: 10px;
+                margin-left: 20px;
+                width: 104px;
+            }
+
+            .linha-nickname {
+                margin-right: 10px;
+                width: 150px;
+            }
+            
+            .linha-valor {
+                margin-right: 10px;
+                width: 60px;
+            }
+        }
+
+        .payment-set {
+            min-width: 370px;
+            width: 40%;
+
+            .form-control {
+                font-size: 13px !important;
+                height: 30px !important;
+                width: 180px !important;
+            }
+
+            label {
+                width: 150px;
+            }
+
+            .column-payment {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                margin-bottom: 3px;
+            }
+        }
+
+        .button-box {
+            width: 20%;
+        }
+    
+
+    
+        .checkbox {
+            outline: none !important;
+            margin-left: 4px;
+        }
+    }
+
+    .botao-cobrar-cliente {
+        width: 180px;
+        outline: none;
+        margin-right: 6px;
     }
 
     .btn-buscar {
@@ -121,6 +142,10 @@
 
     .btn-cobranca-massa {
         margin-top: 40px;
+    }
+
+    button {
+        outline: none;
     }
 
 }
