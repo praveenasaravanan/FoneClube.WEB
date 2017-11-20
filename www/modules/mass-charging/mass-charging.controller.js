@@ -16,6 +16,7 @@
 
         vm.checkedAll = false;
         vm.checkAllCustomers = checkAllCustomers;
+        vm.hasOneChecked = hasOneChecked;
 
         vm.chargeCustomer = chargeCustomer;
         vm.plans = [];
@@ -87,7 +88,14 @@
         function processCharging(customer) {
             if (customer.typeCharging == 'boletoBS') {
                 chargeBoletoBS(customer).then(function (result) {
-                    customer.statusOnCharging = 3;
+                    if (result.result == 'sucesso') {
+                        customer.statusOnCharging = 3;
+                    } else {
+                        customer.statusOnCharging = 4;
+                        customer.checked = false;
+                        customer.errorMsg = error;
+                        showSimpleToast(error);
+                    }
                 }).catch(function (error) {
                     customer.statusOnCharging = 4;
                     customer.checked = false;
@@ -101,15 +109,17 @@
                     return;
                 }
                 chargeBoletoPG(customer).then(function (result) {
-                    customer.statusOnCharging = 3;
-                }, function (reject) {
-                    showSimpleToast(reject.msg);
-                    customer.errorMsg = reject.msg;
-                    customer.checked = false;
-                    if (reject.block) {
-                        customer.statusOnCharging = 4;
+                    if (result.result == 'sucesso') {
+                        customer.statusOnCharging = 3;
                     } else {
-                        delete customer.statusOnCharging;
+                        showSimpleToast(reject.msg);
+                        customer.errorMsg = reject.msg;
+                        customer.checked = false;
+                        if (reject.block) {
+                            customer.statusOnCharging = 4;
+                        } else {
+                            delete customer.statusOnCharging;
+                        }
                     }
                 }).catch(function (error) {
                     customer.statusOnCharging = 4;
@@ -123,15 +133,17 @@
                     return;
                 }
                 chargeCreditCart(customer).then(function (result) {
-                    customer.statusOnCharging = 3;
-                }, function (reject) {
-                    showSimpleToast(reject.msg);
-                    customer.errorMsg = reject.msg;
-                    customer.checked = false;
-                    if (reject.block) {
-                        customer.statusOnCharging = 4;
+                    if (result.result == 'sucesso') {
+                        customer.statusOnCharging = 3;
                     } else {
-                        delete customer.statusOnCharging;
+                        showSimpleToast(reject.msg);
+                        customer.errorMsg = reject.msg;
+                        customer.checked = false;
+                        if (reject.block) {
+                            customer.statusOnCharging = 4;
+                        } else {
+                            delete customer.statusOnCharging;
+                        }
                     }
                 }).catch(function (error) {
                     customer.statusOnCharging = 4;
@@ -144,20 +156,21 @@
         function getAPIParansClient(customer, PaymentType) {
             return {
                 "ClientId" : customer.Id,
-                "Ammount": customer.Charging.Ammount,
+                "Ammount": customer.Charging.Ammount.replace('.', ''),
                 "Comment": customer.commentBoleto || '',
                 "ChargingComment": customer.Charging.ChargingComment || '',
                 "PaymentType": PaymentType
             }
         }
+        
 
         function chargeBoletoBS(customer) {
             var defer = $q.defer();
             var param = getAPIParansClient(customer, 3);
             FoneclubeService.postChargingClient(vm.year, vm.month, param).then(function (result) {
-                defer.resolve({result: 'sucesso',customerId: customer.Id});
+                defer.resolve({result: 'sucesso', customerId: customer.Id});
             }).catch(function (error) {
-                defer.reject({errorMsg: error.data.Message, customerId: customer.Id});
+                defer.resolve({result: 'fail', errorMsg: error.data.Message, customerId: customer.Id});
             });
             return defer.promise; 
         }
@@ -206,15 +219,15 @@
                             console.log("Houve erro mas a cobrança foi realizada");//Falar com Cardozo;
                         });
                     }).catch(function(error) {
-                        defer.reject({block: true , msg: 'Erro na captura da transação ' + error.status, customerId: customer.Id});
+                        defer.resolve({result: 'fail', block: true , msg: 'Erro na captura da transação ' + error.status, customerId: customer.Id});
                     });
                 }, function (error) {
-                    defer.reject({block: true , msg: 'Erro ao realizar transação, Cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber + 'Msg Pagarme: ' + error.data.errors[0].message, customerId: customer.Id});
+                    defer.resolve({result: 'fail', block: true , msg: 'Erro ao realizar transação, Cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber + 'Msg Pagarme: ' + error.data.errors[0].message, customerId: customer.Id});
                 }).catch(function (error) {
-                    defer.reject({block: true , msg: 'Erro ao realizar transação, Cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber + 'Msg Pagarme: ' + error.data.errors[0].message, customerId: customer.Id});
+                    defer.resolve({result: 'fail', block: true , msg: 'Erro ao realizar transação, Cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber + 'Msg Pagarme: ' + error.data.errors[0].message, customerId: customer.Id});
                 });
             }).catch(function() {
-                defer.reject({block: true , msg: error, customerId: customer.Id});
+                defer.resolve({result: 'fail', block: true , msg: error, customerId: customer.Id});
             });
             return defer.promise;
         }
@@ -233,7 +246,7 @@
             var card = null;
             PagarmeService.getCard(customer.IdPagarme).then(function(result) {
                 if (result.length == 0) {
-                    defer.reject({block: true, msg:'Não há cartão de crédito cadastrado para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id});
+                    defer.resolve({result: 'fail', block: true, msg:'Não há cartão de crédito cadastrado para o cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id});
                 } else {
                     card = result[0];
                     FoneclubeService.postChargingClient(vm.year, vm.month, foneclubeCustomer).then(function (result) {
@@ -257,20 +270,20 @@
                                 });
                             }).catch(function(error){
                                 try{
-                                    defer.reject({block: true , msg: 'Erro na captura da transação' + error.status, customerId: customer.Id});
+                                    defer.resolve({result: 'fail', block: true , msg: 'Erro na captura da transação' + error.status, customerId: customer.Id});
                                 } catch(erro) {
-                                    defer.reject({block: true , msg: 'Erro na captura da transação', customerId: customer.Id});
+                                    defer.resolve({result: 'fail', block: true , msg: 'Erro na captura da transação', customerId: customer.Id});
                                 }
                             });
                         }).catch(function (error) {
-                            defer.reject({block: true , msg: 'Erro ao realizar transação, Cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber + 'Msg Pagarme: ' + error.data.errors[0].message, customerId: customer.Id});
+                            defer.resolve({result: 'fail', block: true , msg: 'Erro ao realizar transação, Cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber + 'Msg Pagarme: ' + error.data.errors[0].message, customerId: customer.Id});
                         });
                     }).catch(function (error) {
-                        defer.reject({block: true , msg: error, customerId: customer.Id});
+                        defer.resolve({result: 'fail', block: true , msg: error, customerId: customer.Id});
                     });
                 }
             }).catch(function(error){
-                defer.reject({block: false, msg:'falha ao recuperar cartão do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id});
+                defer.resolve({result: 'fail', block: false, msg:'falha ao recuperar cartão do cliente: ' + customer.Name + ", CPF: " + customer.DocumentNumber, customerId: customer.Id});
             });
             return defer.promise;
         }
@@ -439,6 +452,16 @@
             }
         }
 
+        function hasOneChecked() {
+            for (var x in vm.lista) {
+                if (vm.lista[x].checked) {
+                    return true;
+                    break
+                }
+            }
+            return false;
+        }
+
         function doMassCharge() {
             vm.resquenting = true;
             var lista = angular.copy(vm.lista)
@@ -475,41 +498,30 @@
                 
             $q.all(promises).then(function (promisesResult) {
                 for(var i in promisesResult) {
-                    var customer = vm.lista.find(function (customerRaiz) {
-                        return promisesResult[i].customerId == customerRaiz.Id;
-                    });
-                    for (var y in customer.Phones) {
+                    if (promisesResult[i].result == 'sucesso') {
+                        var customer = vm.lista.find(function (customerRaiz) {
+                            return promisesResult[i].customerId == customerRaiz.Id;
+                        });
                         customer.statusOnCharging = 3;
                         customer.checked = false;
+                    } else {
+                        var customer = vm.lista.find(function (element) {
+                            return promisesResult[i].customerId == element.Id;
+                        });
+                        customer.errorMsg = promisesResult[i].msg;
+                        customer.checked = false;
+                        if (promisesResult[i].block) {
+                            customer.statusOnCharging = 4;
+                        } else {
+                            delete customer.statusOnCharging;
+                        }
                     }
-                }
-                vm.resquenting = false;
-            }, function (promisesResult) {
-                var customer = vm.lista.find(function (element) {
-                    return promisesResult.customerId == element.Id;
-                });
-
-                // var phone = customer.Phones.find(function (element) {
-                //     return element.Id == promisesResult.phoneId;
-                // });
-
-                customer.errorMsg = promisesResult.msg;
-                customer.checked = false;
-                if (promisesResult.block) {
-                    customer.statusOnCharging = 4;
-                } else {
-                    delete customer.statusOnCharging;
                 }
                 vm.resquenting = false;
             }).catch(function (promisesResult) {
                 var customer = vm.lista.find(function (element) {
                     return promisesResult.customerId == element.Id;
                 });
-
-                // var phone = customer.Phones.find(function (element) {
-                //     return element.Id == promisesResult.phoneId;
-                // });
-
                 customer.errorMsg = promisesResult.msg;
                 customer.checked = false;
                 if (promisesResult.block) {

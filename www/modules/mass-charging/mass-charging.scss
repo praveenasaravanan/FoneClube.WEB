@@ -5,6 +5,16 @@
     flex-direction: column;                         
     background-color: $background-default;
 
+    .no-outline {
+        outline: none !important;
+    }
+
+    .floating-button {
+        margin: 0px;
+        position: fixed;
+        bottom: 7vh;
+    }
+    
     .check-all {
         margin-bottom: 22px;
         color: blue;
