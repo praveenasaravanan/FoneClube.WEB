@@ -15,7 +15,7 @@
         vm.validarCEP = validarCEP;
         vm.validarCPF = validarCPF;
         vm.validatePhoneNumber = validatePhoneNumber;
-        vm.getContactParentName = getContactParentName;
+        // vm.getContactParentName = getContactParentName;
         vm.showAddNewPhone = showAddNewPhone;
         vm.goBack = goBack;
         vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
@@ -65,6 +65,8 @@
                         }
                     }
                     console.info(vm.customer);
+                    
+                    populaPai(vm.customer)
                     showDialog.close();
                     // Fix caso não exista numero de telefone -- É necessário manter esse fix por causa de clientes que tenham esse array vazio
                     var dontHaveContact = vm.customer.Phones.filter(function (element, index, array) {
@@ -112,6 +114,15 @@
             });
         };
 
+        function populaPai(customer){
+            
+            vm.customer.NameContactParent = customer.NameParent;
+
+            if(customer.PhoneDDDParent != null && customer.PhoneNumberParent != null)
+                vm.contactParent =  customer.PhoneDDDParent  + customer.PhoneNumberParent;
+
+        }
+
         function getPersonParent(id) {
             if (id) {
                 FoneclubeService.getCustomerById(id).then(function (result) {
@@ -138,7 +149,12 @@
             if (vm.requesting == true) return;
             vm.requesting = true;
             
+            //debugger;
+            //return;
             
+            //TODO
+            //colocar breakpoint nos metodos localhost API, validar se novos atributos chegam
+            //revisar todos nomes entidade .net apos refact de nomes atributos
             var customerSend = {
                 "Id": customer.Id,
                 "DocumentNumber": UtilsService.clearDocumentNumber(customer.DocumentNumber),
@@ -249,7 +265,53 @@
                         // }
                         customerSend.Photos.push({Name:result[i].filename, Tipo: result[i].tipo});
                     }
-                    FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
+
+                    var parentDDD = vm.contactParent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim().substring(0,2);
+                    var parentNumber = vm.contactParent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim().substring(2,11);
+                    var parentName = vm.customer.NameContactParent;
+                    // debugger;
+                    if(vm.contactParent.length > 0 || vm.customer.NameContactParent.length > 0)
+                    {
+          
+                        var customerObj = {
+                            'NameParent':vm.customer.NameContactParent,
+                            'Id': customerSend.Id,
+                            'PhoneDDDParent':parentDDD,
+                            'PhoneNumberParent':parentNumber
+                        }
+
+                        FoneclubeService.postCustomerParent(customerObj).then(function(result){
+                            // debugger;
+                            if(result)
+                                FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
+                            else{
+                                DialogFactory.dialogConfirm({title:'Andamento editar', mensagem: 'Não foi possível atualizar dados do pai da linha, deseja salvaro restante ( reomendável que sim ):', btn1: 'sim', btn2: 'não'})
+                                .then(function(result) {
+                                    if(result) {
+                                        FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
+                                    } else {
+                                        return;
+                                    }
+                                })
+                            }    
+                        }).catch(function(erro){
+                            
+                            DialogFactory.dialogConfirm({title:'Andamento editar', mensagem: 'Não foi possível atualizar dados do pai da linha, deseja salvaro restante ( reomendável que sim ):', btn1: 'sim', btn2: 'não'})
+                            .then(function(result) {
+                                if(result) {
+                                    FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
+                                } else {
+                                    return;
+                                }
+                            })
+                            
+                        });
+
+
+                          
+                    }
+
+                    
                 })
 
             }
@@ -332,20 +394,20 @@
             });
         }
         
-        function getContactParentName() {
-            if (vm.contactParent.length < 13) { 
-                vm.customer.IdParent = "";
-                return
-            }
-            var param = {
-                ddd: clearPhoneNumber(vm.contactParent).substring(0, 2),
-                numero: clearPhoneNumber(vm.contactParent).substring(2)
-            }
-            FoneclubeService.getCustomerByPhoneNumber(param).then(function(result) {
-                vm.customer.IdParent = result.Id;
-                vm.customer.NameContactParent = result.Name;
-            })
-        }
+        // function getContactParentName() {
+        //     if (vm.contactParent.length < 13) { 
+        //         vm.customer.IdParent = "";
+        //         return
+        //     }
+        //     var param = {
+        //         ddd: clearPhoneNumber(vm.contactParent).substring(0, 2),
+        //         numero: clearPhoneNumber(vm.contactParent).substring(2)
+        //     }
+        //     FoneclubeService.getCustomerByPhoneNumber(param).then(function(result) {
+        //         vm.customer.IdParent = result.Id;
+        //         vm.customer.NameContactParent = result.Name;
+        //     })
+        // }
         
         function onTapNewPhoneNumber() {
             vm.customer.Phones.push(
