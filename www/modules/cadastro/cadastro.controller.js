@@ -680,13 +680,17 @@
 
             var personCheckout = {
                 'DocumentNumber': UtilsService.clearDocumentNumber(vm.cpf),  
-                'NameContactParent': vm.whoinvite,
+                // 'NameContactParent': vm.whoinvite,
                 //'IdParent': vm.IdParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
                 //'IdContactParent': vm.IdParent, //se passar um que não existe api não guarda indicação, atualmente não retornamos erro, validar com cliente, cardozo
                 'Phones': phones,
                 'SinglePrice': vm.singlePrice,
                 'DescriptionSinglePrice': vm.descriptionSinglePrice
             };
+
+            // debugger;
+
+            
             
             if (vm.IdParent) {
                 personCheckout.IdParent = vm.IdParent;
@@ -730,32 +734,88 @@
             }
             
             function postUpdatePersonSucess(result) {
-                showLoader.close();
-                if(result) { 
-                    DialogFactory.dialogConfirm({title:'Cadastro Realizado', mensagem: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.', btn1: 'Ir para Home', btn2: 'Realizar Cobrança'}).then(function(result) {
-                        if(result) {
-                            FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
-                                if(vm.singlePrice) {
-                                    result.CacheIn = vm.singlePrice;
-                                    ViewModelUtilsService.showModalCustomer(result);
-                                } else {
-                                    FoneclubeService.getCustomerPlans(UtilsService.clearDocumentNumber(vm.cpf)).then(function(customerPlans){
-                                        var valueTotal = 0;
-                                        if(customerPlans.length > 0) {
-                                            for(var i=0; i<customerPlans.length;i++){
-                                                valueTotal = valueTotal + customerPlans[i].Value;
-                                            }
-                                        }
-                                        result.CacheIn = valueTotal;
-                                        ViewModelUtilsService.showModalCustomer(result);
-                                    });
-                                }
-                            });
-                        } else {
-                            FlowManagerService.changeHomeView();
+
+                FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
+                    
+                    
+                    var parentDDD = vm.phoneContactParent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim().substring(0,2);
+                    var parentNumber = vm.phoneContactParent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim().substring(2,11);
+                    debugger;
+                    var customerObj = {
+                        'NameParent':vm.whoinvite,
+                        'Id': result.Id,
+                        'PhoneDDDParent':parentDDD,
+                        'PhoneNumberParent':parentNumber
+                    }
+    
+                    FoneclubeService.postCustomerParent(customerObj).then(function(result){
+                        var avisopai = '';
+                        if(!result)
+                        {
+                            avisopai = '(menos o pai)'
                         }
-                    })                    
-                }
+ 
+                        
+                        showLoader.close();
+                        if(result) { 
+                            DialogFactory.dialogConfirm({title:'Cadastro Realizado', mensagem: 'Todos dados pessoais enviados, cadastro Foneclube feito com sucesso.' + avisopai, btn1: 'Ir para Home', btn2: 'Realizar Cobrança'}).then(function(result) {
+                                if(result) {
+                                    FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
+                                        if(vm.singlePrice) {
+                                            result.CacheIn = vm.singlePrice;
+                                            ViewModelUtilsService.showModalCustomer(result);
+                                        } else {
+                                            FoneclubeService.getCustomerPlans(UtilsService.clearDocumentNumber(vm.cpf)).then(function(customerPlans){
+                                                var valueTotal = 0;
+                                                if(customerPlans.length > 0) {
+                                                    for(var i=0; i<customerPlans.length;i++){
+                                                        valueTotal = valueTotal + customerPlans[i].Value;
+                                                    }
+                                                }
+                                                result.CacheIn = valueTotal;
+                                                ViewModelUtilsService.showModalCustomer(result);
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    FlowManagerService.changeHomeView();
+                                }
+                            })                    
+                        }
+
+                    }).catch(function(erro){
+                        
+
+                        showLoader.close();
+                        if(result) { 
+                            DialogFactory.dialogConfirm({title:'Cadastro Realizado', mensagem: 'Todos dados pessoais enviados (menos o pai), cadastro Foneclube feito com sucesso.', btn1: 'Ir para Home', btn2: 'Realizar Cobrança'}).then(function(result) {
+                                if(result) {
+                                    FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
+                                        if(vm.singlePrice) {
+                                            result.CacheIn = vm.singlePrice;
+                                            ViewModelUtilsService.showModalCustomer(result);
+                                        } else {
+                                            FoneclubeService.getCustomerPlans(UtilsService.clearDocumentNumber(vm.cpf)).then(function(customerPlans){
+                                                var valueTotal = 0;
+                                                if(customerPlans.length > 0) {
+                                                    for(var i=0; i<customerPlans.length;i++){
+                                                        valueTotal = valueTotal + customerPlans[i].Value;
+                                                    }
+                                                }
+                                                result.CacheIn = valueTotal;
+                                                ViewModelUtilsService.showModalCustomer(result);
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    FlowManagerService.changeHomeView();
+                                }
+                            })                    
+                        }
+                    });
+                });
+
+                
             }
             
             function postUpdatePersonError(error) {
@@ -841,18 +901,20 @@
         }
         
         function getContactParentName() {
-            if (vm.phoneContactParent.length < 13) { 
-                vm.IdParent = "";
-                return 
-            }
-            var param = {
-                ddd: UtilsService.getPhoneNumberFromStringToJson(vm.phoneContactParent).DDD,
-                numero: UtilsService.getPhoneNumberFromStringToJson(vm.phoneContactParent).Number
-            }
-            FoneclubeService.getCustomerByPhoneNumber(param).then(function(result) {
-                vm.IdParent = result.Id;
-                vm.whoinvite = result.Name;
-            })
+            //TODO
+            //preenchimento automatico
+            // if (vm.phoneContactParent.length < 13) { 
+            //     vm.IdParent = "";
+            //     return 
+            // }
+            // var param = {
+            //     ddd: UtilsService.getPhoneNumberFromStringToJson(vm.phoneContactParent).DDD,
+            //     numero: UtilsService.getPhoneNumberFromStringToJson(vm.phoneContactParent).Number
+            // }
+            // FoneclubeService.getCustomerByPhoneNumber(param).then(function(result) {
+            //     vm.IdParent = result.Id;
+            //     vm.whoinvite = result.Name;
+            // })
         }
 
         function onTapCancel(){
