@@ -737,9 +737,16 @@
 
                 FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
                     
+                    debugger
+                    try{
+                        var parentDDD = vm.phoneContactParent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim().substring(0,2);
+                        var parentNumber = vm.phoneContactParent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim().substring(2,11);
+                    }
+                    catch(erro){
+                        var parentDDD = '';
+                        var parentNumber = '';
+                    }
                     
-                    var parentDDD = vm.phoneContactParent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim().substring(0,2);
-                    var parentNumber = vm.phoneContactParent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim().substring(2,11);
                     debugger;
                     var customerObj = {
                         'NameParent':vm.whoinvite,
