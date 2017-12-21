@@ -146,6 +146,8 @@
         }
         
         function onTapSendUser(customer){
+
+            debugger;
             if (vm.requesting == true) return;
             vm.requesting = true;
             
@@ -252,6 +254,7 @@
             }
             
             function runPostUpdateCustomer(customerSend) {
+                debugger;
                 UtilsService.sendImageToUpload(vm.imageSelf, vm.imageFrente, vm.imageVerso).then(function (result) {
                     for(var i in result) {
                         customerSend.Photos = customerSend.Photos.filter(function (element) {
@@ -270,8 +273,7 @@
                     var parentNumber = vm.contactParent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim().substring(2,11);
                     var parentName = vm.customer.NameContactParent;
                     // debugger;
-                    if(vm.contactParent.length > 0 || vm.customer.NameContactParent.length > 0)
-                    {
+                    
           
                         var customerObj = {
                             'NameParent':vm.customer.NameContactParent,
@@ -279,7 +281,7 @@
                             'PhoneDDDParent':parentDDD,
                             'PhoneNumberParent':parentNumber
                         }
-
+                        debugger;
                         FoneclubeService.postCustomerParent(customerObj).then(function(result){
                             // debugger;
                             if(result)
@@ -309,7 +311,7 @@
 
 
                           
-                    }
+                    
 
                     
                 })
