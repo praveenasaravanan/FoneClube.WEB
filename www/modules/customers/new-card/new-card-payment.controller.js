@@ -26,6 +26,7 @@
         vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
 
         vm.etapaDados = true;
+        debugger;
 
         function onTapConfirmarPagamento() {
             if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
@@ -141,25 +142,51 @@
 
         function paymentNewCustomer(){
 
+            debugger;
             vm.disableTapPay = true;
 
             PagarmeService.generateCardHash(cardData).then(function(cardHash){
 
                 vm.statusTransaction = 'Criptografando dados cartão';
-
+                debugger;
                 PagarmeService.postTransactionCard(vm.amount, cardHash, newCustomer)
                 .then(function(result){
 
-
+                    debugger;
                     vm.statusTransaction = 'Transação em andamento';
 
 
                     PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function(result){
+                        debugger;
 
-                        vm.statusTransaction = 'Transação concluída';
-                        vm.disableTapPay = false;
-                        vm.cobrancaRealizada = true;  
-                        saveHistoryPayment();
+                        var customCustomer = {
+                            Id:vm.customer.Id,
+                            IdPagarme:result.customer.id
+                        }
+                        
+                        FoneclubeService.postUpdatePagarmeID(customCustomer).then(function(result){
+                            console.log('FoneclubeService.postUpdatePagarmeID');
+                            console.log(result);
+
+                            vm.statusTransaction = 'Transação concluída';
+                            vm.disableTapPay = false;
+                            vm.cobrancaRealizada = true;  
+                            saveHistoryPayment();
+                        })
+                        .catch(function(error){
+                            console.log('catch error');
+                            console.log(error);
+
+                            vm.statusTransaction = 'Transação concluída sem associar ID pagarme, guarde o ID: result.customer.id , e informe o desenvolvimento';
+                            vm.disableTapPay = false;
+                            vm.cobrancaRealizada = true; 
+                            saveHistoryPayment();
+                            
+                        });
+                        // result.customer.id
+
+
+                        
                     })
                     .catch(function(error){
                         try{        

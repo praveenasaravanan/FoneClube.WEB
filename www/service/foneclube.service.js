@@ -27,6 +27,7 @@
         this.postChargingClient = postChargingClient;
         this.postChargingClientCommitCard = postChargingClientCommitCard;
         this.postCustomerParent = postCustomerParent;
+        this.postUpdatePagarmeID = postUpdatePagarmeID ;
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
         this.getOperators = getOperators;
@@ -147,6 +148,22 @@
             });
 
             return q.promise;
+        }
+
+
+        function postUpdatePagarmeID(customer){
+            // customer/pagarme/id/insert
+            var q = $q.defer();
+            
+                        HTTPService.post(urlApi.concat('/profile/customer/pagarme/id/insert'), customer)
+                        .then(function(data){
+                            q.resolve(data);
+                        })
+                        .catch(function(error){
+                            q.reject(error);
+                        });
+            
+                        return q.promise;
         }
 
         function postChargingClient(year, month, param) {

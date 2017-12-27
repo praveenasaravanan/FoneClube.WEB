@@ -26,6 +26,7 @@
         init();
 
         function init(){
+            debugger
             if(!customer.IdPagarme)
             {
 
