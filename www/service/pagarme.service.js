@@ -10,12 +10,12 @@
     function PagarmeService($q, HTTPService) {
 
         //live
-        // var apiKey = 'ak_live_fP7ceLSpdBe8gCXGTywVRmC5VTkvN0'
-        // var encriptionKey = 'ek_live_U52ijlxsDgB8mk0rzcJde7HYHzqWYl';
+        var apiKey = 'ak_live_fP7ceLSpdBe8gCXGTywVRmC5VTkvN0'
+        var encriptionKey = 'ek_live_U52ijlxsDgB8mk0rzcJde7HYHzqWYl';
 
         //Testes
-        var apiKey = 'ak_test_rIMnFMFbwNJR1A5RuTmSULl9xxDdoM';
-        var encriptionKey = 'ek_test_5rLvyIU3tqMGHKAj94kpCuqSWT37Ps';
+        // var apiKey = 'ak_test_rIMnFMFbwNJR1A5RuTmSULl9xxDdoM';
+        // var encriptionKey = 'ek_test_5rLvyIU3tqMGHKAj94kpCuqSWT37Ps';
 
         this.getCards = getCards;
         this.getCustomers = getCustomers;
@@ -121,18 +121,20 @@
          function notifyCustomerBoleto(id, email){
             var q = $q.defer();
 
-            var parameters = {
-                'email': email
-            };
+            // var parameters = {
+            //     'email': email
+            // };
 
-            HTTPService.post('https://api.pagar.me/1/transactions/'.concat(id).concat('/collect_payment?api_key=').concat(apiKey), parameters)
-            .then(function(result){
-                console.log(result);
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+            // HTTPService.post('https://api.pagar.me/1/transactions/'.concat(id).concat('/collect_payment?api_key=').concat(apiKey), parameters)
+            // .then(function(result){
+            //     console.log(result);
+            //     q.resolve(result);
+            // })
+            // .catch(function(error){
+            //     q.reject(error);
+            // });
+
+            q.resolve(true);
 
             return q.promise;
         }
