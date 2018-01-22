@@ -96,15 +96,17 @@
         function postBoleto(amount, instructions, customer){
             var q = $q.defer();
 
+            debugger;
             var parameters = {
                 'api_key':apiKey,
                 'encryption_key':encriptionKey,
                 'amount': amount,
                 'payment_method':'boleto',
+                'boleto_instructions': instructions,
                 'data-customer-data':true,
-                'customer':customer,
-                'boleto_instructions': instructions
+                'customer':customer
             };
+            
 
             HTTPService.post('https://api.pagar.me/1/transactions', parameters)
             .then(function(result){

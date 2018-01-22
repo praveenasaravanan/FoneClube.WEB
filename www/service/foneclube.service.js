@@ -28,6 +28,8 @@
         this.postChargingClientCommitCard = postChargingClientCommitCard;
         this.postCustomerParent = postCustomerParent;
         this.postUpdatePagarmeID = postUpdatePagarmeID ;
+        this.postSendEmail = postSendEmail;
+        this.postGeraBoleto = postGeraBoleto
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
         this.getOperators = getOperators;
@@ -193,6 +195,30 @@
         function postCustomerParent(param) {
             var q = $q.defer();
             HTTPService.post(urlApi.concat('/profile/customer/parent/insert'), param)
+            .then(function(data){
+                q.resolve(data);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+            return q.promise;
+        }
+
+        function postSendEmail(param) {
+            var q = $q.defer();
+            HTTPService.post(urlApi.concat('/email/send'), param)
+            .then(function(data){
+                q.resolve(data);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+            return q.promise;
+        }
+
+        function postGeraBoleto(){
+            var q = $q.defer();
+            HTTPService.post(urlApi.concat('/pagarme/boleto'), param)
             .then(function(data){
                 q.resolve(data);
             })

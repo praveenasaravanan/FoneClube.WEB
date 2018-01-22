@@ -27,6 +27,7 @@
         vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
         vm.onTapCancel = onTapCancel;
         vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
+        vm.enviaEmail = true;
 
         var existentCustomer = {
                     'name' : customer.Name,
@@ -68,10 +69,33 @@
             vm.disableTapPay = true;
             vm.message = 'Iniciando transação';
             vm.instructions = 'FoneClub - 2017'
-            PagarmeService.postBoleto(vm.amount, vm.instructions, existentCustomer)
+            debugger;
+            PagarmeService.postBoleto(vm.amount, vm.commentBoleto, existentCustomer)
              .then(function(result){
                 console.log(result);
                  PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function(resultCapture){
+
+    
+                        if(vm.enviaEmail)
+                        {
+                            var emailObject = {
+                                'To': "rodrigocardozop@gmail.com", //existentCustomer.email
+                                'TargetName' : existentCustomer.name,
+                                'TargetSecondaryText' : resultCapture.boleto_url,
+                                'TemplateType' : 2
+                            }
+    
+                            FoneclubeService.postSendEmail(emailObject).then(function(result){
+                                console.log('FoneclubeService.postHistoryPayment');
+                                console.log(result);
+                            })
+                            .catch(function(error){
+                                console.log('catch error');
+                                console.log(error);
+                            });
+                        }
+                        
+
                         try{
 
                             PagarmeService.notifyCustomerBoleto(resultCapture.id, existentCustomer.email).then(function(resultNotify){
