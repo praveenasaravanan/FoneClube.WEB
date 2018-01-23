@@ -11,6 +11,7 @@
                 <button class="btn btn-primary col-xs-12" ng-click="vm.onTapNewCardPayment()" >Cobrança com novo cartão</button>
                 <button class="btn btn-primary col-xs-12" ng-click="vm.onTapBoleto()" >Cobrança com boleto</button>
                 <button ng-click="vm.onTapEditar(); closeThisDialog(0);" class="btn btn-primary col-xs-12" >Editar cliente</button>
+                <button ng-click="vm.onTapComment(); closeThisDialog(0);" class="btn btn-primary col-xs-12" >Criar ordem de serviço</button>
                 <button ng-click="vm.onTapExcluir()" class="btn btn-danger col-xs-12" >Excluir cliente</button>
             </div>
 
@@ -50,6 +51,25 @@
                             <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{history.StatusPayment }} </strong> </p>
                         </div>
                         <button class="btn btn-info col-xs-12 col-sm-3" ng-click="vm.onTapPaymentHistoryDetail(history);"> + Info </button>
+                    </div> 
+                </uib-accordion>
+                
+                <h4>Histórico de ordem de serviço</h4>
+                
+                <uib-accordion close-others="oneAtATime">
+                    <div uib-accordion-group class="panel-default" ng-init="vm.orders.length == 1 ? status.open = true : status.open = false" is-open="status.open" ng-repeat="order in vm.orders">
+                        <uib-accordion-heading>
+                                {{vm.orders.length-$index}}ª Cobrança<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
+                        </uib-accordion-heading>
+                        <div class="accordion-container">
+                            <p>Data e hora: <strong>{{order.dteRegister | date: 'dd/MM/yy hh:mm:ss a'}}.</strong> </p>
+                            <p>Comentário: <strong>{{order.txtDescription}}.</strong> </p>
+                            <p>Pendete interação: <strong>{{order.bitPendingInteraction}} </strong> </p>
+                            <!--<p>Tipo: <strong>{{history.descriptionType}} </strong> </p>
+                            <p>Agente: <strong>{{history.CollectorName }} </strong> </p>
+                            <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{history.StatusPayment }} </strong> </p>-->
+                        </div>
+                        <!--<button class="btn btn-info col-xs-12 col-sm-3" ng-click="vm.onTapPaymentHistoryDetail(history);"> + Info </button>-->
                     </div> 
                 </uib-accordion>
             </div>
