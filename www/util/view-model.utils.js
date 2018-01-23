@@ -12,6 +12,7 @@
         //todo colocar cria~ção na hora do show garantindo sempre limpeza ao abrir
         this.modalCustomerData = {};        
         this.showModalCustomer = showModalCustomer;
+        this.showModalComment=showModalComment;
 
         this.modalNewCardPaymentData = {};
         this.showModalNewCardPayment = showModalNewCardPayment;
@@ -49,6 +50,13 @@
            
             DialogFactory.showTemplate('modules/customers/new-card/new-card-payment.html');
         }
+        function showModalComment(data){        
+            this.modalCommentData = data;
+            var service = this;          
+            DialogFactory.showTemplate('modules/customers/comment/comment.html');
+        }
+        
+        
 
         function showModalExistentCardPayment(data,card){
             this.modalExistentCardPaymentData = data;
