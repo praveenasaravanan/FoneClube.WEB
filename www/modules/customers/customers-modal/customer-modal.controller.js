@@ -16,6 +16,7 @@
         vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
         vm.onTapOrdemServico = onTapOrdemServico;
         vm.cancelarPagamento = etapaEscolhaCartao;
+        vm.onTapComment=onTapComment
         var customer = ViewModelUtilsService.modalCustomerData;
         vm.customer = customer;
         var CARTAO = 1;
@@ -86,6 +87,19 @@
                 console.log('catch error');
                 console.log(error);
             });
+            
+            FoneclubeService.getTblServiceOrders(customer.Id)
+                .then(function(result)
+                      {
+                console.log('FoneclubeService.getTblServiceOrders');
+                console.log(result);
+                vm.orders=result;
+            })
+                .catch(function(error)
+                       {
+                console.log('catch error');
+                console.log(error);
+            });
         }
 
         function onTapExcluir(){            
@@ -140,6 +154,14 @@
             console.log('onTapNewCardPayment');
             ViewModelUtilsService.showModalNewCardPayment(customer);
         }
+        
+        
+        function onTapComment(){
+            console.log('onTapComment');
+            ViewModelUtilsService.showModalComment(customer);
+            
+        }
+        
 
 
         function initCardList(customerId){
