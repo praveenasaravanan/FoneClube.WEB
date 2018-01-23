@@ -82,7 +82,8 @@
                                 var emailObject = {
                                     'To': 'rodrigocardozop@gmail.com', //existentCustomer.email
                                     'TargetName' : existentCustomer.name,
-                                    'TargetSecondaryText' : resultCapture.boleto_url,
+                                    'TargetTextBlue': resultCapture.boleto_url,
+                                    'TargetSecondaryText' : vm.commentBoleto,
                                     'TemplateType' : 2
                                 }
         
