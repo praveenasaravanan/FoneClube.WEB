@@ -8,13 +8,13 @@
     FoneclubeService.inject = ['$q','HTTPService'];
     function FoneclubeService($q,HTTPService) {
 
-        // var urlApi = 'http://localhost:57078/api';
+     /*var urlApi = 'http://localhost:57078/api';*/
 
         //API HOMOL TEMP
         // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API QUE VAI SER PROD
-        var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+       var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -30,6 +30,7 @@
         this.postUpdatePagarmeID = postUpdatePagarmeID ;
         this.postSendEmail = postSendEmail;
         this.postGeraBoleto = postGeraBoleto
+        this.postCustomerComment = postCustomerComment ;
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
         this.getOperators = getOperators;
@@ -39,6 +40,26 @@
         this.getCustomerByPhoneNumber = getCustomerByPhoneNumber;
         this.getCustomerById = getCustomerById;
         this.getChargingClients = getChargingClients;
+        this.getTblServiceOrders=getTblServiceOrders
+        
+        
+        
+        function postCustomerComment(commentDetails){
+            
+            
+            var q=$q.defer();
+            HTTPService.post(urlApi.concat('/profile/comment'), commentDetails)
+            .then(function(result){
+                q.resolve(result);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+
+            return q.promise; 
+            
+        }
+        
         
         function postUpdatePerson(personCheckout){
             var q = $q.defer();
@@ -311,6 +332,21 @@
                 q.reject(error);
             });
 
+            return q.promise;
+        }
+        
+        function getTblServiceOrders(id)
+        {
+            var q = $q.defer();
+            HTTPService.get(urlApi.concat('/profile/getorders?personID='.concat(id)))
+            .then(function(result)
+                  {
+                q.resolve(result);
+            })
+            .catch(function(error)
+                  {
+                q.reject(error);
+            });
             return q.promise;
         }
         
