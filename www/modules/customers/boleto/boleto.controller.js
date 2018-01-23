@@ -80,7 +80,7 @@
                             {
                                 debugger;
                                 var emailObject = {
-                                    'To': 'rodrigocardozop@gmail.com', //existentCustomer.email
+                                    'To': existentCustomer.email, //existentCustomer.email
                                     'TargetName' : existentCustomer.name,
                                     'TargetTextBlue': resultCapture.boleto_url,
                                     'TargetSecondaryText' : vm.commentBoleto,
