@@ -60,6 +60,27 @@
                 return defer.promise;
             }
 
+            function _showAlertDialog(param) {
+                debugger;
+                var defer = $q.defer();
+                if(param.titulo == undefined || !param.titulo) {
+                    param.titulo = 'Aviso';
+                }
+                ngDialog.open({
+                    template: '<div class="mensagens-dialog"><div class="mensagem-content"><div class="title-mensagem">'+
+                    '<span>' + param.titulo +'</span><hr></div>' +
+                    '<div class="corpo-mensagem">'+ param.message +'</div>' +
+                    '<div class="footer">' +
+                    '<button type="button" class="btnOk" ng-enter-all="closeThisDialog(0)" ng-click="closeThisDialog(0)">Ok' +
+                    '</button></div></div></div>',
+                    plain: true,
+                    className: 'mensagens-dialog',
+                    closeByDocument: false,
+                    closeByEscape: false
+                })
+                return defer.promise;
+            }
+            
             function _showLoader(mensagem) {                               
                 return ngDialog.open({
                     template: '<div class="mensagens-dialog"><div class="show-loader">'+                    
@@ -109,7 +130,8 @@
                 showMessageDialog: _showMessageDialog,
                 showMessageConfirm: _showMessageConfirm,
                 showLoader: _showLoader,
-                showTemplate: _showTemplate
+                showTemplate: _showTemplate,
+                showAlertDialog:_showAlertDialog
             }
     
         }
