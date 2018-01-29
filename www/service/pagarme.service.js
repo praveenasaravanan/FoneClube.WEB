@@ -103,6 +103,8 @@
                     'encryption_key':encriptionKey,
                     'amount': amount,
                     'payment_method':'boleto',
+                    'data-customer-data':true,
+                    'customer':customer,
                     'boleto_instructions': instructions
                 };
                 
@@ -123,11 +125,21 @@
                 var q = $q.defer();
                 
                             debugger;
+                            // var parameters = {
+                            //     'api_key':apiKey,
+                            //     // 'encryption_key':encriptionKey,
+                            //     'amount': amount,
+                            //     'payment_method':'boleto',
+                            //     'boleto_instructions': instructions
+                            // };
+
                             var parameters = {
                                 'api_key':apiKey,
                                 // 'encryption_key':encriptionKey,
                                 'amount': amount,
                                 'payment_method':'boleto',
+                                'data-customer-data':true,
+                                'customer':customer,
                                 'boleto_instructions': instructions
                             };
                             
