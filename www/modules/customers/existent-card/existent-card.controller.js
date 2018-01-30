@@ -39,6 +39,8 @@
             'phone' : getContactPhone(customer)
         }
 
+        vm.existentCustomer = existentCustomer;
+
         function onTapConfirmarPagamento() {
             if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
                 return;
@@ -74,10 +76,11 @@
                 debugger;
                 PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function(result){
                         vm.message = 'Transação concluída';
-/*
+
                         var emailObject = {
-                            'To': existentCustomer.email, //existentCustomer.email
-                            'TargetName' : existentCustomer.name,
+                            'To': 'rodrigocardozop@gmail.com', //vm.existentCustomer
+                            'TargetName' : vm.existentCustomer.name,
+                            'TargetTextBlue' : vm.amount / 100,
                             // 'TargetSecondaryText' : vm.commentBoleto,
                             'TemplateType' : 1
                         }
@@ -90,7 +93,7 @@
                             console.log('catch error');
                             console.log(error);
                         });
-*/
+
                         saveHistoryPayment();
                         vm.disableTapPay = false;
                         vm.cobrancaRealizada = true;                        
