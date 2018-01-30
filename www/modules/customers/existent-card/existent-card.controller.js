@@ -80,7 +80,7 @@
                         var emailObject = {
                             'To': 'rodrigocardozop@gmail.com', //vm.existentCustomer
                             'TargetName' : vm.existentCustomer.name,
-                            'TargetTextBlue' : $filter('currency')(vm.amount / 100),
+                            'TargetTextBlue' : $filter('currency')(vm.amount / 100, ""),
                             // 'TargetSecondaryText' : vm.commentBoleto,
                             'TemplateType' : 1
                         }
