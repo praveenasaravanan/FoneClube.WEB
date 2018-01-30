@@ -69,6 +69,8 @@
                     'phone' : getContactPhone(customer)
         }
 
+        vm.newCustomer = newCustomer;
+
 
         if(!customer.IdPagarme)
         {
@@ -163,6 +165,23 @@
                             Id:vm.customer.Id,
                             IdPagarme:result.customer.id
                         }
+
+                        var emailObject = {
+                            'To': 'rodrigocardozop@gmail.com', //vm.newCustomer.email
+                            'TargetName' : vm.newCustomer.name,
+                            'TargetTextBlue' : vm.amount / 100,
+                            // 'TargetSecondaryText' : vm.commentBoleto,
+                            'TemplateType' : 1
+                        }
+
+                        FoneclubeService.postSendEmail(emailObject).then(function(result){
+                            console.log('FoneclubeService.postHistoryPayment');
+                            console.log(result);
+                        })
+                        .catch(function(error){
+                            console.log('catch error');
+                            console.log(error);
+                        });
                         
                         FoneclubeService.postUpdatePagarmeID(customCustomer).then(function(result){
                             console.log('FoneclubeService.postUpdatePagarmeID');

@@ -71,8 +71,26 @@
             vm.message = 'Iniciando transação';
             PagarmeService.postTransactionExistentCard(vm.amount, card.id, existentCustomer).then(function(result){
                 vm.message = 'Transação efetuada';
+                debugger;
                 PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function(result){
                         vm.message = 'Transação concluída';
+/*
+                        var emailObject = {
+                            'To': existentCustomer.email, //existentCustomer.email
+                            'TargetName' : existentCustomer.name,
+                            // 'TargetSecondaryText' : vm.commentBoleto,
+                            'TemplateType' : 1
+                        }
+
+                        FoneclubeService.postSendEmail(emailObject).then(function(result){
+                            console.log('FoneclubeService.postHistoryPayment');
+                            console.log(result);
+                        })
+                        .catch(function(error){
+                            console.log('catch error');
+                            console.log(error);
+                        });
+*/
                         saveHistoryPayment();
                         vm.disableTapPay = false;
                         vm.cobrancaRealizada = true;                        
