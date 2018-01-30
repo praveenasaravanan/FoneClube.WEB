@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('ExistentCardPaymentModalController', ExistentCardPaymentModalController);
 
-    ExistentCardPaymentModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainComponents', 'FoneclubeService', 'MainUtils', 'UtilsService', '$scope', 'DialogFactory'];
-    function ExistentCardPaymentModalController(ViewModelUtilsService, PagarmeService, MainComponents, FoneclubeService, MainUtils, UtilsService, $scope, DialogFactory) {
+    ExistentCardPaymentModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainComponents', 'FoneclubeService', 'MainUtils', 'UtilsService', '$scope', 'DialogFactory', '$filter'];
+    function ExistentCardPaymentModalController(ViewModelUtilsService, PagarmeService, MainComponents, FoneclubeService, MainUtils, UtilsService, $scope, DialogFactory, $filter) {
 
         var vm = this;
         vm.etapaDados = true;
@@ -80,7 +80,7 @@
                         var emailObject = {
                             'To': 'rodrigocardozop@gmail.com', //vm.existentCustomer
                             'TargetName' : vm.existentCustomer.name,
-                            'TargetTextBlue' : vm.amount / 100,
+                            'TargetTextBlue' : $filter('currency')(vm.amount / 100),
                             // 'TargetSecondaryText' : vm.commentBoleto,
                             'TemplateType' : 1
                         }

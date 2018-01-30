@@ -6,8 +6,8 @@
         .controller('NewCardPaymentModalController', NewCardPaymentModalController);
 
 // <<<<<<< HEAD
-    NewCardPaymentModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService'];
-    function NewCardPaymentModalController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService) {
+    NewCardPaymentModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService', '$filter'];
+    function NewCardPaymentModalController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService, $filter) {
 // =======
 //     NewCardPaymentModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainComponents', 'MainUtils', 'FoneclubeService', 'UtilsService'];
 //     function NewCardPaymentModalController(ViewModelUtilsService, PagarmeService, MainComponents, MainUtils, FoneclubeService, UtilsService) {
@@ -169,7 +169,7 @@
                         var emailObject = {
                             'To': 'rodrigocardozop@gmail.com', //vm.newCustomer.email
                             'TargetName' : vm.newCustomer.name,
-                            'TargetTextBlue' : vm.amount / 100,
+                            'TargetTextBlue' : $filter('currency')(vm.amount / 100),
                             // 'TargetSecondaryText' : vm.commentBoleto,
                             'TemplateType' : 1
                         }
