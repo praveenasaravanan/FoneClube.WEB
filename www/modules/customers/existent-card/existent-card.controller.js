@@ -78,7 +78,7 @@
                         vm.message = 'Transação concluída';
 
                         var emailObject = {
-                            'To': vm.existentCustomer, //vm.existentCustomer
+                            'To': vm.existentCustomer.email, //vm.existentCustomer
                             'TargetName' : vm.existentCustomer.name,
                             'TargetTextBlue' : $filter('currency')(vm.amount / 100, ""),
                             // 'TargetSecondaryText' : vm.commentBoleto,
