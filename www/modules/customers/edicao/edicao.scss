@@ -19,4 +19,63 @@
         max-height: auto;
         transition: max-height 0.25s ease-in;
     }
+     
 }
+
+
+  .s_cls span {
+        display: inline-block;
+    vertical-align: middle;
+    color: #de0303;
+    font-weight: 600;
+}
+
+.s_cls input, .s_cls select {
+   display: inline-block;
+    width: 180px;
+    vertical-align: middle;
+}
+
+.s_cls {
+        margin-right: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+    
+}
+    
+    .s_lable {
+    padding-left: 30px;
+    margin-top: 30px;
+}
+
+.s_cls.s_lbl {
+
+    text-align: center;
+    margin-bottom: 0px;
+    margin: 0;
+}
+button.s_button-icon {
+    margin-right: 20px;
+    font-size: 26px;
+}
+
+button.s_button-icon:hover {
+    color: #3379b7;
+}
+table.s_table {
+    width: 100%;
+}
+
+table.s_table tr th {
+    text-align: center;
+    padding: 15px;
+}
+
+table.s_table tr td:nth-child(5) {
+    text-align: center;
+}
+
+
+
+
+
