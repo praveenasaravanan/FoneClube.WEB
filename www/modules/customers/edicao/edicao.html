@@ -152,77 +152,64 @@
             <table class="s_table">
   <thead>
     <tr>
-      <th>   <div class="s_cls s_lbl">
-               <span for="portabilidadeTelefone">TELEFONE:</span>
-                </div>
+      <th style="width: 130px;">   <div class="s_cls s_lbl"><span for="portabilidadeTelefone">TELEFONE:</span></div>
         </th>
-      <th>
-           <div class="s_cls s_lbl">
-                <span for="portabilidadeTelefone">PLANO:</span>
-                </div>
+      <th style="width: 100px;">
+           <div class="s_cls s_lbl"><span for="portabilidadeTelefone">PLANO:</span></div>
         </th>
-      <th>
-           <div class="s_cls s_lbl">
-                <span for="portabilidadeTelefone">OPERADORA:</span>
-                </div>
+      <th style="width: 100px;">
+           <div class="s_cls s_lbl"><span for="portabilidadeTelefone">OPERADORA:</span></div>
         </th>
-      <th>
-           <div class="s_cls s_lbl">
-                <span for="portabilidadeTelefone">PORTAR:</span>
-                </div>
+      <th style="width: 100px;">
+           <div class="s_cls s_lbl"><span for="portabilidadeTelefone">PORTAR:</span></div>
         </th>
-      <th>
-           <div class="s_cls s_lbl" style="width: 100px;">
-                <span for="portabilidadeTelefone">ATIVA:</span>
-                </div>
+      <th style="width: 40px;">
+           <div class="s_cls s_lbl"><span for="portabilidadeTelefone">ATIVA:</span></div>
         </th>
-      <th>
-           <div class="s_cls s_lbl" style="width: 400px;">
-                <span for="portabilidadeTelefone">APELIDO:</span>
-                </div>
+      <th style="width: 600px;">
+           <div class="s_cls s_lbl" ><span for="portabilidadeTelefone">APELIDO:</span></div>
         </th>
    
     </tr>
   </thead>
   <tbody>   
     <tr ng-hide="!phoneNumber.IsFoneclube || phoneNumber.Delete" ng-init="status.open = false" is-open="status.open" ng-repeat="phoneNumber in vm.customer.Phones track by $index">     
-      <td>
+      <td style="width: 130px;text-align: center;">
           <div class="s_cls">                        
-    <input id="portabilidadeTelefone" next-on-enter class="form-control" ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.validatePhoneNumber($index)">
+    <input id="portabilidadeTelefone" next-on-enter class="form-control" ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.validatePhoneNumber($index)" style="width: 120px;">
       </div>           
         </td>          
-      <td>
+      <td style="width: 100px;">
             <div class="s_cls">                        
-      <select id="usarNumeroAtual" class="form-control" next-on-enter ng-model="phoneNumber.Portability" style="width: 150px;">
-     <option value="true">Sim, vou fazer a "portabilidade" transferindo minha linha para o Foneclube.</option>
-       <option value="false">Não, quero um número novo.</option>
-       </select>
+      <select id="qualPlanoContratar" next-on-enter class="form-control" ng-options="plan.Id as plan.Description for plan in vm.plans | filter: phoneNumber.operadora == 1 ? 'VIVO' : phoneNumber.operadora == 2 ? 'CLARO' : 9" ng-model="phoneNumber.IdPlanOption" style="width: 160px;">
+                            <option value="">Selecione</option>
+                        </select>
        </div>          
         </td>        
-      <td>
+      <td style="width: 100px;text-align: center;">
         <div class="s_cls">                        
-                        <select id="qualOperadoraUsar" next-on-enter class="form-control" ng-model="phoneNumber.operadora" ng-change="phoneNumber.IdPlanOption = ''" style="width: 180px;">
+                        <select id="qualOperadoraUsar" next-on-enter class="form-control" ng-model="phoneNumber.operadora" ng-change="phoneNumber.IdPlanOption = ''" style="width: 100px;">
                             <option name="{{'operadora' + phoneNumber.key}}" value="1">Vivo</option>
                             <option name="{{'operadora' + phoneNumber.key}}" value="2">Claro</option>
                         </select>
                            </div>
         
         </td>
-      <td>
-          <div class="s_cls" style="margin-right: 10px;">                        
-                        <select id="usarNumeroAtual" class="form-control" next-on-enter ng-model="phoneNumber.Portability" style="width: 180px;">
+      <td style="width: 100px;text-align: center;">
+          <div class="s_cls">                        
+                        <select id="usarNumeroAtual" class="form-control" next-on-enter ng-model="phoneNumber.Portability" style="width: 100px;">
                             <option value="true">Sim, vou fazer a "portabilidade" transferindo minha linha para o Foneclube.</option>
                             <option value="false">Não, quero um número novo.</option>
                         </select>
                            </div>
         </td>
-        <td>
+        <td style="width: 40px;">
          <toggle ng-change="changed()"  on="On" off="Off" ng-model="phoneNumber.LinhaAtiva"></toggle>
         
         </td>
         <td>
-          <div class="s_cls" style="margin-left: 20px;">                        
-                        <input id="comentarioValor" next-on-enter class="form-control" ng-model="phoneNumber.NickName" type="text" placeholder="Apelido" style="width: 400px;">
+          <div class="s_cls">                        
+                        <input id="comentarioValor" next-on-enter class="form-control" ng-model="phoneNumber.NickName" type="text" placeholder="Apelido" style="width: 100%;">
                            </div>
         </td>
     </tr>

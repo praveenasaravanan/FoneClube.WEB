@@ -34,11 +34,11 @@
    display: inline-block;
     width: 180px;
     vertical-align: middle;
+    padding: 6px !important;
 }
 
 .s_cls {
-        margin-right: 10px;
-    margin-bottom: 10px;
+     width: 100%;
     display: inline-block;
     
 }
@@ -68,14 +68,17 @@ table.s_table {
 
 table.s_table tr th {
     text-align: center;
-    padding: 15px;
+    padding: 15px 15px  10px;
 }
 
 table.s_table tr td:nth-child(5) {
     text-align: center;
 }
 
-
+table.s_table tr td {
+    text-align: center;
+    padding: 8px;
+}
 
 
 
