@@ -57,7 +57,7 @@
                 <h4>Histórico de ordem de serviço</h4>
                 
                 <uib-accordion close-others="oneAtATime">
-                    <div uib-accordion-group class="panel-default" ng-init="vm.orders.length == 1 ? status.open = true : status.open = false" is-open="status.open" ng-repeat="order in vm.orders">
+                    <div uib-accordion-group class="panel-default" ng-init="vm.orders.length == 1 ? status.open = true : status.open = false" is-open="status.open" ng-repeat="order in vm.orders | orderBy: '-dteRegister'">
                         <uib-accordion-heading>
                                 {{vm.orders.length-$index}}ª Cobrança<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
                         </uib-accordion-heading>

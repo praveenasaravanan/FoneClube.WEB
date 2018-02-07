@@ -29,7 +29,9 @@
         vm.removeCaracteres = function() {
             if (!vm.search)
                 return;
-            return vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~\s]/g, '');
+            //return vm.search;
+            //return vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~\s]/g, '');
+            return vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
         }
 
         var getCustomers = $scope.$watch(function() {
