@@ -25,10 +25,17 @@
         vm.onTapCancel = onTapCancel;
         vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
 
+        vm.years = [2018,2017,2016,2015,2014,2013,2012,2011,2010];
+        vm.months = [1,2,3,4,5,6,7,8,9,10,11,12];
+        
+        vm.year = new Date().getFullYear().toString();
+        vm.month = (new Date().getMonth() + 1).toString();
+
         vm.etapaDados = true;
-        debugger;
+        
 
         function onTapConfirmarPagamento() {
+            debugger
             if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
                 return;
             }
@@ -84,6 +91,7 @@
         }
 
         function onTapPagar(){
+            debugger
             cardData = getCardData();
 
              console.log("-----------------------")

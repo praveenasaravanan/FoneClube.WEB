@@ -34,8 +34,25 @@
                     <label for="codigoVerificacao">Código de verificação:</label>
                     <input id="codigoVerificacao" next-on-enter class="form-control" ng-model="vm.cardCVV" type="tel">
                 </div>                                                   
+    
+                <h4>Período de vingência da cobrança</h4>
+
+                <div class="form-group col-xs-12">
+                        <label>Ano:</label>
+                    <select ng-model="vm.year">
+                        <option ng-repeat="year in vm.years" ng-model="vm.year">{{year}}</option>
+                    </select>
+
+                    <label>Mês:</label>
+                    <select ng-model="vm.month">
+                        <option ng-repeat="month in vm.months" ng-model="vm.month" ng-selected="{{month == 2}}">{{month}}</option>
+                    </select>
+                </div>
+
 
                 <h4>Valor</h4>
+
+                
 
                 <div class="form-group col-xs-12">
                     <label for="quantia">Quantia:</label>
@@ -45,7 +62,8 @@
                     <label for="observacao">Observação:</label>
                     <input id="observacao" ng-enter="vm.onTapConfirmarPagamento()" class="form-control" ng-model="vm.comment" type="text">
                 </div> 
-                <button ng-click="vm.onTapConfirmarPagamento()" ng-disabled="vm.comment.length == 0 || vm.amount.length == 0 || vm.disableTapPay" class="btn btn-success col-xs-12">
+                <!-- <button ng-click="vm.onTapConfirmarPagamento()" ng-disabled="vm.comment.length == 0 || vm.amount.length == 0 || vm.disableTapPay" class="btn btn-success col-xs-12"> -->
+                        <button ng-click="vm.onTapConfirmarPagamento()" class="btn btn-success col-xs-12">
                         Cobrar
                 </button>           
             </div>
