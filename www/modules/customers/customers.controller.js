@@ -26,13 +26,24 @@
 
 //         console.log('=== Customers Controller Controller ===');
 // >>>>>>> release-branch
-        vm.removeCaracteres = function() {
+        vm.removeCaracteres = function() {  // no need of this filter as added replace in ignoreAccents filter below
             if (!vm.search)
                 return;
+            //alert(vm.search);
             //return vm.search;
             //return vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~\s]/g, '');
             return vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
         }
+
+        vm.ignoreAccents = function(item) {   
+            //alert(item.Name);     
+            if (!vm.search)
+                return true;       
+            var text = removeAccents(item.Name.toLowerCase());
+            //alert(text);
+            var search = removeAccents(vm.search.toLowerCase()).replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
+            return text.indexOf(search) > -1;
+        };
 
         var getCustomers = $scope.$watch(function() {
             return vm.data.customers;
