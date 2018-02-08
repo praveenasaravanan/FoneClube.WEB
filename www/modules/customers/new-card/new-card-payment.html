@@ -62,8 +62,8 @@
                     <label for="observacao">Observação:</label>
                     <input id="observacao" ng-enter="vm.onTapConfirmarPagamento()" class="form-control" ng-model="vm.comment" type="text">
                 </div> 
-                <!-- <button ng-click="vm.onTapConfirmarPagamento()" ng-disabled="vm.comment.length == 0 || vm.amount.length == 0 || vm.disableTapPay" class="btn btn-success col-xs-12"> -->
-                        <button ng-click="vm.onTapConfirmarPagamento()" class="btn btn-success col-xs-12">
+                <button ng-click="vm.onTapConfirmarPagamento()" ng-disabled="vm.comment.length == 0 || vm.amount.length == 0 || vm.disableTapPay" class="btn btn-success col-xs-12">
+                        <!-- <button ng-click="vm.onTapConfirmarPagamento()" class="btn btn-success col-xs-12"> -->
                         Cobrar
                 </button>           
             </div>
