@@ -127,14 +127,16 @@
             console.log('saveHistoryPayment');
             console.log(MainUtils.getAgent());
             console.log(vm.comment);
-            //vm.comment
+           
             var customerCharging = {
                 Id: vm.customer.Id,
                 Charging:{
                     Comment:vm.comment,
                     Ammount: vm.amount,
                     CollectorName: MainUtils.getAgent(),
-                    PaymentType: CARTAO
+                    PaymentType: CARTAO,
+                    AnoVingencia:vm.year,
+                    MesVingencia:vm.month
                 }
             }
             FoneclubeService.postHistoryPayment(customerCharging).then(function(result){

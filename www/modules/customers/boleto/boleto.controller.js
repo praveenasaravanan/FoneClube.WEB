@@ -165,7 +165,9 @@
                         CollectorName: MainUtils.getAgent(),
                         PaymentType: BOLETO,
                         BoletoId: idBoleto,
-                        AcquireId: acquirer_id
+                        AcquireId: acquirer_id,
+                        AnoVingencia:vm.year,
+                        MesVingencia:vm.month
                     }
                 }
     
