@@ -156,7 +156,7 @@
             }
     
             function saveHistoryPayment(idBoleto, acquirer_id){
-    
+                
                 var customerCharging = {
                     Id: vm.customer.Id,
                     Charging:{
