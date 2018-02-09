@@ -27,6 +27,12 @@
         vm.onTapCancel = onTapCancel;
         vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
 
+        vm.years = [2018,2017,2016,2015,2014,2013,2012,2011,2010];
+        vm.months = [1,2,3,4,5,6,7,8,9,10,11,12];
+        
+        vm.year = new Date().getFullYear().toString();
+        vm.month = (new Date().getMonth() + 1).toString();
+
         if (vm.customer.CacheIn) {
             vm.amount = vm.customer.CacheIn;
         }
@@ -121,14 +127,16 @@
             console.log('saveHistoryPayment');
             console.log(MainUtils.getAgent());
             console.log(vm.comment);
-            //vm.comment
+           
             var customerCharging = {
                 Id: vm.customer.Id,
                 Charging:{
                     Comment:vm.comment,
                     Ammount: vm.amount,
                     CollectorName: MainUtils.getAgent(),
-                    PaymentType: CARTAO
+                    PaymentType: CARTAO,
+                    AnoVingencia:vm.year,
+                    MesVingencia:vm.month
                 }
             }
             FoneclubeService.postHistoryPayment(customerCharging).then(function(result){

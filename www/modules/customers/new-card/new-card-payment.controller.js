@@ -281,7 +281,9 @@
                         Comment:vm.comment,
                         Ammount: vm.amount,
                         CollectorName: MainUtils.getAgent(),
-                        PaymentType: CARTAO
+                        PaymentType: CARTAO,
+                        AnoVingencia:vm.year,
+                        MesVingencia:vm.month
                     }
                 }
 
