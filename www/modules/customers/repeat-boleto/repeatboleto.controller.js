@@ -3,11 +3,11 @@
     
         angular
             .module('foneClub')
-            .controller('BoletoModalController', BoletoModalController);
+            .controller('RepeatBoletoModalController', RepeatBoletoModalController);
     
     // <<<<<<< HEAD
-        BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService'];
-        function BoletoModalController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService) {
+        RepeatBoletoModalController.inject = ['ViewModelUtilsService', '$scope','PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService'];
+        function RepeatBoletoModalController(ViewModelUtilsService, $scope,PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService) {
     // =======
     //     BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainComponents', 'MainUtils', 'FoneclubeService', 'UtilsService'];
     //     function BoletoModalController(ViewModelUtilsService, PagarmeService, MainComponents, MainUtils, FoneclubeService, UtilsService) {
@@ -16,20 +16,30 @@
             var vm = this;
             debugger;
             var customer = ViewModelUtilsService.modalBoletoData;
+            var payment = ViewModelUtilsService.modalRepeatBoletoData;
+           
+            
             vm.customer = customer;
+            vm.payment=payment;
+             
             var newCustomer;
             var BOLETO = 2;
+            
+            
             vm.etapaDados = true;
             vm.cobrancaRealizada = false;
-            vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
+            //vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
             vm.comment = '';
-            console.log('BoletoModalController');
+            console.log('RepeatBoletoModalController');
             vm.onTapPagar = onTapPagar;
             vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
             vm.onTapCancel = onTapCancel;
             vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
             vm.enviaEmail = true;
-    
+            
+            vm.amount=vm.payment.txtAmmountPayment/100;
+            vm.commentBoleto='cobrando boleto de '+ (vm.payment.txtAmmountPayment/100);
+            vm.comment='cobrando boleto de '+ (vm.payment.txtAmmountPayment/100);
             var existentCustomer = {
                         'name' : customer.Name,
                         'document_number' : customer.DocumentNumber,
@@ -38,6 +48,12 @@
                         'phone' : getContactPhone(customer)
     
                  }
+            /*function RepeatBoletoModalController($scope) {
+                debugger;
+                $scope.vm.amount = 121;
+                $scope.vm.commentBoleto="0123";
+                $scope.vm.comment="123";
+            }*/
     
             function onTapConfirmarPagamento() {
                 if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
@@ -58,7 +74,7 @@
             }
             
             function onTapPagar(){
-    
+    debugger;
                 console.log('tap pagar boleto')
                 console.log(parseInt(vm.amount))
                 if(parseInt(vm.amount) < 100)

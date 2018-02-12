@@ -12,6 +12,7 @@
         vm.data = DataFactory;
         vm.onTapCustomer = onTapCustomer;
         vm.showLoader = true;
+        vm.onTapRepeatLastCharge=onTapRepeatLastCharge;
         vm.onTapBoleto = onTapBoleto;
         vm.onTapNewCardPayment = onTapNewCardPayment;
         vm.onTapExcluir = onTapExcluir;
@@ -87,6 +88,30 @@
         function onTapBoleto(customer){
           console.log('onTapBoleto')
           ViewModelUtilsService.showModalBoleto(customer);
+        }
+        function onTapRepeatLastCharge(customer){
+            debugger;
+            console.log('onTapRepeatLastCharge')
+            FoneclubeService.getLastPaymentType(customer).then(function(result){
+                console.log(result);
+                debugger;
+                if(result["intIdPaymentType"]==1){
+                    debugger;
+                    /*ViewModelUtilsService.showModalRepeatBoleto(result,customer);*/
+                    ViewModelUtilsService.showModalRepeatCard(result,customer);
+                }
+                /*else if(result["intIdPaymentType"]==1){
+                    ViewModelUtilsService.showModalRepeatCard(result,customer);
+                }
+                else if(result["intIdPaymentType"]==3)
+                    {
+                        
+                    }*/
+            })
+            .catch(function(error){
+                      console.log('catch error');
+                      console.log(error);
+                  });
         }
 
         function onTapExcluir(customer){

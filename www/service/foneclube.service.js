@@ -8,13 +8,13 @@
     FoneclubeService.inject = ['$q','HTTPService'];
     function FoneclubeService($q,HTTPService) {
 
-     /*var urlApi = 'http://localhost:57078/api';*/
+     var urlApi = 'http://localhost:57078/api';
 
         //API HOMOL TEMP
         // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API QUE VAI SER PROD
-       var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+       /*var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';*/
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -40,9 +40,25 @@
         this.getCustomerByPhoneNumber = getCustomerByPhoneNumber;
         this.getCustomerById = getCustomerById;
         this.getChargingClients = getChargingClients;
-        this.getTblServiceOrders=getTblServiceOrders
+        this.getTblServiceOrders=getTblServiceOrders;
+        this.getLastPaymentType=getLastPaymentType
         
         
+        function getLastPaymentType(customer){
+            debugger;
+            var q=$q.defer();
+            HTTPService.get(urlApi.concat('/profile/getpaymentmethod?personID='.concat(customer.Id)))
+            .then(function(result){
+                debugger;
+                q.resolve(result);
+            })
+            .catch(function(error){
+                debugger;
+                q.reject(error);
+            });
+
+            return q.promise; 
+        }
         
         function postCustomerComment(commentDetails){
             

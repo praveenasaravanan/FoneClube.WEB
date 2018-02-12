@@ -22,10 +22,11 @@
                         <tr ng-repeat="customer in vm.data.customers | orderBy : 'name' | filter: vm.removeCaracteres()">
                             <td data-title="Nome" ng-click="vm.onTapCustomer(customer, $index)"> {{customer.Name}} </td>
                             <td data-title="Ações">
+                                <button class="btn btn-primary" ng-click="vm.onTapCustomer(customer, $index)" > <i class="glyphicon glyphicon-option-horizontal"></i> </button>
+                                <button class="btn btn-primary" ng-click="vm.onTapRepeatLastCharge(customer)">Repetir última cobrança</button>
                               <button class="btn btn-primary" ng-click="vm.onTapNewCardPayment(customer)">Cobrança cartão</button>
                               <button class="btn btn-primary" ng-click="vm.onTapBoleto(customer)">Cobrança boleto</button>
-                              <button class="btn btn-danger" ng-click="vm.onTapExcluir(customer)" > Excluir cliente </button>
-                              <button class="btn btn-primary" ng-click="vm.onTapCustomer(customer, $index)" > <i class="glyphicon glyphicon-option-horizontal"></i> </button>
+                              <!--<button class="btn btn-danger" ng-click="vm.onTapExcluir(customer)" > Excluir cliente </button>-->
                             </td>
                         </tr>
                     </tbody>
