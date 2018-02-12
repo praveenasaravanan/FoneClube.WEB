@@ -19,7 +19,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="customer in vm.data.customers | orderBy : 'name' | filter: vm.removeCaracteres()">
+                        <tr ng-repeat="customer in vm.data.customers | orderBy : 'name' | filter : vm.ignoreAccents">
                             <td data-title="Nome" ng-click="vm.onTapCustomer(customer, $index)"> {{customer.Name}} </td>
                             <td data-title="Ações">
                                 <button class="btn btn-primary" ng-click="vm.onTapCustomer(customer, $index)" > <i class="glyphicon glyphicon-option-horizontal"></i> </button>
