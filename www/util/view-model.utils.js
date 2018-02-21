@@ -30,7 +30,9 @@
         
         this.modalCardData={};
         this.modalRepeatCardData={};
-        this.showModalBoleto = showModalBoleto;       
+      this.showModalBoleto = showModalBoleto;
+      this.showModalBoletoPayment = showModalBoletoPayment;
+      
         this.showModalRepeatBoleto=showModalRepeatBoleto;
         this.showModalRepeatCard=showModalRepeatCard
         
@@ -78,7 +80,13 @@
             var service = this;           
 
             DialogFactory.showTemplate('modules/customers/boleto/boleto.html');
-        }
+       }
+
+      function showModalBoletoPayment(data) {
+        this.modalBoletoData = data;
+        var service = this;
+        DialogFactory.showTemplate('modules/customers/boleto/boletopayment.html');
+      }
         function showModalRepeatBoleto(payment,data){
             debugger;
             this.modalBoletoData = data;
