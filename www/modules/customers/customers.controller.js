@@ -6,14 +6,16 @@
         .controller('CustomersController', CustomersController);
 
 // <<<<<<< HEAD
-    CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory'];
-    function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory) {
+  CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory','FlowManagerService'];
+  function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService) {
         var vm = this;
         vm.data = DataFactory;
-        vm.onTapCustomer = onTapCustomer;
+    vm.onTapCustomer = onTapCustomer;
+    vm.onTapCustomerEdit = onTapCustomerEdit;
         vm.showLoader = true;
         vm.onTapRepeatLastCharge=onTapRepeatLastCharge;
-        vm.onTapBoleto = onTapBoleto;
+    vm.onTapBoleto = onTapBoleto;
+    vm.onTapBoletoPayment = onTapBoletoPayment;
         vm.onTapNewCardPayment = onTapNewCardPayment;
         vm.onTapExcluir = onTapExcluir;
 // =======
@@ -139,6 +141,10 @@
         //     console.log(error.statusText); // mensagem de erro para tela, caso precise
         // });
 
+    function onTapCustomerEdit(customer, index) {
+      FlowManagerService.changeEdicaoView(customer);
+    }
+
         function onTapCustomer(customer, index){
             console.log('customer')
             console.log(customer)
@@ -153,6 +159,11 @@
             console.log('onTapNewCardPayment');
             ViewModelUtilsService.showModalNewCardPayment(customer);
         }
+
+    function onTapBoletoPayment(customer) {
+      console.log('onTapBoleto')
+      ViewModelUtilsService.showModalBoletoPayment(customer);
+    }
 
         function onTapBoleto(customer){
           console.log('onTapBoleto')

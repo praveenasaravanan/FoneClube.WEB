@@ -18,7 +18,6 @@
             var customer = ViewModelUtilsService.modalBoletoData;
             vm.customer = customer;
             var newCustomer;
-            var BOLETO = 2;
             vm.etapaDados = true;
             vm.cobrancaRealizada = false;
             vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
@@ -43,7 +42,39 @@
                         'address' : getAddress(customer),
                         'phone' : getContactPhone(customer)
     
-                 }
+            }
+
+          var CARTAO = 1;
+          var BOLETO = 2;
+          init();
+
+          function init() {
+            FoneclubeService.getHistoryPayment(customer.Id).then(function (result) {
+              vm.histories = result;
+              console.log(vm.histories);
+              for (var i in vm.histories) {
+                var history = vm.histories[i];
+                history.descriptionType = (history.PaymentType == CARTAO) ? 'Cartão de crédito' : 'Boleto';
+                if (i == 0) {
+                  vm.commentBoleto
+                  vm.comment = history.Comment;
+                  vm.amount = history.Ammount / 100;
+                }
+                if (history.PaymentType == BOLETO) {
+                  PagarmeService.getStatusBoleto(history.BoletoId).then(function (result) {
+                    if (result.length > 0) {
+                      history.StatusPayment = result[0].status;
+                    }
+                  })
+                }
+              }
+              customer.histories = vm.histories;
+            })
+              .catch(function (error) {
+
+              });
+
+          }
     
             function onTapConfirmarPagamento() {
                 if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
@@ -67,11 +98,16 @@
     
                 console.log('tap pagar boleto')
                 console.log(parseInt(vm.amount))
-                if(parseInt(vm.amount) < 100)
-                {
-                    DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'Não é permitido cobranças a baixo de 1 Real'});                
-                    return;
-                }
+              var em = vm.amount.toString().split(".");
+              console.log(em[0]);
+              if (em[1] != undefined) {
+                vm.amount = vm.amount.toString().replace(".", "")
+
+              }
+              if (parseInt(vm.amount) < 100) {
+                DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'Não é permitido cobranças a baixo de 1 Real' });
+                return;
+              }
     
                 vm.disableTapPay = true;
                 vm.message = 'Iniciando transação';
