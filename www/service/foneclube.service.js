@@ -44,10 +44,10 @@
         this.getCustomerParentByPhone=getCustomerParentByPhone;
         this.getAllParents=getAllParents;
         
-        function getCustomerParentByPhone(phoneparent,personid,param){            
+        function getCustomerParentByPhone(phoneparent,personid){            
             
             var q=$q.defer();
-            HTTPService.get(urlApi.concat('/profile/customer/GetParentbyPhone?phoneparent='+phoneparent+ '&personid='+personid), param)
+            HTTPService.get(urlApi.concat('/profile/customer/GetParentbyPhone?phoneparent='+phoneparent+ '&personid='+personid))
             .then(function(result){
                 q.resolve(result);
             })
@@ -62,7 +62,7 @@
         function getAllParents(){
             var q = $q.defer();
 
-            HTTPService.get(urlApi.concat('/customer/GetParentAll'))
+            HTTPService.get(urlApi.concat('/profile/customer/GetParentAll'))
             .then(function(result){
                 q.resolve(result);
             })

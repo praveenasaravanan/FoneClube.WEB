@@ -134,11 +134,12 @@
                     return FoneclubeService.getAllParents()
                         .then(function (response) {
                             vm.loading = true;
-                            alert(response);
+                            console.log(response);
                             // ideally filtering should be done on server
                             searchTerm = searchTerm.toUpperCase();
     
-                            var match = _.filter(response.data, function (info) {
+                            var match = _.filter(response, function (info) {                                
+                                //alert(info.NameParent);
                                 if(info.NameParent != null)
                                     //return info.NameParent.startsWith(searchTerm);
                                     return removeAccents(info.NameParent.toString().toLowerCase()).indexOf(removeAccents(searchTerm.toLowerCase())) > -1;
@@ -159,15 +160,12 @@
 
         function getParentDataByPhone(phoneparent,personid) {
             //alert(phoneparent+ " "+personid);
-            var param = {};
             if (phoneparent && personid) {
-            phoneparent= phoneparent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim();
-            FoneclubeService.getCustomerParentByPhone(phoneparent,personid,param).then(function (result) {        
-                //if (result.Phones.length > 0) {
-                //    vm.customer.NameContactParent="Ram Test"; 
-                //}
+            phoneparent= phoneparent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim().substring(2,11);
+            FoneclubeService.getCustomerParentByPhone(phoneparent,personid).then(function (result) {        
                 console.log(result);
                 //alert(phoneparent);
+                //alert(personid);
                 vm.customer.NameContactParent=result.NameParent;
             }).catch(function (error) {
                 console.log('error: ' + error);
