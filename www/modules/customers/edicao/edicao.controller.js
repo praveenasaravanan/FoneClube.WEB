@@ -3,10 +3,22 @@
 
     angular
         .module('foneClub')
-        .controller('EdicaoController', EdicaoController);
+        .controller('EdicaoController', EdicaoController)
+        .directive('ngPrism', function () {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    element.ready(function () {
+                        Prism.highlightElement(element[0]);
+                    });
+                }
+            };
+        });
 
-    EdicaoController.inject = ['$scope', 'DataFactory', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog'];
-    function EdicaoController($scope, DataFactory, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog) {
+
+
+    EdicaoController.inject = ['$scope', 'DataFactory', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog','$http'];
+    function EdicaoController($scope, DataFactory, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog, $http) {
         var vm = this;
         vm.data = DataFactory;
         vm.onTapSendUser = onTapSendUser;
@@ -112,6 +124,53 @@
                     }, 200);
                 });
             });
+        };
+
+        
+        vm.loading = false;
+        vm.autoCompleteOptions ={
+                minimumChars: 1,
+                data: function (searchTerm) {
+                    return FoneclubeService.getAllParents()
+                        .then(function (response) {
+                            vm.loading = true;
+                            console.log(response);
+                            // ideally filtering should be done on server
+                            searchTerm = searchTerm.toUpperCase();
+    
+                            var match = _.filter(response, function (info) {                                
+                                //alert(info.NameParent);
+                                if(info.NameParent != null)
+                                    //return info.NameParent.startsWith(searchTerm);
+                                    return removeAccents(info.NameParent.toString().toLowerCase()).indexOf(removeAccents(searchTerm.toLowerCase())) > -1;
+                            });
+    
+                            vm.loading = false;
+                            return _.pluck(match, 'NameParent');
+                        }).catch(function (error) {
+                            console.log('error: ' + error);
+                        });
+                },
+                itemSelected: function (e) {
+                    //vm.contactParent="12345678901";
+                }
+        }
+
+        vm.getParentDataByPhone= getParentDataByPhone;
+
+        function getParentDataByPhone(phoneparent,personid) {
+            //alert(phoneparent+ " "+personid);
+            if (phoneparent && personid) {
+            phoneparent= phoneparent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim().substring(2,11);
+            FoneclubeService.getCustomerParentByPhone(phoneparent,personid).then(function (result) {        
+                console.log(result);
+                //alert(phoneparent);
+                //alert(personid);
+                vm.customer.NameContactParent=result.NameParent;
+            }).catch(function (error) {
+                console.log('error: ' + error);
+            });
+        }
         };
 
         function populaPai(customer){

@@ -40,11 +40,11 @@
             <div class="row">
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="quemConvidou">Telefone de quem convidou:</label>
-                    <input id="quemConvidou" next-on-enter class="form-control" ng-model="vm.contactParent" type="tel" placeholder="(21) 99999-9999" mask="(99) 9?9999-9999" restrict="reject">
+                    <input id="quemConvidou" next-on-enter class="form-control" ng-model="vm.contactParent" ng-blur="vm.getParentDataByPhone(vm.contactParent, vm.customer.Id)" type="tel" placeholder="(21) 99999-9999" mask="(99) 9?9999-9999" restrict="reject">
                 </div> 
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="nomeQuemConvidou">Nome de quem te convidou para o Foneclube:</label>
-                    <input id="nomeQuemConvidou" next-on-enter class="form-control"ng-model="vm.customer.NameContactParent" type="text">
+                    <input id="nomeQuemConvidou" next-on-enter class="form-control" ng-model="vm.customer.NameContactParent" type="text" auto-complete="vm.autoCompleteOptions">
                 </div>
             </div>              
         </div>          
