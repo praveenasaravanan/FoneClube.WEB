@@ -6,13 +6,16 @@
         .controller('CustomersController', CustomersController);
 
 // <<<<<<< HEAD
-    CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory'];
-    function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory) {
+  CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory','FlowManagerService'];
+  function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService) {
         var vm = this;
         vm.data = DataFactory;
-        vm.onTapCustomer = onTapCustomer;
+    vm.onTapCustomer = onTapCustomer;
+    vm.onTapCustomerEdit = onTapCustomerEdit;
         vm.showLoader = true;
-        vm.onTapBoleto = onTapBoleto;
+        vm.onTapRepeatLastCharge=onTapRepeatLastCharge;
+    vm.onTapBoleto = onTapBoleto;
+    vm.onTapBoletoPayment = onTapBoletoPayment;
         vm.onTapNewCardPayment = onTapNewCardPayment;
         vm.onTapExcluir = onTapExcluir;
 // =======
@@ -138,6 +141,10 @@
         //     console.log(error.statusText); // mensagem de erro para tela, caso precise
         // });
 
+    function onTapCustomerEdit(customer, index) {
+      FlowManagerService.changeEdicaoView(customer);
+    }
+
         function onTapCustomer(customer, index){
             console.log('customer')
             console.log(customer)
@@ -153,9 +160,38 @@
             ViewModelUtilsService.showModalNewCardPayment(customer);
         }
 
+    function onTapBoletoPayment(customer) {
+      console.log('onTapBoleto')
+      ViewModelUtilsService.showModalBoletoPayment(customer);
+    }
+
         function onTapBoleto(customer){
           console.log('onTapBoleto')
           ViewModelUtilsService.showModalBoleto(customer);
+        }
+        function onTapRepeatLastCharge(customer){
+            debugger;
+            console.log('onTapRepeatLastCharge')
+            FoneclubeService.getLastPaymentType(customer).then(function(result){
+                console.log(result);
+                debugger;
+                if(result["intIdPaymentType"]==1){
+                    debugger;
+                    /*ViewModelUtilsService.showModalRepeatBoleto(result,customer);*/
+                    ViewModelUtilsService.showModalRepeatCard(result,customer);
+                }
+                /*else if(result["intIdPaymentType"]==1){
+                    ViewModelUtilsService.showModalRepeatCard(result,customer);
+                }
+                else if(result["intIdPaymentType"]==3)
+                    {
+                        
+                    }*/
+            })
+            .catch(function(error){
+                      console.log('catch error');
+                      console.log(error);
+                  });
         }
 
         function onTapExcluir(customer){

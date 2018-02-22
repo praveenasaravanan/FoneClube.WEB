@@ -26,7 +26,16 @@
         this.showModal = showModal;
 
         this.modalBoletoData = {};
-        this.showModalBoleto = showModalBoleto;
+        this.modalRepeatBoletoData={};
+        
+        this.modalCardData={};
+        this.modalRepeatCardData={};
+      this.showModalBoleto = showModalBoleto;
+      this.showModalBoletoPayment = showModalBoletoPayment;
+      
+        this.showModalRepeatBoleto=showModalRepeatBoleto;
+        this.showModalRepeatCard=showModalRepeatCard
+        
 
         function showModal(data){
 
@@ -71,6 +80,26 @@
             var service = this;           
 
             DialogFactory.showTemplate('modules/customers/boleto/boleto.html');
+       }
+
+      function showModalBoletoPayment(data) {
+        this.modalBoletoData = data;
+        var service = this;
+        DialogFactory.showTemplate('modules/customers/boleto/boletopayment.html');
+      }
+        function showModalRepeatBoleto(payment,data){
+            debugger;
+            this.modalBoletoData = data;
+            this.modalRepeatBoletoData = payment;
+            var service = this;           
+            DialogFactory.showTemplate('modules/customers/repeat-boleto/repeat-boleto.html');
+        }
+        function showModalRepeatCard(payment,data){
+            debugger;
+            this.modalCardData = data;
+            this.modalRepeatCardData = payment;
+            var service = this;           
+            DialogFactory.showTemplate('modules/customers/repeat-card/repeat-card.html');
         }
         
         function showModalPaymentHistoryDetail(history, customer) {

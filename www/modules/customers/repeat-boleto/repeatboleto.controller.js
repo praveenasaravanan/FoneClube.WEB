@@ -3,11 +3,11 @@
     
         angular
             .module('foneClub')
-            .controller('BoletoModalController', BoletoModalController);
+            .controller('RepeatBoletoModalController', RepeatBoletoModalController);
     
     // <<<<<<< HEAD
-        BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService'];
-        function BoletoModalController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService) {
+        RepeatBoletoModalController.inject = ['ViewModelUtilsService', '$scope','PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService'];
+        function RepeatBoletoModalController(ViewModelUtilsService, $scope,PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService) {
     // =======
     //     BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainComponents', 'MainUtils', 'FoneclubeService', 'UtilsService'];
     //     function BoletoModalController(ViewModelUtilsService, PagarmeService, MainComponents, MainUtils, FoneclubeService, UtilsService) {
@@ -16,25 +16,30 @@
             var vm = this;
             debugger;
             var customer = ViewModelUtilsService.modalBoletoData;
+            var payment = ViewModelUtilsService.modalRepeatBoletoData;
+           
+            
             vm.customer = customer;
+            vm.payment=payment;
+             
             var newCustomer;
+            var BOLETO = 2;
+            
+            
             vm.etapaDados = true;
             vm.cobrancaRealizada = false;
-            vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
+            //vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
             vm.comment = '';
-            console.log('BoletoModalController');
+            console.log('RepeatBoletoModalController');
             vm.onTapPagar = onTapPagar;
             vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
             vm.onTapCancel = onTapCancel;
             vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
             vm.enviaEmail = true;
-
-            vm.years = [2018,2017,2016,2015,2014,2013,2012,2011,2010];
-            vm.months = [1,2,3,4,5,6,7,8,9,10,11,12];
             
-            vm.year = new Date().getFullYear().toString();
-            vm.month = (new Date().getMonth() + 1).toString();
-    
+            vm.amount=vm.payment.txtAmmountPayment/100;
+            vm.commentBoleto='cobrando boleto de '+ (vm.payment.txtAmmountPayment/100);
+            vm.comment='cobrando boleto de '+ (vm.payment.txtAmmountPayment/100);
             var existentCustomer = {
                         'name' : customer.Name,
                         'document_number' : customer.DocumentNumber,
@@ -42,39 +47,13 @@
                         'address' : getAddress(customer),
                         'phone' : getContactPhone(customer)
     
-            }
-
-          var CARTAO = 1;
-          var BOLETO = 2;
-          init();
-
-          function init() {
-            FoneclubeService.getHistoryPayment(customer.Id).then(function (result) {
-              vm.histories = result;
-              console.log(vm.histories);
-              for (var i in vm.histories) {
-                var history = vm.histories[i];
-                history.descriptionType = (history.PaymentType == CARTAO) ? 'Cartão de crédito' : 'Boleto';
-                if (i == 0) {
-                  vm.commentBoleto
-                  vm.comment = history.Comment;
-                  vm.amount = history.Ammount / 100;
-                }
-                if (history.PaymentType == BOLETO) {
-                  PagarmeService.getStatusBoleto(history.BoletoId).then(function (result) {
-                    if (result.length > 0) {
-                      history.StatusPayment = result[0].status;
-                    }
-                  })
-                }
-              }
-              customer.histories = vm.histories;
-            })
-              .catch(function (error) {
-
-              });
-
-          }
+                 }
+            /*function RepeatBoletoModalController($scope) {
+                debugger;
+                $scope.vm.amount = 121;
+                $scope.vm.commentBoleto="0123";
+                $scope.vm.comment="123";
+            }*/
     
             function onTapConfirmarPagamento() {
                 if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
@@ -95,19 +74,14 @@
             }
             
             function onTapPagar(){
-    
+    debugger;
                 console.log('tap pagar boleto')
                 console.log(parseInt(vm.amount))
-              var em = vm.amount.toString().split(".");
-              console.log(em[0]);
-              if (em[1] != undefined) {
-                vm.amount = vm.amount.toString().replace(".", "")
-
-              }
-              if (parseInt(vm.amount) < 100) {
-                DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'Não é permitido cobranças a baixo de 1 Real' });
-                return;
-              }
+                if(parseInt(vm.amount) < 100)
+                {
+                    DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'Não é permitido cobranças a baixo de 1 Real'});                
+                    return;
+                }
     
                 vm.disableTapPay = true;
                 vm.message = 'Iniciando transação';
@@ -193,7 +167,7 @@
             }
     
             function saveHistoryPayment(idBoleto, acquirer_id){
-                
+    
                 var customerCharging = {
                     Id: vm.customer.Id,
                     Charging:{
@@ -202,9 +176,7 @@
                         CollectorName: MainUtils.getAgent(),
                         PaymentType: BOLETO,
                         BoletoId: idBoleto,
-                        AcquireId: acquirer_id,
-                        AnoVingencia:vm.year,
-                        MesVingencia:vm.month
+                        AcquireId: acquirer_id
                     }
                 }
     
