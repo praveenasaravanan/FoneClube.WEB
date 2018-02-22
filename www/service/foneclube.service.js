@@ -40,10 +40,39 @@
         this.getCustomerByPhoneNumber = getCustomerByPhoneNumber;
         this.getCustomerById = getCustomerById;
         this.getChargingClients = getChargingClients;
-        this.getTblServiceOrders=getTblServiceOrders
+        this.getTblServiceOrders=getTblServiceOrders;
+        this.getCustomerParentByPhone=getCustomerParentByPhone;
+        this.getAllParents=getAllParents;
         
-        
-        
+        function getCustomerParentByPhone(phoneparent,personid,param){            
+            
+            var q=$q.defer();
+            HTTPService.get(urlApi.concat('/profile/customer/GetParentbyPhone?phoneparent='+phoneparent+ '&personid='+personid), param)
+            .then(function(result){
+                q.resolve(result);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+
+            return q.promise; 
+            
+        }
+
+        function getAllParents(){
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/customer/GetParentAll'))
+            .then(function(result){
+                q.resolve(result);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+
+            return q.promise;
+        }
+
         function postCustomerComment(commentDetails){
             
             

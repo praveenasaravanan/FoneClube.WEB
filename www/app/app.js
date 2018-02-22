@@ -13,7 +13,8 @@
     'ui.bootstrap',
     'ngDialog',
     'ui.router',
-    'ui.toggle'
+    'ui.toggle',
+    'autoCompleteModule'
 
   ]);
 
