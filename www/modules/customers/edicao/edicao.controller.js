@@ -58,6 +58,19 @@
                     vm.plans = result;
                     for(var number in vm.customer.Phones) {
                         vm.customer.Phones[number].key = Math.random();
+
+                        debugger
+                        if(number % 2)
+                        {
+                            vm.customer.Phones[number].StatusOperator = {'background-color':'green'}
+                            vm.customer.Phones[number].StatusDescription = 'A' 
+                        }
+                        else
+                        {
+                            vm.customer.Phones[number].StatusOperator = {'background-color':'red'}
+                            vm.customer.Phones[number].StatusDescription = 'B'
+                        }
+                        
                         //vm.customer.Phones[number].IdOperator = vm.customer.Phones[number].IdOperator.toString(); //deve ser string por causa do ng-options
                         //vm.customer.Phones[number].IdPlanOption = vm.customer.Phones[number].IdPlanOption.toString(); //deve ser string por causa do ng-options
                         if (vm.customer.Phones[number].Portability) {

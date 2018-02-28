@@ -157,15 +157,22 @@
       <th style="width: 100px;">
            <div class="s_cls s_lbl"><span for="portabilidadeTelefone">PLANO:</span></div>
         </th>
+
+        <th style="width: 40px;">
+            <div class="s_cls s_lbl"><span for="portabilidadeTelefone">STATUS:</span></div>
+         </th>
+         
       <th style="width: 100px;">
            <div class="s_cls s_lbl"><span for="portabilidadeTelefone">OPERADORA:</span></div>
         </th>
       <th style="width: 100px;">
            <div class="s_cls s_lbl"><span for="portabilidadeTelefone">PORTAR:</span></div>
         </th>
-      <th style="width: 40px;">
-           <div class="s_cls s_lbl"><span for="portabilidadeTelefone">ATIVA:</span></div>
-        </th>
+        <th style="width: 40px;">
+            <div class="s_cls s_lbl"><span for="portabilidadeTelefone">ATIVA:</span></div>
+         </th>
+
+         
       <th style="width: 600px;">
            <div class="s_cls s_lbl" ><span for="portabilidadeTelefone">APELIDO:</span></div>
         </th>
@@ -185,7 +192,13 @@
                             <option value="">Selecione</option>
                         </select>
        </div>          
-        </td>        
+        </td>   
+        
+        <td style="width: 100px;">
+            <div class="s_cls box-status" ng-style="phoneNumber.StatusOperator">{{phoneNumber.StatusDescription}}</div>          
+        </td> 
+
+
       <td style="width: 100px;text-align: center;">
         <div class="s_cls">                        
                         <select id="qualOperadoraUsar" next-on-enter class="form-control" ng-model="phoneNumber.operadora" ng-change="phoneNumber.IdPlanOption = ''" style="width: 100px;">
