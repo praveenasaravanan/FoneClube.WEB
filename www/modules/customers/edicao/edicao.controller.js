@@ -35,6 +35,36 @@
         vm.singlePriceLocal = 0;
         vm.allOperatorOptions = MainUtils.operatorOptions();
         vm.requesting = true;
+        vm.onCheckCNPJ = onCheckCNPJ
+        vm.CNPJField = false;
+        vm.CPFField = true;
+
+        function onCheckCNPJ(){
+            console.log("andando " + vm.checkboxCNPJ)
+
+            if(vm.checkboxCNPJ)
+            {
+                onShowCNPJField();
+            }
+            else
+            {
+                onShowCPFField();
+            }
+            
+        }
+
+        function onShowCPFField(){
+            vm.CNPJField = false;
+            vm.CPFField = true;
+        }
+
+        function onShowCNPJField(){
+            vm.CNPJField = true;
+            vm.CPFField = false;
+        }
+
+
+        
 
         init();
         function init() {            

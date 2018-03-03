@@ -5,8 +5,13 @@
         <div class="form-container"> 
             <div class="row">           
                 <div class="form-group col-sm-6 col-xs-12">
-                    <label for="cpf">CPF:</label>
-                    <input id="cpf" next-on-enter class="form-control" ng-model="vm.customer.DocumentNumber" type="text" ng-change="vm.validarCPF()" mask="999.999.999-99" restrict="reject">
+                        
+                    <label for="cpf">CPF - </label>
+                    <label>(Selecione para CNPJ)
+                            <input type="checkbox" ng-model="vm.checkboxCNPJ" ng-change="vm.onCheckCNPJ()">
+                    </label>
+                    <input id="cpf" ng-if="vm.CPFField"next-on-enter class="form-control" ng-model="vm.customer.DocumentNumber" type="text" ng-change="vm.validarCPF()" mask="999.999.999-99" restrict="reject">
+                    <input id="cpf" ng-if="vm.CNPJField" next-on-enter class="form-control" ng-model="vm.customer.DocumentNumber" type="text" ng-change="vm.validarCPF()" mask="99.999.999/9999-99" restrict="reject">
                 </div>
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="nome">Nome:</label>
