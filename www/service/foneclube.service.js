@@ -44,6 +44,7 @@
         this.getCustomerParentByPhone=getCustomerParentByPhone;
         this.getAllParents=getAllParents;
         this.getLastPaymentType=getLastPaymentType
+        this.getStatusBlockedClaro = getStatusBlockedClaro;
         
         
         function getLastPaymentType(customer){
@@ -352,6 +353,23 @@
 
             return q.promise;
         }
+
+        function getStatusBlockedClaro(ddd,numeroLinha){
+            
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/manager/phones/claro/status/linha/ddd/'+ ddd + '/numeroLinha/'+numeroLinha))
+            .then(function(result){
+                q.resolve(result);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+
+            return q.promise;
+        }
+
+        // api/manager/phones/claro/status/linha/ddd/{ddd}/numeroLinha/{numeroLinha}
 
         function getCustomers(){
 

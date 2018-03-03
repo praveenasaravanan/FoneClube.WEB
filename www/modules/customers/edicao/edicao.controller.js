@@ -59,17 +59,20 @@
                     for(var number in vm.customer.Phones) {
                         vm.customer.Phones[number].key = Math.random();
 
+                        vm.customer.Phones[number].StatusOperator = {'background-color':'grey'}
+                        vm.customer.Phones[number].StatusDescription = 'C' 
+
                         debugger
-                        if(number % 2)
-                        {
-                            vm.customer.Phones[number].StatusOperator = {'background-color':'green'}
-                            vm.customer.Phones[number].StatusDescription = 'A' 
-                        }
-                        else
-                        {
-                            vm.customer.Phones[number].StatusOperator = {'background-color':'red'}
-                            vm.customer.Phones[number].StatusDescription = 'B'
-                        }
+                        // if(number % 2)
+                        // {
+                        //     vm.customer.Phones[number].StatusOperator = {'background-color':'green'}
+                        //     vm.customer.Phones[number].StatusDescription = 'A' 
+                        // }
+                        // else
+                        // {
+                        //     vm.customer.Phones[number].StatusOperator = {'background-color':'red'}
+                        //     vm.customer.Phones[number].StatusDescription = 'B'
+                        // }
                         
                         //vm.customer.Phones[number].IdOperator = vm.customer.Phones[number].IdOperator.toString(); //deve ser string por causa do ng-options
                         //vm.customer.Phones[number].IdPlanOption = vm.customer.Phones[number].IdPlanOption.toString(); //deve ser string por causa do ng-options
@@ -83,11 +86,33 @@
                             if (vm.plans[plan].Id == vm.customer.Phones[number].IdPlanOption) {
                                 if (vm.plans[plan].Description.endsWith('VIVO')) {
                                     vm.customer.Phones[number].operadora = '1'; //seta a operadora local
+
+                                    vm.customer.Phones[number].StatusOperator = {'background-color':'green'}
+                                    vm.customer.Phones[number].StatusDescription = 'A' 
                                 } else {
                                     vm.customer.Phones[number].operadora = '2'; //seta a operadora local
+
+                                    console.log('tentando coletar')
+                                    FoneclubeService.getStatusBlockedClaro(vm.customer.Phones[number].DDD, vm.customer.Phones[number].Number).then(function(result){
+                                        console.log('retorno ' + result)
+                                        if(!result)
+                                        {
+                                            vm.customer.Phones[number].StatusOperator = {'background-color':'green'}
+                                            vm.customer.Phones[number].StatusDescription = 'A' 
+                                        }
+                                        else{
+                                            vm.customer.Phones[number].StatusOperator = {'background-color':'red'}
+                                            vm.customer.Phones[number].StatusDescription = 'B'
+                                        }
+                                        
+                                    });
+
                                 }
                             }
                         }
+                        
+                 
+                        
                     }
                     console.info(vm.customer);
                     
