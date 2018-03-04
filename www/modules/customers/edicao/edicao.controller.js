@@ -16,9 +16,8 @@
         });
 
 
-
-    EdicaoController.inject = ['$scope', 'DataFactory', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog','$http'];
-    function EdicaoController($scope, DataFactory, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog, $http) {
+    EdicaoController.inject = ['$scope', 'DataFactory', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog','$http','$sce'];
+    function EdicaoController($scope, DataFactory, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog, $http,$sce) {
         var vm = this;
         vm.data = DataFactory;
         vm.onTapSendUser = onTapSendUser;
@@ -130,6 +129,7 @@
         vm.loading = false;
         vm.autoCompleteOptions ={
                 minimumChars: 1,
+                //selectedTextAttr: 'PhoneParent',
                 data: function (searchTerm) {
                     return FoneclubeService.getAllParents()
                         .then(function (response) {
@@ -138,21 +138,40 @@
                             // ideally filtering should be done on server
                             searchTerm = searchTerm.toUpperCase();
     
-                            var match = _.filter(response, function (info) {                                
-                                //alert(info.NameParent);
+
+                            return _.filter(response, function (info){
                                 if(info.NameParent != null)
                                     //return info.NameParent.startsWith(searchTerm);
                                     return removeAccents(info.NameParent.toString().toLowerCase()).indexOf(removeAccents(searchTerm.toLowerCase())) > -1;
                             });
+
+                            // var match = _.filter(response, function (info) {                                
+                            //     //alert(info.NameParent);
+                            //     if(info.NameParent != null)
+                            //         //return info.NameParent.startsWith(searchTerm);
+                            //         return removeAccents(info.NameParent.toString().toLowerCase()).indexOf(removeAccents(searchTerm.toLowerCase())) > -1;
+                            // });
     
-                            vm.loading = false;
-                            return _.pluck(match, 'NameParent');
+                            // vm.loading = false;
+                            // return _.pluck(match, 'NameParent');
                         }).catch(function (error) {
                             console.log('error: ' + error);
                         });
                 },
+                 renderItem: function (item) {
+                     return {
+                         value: item.NameParent,
+                         label: $sce.trustAsHtml(
+                         "<p class='auto-complete' style='margin-bottom:0px;'>" 
+                         + item.NameParent + 
+                         "</p>")
+                     };
+                },
                 itemSelected: function (e) {
-                    //vm.contactParent="12345678901";
+                    //vm.contactParent="(21) 98156-7560";
+                    //alert(JSON.stringify(e));
+                    var contactNo = "(" + e.item.DDDParent + ") " + e.item.PhoneParent.toString().substring(0, 5) + "-" + e.item.PhoneParent.toString().substring(5, 9);
+                    vm.contactParent = contactNo;
                 }
         }
 
