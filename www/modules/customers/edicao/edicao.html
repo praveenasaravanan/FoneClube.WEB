@@ -5,8 +5,13 @@
         <div class="form-container"> 
             <div class="row">           
                 <div class="form-group col-sm-6 col-xs-12">
-                    <label for="cpf">CPF:</label>
-                    <input id="cpf" next-on-enter class="form-control" ng-model="vm.customer.DocumentNumber" type="text" ng-change="vm.validarCPF()" mask="999.999.999-99" restrict="reject">
+                        
+                    <label for="cpf">CPF - </label>
+                    <label>(Selecione checkbox para CNPJ)
+                            <input type="checkbox" ng-model="vm.checkboxCNPJ" ng-change="vm.onCheckCNPJ()">
+                    </label>
+                    <input id="cpf" ng-if="vm.CPFField" next-on-enter class="form-control" ng-model="vm.customer.DocumentNumber" type="text" ng-change="vm.validarCPF()" mask="999.999.999-99" restrict="reject">
+                    <input id="cpf" ng-if="vm.CNPJField" next-on-enter class="form-control" ng-model="vm.customer.DocumentNumber" type="text" ng-change="vm.validarCPF()" mask="99.999.999/9999-99" restrict="reject">
                 </div>
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="nome">Nome:</label>
@@ -154,18 +159,28 @@
     <tr>
       <th style="width: 130px;">   <div class="s_cls s_lbl"><span for="portabilidadeTelefone">TELEFONE:</span></div>
         </th>
+
+        <th style="width: 40px;">
+            <div class="s_cls s_lbl"><span for="portabilidadeTelefone">STATUS:</span></div>
+         </th>
+
       <th style="width: 100px;">
            <div class="s_cls s_lbl"><span for="portabilidadeTelefone">PLANO:</span></div>
         </th>
+
+        
+         
       <th style="width: 100px;">
            <div class="s_cls s_lbl"><span for="portabilidadeTelefone">OPERADORA:</span></div>
         </th>
       <th style="width: 100px;">
            <div class="s_cls s_lbl"><span for="portabilidadeTelefone">PORTAR:</span></div>
         </th>
-      <th style="width: 40px;">
-           <div class="s_cls s_lbl"><span for="portabilidadeTelefone">ATIVA:</span></div>
-        </th>
+        <th style="width: 40px;">
+            <div class="s_cls s_lbl"><span for="portabilidadeTelefone">ATIVA:</span></div>
+         </th>
+
+         
       <th style="width: 600px;">
            <div class="s_cls s_lbl" ><span for="portabilidadeTelefone">APELIDO:</span></div>
         </th>
@@ -178,14 +193,24 @@
           <div class="s_cls">                        
     <input id="portabilidadeTelefone" next-on-enter class="form-control" ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.validatePhoneNumber($index)" style="width: 120px;">
       </div>           
-        </td>          
+        </td> 
+        
+        
+        <td style="width: 40px;">
+            <div class="s_cls box-status" ng-style="phoneNumber.StatusOperator">{{phoneNumber.StatusDescription}}</div>          
+        </td> 
+
       <td style="width: 100px;">
             <div class="s_cls">                        
       <select id="qualPlanoContratar" next-on-enter class="form-control" ng-options="plan.Id as plan.Description for plan in vm.plans | filter: phoneNumber.operadora == 1 ? 'VIVO' : phoneNumber.operadora == 2 ? 'CLARO' : 9" ng-model="phoneNumber.IdPlanOption" style="width: 160px;">
                             <option value="">Selecione</option>
                         </select>
        </div>          
-        </td>        
+        </td>   
+        
+        
+
+
       <td style="width: 100px;text-align: center;">
         <div class="s_cls">                        
                         <select id="qualOperadoraUsar" next-on-enter class="form-control" ng-model="phoneNumber.operadora" ng-change="phoneNumber.IdPlanOption = ''" style="width: 100px;">

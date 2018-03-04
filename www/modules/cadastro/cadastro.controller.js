@@ -70,6 +70,34 @@
         
         // vm.enter = enter;
         vm.onTapCancel = onTapCancel;
+
+        vm.onCheckCNPJ = onCheckCNPJ
+        vm.CNPJField = false;
+        vm.CPFField = true;
+
+        function onCheckCNPJ(){
+            console.log("andando " + vm.checkboxCNPJ)
+
+            if(vm.checkboxCNPJ)
+            {
+                onShowCNPJField();
+            }
+            else
+            {
+                onShowCPFField();
+            }
+            
+        }
+
+        function onShowCPFField(){
+            vm.CNPJField = false;
+            vm.CPFField = true;
+        }
+
+        function onShowCNPJField(){
+            vm.CNPJField = true;
+            vm.CPFField = false;
+        }
            
         init();
 

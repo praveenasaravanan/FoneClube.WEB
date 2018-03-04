@@ -17,7 +17,7 @@
         }
         
         function _clearDocumentNumber(documentNumber){
-            return documentNumber.replace(/[-.]/g, '');
+            return documentNumber.replace(/[-.]/g, '').replace('/','');
         }
         
         function _getContactPhoneFromPhones(phones) {
