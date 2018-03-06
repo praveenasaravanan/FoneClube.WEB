@@ -41,17 +41,22 @@
         vm.ignoreAccents = function(item) {   
             //alert(item.Name);     
             if (!vm.search)
-                return true;       
-            //var text = removeAccents(item.Name.toLowerCase());
-            //alert(text);
-            //var search = removeAccents(vm.search.toLowerCase()).replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
-            //return text.indexOf(search) > -1;
-            var objects = [];
-            var jsonstr=JSON.stringify(item);
-            var parsejson=JSON.parse(jsonstr);
-            var searchterm=vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
-            objects=getKeys(parsejson,searchterm);
-            return objects.length > 0;
+                return true;  
+            //alert(vm.showall);
+            if (!vm.showall) {
+                var text = removeAccents(item.Name.toLowerCase());
+                //alert(text);
+                var search = removeAccents(vm.search.toLowerCase()).replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
+                return text.indexOf(search) > -1;
+            }
+            else {
+                var objects = [];
+                var jsonstr = JSON.stringify(item);
+                var parsejson = JSON.parse(jsonstr);
+                var searchterm = vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
+                objects = getKeys(parsejson, searchterm);
+                return objects.length > 0;
+            }
         };
 
                 //return an array of keys that match on a certain value
