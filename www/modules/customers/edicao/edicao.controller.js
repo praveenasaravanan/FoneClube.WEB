@@ -85,6 +85,9 @@
 
                 FoneclubeService.getPlans().then(function(result){
                     vm.plans = result;
+                    debugger;
+                    var listaPlanosUsados = [];
+
                     for(var number in vm.customer.Phones) {
                         vm.customer.Phones[number].key = Math.random();
 
@@ -112,6 +115,9 @@
                         }
                         vm.customer.Phones[number].NovoFormatoNumero = getNumberString(vm.customer.Phones[number]); //popula o novo campo vm.<telefone>
                         for (var plan in vm.plans) {
+
+                            listaPlanosUsados.push(vm.customer.Phones[number].IdPlanOption);
+
                             if (vm.plans[plan].Id == vm.customer.Phones[number].IdPlanOption) {
                                 if (vm.plans[plan].Description.endsWith('VIVO')) {
                                     vm.customer.Phones[number].operadora = '1'; //seta a operadora local
@@ -143,6 +149,13 @@
                  
                         
                     }
+                    
+                    listaPlanosUsados = listaPlanosUsados.filter(vm.onlyUnique)
+                    for (var i in listaPlanosUsados) {
+                        debugger
+                        var teste = listaPlanosUsados[i];
+                    }
+
                     console.info(vm.customer);
                     
                     populaPai(vm.customer)
@@ -699,6 +712,12 @@
                 return 'https://s3-sa-east-1.amazonaws.com/fone-clube-bucket/' + img[0].Name;
             }
             return '../../content/img/upload-cloud.png';
+        }
+
+        vm.onlyUnique = onlyUnique;
+
+        function onlyUnique(value, index, self) { 
+            return self.indexOf(value) === index;
         }
                 
     }
