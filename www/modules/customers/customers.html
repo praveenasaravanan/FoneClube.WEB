@@ -4,10 +4,16 @@
     <img class="loader" ng-if="vm.showLoader">
     <div class="col-xs-12" ng-show="!vm.showLoader">
         <div class="form-container">
-            <div class="form-group col-xs-12 col-sm-3">
+            <div class="form-group col-xs-9 col-sm-3">
                 <div class="input-group">
                     <span class="input-group-addon" id="sizing-addon2"><i class="glyphicon glyphicon-search"></i></span>
                     <input type="text" class="form-control" placeholder="Buscar" ng-model="vm.search" aria-describedby="sizing-addon2">
+                </div>
+            </div>
+            <div class="form-group col-xs-3 col-sm-3">
+                    <div class="input-group" style="line-height:35px;">
+                <input id="chkShowall" type="checkbox" ng-model="vm.showall" ng-checked="false" />
+                <label for="chkShowall">All</label>
                 </div>
             </div>
             <div class="form-group  table-responsive-vertical shadow-z-1 col-xs-12">
