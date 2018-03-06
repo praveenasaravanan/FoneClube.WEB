@@ -202,7 +202,7 @@
 
       <td style="width: 100px;">
             <div class="s_cls">                        
-      <select id="qualPlanoContratar" next-on-enter class="form-control" ng-options="plan.Id as plan.Description for plan in vm.plans | filter: phoneNumber.operadora == 1 ? 'VIVO' : phoneNumber.operadora == 2 ? 'CLARO' : 9" ng-model="phoneNumber.IdPlanOption" style="width: 160px;">
+      <select id="qualPlanoContratar" next-on-enter class="form-control" ng-options="plan.Id as plan.Description + ' - R$' + (plan.Value/100) for plan in vm.plans | filter: phoneNumber.operadora == 1 ? 'VIVO' : phoneNumber.operadora == 2 ? 'CLARO' : 9" ng-model="phoneNumber.IdPlanOption"  style="width: 160px;">
                             <option value="">Selecione</option>
                         </select>
        </div>          
