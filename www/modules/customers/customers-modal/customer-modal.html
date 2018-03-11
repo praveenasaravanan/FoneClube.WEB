@@ -2,17 +2,17 @@
     <div class="header">
         <span class="title">Detalhe Cliente</span>
         <button ng-click="closeThisDialog(0)">X</button>
-    </div> 
+    </div>
 
     <h4 class="nome-cliente">{{vm.customer.Name}}</h4>
     <div class="modal-container">
         <div class="container col-xs-12">
             <div>
-                <button class="btn btn-primary col-xs-12" ng-click="vm.onTapNewCardPayment()" >Cobrança com novo cartão</button>
-                <button class="btn btn-primary col-xs-12" ng-click="vm.onTapBoleto()" >Cobrança com boleto</button>
-                <button ng-click="vm.onTapEditar(); closeThisDialog(0);" class="btn btn-primary col-xs-12" >Editar cliente</button>
-                <button ng-click="vm.onTapComment(); closeThisDialog(0);" class="btn btn-primary col-xs-12" >Criar ordem de serviço</button>
-                <button ng-click="vm.onTapExcluir()" class="btn btn-danger col-xs-12" >Excluir cliente</button>
+                <button class="btn btn-primary col-xs-12" ng-click="vm.onTapNewCardPayment()">Cobrança com novo cartão</button>
+                <button class="btn btn-primary col-xs-12" ng-click="vm.onTapBoleto()">Cobrança com boleto</button>
+                <button ng-click="vm.onTapEditar(); closeThisDialog(0);" class="btn btn-primary col-xs-12">Editar cliente</button>
+                <button ng-click="vm.onTapComment(); closeThisDialog(0);" class="btn btn-primary col-xs-12">Criar ordem de serviço</button>
+                <button ng-click="vm.onTapExcluir()" class="btn btn-danger col-xs-12">Excluir cliente</button>
             </div>
 
             <div ng-if="vm.etapaEscolhaCartao">
@@ -22,9 +22,11 @@
                 </h4>
 
                 <uib-accordion close-others="oneAtATime">
-                    <div uib-accordion-group class="panel-default" ng-init="vm.cards.length == 1 ? status.open = true : status.open = false" is-open="status.open" ng-repeat="card in vm.cards">
+                    <div uib-accordion-group class="panel-default" ng-init="vm.cards.length == 1 ? status.open = true : status.open = false"
+                        is-open="status.open" ng-repeat="card in vm.cards">
                         <uib-accordion-heading>
-                            Cartão Final: {{card.last_digits}} <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
+                            Cartão Final: {{card.last_digits}}
+                            <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
                         </uib-accordion-heading>
                         <div class="accordion-container">
                             <p>Bandeira: {{card.brand}}</p>
@@ -32,53 +34,70 @@
                             <p>{{card.valid ? 'Cartão válido' : 'Cartão inválido/vencido'}}</p>
                         </div>
                         <button class="btn btn-success col-xs-12 col-sm-3" ng-click="vm.onTapCard(card)"> Nova cobrança </button>
-                    </div> 
+                    </div>
                 </uib-accordion>
 
-                <h4>Histórico de cobranças</h4>
+                <h4>Cobranças & Ordens de Serviço</h4>
 
                 <uib-accordion close-others="oneAtATime">
-                    <div uib-accordion-group class="panel-default" ng-init="vm.histories.length == 1 ? status.open = true : status.open = false" is-open="status.open" ng-repeat="history in vm.histories">
-                        <uib-accordion-heading>
-                                {{vm.histories.length-$index}}ª Cobrança<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
-                        </uib-accordion-heading>
-                        <div class="accordion-container">
-                            <p>Data e hora: <strong>{{history.PaymentDate}}.</strong> </p>
-                            <p>Comentário: <strong>{{history.Comment}}.</strong> </p>
-                            <p>Valor: <strong>{{history.Ammount / 100 }} R$ </strong> </p>
-                            <p>Tipo: <strong>{{history.descriptionType}} </strong> </p>
-                            <p>Agente: <strong>{{history.CollectorName }} </strong> </p>
-                            <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{history.StatusPayment }} </strong> </p>
+                    <div uib-accordion-group class="panel-default" ng-init="status.open = true"
+                        is-open="status.open" ng-repeat="chargeAndOrder in vm.chargesAndOrders">
+                        <div ng-if="chargeAndOrder.IsCharge">
+                            <uib-accordion-heading>
+                                {{vm.chargesAndOrders.length-$index}}ª Cob.   {{ chargeAndOrder.Charges.PaymentDateFormatted | date:'MM/dd/yyyy'}}   R${{chargeAndOrder.Charges.Ammount / 100 }}   {{chargeAndOrder.Charges.descriptionType}}
+                                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}" ></i>
+                            </uib-accordion-heading>
+                            <div class="accordion-container">
+                                <p>Data e hora:
+                                    <strong>{{chargeAndOrder.Charges.PaymentDate}}.</strong>
+                                </p>
+                                <p>Comentário:
+                                    <strong>{{chargeAndOrder.Charges.Comment}}.</strong>
+                                </p>
+                                <p>Valor:
+                                    <strong>{{chargeAndOrder.Charges.Ammount / 100 }} R$ </strong>
+                                </p>
+                                <p>Tipo:
+                                    <strong>{{chargeAndOrder.Charges.descriptionType}} </strong>
+                                </p>
+                                <p>Agente:
+                                    <strong>{{chargeAndOrder.Charges.CollectorName }} </strong>
+                                </p>
+                                <p ng-if="chargeAndOrder.Charges.StatusPayment != undefined">Status pagamento:
+                                    <strong>{{chargeAndOrder.Charges }} </strong>
+                                </p>
+                            </div>
+                            <button class="btn btn-info col-xs-12 col-sm-3" ng-click="vm.onTapPaymentHistoryDetail(chargeAndOrder.Charges);"> + Info </button>
                         </div>
-                        <button class="btn btn-info col-xs-12 col-sm-3" ng-click="vm.onTapPaymentHistoryDetail(history);"> + Info </button>
-                    </div> 
-                </uib-accordion>
-                
-                <h4>Histórico de ordem de serviço</h4>
-                
-                <uib-accordion close-others="oneAtATime">
-                    <div uib-accordion-group class="panel-default" ng-init="vm.orders.length == 1 ? status.open = true : status.open = false" is-open="status.open" ng-repeat="order in vm.orders | orderBy: '-dteRegister'">
-                        <uib-accordion-heading>
-                                {{vm.orders.length-$index}}ª Cobrança<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
-                        </uib-accordion-heading>
-                        <div class="accordion-container">
-                            <p>Data e hora: <strong>{{order.dteRegister | date: 'dd/MM/yy hh:mm:ss a'}}.</strong> </p>
-                            <p>Comentário: <strong>{{order.txtDescription}}.</strong> </p>
-                            <p>Pendete interação: <strong>{{order.bitPendingInteraction}} </strong> </p>
-                            <!--<p>Tipo: <strong>{{history.descriptionType}} </strong> </p>
+                        <div ng-if="chargeAndOrder.IsServiceOrder">
+                            <uib-accordion-heading>
+                                {{vm.chargesAndOrders.length-$index}}ª O.S.   {{chargeAndOrder.ServiceOrders.Description}}
+                                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                            </uib-accordion-heading>
+                            <div class="accordion-container">
+                                <p>Data e hora:
+                                    <strong>{{chargeAndOrder.ServiceOrders.RegisterDate | date: 'dd/MM/yy hh:mm:ss a'}}.</strong>
+                                </p>
+                                <p>Comentário:
+                                    <strong>{{chargeAndOrder.ServiceOrders.Description}}.</strong>
+                                </p>
+                                <p>Pendete interação:
+                                    <strong>{{chargeAndOrder.ServiceOrders.PendingInteraction}} </strong>
+                                </p>
+                                <!--<p>Tipo: <strong>{{history.descriptionType}} </strong> </p>
                             <p>Agente: <strong>{{history.CollectorName }} </strong> </p>
                             <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{history.StatusPayment }} </strong> </p>-->
+                            </div>
                         </div>
-                        <!--<button class="btn btn-info col-xs-12 col-sm-3" ng-click="vm.onTapPaymentHistoryDetail(history);"> + Info </button>-->
-                    </div> 
+                    </div>
                 </uib-accordion>
             </div>
 
-            <div ng-if="vm.etapaQuantia" class="etapa-quantia"> 
+            <div ng-if="vm.etapaQuantia" class="etapa-quantia">
                 <div class="form-group">
                     <label for="quantia">Quantia:</label>
-                    <input id="quantia" class="form-control" ng-model="vm.amount" type="text"  money-input placeholder="Digite o valor a ser pago">
-                </div>  
+                    <input id="quantia" class="form-control" ng-model="vm.amount" type="text" money-input placeholder="Digite o valor a ser pago">
+                </div>
                 <button ng-click="vm.onTapPagar()" class="btn btn-success">
                     Pagar
                 </button>
@@ -87,7 +106,7 @@
 
             <div class="list">
                 <h2>{{vm.message}}</h2>
-            </div>    
+            </div>
         </div>
     </div>
 </div>
