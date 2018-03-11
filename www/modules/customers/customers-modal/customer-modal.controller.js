@@ -1,5 +1,5 @@
-(function() {
-'use strict';
+(function () {
+    'use strict';
 
     angular
         .module('foneClub')
@@ -16,7 +16,7 @@
         vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
         vm.onTapOrdemServico = onTapOrdemServico;
         vm.cancelarPagamento = etapaEscolhaCartao;
-        vm.onTapComment=onTapComment
+        vm.onTapComment = onTapComment
         var customer = ViewModelUtilsService.modalCustomerData;
         vm.customer = customer;
         var CARTAO = 1;
@@ -26,162 +26,173 @@
 
         init();
 
-        function init(){
+        function init() {
             debugger
-            if(!customer.IdPagarme)
-            {
+            if (!customer.IdPagarme) {
 
                 PagarmeService.getCustomer(customer.DocumentNumber)
-                .then(function(result){
-                    console.log('- get customer')
-                    console.log(result)
+                    .then(function (result) {
+                        console.log('- get customer')
+                        console.log(result)
 
 
-                    try{
+                        try {
+                            var pagarmeID = result[0].id;
+                            updatePagarmeId(pagarmeID);
+                            initCardList(pagarmeID);
+                            etapaEscolhaCartao();
+                        }
+                        catch (erro) {
+                            console.log('cliente sem id pagarme ainda')
+                        }
+                        /*
                         var pagarmeID = result[0].id;
                         updatePagarmeId(pagarmeID);
                         initCardList(pagarmeID);
                         etapaEscolhaCartao();
-                    }
-                    catch(erro){
-                        console.log('cliente sem id pagarme ainda')
-                    }
-                    /*
-                    var pagarmeID = result[0].id;
-                    updatePagarmeId(pagarmeID);
-                    initCardList(pagarmeID);
-                    etapaEscolhaCartao();
-                    */
+                        */
 
-                })
-                .catch(function(error){
-                    console.log(error);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
 
-                });
+                    });
 
 
             }
-            else
-            {
+            else {
                 etapaEscolhaCartao();
                 initCardList(customer.IdPagarme);
             }
 
-            FoneclubeService.getHistoryPayment(customer.Id).then(function(result){
+            FoneclubeService.getChargeAndServiceOrderHistory(customer.Id).then(function (result) {
+                console.log('FoneclubeService.getChargeAndServiceOrderHistory');
+                console.log(result);
+                vm.chargesAndOrders = result;
+                for (var i in vm.chargesAndOrders) {
+                    var data = vm.chargesAndOrders[i];
+                    if (data.IsCharge) {
+                        data.Charges.descriptionType = (data.Charges.PaymentType == CARTAO) ? 'Cartão de crédito' : 'Boleto';
+
+                        if (data.Charges.PaymentType == BOLETO) {
+                            setStatusBoleto(data.Charges);
+                        }
+                    }
+                }
+                customer.chargesAndOrders = vm.chargesAndOrders;
+            });
+
+            FoneclubeService.getHistoryPayment(customer.Id).then(function (result) {
                 console.log('FoneclubeService.getHistoryPayment');
                 console.log(result);
                 vm.histories = result;
-                for(var i in vm.histories)
-                {
+                for (var i in vm.histories) {
                     var history = vm.histories[i];
                     history.descriptionType = (history.PaymentType == CARTAO) ? 'Cartão de crédito' : 'Boleto';
 
-                    if(history.PaymentType == BOLETO)
-                    {
+                    if (history.PaymentType == BOLETO) {
                         setStatusBoleto(history);
                     }
                 }
                 customer.histories = vm.histories;
             })
-            .catch(function(error){
-                console.log('catch error');
-                console.log(error);
-            });
-            
+                .catch(function (error) {
+                    console.log('catch error');
+                    console.log(error);
+                });
+
             FoneclubeService.getTblServiceOrders(customer.Id)
-                .then(function(result)
-                      {
-                console.log('FoneclubeService.getTblServiceOrders');
-                console.log(result);
-                vm.orders=result;
-            })
-                .catch(function(error)
-                       {
-                console.log('catch error');
-                console.log(error);
-            });
+                .then(function (result) {
+                    console.log('FoneclubeService.getTblServiceOrders');
+                    console.log(result);
+                    vm.orders = result;
+                })
+                .catch(function (error) {
+                    console.log('catch error');
+                    console.log(error);
+                });
         }
 
-        function onTapExcluir(){            
+        function onTapExcluir() {
             var personCheckout = {
-                    'DocumentNumber': customer.DocumentNumber
-                };
-            DialogFactory.dialogConfirm({mensagem: 'Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?'})
-            .then(function(value) {
-                if(value) {
-                    FoneclubeService.postDeletePerson(personCheckout).then(function(result){
-                        console.log(result);
-                        if(result){
-                            DialogFactory.showMessageDialog({message: 'Usuário foi removido com sucesso, no próximo carregamento da lista ele não será mais exibido'});                            
-                            closeThisDialog(0);
-                        }                       
-                        else
-                            DialogFactory.showMessageDialog({message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber});                            
-                    })
-                    .catch(function(error){
-                        console.log('catch error');
-                        console.log(error);
-                    });
-                }
-            })           
+                'DocumentNumber': customer.DocumentNumber
+            };
+            DialogFactory.dialogConfirm({ mensagem: 'Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?' })
+                .then(function (value) {
+                    if (value) {
+                        FoneclubeService.postDeletePerson(personCheckout).then(function (result) {
+                            console.log(result);
+                            if (result) {
+                                DialogFactory.showMessageDialog({ message: 'Usuário foi removido com sucesso, no próximo carregamento da lista ele não será mais exibido' });
+                                closeThisDialog(0);
+                            }
+                            else
+                                DialogFactory.showMessageDialog({ message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber });
+                        })
+                            .catch(function (error) {
+                                console.log('catch error');
+                                console.log(error);
+                            });
+                    }
+                })
         }
 
-        function setStatusBoleto(history){
+        function setStatusBoleto(history) {
             console.log('setStatusBoleto')
             console.log(history)
-            PagarmeService.getStatusBoleto(history.BoletoId).then(function(result){
-               history.StatusPayment = result[0].status;
+            PagarmeService.getStatusBoleto(history.BoletoId).then(function (result) {
+                history.StatusPayment = result[0].status;
             })
         }
 
-        function updatePagarmeId(pagarmeID){
+        function updatePagarmeId(pagarmeID) {
             var personCheckout = {
-                    'DocumentNumber': customer.DocumentNumber,
-                    'IdPagarme': pagarmeID
-                };
+                'DocumentNumber': customer.DocumentNumber,
+                'IdPagarme': pagarmeID
+            };
 
-            FoneclubeService.postUpdatePerson(personCheckout).then(function(result){
+            FoneclubeService.postUpdatePerson(personCheckout).then(function (result) {
                 console.log(result);
                 initCardList(pagarmeID);
             })
-            .catch(function(error){
-                console.log('catch error');
-                console.log(error);
-            });
+                .catch(function (error) {
+                    console.log('catch error');
+                    console.log(error);
+                });
         }
 
-        function onTapNewCardPayment(){
+        function onTapNewCardPayment() {
             console.log('onTapNewCardPayment');
             ViewModelUtilsService.showModalNewCardPayment(customer);
         }
-        
-        
-        function onTapComment(){
+
+
+        function onTapComment() {
             console.log('onTapComment');
             ViewModelUtilsService.showModalComment(customer);
-            
+
         }
-        
 
 
-        function initCardList(customerId){
+
+        function initCardList(customerId) {
 
 
             PagarmeService.getCard(customerId)
-            .then(function(result){
-                vm.cards = result;
-                console.log('-- cards --')
-                console.log(result)
-            })
-            .catch(function(error){
-                console.log(error);
-                vm.message = 'falha ao recuperar cartão';
-            });
+                .then(function (result) {
+                    vm.cards = result;
+                    console.log('-- cards --')
+                    console.log(result)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    vm.message = 'falha ao recuperar cartão';
+                });
 
 
         }
 
-        function onTapCard(card){
+        function onTapCard(card) {
 
             //vm.card = card;
             //etapaQuantia();
@@ -190,33 +201,32 @@
 
         }
 
-         function onTapBoleto(card){
+        function onTapBoleto(card) {
             console.log('onTapBoleto')
             ViewModelUtilsService.showModalBoleto(customer);
 
         }
 
-        function onTapPagar(){
+        function onTapPagar() {
 
             vm.message = 'Transação iniciada';
             var customer;
 
-            if(!vm.customer.address || !vm.customer.phone || !vm.customer.email || !vm.customer.document_number || !vm.customer.name)
-            {
+            if (!vm.customer.address || !vm.customer.phone || !vm.customer.email || !vm.customer.document_number || !vm.customer.name) {
                 customer = {
-                    'name' : vm.customer.name,
-                    'document_number' : vm.customer.document_number,
-                    'email' : vm.customer.email
+                    'name': vm.customer.name,
+                    'document_number': vm.customer.document_number,
+                    'email': vm.customer.email
                     ,
-                    'address' : {
-                        'street' : 'empty',
-                        'street_number' : '10',
-                        'neighborhood' : 'empty',
-                        'zipcode' : '01452000'
+                    'address': {
+                        'street': 'empty',
+                        'street_number': '10',
+                        'neighborhood': 'empty',
+                        'zipcode': '01452000'
                     },
-                    'phone' : {
-                        'ddd' : '00',
-                        'number' : '000000000'
+                    'phone': {
+                        'ddd': '00',
+                        'number': '000000000'
                     }
                 }
                 //vm.message = 'Usuário incompleto';
@@ -228,25 +238,25 @@
             console.log(vm.amount);
             console.log(customer);
 
-             PagarmeService.postTransactionExistentCard(vm.amount, vm.card.id, customer)
-             .then(function(result){
-                console.log('nova transac ' + result);
-                vm.message = 'Transação efetuada';
-                PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function(result){
+            PagarmeService.postTransactionExistentCard(vm.amount, vm.card.id, customer)
+                .then(function (result) {
+                    console.log('nova transac ' + result);
+                    vm.message = 'Transação efetuada';
+                    PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function (result) {
 
                         vm.message = 'Transação concluída';
                     })
-                    .catch(function(error){
-                        try{
-                            vm.message = 'Erro na captura da transação' + error.status;
-                        }
-                        catch(erro){
-                            vm.message = 'Erro na captura da transação'
-                        }
-                        console.log(error);
+                        .catch(function (error) {
+                            try {
+                                vm.message = 'Erro na captura da transação' + error.status;
+                            }
+                            catch (erro) {
+                                vm.message = 'Erro na captura da transação'
+                            }
+                            console.log(error);
 
-                    });
-             })
+                        });
+                })
 
 
             console.log(customer)
@@ -264,18 +274,18 @@
             vm.etapaEscolhaCartao = false;
             vm.etapaQuantia = true;
         }
-        
+
         function onTapEditar() {
-            FlowManagerService.changeEdicaoView(customer);            
+            FlowManagerService.changeEdicaoView(customer);
         }
-        
+
 
         function onTapPaymentHistoryDetail(history) {
             ViewModelUtilsService.showModalPaymentHistoryDetail(history, vm.customer)
         }
 
         function onTapOrdemServico() {
-            FlowManagerService.changeOrdemServicoView(customer);            
+            FlowManagerService.changeOrdemServicoView(customer);
         }
 
     }

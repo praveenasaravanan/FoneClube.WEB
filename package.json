@@ -4,7 +4,9 @@
     "description": "FoneClubControll: An Ionic project",
     "dependencies": {
         "angular-bootstrap-toggle": "^0.1.2",
+        "angular-date-time-input": "^1.2.1",
         "angular-ui-bootstrap": "^2.5.0",
+        "angularjs-bootstrap-datetimepicker": "^1.1.4",
         "browser-sync": "^2.18.13",
         "cordova-android": "^6.2.3",
         "cordova-browser": "^4.1.0",

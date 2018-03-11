@@ -14,7 +14,7 @@
     // >>>>>>> release-branch
     
             var vm = this;
-            debugger;
+            vm.date = new Date();
             var customer = ViewModelUtilsService.modalBoletoData;
             vm.customer = customer;
             var newCustomer;

@@ -119,7 +119,7 @@
                 return ngDialog.open({                    
                     template: template,   
                     className: 'show-template',                        
-                    closeByDocument: false,
+                    closeByDocument: true,
                     closeByEscape: true,
                     showClose: false                    
                 })
