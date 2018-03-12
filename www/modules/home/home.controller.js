@@ -260,6 +260,8 @@
             });
         }
 
+      window.location.href = "#/tab/customers";
+
         ////////////////////////////
 
     }
