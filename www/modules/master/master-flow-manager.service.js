@@ -17,6 +17,7 @@
         this.changeListCustomer = changeListCustomer;
         this.changeCadastro = changeCadastro;
         this.changeMassChargingView = changeMassChargingView;
+        this.changeStatusChargingView = changeStatusChargingView;
         this.goBack = goBack;
 
         function changeLoginView(){
@@ -59,6 +60,12 @@
         function changeMassChargingView(param) {
             LocationService.change('tabs.mass-charging', param);
             $rootScope.$broadcast('changeMenuItem', 'mass-charging');
+        }
+
+        function changeStatusChargingView(param){
+            console.log('changeStatusChargingView')
+            LocationService.change('tabs.status-charging', param);
+            $rootScope.$broadcast('changeMenuItem', 'status-charging');
         }
         
         function goBack() {

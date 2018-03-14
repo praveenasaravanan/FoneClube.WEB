@@ -44,6 +44,8 @@
                 FlowManagerService.changeCustomersView();
             } else if (screen == 'mass-charging') {
                 FlowManagerService.changeMassChargingView();
+            } else if(screen =='status-charging'){
+                FlowManagerService.changeStatusChargingView();
             }
         }
         

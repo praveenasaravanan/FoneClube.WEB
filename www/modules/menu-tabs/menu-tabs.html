@@ -36,6 +36,13 @@
                 <span> Cobrança </span>
             </div>
         </div>     
+
+        <div title="StatusCharging" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'mass-charging'}"  ng-click="vm.setMenuItemActive('status-charging')">            
+            <div>
+                <i class="glyphicon glyphicon-credit-card" aria-hidden="true"></i>            
+                <span> Status </span>
+            </div>
+        </div> 
     </div>  
      
     <div class="menu-views" ui-view name="menu-tab">                            

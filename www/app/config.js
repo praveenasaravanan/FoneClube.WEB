@@ -70,6 +70,15 @@
           }
         }
       })
+      .state('tabs.status-charging', {
+        url: "/status-charging",
+        views: {
+          'menu-tab': {
+            templateUrl: "modules/status-charging/status-charging.html",
+            controller: 'StatusChargingController as vm'
+          }
+        }
+      })
       .state('tabs.edicao', {
         url: "/edicao", 
         views: {      
