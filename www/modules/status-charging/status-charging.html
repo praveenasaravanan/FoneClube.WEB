@@ -12,9 +12,27 @@
             <input type="number" min="2000"  class="form-control" placeholder="Ano" ng-model="vm.year" aria-describedby="sizing-addon2" id="ano">
         </div>
 
-        <div class="row">
-            <button class="btn btn-primary busca-status" ng-click="vm.searchMassCharging()" ng-disabled="vm.resquenting || vm.loading">Buscar</button>
+        <div class="form-group col-xs-6 col-sm-1">
+            <button class="btn btn-primary busca-status" ng-click="vm.searchStatusCharging()" ng-disabled="vm.resquenting || vm.loading">Buscar</button>
         </div>
+
+        
+        <div class="form-group col-xs-2 col-sm-1 totalizadores">
+            <label>Valor total cobrado</label>
+            <p>R$: {{vm.totalCharged}}</p>
+        </div>
+
+        <div class="form-group col-xs-2 col-sm-1 totalizadores">
+            <label>Valor total recebido</label>
+            <p>R$: {{vm.totalReceived}}</p>
+        </div>
+
+        <!-- <div class="form-group col-xs-12 col-sm-6">
+            <label>Resultado</label>
+            <p>R$: 50,00</p>
+        </div> -->
+
+      
     </div>
 
     <table class="table table-hover force-select">
@@ -28,42 +46,14 @@
           <th scope="col"><strong>Valor cobrado cliente</strong></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody ng-repeat="customer in vm.customers">
 
         <tr>
-          <!-- <th scope="row">1</th> -->
           <td>Mark</td>
-          <td>Otto</td>
+          <td>{{customer.Name}}</td>
           <td>@mdo</td>
           <td>@mdo2</td>
           <td>@mdo3</td>
-        </tr>
-
-        <tr>
-          <!-- <th scope="row">2</th> -->
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-          <td>@fat2</td>
-          <td>@fat3</td>
-        </tr>
-
-        <tr>
-          <!-- <th scope="row">2</th> -->
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-          <td>@fat2</td>
-          <td>@fat3</td>
-        </tr>
-
-        <tr>
-          <!-- <th scope="row">2</th> -->
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-          <td>@fat2</td>
-          <td>@fat3</td>
         </tr>
    
       </tbody>

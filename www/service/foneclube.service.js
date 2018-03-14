@@ -46,6 +46,7 @@
         this.getLastPaymentType=getLastPaymentType
         this.getStatusBlockedClaro = getStatusBlockedClaro;
         this.getChargeAndServiceOrderHistory = getChargeAndServiceOrderHistory;
+        this.getStatusCharging = getStatusCharging;
         
         function getLastPaymentType(customer){
             debugger;
@@ -82,6 +83,20 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/profile/customer/GetParentAll'))
+            .then(function(result){
+                q.resolve(result);
+            })
+            .catch(function(error){
+                q.reject(error);
+            });
+
+            return q.promise;
+        }
+
+        function getStatusCharging(month, year){
+            var q = $q.defer();
+            
+            HTTPService.get(urlApi.concat('/charging/cobranca/status/vingencia/mes/' + month + '/ano/' + year))
             .then(function(result){
                 q.resolve(result);
             })
