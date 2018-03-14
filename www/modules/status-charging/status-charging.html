@@ -1,8 +1,73 @@
 
-<div class="home">
+<div class="home force-select">
     <fone-header title="Status de cobrança"></fone-header> 
-    <!-- <div class="text-center">
-      <h4 style="text-align: center;">Status de cobrança</h4>
-    </div> -->
+    
+    <div class="row container-data">
+        <div class="form-group col-xs-6 col-sm-1">
+            <label for="mes">Mês:</label>
+            <input type="number" class="form-control" placeholder="Mês" ng-model="vm.month" aria-describedby="sizing-addon2" id="mes">
+        </div>
+        <div class="form-group col-xs-6 col-sm-1">
+            <label for="ano">Ano:</label>
+            <input type="number" min="2000"  class="form-control" placeholder="Ano" ng-model="vm.year" aria-describedby="sizing-addon2" id="ano">
+        </div>
+
+        <div class="row">
+            <button class="btn btn-primary busca-status" ng-click="vm.searchMassCharging()" ng-disabled="vm.resquenting || vm.loading">Buscar</button>
+        </div>
+    </div>
+
+    <table class="table table-hover force-select">
+      <thead>
+        <tr >
+          
+          <th scope="col"><strong>Status</strong></th>
+          <th scope="col"><strong>Nome</strong></th>
+          <th scope="col"><strong>Telefones</strong></th>
+          <th scope="col"><strong>Detalhes linha</strong></th>
+          <th scope="col"><strong>Valor cobrado cliente</strong></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <!-- <th scope="row">1</th> -->
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+          <td>@mdo2</td>
+          <td>@mdo3</td>
+        </tr>
+
+        <tr>
+          <!-- <th scope="row">2</th> -->
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+          <td>@fat2</td>
+          <td>@fat3</td>
+        </tr>
+
+        <tr>
+          <!-- <th scope="row">2</th> -->
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+          <td>@fat2</td>
+          <td>@fat3</td>
+        </tr>
+
+        <tr>
+          <!-- <th scope="row">2</th> -->
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+          <td>@fat2</td>
+          <td>@fat3</td>
+        </tr>
+   
+      </tbody>
+    </table>
+
   </div>
   
