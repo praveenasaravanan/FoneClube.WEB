@@ -17,7 +17,9 @@
     vm.onTapBoleto = onTapBoleto;
     vm.onTapBoletoPayment = onTapBoletoPayment;
         vm.onTapNewCardPayment = onTapNewCardPayment;
-        vm.onTapExcluir = onTapExcluir;
+    vm.onTapExcluir = onTapExcluir;
+    vm.CustomerAsc = CustomerAsc;
+    vm.CustomerDesc = CustomerDesc;
 // =======
 //     CustomersController.inject = ['PagarmeService', '$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', 'UtilsService'];
 //     function CustomersController(PagarmeService, $ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, UtilsService) {
@@ -111,7 +113,8 @@
             return objects;
         }
 
-        var getCustomers = $scope.$watch(function() {
+    var getCustomers = $scope.$watch(function () {
+
             return vm.data.customers;
         }, function(data) {
             if(data && data.length > 0) {
@@ -122,7 +125,11 @@
                 }
             }
         })
+    $scope.sortType = 'Name';
+    $scope.sortReverse = false;
+    $scope.friends = vm.data.customers;
 
+    
 
 
         console.log('=== Customers Controller Controller ===');
@@ -164,6 +171,8 @@
             console.log('onTapNewCardPayment');
             ViewModelUtilsService.showModalNewCardPayment(customer);
         }
+
+
 
     function onTapBoletoPayment(customer) {
       console.log('onTapBoleto')
@@ -222,6 +231,22 @@
               }
           })
         }
+
+
+    function CustomerAsc() {
+      $scope.sortType = 'Name';
+      $scope.sortReverse = false;
+      $scope.friends = vm.data.customers;
+
+    }
+
+
+    function CustomerDesc() {
+      $scope.sortType = '-Name';
+      $scope.sortReverse = false;
+      $scope.friends = vm.data.customers;
+
+    }
 
 
     }
