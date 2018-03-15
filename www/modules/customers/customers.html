@@ -41,7 +41,7 @@
                             </td>
                         </tr>-->
 
-                      <tr ng-repeat="customer in vm.data.customers | orderBy:sortType:sortReverse" | filter : vm.ignoreAccents">
+                      <tr ng-repeat="customer in vm.data.customers | orderBy:sortType:sortReverse | filter : vm.ignoreAccents">
                        
                         <td><button class="btn btn-primary" ng-click="vm.onTapCustomer(customer, $index)"> <i class="glyphicon glyphicon-option-horizontal"></i> </button></td>
                         <td data-title="Nome" style="cursor:pointer;" ng-click="vm.onTapCustomerEdit(customer, $index)"> {{customer.Name}} </td>
