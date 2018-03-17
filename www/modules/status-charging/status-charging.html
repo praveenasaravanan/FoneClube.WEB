@@ -1,5 +1,5 @@
 
-<div class="home force-select">
+<div class="home" ng-class="{'force-select': vm.selecaoMassiva }">
     <fone-header title="Status de cobrança"></fone-header> 
     
     <div class="row container-data">
@@ -16,44 +16,122 @@
             <button class="btn btn-primary busca-status" ng-click="vm.searchStatusCharging()" ng-disabled="vm.resquenting || vm.loading">Buscar</button>
         </div>
 
-        
-        <div class="form-group col-xs-2 col-sm-1 totalizadores">
+
+        <div class="form-group col-xs-2 col-sm-1 totalizadores massive-selection">
+            <input type="checkbox" class="form-check-input" ng-model="vm.selecaoMassiva">
+            <label class="form-check-label" for="exampleCheck1">seleção massiva</label>
+          </div>
+
+        <div class="form-group col-xs-1 col-sm-1 totalizadores">
+            <label>Clientes ativos</label>
+            <p>{{vm.totalCustomers}}</p>
+        </div>
+
+        <div class="form-group col-xs-1 col-sm-1 totalizadores">
+            <label>Clientes cobrados</label>
+            <p>{{vm.totalCustomersCharged}}</p>
+        </div>
+
+        <div class="form-group col-xs-1 col-sm-1 totalizadores">
+            <label>Clientes não cobrados</label>
+            <p>{{vm.totalCustomersNotCharged}}</p>
+        </div>
+
+        <div class="form-group col-xs-1 col-sm-1 totalizadores">
             <label>Valor total cobrado</label>
             <p>R$: {{vm.totalCharged}}</p>
         </div>
 
-        <div class="form-group col-xs-2 col-sm-1 totalizadores">
+        <div class="form-group col-xs-1 col-sm-1 totalizadores">
             <label>Valor total recebido</label>
             <p>R$: {{vm.totalReceived}}</p>
         </div>
+
+        
 
         <!-- <div class="form-group col-xs-12 col-sm-6">
             <label>Resultado</label>
             <p>R$: 50,00</p>
         </div> -->
-
       
     </div>
 
-    <table class="table table-hover force-select">
+    <table class="table table-hover">
       <thead>
-        <tr >
+        <tr>
           
           <th scope="col"><strong>Status</strong></th>
           <th scope="col"><strong>Nome</strong></th>
           <th scope="col"><strong>Telefones</strong></th>
           <th scope="col"><strong>Detalhes linha</strong></th>
+          <th scope="col"><strong>Tipo</strong></th>
           <th scope="col"><strong>Valor cobrado cliente</strong></th>
+          <!-- <th scope="col"><strong>Teste</strong></th> -->
+          
         </tr>
       </thead>
       <tbody ng-repeat="customer in vm.customers">
 
         <tr>
-          <td>Mark</td>
+          
+          <td ng-class="{'status-red': !customer.Charged, 'status-green': customer.status == 'PAGO', 'status-blue': customer.status == 'PENDENTE'}">
+              <strong>{{customer.selectedCharge.StatusDescription}}</strong>
+              <strong ng-if="customer.selectedCharge.StatusDescription == undefined || customer.selectedCharge.StatusDescription == null"> NÃO COBRADO</strong>
+          </td>
+
           <td>{{customer.Name}}</td>
-          <td>@mdo</td>
-          <td>@mdo2</td>
-          <td>@mdo3</td>
+
+          <td>
+              <select
+              ng-if="customer.Phones.length > 0" 
+              ng-show="customer.Phones.length > 1" 
+              ng-model="customer.selectedPhone" 
+              ng-options="item.DDD + item.Number for item in customer.Phones"
+              ng-init="customer.selectedPhone = customer.Phones[0]" >
+            </select>
+
+            <div ng-if="customer.Phones.length == 1" >{{customer.Phones[0].DDD + customer.Phones[0].Number}}</div>
+            <div ng-if="customer.Phones.length == 0" >SEM LINHA</div>
+          </td>
+
+          <td>
+              {{customer.selectedPhone.PlanDescription}}
+          </td>
+
+          <td>
+            <div ng-if="customer.ChargingValidity[0].Charged">
+                {{ customer.ChargingValidity[0].PaymentType == 1 ? 'CARTÃO' : 'BOLETO' }}
+            </div>
+
+          </td>
+
+          <td> 
+              <select
+              ng-if="customer.ChargingValidity.length > 0" 
+              ng-show="customer.ChargingValidity.length > 1"
+              ng-model="customer.selectedCharge" 
+              ng-options="vm.formatAmmout(item.Ammount) for item in customer.ChargingValidity"
+              ng-init="customer.selectedCharge = customer.ChargingValidity[0]" >
+            </select>
+            
+      
+            <div ng-if="customer.ChargingValidity.length == 1" >{{ customer.ammout}}</div>
+            
+          
+          </td>
+
+          <!-- <td>
+              <select
+              ng-if="customer.ChargingValidity.length > 0" 
+              ng-model="customer.selectedCharge" 
+              ng-options="vm.formatAmmout(item.Ammount) for item in customer.ChargingValidity"
+              ng-init="customer.selectedCharge = customer.ChargingValidity[0]" >
+            </select>
+
+          </td> -->
+
+
+    
         </tr>
    
       </tbody>
