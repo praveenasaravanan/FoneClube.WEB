@@ -5,26 +5,72 @@
             .module('foneClub')
             .controller('StatusChargingController', StatusChargingController);
     
-        StatusChargingController.inject = ['FlowManagerService', 'MainUtils', 'FoneclubeService', 'PagarmeService'];
-        function StatusChargingController(FlowManagerService, MainUtils, FoneclubeService, PagarmeService) {
+        StatusChargingController.inject = ['FlowManagerService', 'MainUtils', 'FoneclubeService', 'PagarmeService', '$interval'];
+        function StatusChargingController(FlowManagerService, MainUtils, FoneclubeService, PagarmeService, $interval) {
             var vm = this;
+            
             console.log('--- StatusChargingController --- ' );
+
             vm.totalCharged = '...';
             vm.totalReceived = '...';
             vm.searchStatusCharging = searchStatusCharging;
             vm.formatAmmout = formatAmmout
+            
             var totalRecebidoBoleto = 0;
+            var interval;
+
+            vm.loading = false;
+            vm.loadingMessage = 'Carregando...';
+
 
             function searchStatusCharging(){
                 // console.log('searchStatusCharging')
                 // console.log( vm.month + ' ' + vm.year);
+                vm.loading = true;
+                vm.totalReceivedReady = false;
+
+                interval = $interval(checkFullLoad, 500);
 
                 FoneclubeService.getStatusCharging(vm.month,vm.year).then(function (result) {
                     console.log('getStatusCharging')
                     console.log(result)
                     vm.customers = result;
-                    handleData(vm.customers)
+                    handleData(vm.customers);
+                    vm.loading = false;
                 })
+            }
+
+            function checkFullLoad(){
+                // console.log('------------------------ ' + allStatusLoaded())
+                if(allStatusLoaded())
+                {
+                    $interval.cancel(interval);
+                    
+                    
+                    if(!vm.totalReceivedReady){
+                        vm.totalReceived = parseFloat(vm.totalReceived / 100).toString().replace('.',',');
+                        vm.totalReceivedReady = true;
+                    }
+                }
+                
+            }
+
+            function allStatusLoaded(){
+                for (var index in vm.customers) {
+                    
+                    for(var i in vm.customers[index].ChargingValidity)
+                    {
+                        // console.log(vm.customers[index].ChargingValidity[i].StatusDescription)
+                        if( vm.customers[index].ChargingValidity[i].StatusDescription == 'CARREGANDO')
+                        {
+                            return false;
+                        }
+                        
+                    }
+                    
+                }
+
+                return true;
             }
 
             function handleData(customers){
@@ -67,8 +113,8 @@
                             for(var i in customer.ChargingValidity)
                             {
                                 var charge = customer.ChargingValidity[i];
-                                
-                                if(charge.PaymentType == 2)
+
+                                if(charge.PaymentType == 2 && charge.BoletoId != 0)
                                 {
                                     
                                     PagarmeService.getStatusBoletoRecursivo(charge.BoletoId, customer, vm, index, i).then(function (result) {
@@ -97,7 +143,7 @@
 
                                             result[0].elemento.registerPayd = true;
                                             result[0].elemento.status = charge.StatusDescription;
-                                            debugger
+                                            // debugger
                                             console.log('Adicionando ' + parseInt(result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Ammount,10))
                                             console.log('Adicionando ' + totalRecebidoBoleto)
                                             totalRecebidoBoleto += parseInt(result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Ammount,10)
@@ -113,9 +159,17 @@
                                         {
                                             console.log('Completou todos boletos');
                                             result[0].vm.totalReceived = parseFloat(result[0].vm.totalReceived / 100).toString().replace('.',',');
+                                            vm.totalReceivedReady = true;
                                         }
         
                                     })
+                                }
+                                else if(charge.BoletoId == 0){
+                                    if(vm.customers[index].ChargingValidity[i].StatusDescription == 'CARREGANDO')
+                                    {
+                                        vm.customers[index].ChargingValidity[i].StatusDescription = 'INVÁLIDO'
+                                    }
+                                    
                                 }
                             }
                             

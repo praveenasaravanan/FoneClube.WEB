@@ -301,11 +301,18 @@
     
                 HTTPService.get('https://api.pagar.me/1/transactions?api_key='.concat(apiKey).concat('&id=').concat(boletoId))
                 .then(function(result){
-
-                    result[0].elemento = elemento;
-                    result[0].vm = viewModel;
-                    result[0].indexCustomer = indexCustomerModel
-                    result[0].indexCharge = indexChargeModel
+                    
+                    try{
+                        result[0].elemento = elemento;
+                        result[0].vm = viewModel;
+                        result[0].indexCustomer = indexCustomerModel
+                        result[0].indexCharge = indexChargeModel
+                    }
+                    catch(erro){
+                        // debugger
+                    }
+                    
+                    
                     q.resolve(result);
                 })
                 .catch(function(error){
