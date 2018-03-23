@@ -37,6 +37,7 @@
                     vm.customers = result;
                     handleData(vm.customers);
                     vm.loading = false;
+                    loadPaymentHistory();
                 })
             }
 
@@ -193,6 +194,61 @@
                 vm.totalCharged = parseFloat(vm.totalCharged / 100).toString().replace('.',',');
                 // vm.totalReceived = parseFloat(vm.totalReceived / 100).toString().replace('.',',');
 
+            }
+
+            function loadPaymentHistory(){
+                
+                for (var index in vm.customers) {
+                   
+                    FoneclubeService.getChargeAndServiceOrderHistoryDinamic(vm.customers[index].Id, index).then(function (result) {
+                        console.log('FoneclubeService.getChargeAndServiceOrderHistoryDinamic');
+                        // console.log(result);
+
+                        if(result.length == 0){
+                            //zerado
+                            
+                            
+                        }
+                        else{
+
+                            // TODO TEMPORARIO
+                            var dataCobranca;
+                            try{
+                                
+                                // dataCobranca = result[0].Charges.PaymentDate.substring(0,10).replace('-','/').replace('-','/');
+                                dataCobranca = result[0].Charges.PaymentDate;
+                            }
+                            catch(erro){
+                                
+                                // dataCobranca = result[0].CreatedDate.substring(0,10).replace('-','/').replace('-','/')
+                                dataCobranca = result[0].CreatedDate
+                            }
+                            
+                            var dataConvertida = new Date(dataCobranca).toISOString().split('T')[0].replace('-','/').replace('-','/');
+                            var mes = dataConvertida.substring(5,7);
+                            var ano = dataConvertida.substring(0,4);
+                            console.log('-------------------')
+                            console.log(mes)
+                            console.log(ano)
+
+                            var selecionado = new Date( vm.year.toString() + '/' + vm.month.toString()).toISOString().split('T')[0].replace('-','/').replace('-','/');
+                            var mesSelecionado = selecionado.substring(5,7);
+                            var anoSelecionado = selecionado.substring(0,4);
+
+                            if(mesSelecionado == mes && anoSelecionado == ano)
+                            {    
+                                vm.customers[result.indexLista].dataIgual = true;
+                            }
+
+                            vm.customers[result.indexLista].chargingDate = dataConvertida
+                            
+                                
+                             
+                        }
+                        
+                    });
+
+                }
             }
 
             function formatAmmout(value){

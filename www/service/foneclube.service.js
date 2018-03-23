@@ -46,6 +46,7 @@
         this.getLastPaymentType=getLastPaymentType
         this.getStatusBlockedClaro = getStatusBlockedClaro;
         this.getChargeAndServiceOrderHistory = getChargeAndServiceOrderHistory;
+        this.getChargeAndServiceOrderHistoryDinamic = getChargeAndServiceOrderHistoryDinamic;
         this.getStatusCharging = getStatusCharging;
         
         function getLastPaymentType(customer){
@@ -436,6 +437,22 @@
             HTTPService.get(urlApi.concat('/profile/getChargeAndServiceOrderHistory?personID='.concat(id)))
             .then(function(result)
                   {
+                q.resolve(result);
+            })
+            .catch(function(error)
+                  {
+                q.reject(error);
+            });
+            return q.promise;
+        }
+
+        function getChargeAndServiceOrderHistoryDinamic(id,index)
+        {
+            var q = $q.defer();
+            HTTPService.get(urlApi.concat('/profile/getChargeAndServiceOrderHistory?personID='.concat(id)))
+            .then(function(result)
+            {
+                result.indexLista = index
                 q.resolve(result);
             })
             .catch(function(error)
