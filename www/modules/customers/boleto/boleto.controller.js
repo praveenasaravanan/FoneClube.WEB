@@ -128,7 +128,7 @@
                    } 
                 }
 
-                     PagarmeService.postBoletoDirect(vm.amount, vm.commentBoleto, addExpirationDays(vm.expirationDateField)).then(function(resultCapture){
+                     PagarmeService.postBoletoDirect(vm.amount, vm.commentBoleto, existentCustomer, addExpirationDays(vm.expirationDateField)).then(function(resultCapture){
     
                             debugger;
                             if(vm.enviaEmail)
