@@ -122,7 +122,7 @@
                 return q.promise;
             }
 
-            function postBoletoDirect(amount, instructions, customer){
+            function postBoletoDirect(amount, instructions, customer, expirationDate){
                 var q = $q.defer();
                 
                             debugger;
@@ -141,7 +141,8 @@
                                 'payment_method':'boleto',
                                 'data-customer-data':true,
                                 'customer':customer,
-                                'boleto_instructions': instructions
+                                'boleto_instructions': instructions,
+                                'boleto_expiration_date':expirationDate
                             };
                             
                 
@@ -156,7 +157,7 @@
                 
                             return q.promise;
             }
-    
+            
              function notifyCustomerBoleto(id, email){
                 var q = $q.defer();
     
