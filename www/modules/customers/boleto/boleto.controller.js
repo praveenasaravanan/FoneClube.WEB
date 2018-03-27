@@ -116,7 +116,19 @@
                 // PagarmeService.postBoleto(vm.amount, vm.commentBoleto, existentCustomer)
                 //  .then(function(result){
                 //     console.log(result);
-                     PagarmeService.postBoletoDirect(vm.amount, vm.commentBoleto, existentCustomer).then(function(resultCapture){
+
+                if(!vm.expirationDateField)
+                {
+                    vm.expirationDateField = 5; 
+                }
+                else{
+                   if(vm.expirationDateField <= 0)
+                   {
+                    vm.expirationDateField = 5; 
+                   } 
+                }
+
+                     PagarmeService.postBoletoDirect(vm.amount, vm.commentBoleto, addExpirationDays(vm.expirationDateField)).then(function(resultCapture){
     
                             debugger;
                             if(vm.enviaEmail)
@@ -254,6 +266,13 @@
             function onTapPaymentHistoryDetail(history) {
                 ViewModelUtilsService.showModalPaymentHistoryDetail(history, vm.customer);
             }
+
+            
+            function addExpirationDays(days) {
+                var dat = new Date();
+                dat.setDate(dat.getDate() + days);
+                return dat.toISOString();
+              }
     
         }
     })();
