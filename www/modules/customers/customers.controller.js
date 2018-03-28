@@ -115,19 +115,23 @@
 
     var getCustomers = $scope.$watch(function () {
 
-            return vm.data.customers;
-        }, function(data) {
-            if(data && data.length > 0) {
-                vm.showLoader = false;
-                getCustomers();
-                if (vm.data.customersCache) {
-                    vm.data.customers = angular.copy(vm.data.customersCache);
-                }
-            }
-        })
-    $scope.sortType = 'Name';
+      $scope.sortType = 'Nome';
+      $scope.sortReverse = false;
+      $scope.clientList = vm.data.customers;
+      return $scope.clientList;
+    }, function (data) {
+      if (data && data.length > 0) {
+        vm.showLoader = false;
+        getCustomers();
+        if (vm.data.customersCache) {
+          vm.data.customers = angular.copy(vm.data.customersCache);
+          $scope.clientList = angular.copy(vm.data.customersCache);
+        }
+      }
+    })
+    $scope.sortType = 'Nome';
     $scope.sortReverse = false;
-    $scope.friends = vm.data.customers;
+    $scope.clientList = vm.data.customers;
 
     
 
@@ -233,18 +237,45 @@
         }
 
 
-    function CustomerAsc() {
-      $scope.sortType = 'Name';
-      $scope.sortReverse = false;
-      $scope.friends = vm.data.customers;
+    function CustomerAsc(type) {
+
+      if (type == 'Nome') {
+        $scope.sortType = 'Name';
+        $scope.sortReverse = false;
+        $scope.clientList = vm.data.customers;
+
+
+      }
+      else {
+        $scope.sortType = 'LastChargeDate';
+        $scope.sortReverse = false;
+        $scope.clientList = vm.data.customers.filter(x => x.LastChargeDate != null);;
+
+
+
+      }
 
     }
 
 
-    function CustomerDesc() {
-      $scope.sortType = '-Name';
-      $scope.sortReverse = false;
-      $scope.friends = vm.data.customers;
+    function CustomerDesc(type) {
+      if (type == 'Nome') {
+        $scope.sortType = '-Name';
+        $scope.sortReverse = false;
+        $scope.clientList = vm.data.customers;
+
+
+      }
+      else {
+
+        $scope.sortType = '-LastChargeDate';
+        $scope.sortReverse = false;
+        $scope.clientList = vm.data.customers.filter(x => x.LastChargeDate != null);
+
+
+
+
+      }
 
     }
 
