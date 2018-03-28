@@ -19,12 +19,17 @@
             <div class="form-group  table-responsive-vertical shadow-z-1 col-xs-12">
                 <table id="table" class="table table-hover table-condensed table-striped table-bordered">
                     <thead>
-                        <tr>
-                           <th></th>
-                        <th>Nome <span title="A-To-Z"  ng-click="vm.CustomerAsc()" style="cursor:pointer;" class="glyphicon glyphicon-triangle-bottom"></span>
-<span style="cursor:pointer;" title="Z-To-A" class="glyphicon glyphicon-triangle-top" ng-click="vm.CustomerDesc()"></span></th>
+                      <tr>
+                        <th></th>
+                        <th>
+                          <b>Nome</b> &nbsp;&nbsp; &nbsp;&nbsp;    Sort By : Nome <span title="A-To-Z" ng-click="vm.CustomerAsc('Nome')" style="cursor:pointer;" class="glyphicon glyphicon-triangle-bottom"></span>
+                          <span style="cursor:pointer;" title="Z-To-A" class="glyphicon glyphicon-triangle-top" ng-click="vm.CustomerDesc('Nome')"></span>
+                          &nbsp;&nbsp;  Sort By :  Hist <span title="A-To-Z" ng-click="vm.CustomerAsc('Hist')" style="cursor:pointer;" class="glyphicon glyphicon-triangle-bottom"></span>
+                          <span style="cursor:pointer;" title="Z-To-A" class="glyphicon glyphicon-triangle-top" ng-click="vm.CustomerDesc('Hist')"></span>
+                        </th>
+                        <th>Last Charged Date</th>
                         <th>Ações</th>
-                        </tr>
+                      </tr>
                     </thead>
                     <tbody style="-webkit-user-select: text;
   -moz-user-select: text;
@@ -41,10 +46,11 @@
                             </td>
                         </tr>-->
 
-                      <tr ng-repeat="customer in vm.data.customers | orderBy:sortType:sortReverse | filter : vm.ignoreAccents">
-                       
+                      <tr ng-repeat="customer in clientList | orderBy : sortType : sortReverse | filter : vm.ignoreAccents">
+
                         <td><button class="btn btn-primary" ng-click="vm.onTapCustomer(customer, $index)"> <i class="glyphicon glyphicon-option-horizontal"></i> </button></td>
                         <td data-title="Nome" style="cursor:pointer;" ng-click="vm.onTapCustomerEdit(customer, $index)"> {{customer.Name}} </td>
+                        <td data-title="Nome" style="cursor:pointer;"> {{customer.LastChargeDate | date:'dd-MM-yyyy'}} </td>
 
                         <td data-title="Ações">
                           <button class="btn btn-primary" ng-click="vm.onTapBoletoPayment(customer)">Repetir última</button>
