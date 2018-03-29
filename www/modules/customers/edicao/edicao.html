@@ -4,15 +4,16 @@
     <div class="col-xs-12">
         <div class="form-container"> 
             <div class="row">           
-                <div class="form-group col-sm-6 col-xs-12">
-                        
-                    <label for="cpf">CPF - </label>
-                    <label>(Selecione checkbox para CNPJ)
-                            <input type="checkbox" ng-model="vm.checkboxCNPJ" ng-change="vm.onCheckCNPJ()">
-                    </label>
-                    <input id="cpf" ng-if="vm.CPFField" next-on-enter class="form-control" ng-model="vm.customer.DocumentNumber" type="text" ng-change="vm.validarCPF()" mask="999.999.999-99" restrict="reject">
-                    <input id="cpf" ng-if="vm.CNPJField" next-on-enter class="form-control" ng-model="vm.customer.DocumentNumber" type="text" ng-change="vm.validarCPF()" mask="99.999.999/9999-99" restrict="reject">
-                </div>
+              <div class="form-group col-sm-6 col-xs-12">
+
+                <label for="cpf">CPF - </label>
+                <label>
+                  (Selecione checkbox para CNPJ)
+                  <input type="checkbox" ng-model="vm.checkboxCNPJ" ng-change="vm.onCheckCNPJ()">
+                </label>
+                <input id="cpf" ng-if="vm.CPFField" next-on-enter class="form-control" ng-model="vm.customer.DocumentNumber" type="text" ng-change="vm.validarCPF()" mask="999.999.999-99" restrict="reject">
+                <input id="cpf" ng-if="vm.CNPJField" next-on-enter class="form-control" ng-model="vm.customer.DocumentNumber" type="text" ng-change="vm.validarCPF()" mask="99.999.999/9999-99" restrict="reject">
+              </div>
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="nome">Nome:</label>
                     <input id="nome" next-on-enter class="form-control" ng-model="vm.customer.Name" type="text">
@@ -157,86 +158,105 @@
             <table class="s_table">
   <thead>
     <tr>
-      <th style="width: 130px;">   <div class="s_cls s_lbl"><span for="portabilidadeTelefone">TELEFONE:</span></div>
-        </th>
+      <th style="width: 130px;">
+        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">TELEFONE:</span></div>
+      </th>
+      <th style="width: 40px;">
+        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">Email Action:</span></div>
+      </th>
 
-        <th style="width: 40px;">
-            <div class="s_cls s_lbl"><span for="portabilidadeTelefone">STATUS:</span></div>
-         </th>
+      <th style="width: 40px;">
+        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">STATUS:</span></div>
+      </th>
 
       <th style="width: 100px;">
-           <div class="s_cls s_lbl"><span for="portabilidadeTelefone">PLANO:</span></div>
-        </th>
+        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">PLANO:</span></div>
+      </th>
 
-        
-         
-      <th style="width: 100px;">
-           <div class="s_cls s_lbl"><span for="portabilidadeTelefone">OPERADORA:</span></div>
-        </th>
-      <th style="width: 100px;">
-           <div class="s_cls s_lbl"><span for="portabilidadeTelefone">PORTAR:</span></div>
-        </th>
-        <th style="width: 40px;">
-            <div class="s_cls s_lbl"><span for="portabilidadeTelefone">ATIVA:</span></div>
-         </th>
 
-         
+
+      <th style="width: 100px;">
+        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">OPERADORA:</span></div>
+      </th>
+      <th style="width: 100px;">
+        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">PORTAR:</span></div>
+      </th>
+      <th style="width: 40px;">
+        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">ATIVA:</span></div>
+      </th>
+
+
       <th style="width: 600px;">
-           <div class="s_cls s_lbl" ><span for="portabilidadeTelefone">APELIDO:</span></div>
-        </th>
-   
+        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">APELIDO:</span></div>
+      </th>
+
     </tr>
   </thead>
   <tbody>   
-    <tr ng-hide="!phoneNumber.IsFoneclube || phoneNumber.Delete" ng-init="status.open = false" is-open="status.open" ng-repeat="phoneNumber in vm.customer.Phones track by $index">     
+    <tr ng-hide="!phoneNumber.IsFoneclube || phoneNumber.Delete" ng-init="status.open = false" is-open="status.open" ng-repeat="phoneNumber in vm.customer.Phones track by $index">
       <td style="width: 130px;text-align: center;">
-          <div class="s_cls">                        
-    <input id="portabilidadeTelefone" next-on-enter class="form-control" ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.validatePhoneNumber($index)" style="width: 120px;">
-      </div>           
-        </td> 
-        
-        
-        <td style="width: 40px;">
-            <div class="s_cls box-status" ng-style="phoneNumber.StatusOperator">{{phoneNumber.StatusDescription}}</div>          
-        </td> 
+        <div class="s_cls">
+          <input id="portabilidadeTelefone" next-on-enter class="form-control" ng-model="phoneNumber.NovoFormatoNumero" type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.validatePhoneNumber($index)" style="width: 120px;">
+        </div>
+      </td>
 
       <td style="width: 100px;">
-            <div class="s_cls">                        
-      <select id="qualPlanoContratar" next-on-enter class="form-control" ng-options="plan.Id as plan.Description + ' - R$' + (plan.Value/100) for plan in vm.plans | filter: phoneNumber.operadora == 1 ? 'VIVO' : phoneNumber.operadora == 2 ? 'CLARO' : 9" ng-model="phoneNumber.IdPlanOption"  style="width: 160px;">
-                            <option value="">Selecione</option>
-                        </select>
-       </div>          
-        </td>   
-        
-        
+        <div class="s_cls">
+          <select next-on-enter class="form-control" ng-change="vm.opemEmailpopup(EmailstatusID,phoneNumber.NovoFormatoNumero,vm.customer.Email,phoneNumber.operadora)" ng-model="EmailstatusID" style="width: 160px;">
+            <option value="">Selecione</option>
+            <option name="1" value="1">Block-Perda(lost)</option>
+            <option name="2" value="2">Block-Roube(theft)</option>
+            <option name="3" value="3">Block-Gestor (admin – Crawler – robot)</option>
+            <option name="4" value="4">Block-Anatel (4 month block)</option>
+            <option name="5" value="5">DESBLOQUEIO (Universal Unblock)</option>
+            <option name="6" value="6"> Troca de Plano (upgrade/downgrade)</option>
+
+          </select>
+
+
+        </div>
+      </td>
+      <td style="width: 40px;">
+        <div class="s_cls box-status" ng-style="phoneNumber.StatusOperator">{{phoneNumber.StatusDescription}}</div>
+      </td>
+
+      <td style="width: 100px;">
+        <div class="s_cls">
+          <select id="qualPlanoContratar" next-on-enter class="form-control" ng-options="plan.Id as plan.Description + ' - R$' + (plan.Value/100) for plan in vm.plans | filter: phoneNumber.operadora == 1 ? 'VIVO' : phoneNumber.operadora == 2 ? 'CLARO' : 9" ng-model="phoneNumber.IdPlanOption" style="width: 160px;">
+            <option value="">Selecione</option>
+          </select>
+        </div>
+      </td>
+
+
 
 
       <td style="width: 100px;text-align: center;">
-        <div class="s_cls">                        
-                        <select id="qualOperadoraUsar" next-on-enter class="form-control" ng-model="phoneNumber.operadora" ng-change="phoneNumber.IdPlanOption = ''" style="width: 100px;">
-                            <option name="{{'operadora' + phoneNumber.key}}" value="1">Vivo</option>
-                            <option name="{{'operadora' + phoneNumber.key}}" value="2">Claro</option>
-                        </select>
-                           </div>
-        
-        </td>
+        <div class="s_cls">
+          <select id="qualOperadoraUsar" next-on-enter class="form-control" ng-model="phoneNumber.operadora" ng-change="phoneNumber.IdPlanOption = ''" style="width: 100px;">
+            <option name="{{'operadora' + phoneNumber.key}}" value="1">Vivo</option>
+            <option name="{{'operadora' + phoneNumber.key}}" value="2">Claro</option>
+          </select>
+        </div>
+
+      </td>
       <td style="width: 100px;text-align: center;">
-          <div class="s_cls">                        
-                        <select id="usarNumeroAtual" class="form-control" next-on-enter ng-model="phoneNumber.Portability" style="width: 100px;">
-                            <option value="true">Sim, vou fazer a "portabilidade" transferindo minha linha para o Foneclube.</option>
-                            <option value="false">Não, quero um número novo.</option>
-                        </select>
-                           </div>
-        </td>
-        <td style="width: 40px;">
-         <toggle ng-change="changed()"  on="On" off="Off" ng-model="phoneNumber.LinhaAtiva"></toggle>
-        
-        </td>
-        <td>
-          <div class="s_cls">                        
-                        <input id="comentarioValor" next-on-enter class="form-control" ng-model="phoneNumber.NickName" type="text" placeholder="Apelido" style="width: 100%;">
-                           </div>
-        </td>
+        <div class="s_cls">
+          <select id="usarNumeroAtual" class="form-control" next-on-enter ng-model="phoneNumber.Portability" style="width: 100px;">
+            <option value="true">Sim, vou fazer a "portabilidade" transferindo minha linha para o Foneclube.</option>
+            <option value="false">Não, quero um número novo.</option>
+          </select>
+        </div>
+      </td>
+      <td style="width: 40px;">
+        <toggle ng-change="changed()" on="On" off="Off" ng-model="phoneNumber.LinhaAtiva"></toggle>
+
+      </td>
+      <td>
+        <div class="s_cls">
+          <input id="comentarioValor" next-on-enter class="form-control" ng-model="phoneNumber.NickName" type="text" placeholder="Apelido" style="width: 100%;">
+        </div>
+      </td>
     </tr>
   </tbody>
 </table>
