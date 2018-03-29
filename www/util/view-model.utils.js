@@ -34,7 +34,8 @@
       this.showModalBoletoPayment = showModalBoletoPayment;
       
         this.showModalRepeatBoleto=showModalRepeatBoleto;
-        this.showModalRepeatCard=showModalRepeatCard
+      this.showModalRepeatCard = showModalRepeatCard
+      this.showModalEmailDetail = showModalEmailDetail;
         
 
         function showModal(data){
@@ -106,9 +107,18 @@
             this.modalPaymentDetailHistory = history;
             this.modalPaymentDetailCustomer = customer;
             var service = this;
-
             DialogFactory.showTemplate('modules/customers/payment-detail/paymentdetail.html');
         }
+
+      function showModalEmailDetail(emailstatus, phone, email, operator) {
+        this.modalEmailDetailemailstatus = emailstatus;
+        this.modalEmailDetailphone = phone;
+        this.modalEmailDetailemail = email;
+        this.modalEmailDetailoperator = operator;
+        var service = this;
+        DialogFactory.showTemplate('modules/customers/edicao/EmailTemplate.html');
+
+      }
 
     }
 })();
