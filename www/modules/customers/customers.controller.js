@@ -236,48 +236,40 @@
           })
         }
 
+        function CustomerAsc(type) {
+            if (type == 'Nome') {
+                $scope.sortType = 'Name';
+                $scope.sortReverse = false;
+                $scope.clientList = vm.data.customers;
+            } else if (type == 'Hist') {
+                $scope.sortType = 'LastChargeDate';
+                $scope.sortReverse = false;
+                $scope.clientList = vm.data.customers.filter(x => x.LastChargeDate != null);
+            } else {
+                $scope.sortType = 'Register';
+                $scope.sortReverse = false;
+                $scope.clientList = vm.data.customers.filter(x => x.Register != null);
+            }
+            FoneclubeService.getPlans().then(function(result){
+                vm.plans = result;
+            });
+        }
 
-    function CustomerAsc(type) {
-
-      if (type == 'Nome') {
-        $scope.sortType = 'Name';
-        $scope.sortReverse = false;
-        $scope.clientList = vm.data.customers;
-
-
-      }
-      else {
-        $scope.sortType = 'LastChargeDate';
-        $scope.sortReverse = false;
-        $scope.clientList = vm.data.customers.filter(x => x.LastChargeDate != null);;
-
-
-
-      }
-
-    }
-
-
-    function CustomerDesc(type) {
-      if (type == 'Nome') {
-        $scope.sortType = '-Name';
-        $scope.sortReverse = false;
-        $scope.clientList = vm.data.customers;
-
-
-      }
-      else {
-
-        $scope.sortType = '-LastChargeDate';
-        $scope.sortReverse = false;
-        $scope.clientList = vm.data.customers.filter(x => x.LastChargeDate != null);
-
-
-
-
-      }
-
-    }
+        function CustomerDesc(type) {
+            if (type == 'Nome') {
+                $scope.sortType = '-Name';
+                $scope.sortReverse = false;
+                $scope.clientList = vm.data.customers;
+            } else if (type == 'Hist') {
+                $scope.sortType = '-LastChargeDate';
+                $scope.sortReverse = false;
+                $scope.clientList = vm.data.customers.filter(x => x.LastChargeDate != null);
+            } else {
+                $scope.sortType = '-Register';
+                $scope.sortReverse = false;
+                $scope.clientList = vm.data.customers.filter(x => x.Register != null);
+            }
+        }
 
 
     }
