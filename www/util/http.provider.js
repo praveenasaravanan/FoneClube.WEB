@@ -12,11 +12,12 @@
     var vm = this;
     vm.get = get;
     vm.post = post;
+    vm.postFile = postFile;
     vm.getStatus = getStatus;
 
     function get(path, params) {
 
-      return $http.get(path, {params: params})
+      return $http.get(path, { params: params })
         .then(complete)
         .catch(error);
 
@@ -31,7 +32,7 @@
 
     function getStatus(path, params) {
 
-      return $http.get(path, {params: params})
+      return $http.get(path, { params: params })
         .then(complete)
         .catch(error);
 
@@ -57,6 +58,22 @@
       function error(message) {
         throw message;
       }
+    }
+    function postFile(path, params) {
+      debugger;
+      return $http.post(path, params, {
+        headers: { 'Content-Type': undefined }
+      })
+        .then(complete)
+        .catch(error);
+
+      //return $http({
+      //  method: 'POST',
+      //  url: path,
+      //  headers: { 'Content-Type': undefined },
+      //  data: params
+      //}).then(complete)
+      //  .catch(error);
     }
   }
 })();
