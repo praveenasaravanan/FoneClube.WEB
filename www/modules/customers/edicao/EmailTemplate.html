@@ -14,29 +14,26 @@
                   <div class="form-group col-sm-12 col-xs-12">
 
                     <label for="cpf">From :</label>
-                    <select next-on-enter class="form-control"  ng-model="vm.from">
+                    <select next-on-enter class="form-control" ng-model="vm.from">
                       <option name="marcio.franco@gmail.com" value="marcio.franco@gmail.com">marcio.franco@gmail.com</option>
                       <option name="gustavo.franco@foneclube.com.br" value="gustavo.franco@foneclube.com.br">gustavo.franco@foneclube.com.br</option>
                     </select>
-                   
-                  </div>
-                  
-                </div>
 
+                  </div>
+
+                </div>
                 <div class="row">
                   <div class="form-group col-sm-12 col-xs-12">
                     <label for="nome">To:</label>
                     <input id="nome" next-on-enter class="form-control" ng-model="vm.email" type="text">
                   </div>
                 </div>
-
                 <div class="row">
                   <div class="form-group col-sm-12 col-xs-12">
                     <label for="email">CC:</label>
                     <input id="email" next-on-enter class="form-control" ng-model="vm.cc" type="text">
                   </div>
                 </div>
-
                 <div class="row">
                   <div class="form-group col-sm-12 col-xs-12">
                     <label for="email">BCC:</label>
@@ -44,29 +41,38 @@
                   </div>
                 </div>
 
-                  <div class="row">
-                    
-                    <div class="form-group col-sm-12 col-xs-12">
-                      <label for="dataNasc">Subject:</label>
-                      <input id="dataNasc" next-on-enter class="form-control" ng-model="vm.subject">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="form-group col-sm-12 col-xs-12">
-                      <label for="quemConvidou">Body:</label>
-                      <textarea next-on-enter class="form-control" ng-model="vm.body" cols="40" rows="7"></textarea>
-                      
-                    </div>
-
-                  </div>
-               
                 <div class="row">
-                  <div class="form-group col-xs-12">
-                    <button class="btn btn-primary col-sm-4 col-xs-12"  ng-enter="vm.sendemail(vm)" ng-click="vm.sendemail(vm)">Send Email</button>
-                    <span ><button style="margin-left:5px;padding-left:5px" class="btn btn-primary col-sm-4 col-xs-12" ng-enter="vm.send(vm)" ng-click="vm.sendemail(vm)">Edit Template</button></span>
-                  </div>
+
+                  <div class="form-group col-sm-12 col-xs-12">
+                    <label for="dataNasc">Subject:</label>
+                    <input id="dataNasc" next-on-enter class="form-control" ng-model="vm.subject">
                   </div>
                 </div>
+                <div class="row">
+
+                  <div class="form-group col-sm-12 col-xs-12">
+                    <label for="dataNasc">Attach Files:</label>
+                    <input type="file" id="file1" name="file" multiple
+                           ng-files="getTheFiles($files)" />
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-sm-12 col-xs-12">
+                    <label for="quemConvidou">Body:</label>
+                    <textarea next-on-enter class="form-control" ng-model="vm.body" cols="40" rows="7"></textarea>
+
+                  </div>
+
+                </div>
+
+                <div class="row">
+                  <div class="form-group col-xs-12">
+                    <button class="btn btn-primary col-sm-4 col-xs-12" ng-enter="vm.sendemail(vm)" ng-click="vm.sendemail(vm)">Send Email</button>
+                    <span><button style="margin-left:5px;padding-left:5px" class="btn btn-primary col-sm-4 col-xs-12" ng-enter="vm.send(vm)" ng-click="vm.sendemail(vm)">Edit Template</button></span>
+                  </div>
+                </div>
+              </div>
             </div>
 
 

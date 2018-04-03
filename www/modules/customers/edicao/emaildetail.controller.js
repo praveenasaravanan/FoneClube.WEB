@@ -3,7 +3,20 @@
 
   angular
     .module('foneClub')
-    .controller('EmailDetailController', EmailDetailController);
+    .controller('EmailDetailController', EmailDetailController)
+    .directive('ngFiles', ['$parse', function ($parse) {
+
+      function fn_link(scope, element, attrs) {
+        var onChange = $parse(attrs.ngFiles);
+        element.on('change', function (event) {
+          onChange(scope, { $files: event.target.files });
+        });
+      };
+
+      return {
+        link: fn_link
+      }
+    }]);
 
   EmailDetailController.inject = ['ViewModelUtilsService', 'MainUtils', '$scope','FoneclubeService'];
   function EmailDetailController(ViewModelUtilsService, MainUtils, $scope, FoneclubeService) {
@@ -15,7 +28,10 @@
     vm.operator = ViewModelUtilsService.modalEmailDetailoperator;
     vm.from = 'marcio.franco@gmail.com';
     vm.bcc = "";
-
+    vm.attachment1 = "";
+    vm.attachment2 = "";
+    vm.attachment3 = "";
+    $scope.htmlContent = '<h2>Try me!</h2><p>textAngular is a super cool WYSIWYG Text Editor directive for AngularJS</p><p><b>Features:</b></p><ol><li>Automatic Seamless Two-Way-Binding</li><li style="color: blue;">Super Easy <b>Theming</b> Options</li><li>Simple Editor Instance Creation</li><li>Safely Parses Html for Custom Toolbar Icons</li><li>Doesn&apos;t Use an iFrame</li><li>Works with Firefox, Chrome, and IE9+</li></ol><p><b>Code at GitHub:</b> <a href="https://github.com/fraywing/textAngular">Here</a> </p>';
     if (vm.operator == "1") {
       if (vm.emailstatus == "1" || vm.emailstatus == "2") {
         vm.email = ViewModelUtilsService.modalEmailDetailemail + ',relacionamentoPJ1_LD2.br@telefonica.com'
@@ -186,37 +202,29 @@
       }
     }
 
+    var formdata = new FormData();
+    
+    $scope.getTheFiles = function ($files) {
+      debugger;
+      //formData.append("model", angular.toJson(vm));
+      angular.forEach($files, function (value, key) {
+        //formData.append("file" + key, value);
+        formdata.append(key, value);
+      });
+    };
+
     function sendemail(vm) {
-     
-      FoneclubeService.SendEmailStatus(vm).then(function (result) {
+      vm.emailData = { email: vm.email, from: vm.from, subject: vm.subject, body: vm.body, cc: vm.cc, bcc: vm.bcc };
+      formdata.append("model", angular.toJson(vm.emailData));
+      console.log(vm);
+      FoneclubeService.SendEmailStatus(formdata).then(function (result) {
         alert('Email sent successfully');
-        //debugger;
-        //if (result["intIdPaymentType"] == 1) {
-        //  debugger;
-        //  /*ViewModelUtilsService.showModalRepeatBoleto(result,customer);*/
-        //  ViewModelUtilsService.showModalRepeatCard(result, customer);
-        //}
-        ///*else if(result["intIdPaymentType"]==1){
-        //    ViewModelUtilsService.showModalRepeatCard(result,customer);
-        //}
-        //else if(result["intIdPaymentType"]==3)
-        //    {
-                
-        //    }*/
+        
       })
         .catch(function (error) {
           console.log('catch error');
           console.log(error);
         });
-      //FoneclubeService.SendEmailStatus(vm).then(function (result) {
-      //  //console.log(result);
-        
-      //}).catch(function (error) {
-      //  console.log('error: ' + error);
-      //});
     }
-
-
-
   }
 })();
