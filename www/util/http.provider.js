@@ -67,13 +67,13 @@
         .then(complete)
         .catch(error);
 
-      //return $http({
-      //  method: 'POST',
-      //  url: path,
-      //  headers: { 'Content-Type': undefined },
-      //  data: params
-      //}).then(complete)
-      //  .catch(error);
+      function complete(data) {
+        return data;
+      }
+
+      function error(message) {
+        throw message;
+      }
     }
   }
 })();
