@@ -236,10 +236,11 @@
             vm.pricelist = tmp.pricelist;
             for (var position = 0; position < vm.tempPhones.length; position++) {
                 var id = vm.tempPhones[position].IdPlanOption;
-                if (id == '' || id == null)
+      /*          if (id == '' || id == null)
                     vm.pricelist[position] = 0;
                 else
                     vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
+                    */
             }
         }
 
@@ -251,10 +252,12 @@
             vm.pricelist = tmp.pricelist;
             for (var position = 0; position < vm.tempPhones.length; position++) {
                 var id = vm.tempPhones[position].IdPlanOption;
+                /*
                 if (id == '' || id == null)
                     vm.pricelist[position] = 0;
                 else
                     vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
+                    */
             }
         }
 
@@ -292,7 +295,6 @@
 
         vm.pricechanged = pricechanged;
         function pricechanged($index) {
-            addHistory();
             autmaticSum();
         }
 
@@ -322,6 +324,18 @@
         function onShowMore() {
             if(vm.totalDisplayed<vm.tempPhones.length){
                 vm.totalDisplayed+=50;
+            }
+        }
+
+        vm.onfocusPreco = onfocusPreco;
+        function onfocusPreco(position){
+            vm.tempPrice = vm.pricelist[position];
+        }
+
+        vm.onBlurPreco = onBlurPreco;
+        function onBlurPreco(position){
+            if(vm.tempPrice != vm.pricelist[position]){
+                addHistory();
             }
         }
 
