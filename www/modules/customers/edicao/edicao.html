@@ -1,5 +1,6 @@
 <div class="edicao-container">
     <fone-header title="Editar Cadastro"></fone-header>
+    <img class="loader" ng-if="vm.showLoader">
     <h2 ng-click="vm.openDados = !vm.openDados" class="form-group col-xs-12 display-3">Dados Iniciais
         <i class="glyphicon" ng-class="{'glyphicon-chevron-down': vm.openDados, 'glyphicon-chevron-right': !vm.openDados}"></i>
     </h2>

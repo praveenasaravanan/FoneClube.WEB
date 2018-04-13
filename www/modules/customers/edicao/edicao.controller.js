@@ -16,9 +16,10 @@
     });
 
 
-  EdicaoController.inject = ['$scope', 'DataFactory', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog', '$http', '$sce','$rootScope'];
-  function EdicaoController($scope, DataFactory, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog, $http, $sce,$rootScope) {
+  EdicaoController.inject = ['$scope', 'DataFactory', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog', '$http', '$sce', '$rootScope'];
+  function EdicaoController($scope, DataFactory, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog, $http, $sce, $rootScope) {
     var vm = this;
+    vm.showLoader = false;
     vm.data = DataFactory;
     vm.onTapSendUser = onTapSendUser;
     vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
@@ -43,7 +44,7 @@
     vm.showall = false;
     vm.linhaAtiva = false;
     vm.claro = true;
-    vm.vivo = true; 
+    vm.vivo = true;
     vm.history = [];
     vm.sp = 1;
 
@@ -763,11 +764,45 @@
         vm.pricelist[position] = 0;
       else
         vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
+      addHistory();
+      autmaticSum();
     }
+
+    vm.onTapSendUser = onTapSendUser;
+    function onTapSendUser(customer) {
+
+        var customerSend = {
+            "Id": customer.Id,
+            "DocumentNumber": UtilsService.clearDocumentNumber(customer.DocumentNumber),
+            "Register": customer.Register,
+            "Name": customer.Name,
+            "NickName": customer.NickName,
+            "Email": customer.Email,
+            "Born": customer.Born,
+            "Gender": customer.Gender,
+            "IdPlanOption": customer.IdPlanOption,
+            "IdPagarme": customer.IdPagarme,
+            "IdRole": customer.IdRole,
+            "Adresses": customer.Adresses,
+            "Phones": customer.Phones,
+            "Photos": customer.Photos,
+            "IdParent": customer.IdParent,
+            "NameContactParent": customer.NameContactParent,
+            "IdCommissionLevel": customer.IdCommissionLevel,
+            "SinglePrice": vm.singlePriceLocal,
+            "DescriptionSinglePrice": customer.DescriptionSinglePrice
+        }
+
+        FoneclubeService.postUpdateCustomer(customerSend).then(function(result){
+            vm.showLoader = false;
+        })
+    };
 
     vm.onchecked = onchecked;
     function onchecked(position) {
       vm.customer.Phones[position] = angular.copy(vm.tempPhones[position]);
+      vm.showLoader = true;
+      onTapSendUser(vm.customer);
     }
 
     vm.onunchecked = onunchecked;
@@ -783,6 +818,8 @@
     vm.onallchecked = onallchecked;
     function onallchecked() {
       vm.customer.Phones = angular.copy(vm.tempPhones);
+      vm.showLoader = true;
+      onTapSendUser(vm.customer);
     }
 
     vm.onallunchecked = onallunchecked;
@@ -799,39 +836,39 @@
 
     vm.onedit = onedit;
     function onedit() {
-      ViewModelUtilsService.showModalCustomer(vm.customer,-1);
+      ViewModelUtilsService.showModalCustomer(vm.customer, -1);
     }
 
     vm.ignoreAccents = function (item) {
-      if(vm.showall){
+      if (vm.showall) {
         return true;
       } else {
         var text = removeAccents(item.NovoFormatoNumero.toLowerCase());
         //alert(text);
         var search_text = removeAccents(vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, ''));
-        var flag1 =text.indexOf(search_text) > -1;
+        var flag1 = text.indexOf(search_text) > -1;
         var flag2 = true;
-        if(vm.linhaAtiva && !item.LinhaAtiva){
+        if (vm.linhaAtiva && !item.LinhaAtiva) {
           flag2 = false;
         }
         var flag3 = true;
-        if(!vm.claro){
-          var itm = vm.plans.find(x=>x.Id==item.IdPlanOption);
-          if(!itm){
+        if (!vm.claro) {
+          var itm = vm.plans.find(x => x.Id == item.IdPlanOption);
+          if (!itm) {
             flag3 = false;
           } else {
             text = removeAccents(itm.Description.toLowerCase());
-            flag3 = !(text.indexOf('claro')>-1);
+            flag3 = !(text.indexOf('claro') > -1);
           }
         }
         var flag4 = true;
-        if(!vm.vivo){
-          var itm = vm.plans.find(x=>x.Id==item.IdPlanOption);
-          if(!itm){
+        if (!vm.vivo) {
+          var itm = vm.plans.find(x => x.Id == item.IdPlanOption);
+          if (!itm) {
             flag4 = false;
           } else {
             text = removeAccents(itm.Description.toLowerCase());
-            flag4 = !(text.indexOf('vivo')>-1);
+            flag4 = !(text.indexOf('vivo') > -1);
           }
         }
 
@@ -841,19 +878,19 @@
     };
 
     vm.changedFilterAll = changedFilterAll;
-    function changedFilterAll(){
-      if(vm.showall){
+    function changedFilterAll() {
+      if (vm.showall) {
         vm.search = "";
         vm.linhaAtiva = false;
         vm.claro = true;
-        vm.vivo = true;  
+        vm.vivo = true;
       }
     }
 
     vm.onUndo = onUndo;
-    function onUndo(){
+    function onUndo() {
       vm.sp--;
-      var tmp = angular.copy(vm.history[vm.sp-1]);
+      var tmp = angular.copy(vm.history[vm.sp - 1]);
       vm.tempPhones = tmp.phones;
       vm.pricelist = tmp.pricelist;
       for (var position = 0; position < vm.tempPhones.length; position++) {
@@ -866,9 +903,9 @@
     }
 
     vm.onRedo = onRedo;
-    function onRedo(){
+    function onRedo() {
       vm.sp++;
-      var tmp = angular.copy(vm.history[vm.sp-1]);
+      var tmp = angular.copy(vm.history[vm.sp - 1]);
       vm.tempPhones = tmp.phones;
       vm.pricelist = tmp.pricelist;
       for (var position = 0; position < vm.tempPhones.length; position++) {
@@ -881,57 +918,52 @@
     }
 
     vm.addHistory = addHistory;
-    function addHistory(){
-      if(vm.history.length>vm.sp){
-        vm.history.splice(vm.sp,vm.history.length-vm.sp);
+    function addHistory() {
+      if (vm.history.length > vm.sp) {
+        vm.history.splice(vm.sp, vm.history.length - vm.sp);
       }
       var tmpPhones = angular.copy(vm.tempPhones);
       var tmpPricelist = angular.copy(vm.pricelist);
-      vm.history.push({'phones':tmpPhones,'pricelist':tmpPricelist});
+      vm.history.push({ 'phones': tmpPhones, 'pricelist': tmpPricelist });
       vm.sp = vm.history.length;
     }
 
     vm.telephonechanged = telephonechanged;
-    function telephonechanged($index){
-  //    addHistory();
+    function telephonechanged($index) {
+      //    addHistory();
     }
 
     vm.activechanged = activechanged;
-    function activechanged($index){
+    function activechanged($index) {
       addHistory();
     }
 
-    vm.changedPlano = changedPlano;
-    function changedPlano($index){
-      addHistory();
-      autmaticSum();
-    }
 
     vm.pricechanged = pricechanged;
-    function pricechanged($index){
+    function pricechanged($index) {
       addHistory();
       autmaticSum();
     }
 
     vm.nicknamechanged = nicknamechanged;
-    function nicknamechanged($index){
+    function nicknamechanged($index) {
       addHistory();
     }
 
     vm.changedAutoSum = changedAutoSum;
-    function changedAutoSum(){
-      if(vm.autoSum){
+    function changedAutoSum() {
+      if (vm.autoSum) {
         autmaticSum();
       }
     }
 
-    function autmaticSum(){
-      if(vm.autoSum){
+    function autmaticSum() {
+      if (vm.autoSum) {
         vm.singlePriceLocal = 0;
-        for(var i=0;i<vm.pricelist.length;i++){
-          vm.singlePriceLocal+=vm.pricelist[i]*100;
+        for (var i = 0; i < vm.pricelist.length; i++) {
+          vm.singlePriceLocal += vm.pricelist[i] * 100;
         }
-        vm.singlePriceLocal = vm.singlePriceLocal/100;  
+        vm.singlePriceLocal = vm.singlePriceLocal / 100;
       }
     }
 
