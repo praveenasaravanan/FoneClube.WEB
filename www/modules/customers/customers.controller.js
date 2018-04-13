@@ -1,37 +1,37 @@
-(function() {
-'use strict';
+(function () {
+    'use strict';
 
     angular
         .module('foneClub')
         .controller('CustomersController', CustomersController);
 
-// <<<<<<< HEAD
-  CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory','FlowManagerService'];
-  function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService) {
+    // <<<<<<< HEAD
+    CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService'];
+    function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService) {
         var vm = this;
         vm.data = DataFactory;
-    vm.onTapCustomer = onTapCustomer;
-    vm.onTapCustomerEdit = onTapCustomerEdit;
+        vm.onTapCustomer = onTapCustomer;
+        vm.onTapCustomerEdit = onTapCustomerEdit;
         vm.showLoader = true;
-        vm.onTapRepeatLastCharge=onTapRepeatLastCharge;
-    vm.onTapBoleto = onTapBoleto;
-    vm.onTapBoletoPayment = onTapBoletoPayment;
+        vm.onTapRepeatLastCharge = onTapRepeatLastCharge;
+        vm.onTapBoleto = onTapBoleto;
+        vm.onTapBoletoPayment = onTapBoletoPayment;
         vm.onTapNewCardPayment = onTapNewCardPayment;
-    vm.onTapExcluir = onTapExcluir;
-    vm.CustomerAsc = CustomerAsc;
-    vm.CustomerDesc = CustomerDesc;
-// =======
-//     CustomersController.inject = ['PagarmeService', '$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', 'UtilsService'];
-//     function CustomersController(PagarmeService, $ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, UtilsService) {
-//         var vm = this;
-//         vm.onTapCustomer = onTapCustomer;
-//         vm.showLoader = true;
-//         vm.clearDocumentField = clearDocumentField;
-//         vm.documentClear = '';
+        vm.onTapExcluir = onTapExcluir;
+        vm.CustomerAsc = CustomerAsc;
+        vm.CustomerDesc = CustomerDesc;
+        // =======
+        //     CustomersController.inject = ['PagarmeService', '$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', 'UtilsService'];
+        //     function CustomersController(PagarmeService, $ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, UtilsService) {
+        //         var vm = this;
+        //         vm.onTapCustomer = onTapCustomer;
+        //         vm.showLoader = true;
+        //         vm.clearDocumentField = clearDocumentField;
+        //         vm.documentClear = '';
 
-//         console.log('=== Customers Controller Controller ===');
-// >>>>>>> release-branch
-        vm.removeCaracteres = function() {  // no need of this filter as added replace in ignoreAccents filter below
+        //         console.log('=== Customers Controller Controller ===');
+        // >>>>>>> release-branch
+        vm.removeCaracteres = function () {  // no need of this filter as added replace in ignoreAccents filter below
             if (!vm.search)
                 return;
             //alert(vm.search);
@@ -40,10 +40,10 @@
             return vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
         }
 
-        vm.ignoreAccents = function(item) {   
+        vm.ignoreAccents = function (item) {
             //alert(item.Name);     
             if (!vm.search)
-                return true;  
+                return true;
             //alert(vm.showall);
             if (!vm.showall) {
                 var text = removeAccents(item.Name.toLowerCase());
@@ -61,36 +61,36 @@
             }
         };
 
-                //return an array of keys that match on a certain value
-                function getKeys(obj, val) {
-                    var objects = [];
-                    for (var i in obj) {
-                        if (!obj.hasOwnProperty(i)) continue;
-                        if (typeof obj[i] == 'object') {
-                            objects = objects.concat(getKeys(obj[i], val));
-                        } else if (obj[i] != null) {
-                            //console.log(obj[i].toString().toLowerCase());
-                            if (removeAccents(obj[i].toString().toLowerCase()).indexOf(removeAccents(val.toLowerCase())) > -1) {
-                            objects.push(i);
-                            }
-                        }
+        //return an array of keys that match on a certain value
+        function getKeys(obj, val) {
+            var objects = [];
+            for (var i in obj) {
+                if (!obj.hasOwnProperty(i)) continue;
+                if (typeof obj[i] == 'object') {
+                    objects = objects.concat(getKeys(obj[i], val));
+                } else if (obj[i] != null) {
+                    //console.log(obj[i].toString().toLowerCase());
+                    if (removeAccents(obj[i].toString().toLowerCase()).indexOf(removeAccents(val.toLowerCase())) > -1) {
+                        objects.push(i);
                     }
-                    return objects;
                 }
+            }
+            return objects;
+        }
 
-                //return an array of values that match on a certain key
-                function getValues(obj, key) {
-                    var objects = [];
-                    for (var i in obj) {
-                        if (!obj.hasOwnProperty(i)) continue;
-                        if (typeof obj[i] == 'object') {
-                            objects = objects.concat(getValues(obj[i], key));
-                        } else if (i == key) {
-                            objects.push(obj[i]);
-                        }
-                    }
-                    return objects;
-                }        
+        //return an array of values that match on a certain key
+        function getValues(obj, key) {
+            var objects = [];
+            for (var i in obj) {
+                if (!obj.hasOwnProperty(i)) continue;
+                if (typeof obj[i] == 'object') {
+                    objects = objects.concat(getValues(obj[i], key));
+                } else if (i == key) {
+                    objects.push(obj[i]);
+                }
+            }
+            return objects;
+        }
 
         //return an array of objects according to key, value, or key and value matching
         function getObjects(obj, key, val) {
@@ -113,27 +113,31 @@
             return objects;
         }
 
-    var getCustomers = $scope.$watch(function () {
+        var getCustomers = $scope.$watch(function () {
 
-      $scope.sortType = 'Nome';
-      $scope.sortReverse = false;
-      $scope.clientList = vm.data.customers;
-      return $scope.clientList;
-    }, function (data) {
-      if (data && data.length > 0) {
-        vm.showLoader = false;
-        getCustomers();
-        if (vm.data.customersCache) {
-          vm.data.customers = angular.copy(vm.data.customersCache);
-          $scope.clientList = angular.copy(vm.data.customersCache);
-        }
-      }
-    })
-    $scope.sortType = 'Nome';
-    $scope.sortReverse = false;
-    $scope.clientList = vm.data.customers;
+            $scope.sortType = 'Nome';
+            $scope.sortReverse = false;
+            if (vm.data.customers !== undefined && $scope.clientList==undefined) {
+                init();
+            }
+            $scope.clientList = vm.data.customers;
 
-    
+            return $scope.clientList;
+        }, function (data) {
+            if (data && data.length > 0) {
+                vm.showLoader = false;
+                getCustomers();
+                if (vm.data.customersCache) {
+                    vm.data.customers = angular.copy(vm.data.customersCache);
+                    $scope.clientList = angular.copy(vm.data.customersCache);
+                }
+            }
+        })
+        $scope.sortType = 'Nome';
+        $scope.sortReverse = false;
+        $scope.clientList = vm.data.customers;
+
+
 
 
         console.log('=== Customers Controller Controller ===');
@@ -157,46 +161,46 @@
         //     console.log(error.statusText); // mensagem de erro para tela, caso precise
         // });
 
-    function onTapCustomerEdit(customer, index) {
-      FlowManagerService.changeEdicaoView(customer);
-    }
+        function onTapCustomerEdit(customer, index) {
+            FlowManagerService.changeEdicaoView(customer);
+        }
 
-        function onTapCustomer(customer, index){
+        function onTapCustomer(customer, index) {
             console.log('customer')
             console.log(customer)
             ViewModelUtilsService.showModalCustomer(customer, index);
         }
 
         function clearDocumentField(documentNumber) {
-            vm.documentClear =  UtilsService.clearDocumentNumber(documentNumber);
+            vm.documentClear = UtilsService.clearDocumentNumber(documentNumber);
         }
 
-        function onTapNewCardPayment(customer){
+        function onTapNewCardPayment(customer) {
             console.log('onTapNewCardPayment');
             ViewModelUtilsService.showModalNewCardPayment(customer);
         }
 
 
 
-    function onTapBoletoPayment(customer) {
-      console.log('onTapBoleto')
-      ViewModelUtilsService.showModalBoletoPayment(customer);
-    }
-
-        function onTapBoleto(customer){
-          console.log('onTapBoleto')
-          ViewModelUtilsService.showModalBoleto(customer);
+        function onTapBoletoPayment(customer) {
+            console.log('onTapBoleto')
+            ViewModelUtilsService.showModalBoletoPayment(customer);
         }
-        function onTapRepeatLastCharge(customer){
+
+        function onTapBoleto(customer) {
+            console.log('onTapBoleto')
+            ViewModelUtilsService.showModalBoleto(customer);
+        }
+        function onTapRepeatLastCharge(customer) {
             debugger;
             console.log('onTapRepeatLastCharge')
-            FoneclubeService.getLastPaymentType(customer).then(function(result){
+            FoneclubeService.getLastPaymentType(customer).then(function (result) {
                 console.log(result);
                 debugger;
-                if(result["intIdPaymentType"]==1){
+                if (result["intIdPaymentType"] == 1) {
                     debugger;
                     /*ViewModelUtilsService.showModalRepeatBoleto(result,customer);*/
-                    ViewModelUtilsService.showModalRepeatCard(result,customer);
+                    ViewModelUtilsService.showModalRepeatCard(result, customer);
                 }
                 /*else if(result["intIdPaymentType"]==1){
                     ViewModelUtilsService.showModalRepeatCard(result,customer);
@@ -206,34 +210,34 @@
                         
                     }*/
             })
-            .catch(function(error){
-                      console.log('catch error');
-                      console.log(error);
-                  });
+                .catch(function (error) {
+                    console.log('catch error');
+                    console.log(error);
+                });
         }
 
-        function onTapExcluir(customer){
-          var personCheckout = {
-              'DocumentNumber': customer.DocumentNumber
-          };
-          DialogFactory.dialogConfirm({mensagem: 'Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?'})
-          .then(function(value) {
-              if(value) {
-                  FoneclubeService.postDeletePerson(personCheckout).then(function(result){
-                      console.log(result);
-                      if(result){
-                          DialogFactory.showMessageDialog({message: 'Usuário foi removido com sucesso, no próximo carregamento da lista ele não será mais exibido'});
-                          closeThisDialog(0);
-                      }
-                      else
-                          DialogFactory.showMessageDialog({message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber});
-                  })
-                  .catch(function(error){
-                      console.log('catch error');
-                      console.log(error);
-                  });
-              }
-          })
+        function onTapExcluir(customer) {
+            var personCheckout = {
+                'DocumentNumber': customer.DocumentNumber
+            };
+            DialogFactory.dialogConfirm({ mensagem: 'Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?' })
+                .then(function (value) {
+                    if (value) {
+                        FoneclubeService.postDeletePerson(personCheckout).then(function (result) {
+                            console.log(result);
+                            if (result) {
+                                DialogFactory.showMessageDialog({ message: 'Usuário foi removido com sucesso, no próximo carregamento da lista ele não será mais exibido' });
+                                closeThisDialog(0);
+                            }
+                            else
+                                DialogFactory.showMessageDialog({ message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber });
+                        })
+                            .catch(function (error) {
+                                console.log('catch error');
+                                console.log(error);
+                            });
+                    }
+                })
         }
 
         function CustomerAsc(type) {
@@ -250,7 +254,7 @@
                 $scope.sortReverse = false;
                 $scope.clientList = vm.data.customers.filter(x => x.Register != null);
             }
-            FoneclubeService.getPlans().then(function(result){
+            FoneclubeService.getPlans().then(function (result) {
                 vm.plans = result;
             });
         }
@@ -271,6 +275,29 @@
             }
         }
 
+        function init() {
+            for(var i =0;i<vm.data.customers.length;i++){
+                var customer = vm.data.customers[i];
+                FoneclubeService.getHistoryPayment(customer.Id).then(function (result) {
+                    console.log('FoneclubeService.getHistoryPayment');
+                    console.log(result);
+                    vm.histories = result;
+                    var date = "sfsfsdf" ;
+                    for (var i in vm.histories) {
+                        var history = vm.histories[i];
+                        
+                    }
+                    customer.datapgt = date;
 
+                })
+                    .catch(function (error) {
+                        console.log('catch error');
+                        console.log(error);
+                    });
+    
+            }
+        }
+
+        
     }
 })();

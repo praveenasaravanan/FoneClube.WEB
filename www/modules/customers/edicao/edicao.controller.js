@@ -16,8 +16,8 @@
     });
 
 
-  EdicaoController.inject = ['$scope', 'DataFactory', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog', '$http', '$sce'];
-  function EdicaoController($scope, DataFactory, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog, $http, $sce) {
+  EdicaoController.inject = ['$scope', 'DataFactory', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog', '$http', '$sce','$rootScope'];
+  function EdicaoController($scope, DataFactory, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog, $http, $sce,$rootScope) {
     var vm = this;
     vm.data = DataFactory;
     vm.onTapSendUser = onTapSendUser;
@@ -38,6 +38,14 @@
     vm.CNPJField = false;
     vm.CPFField = true;
     vm.opemEmailpopup = opemEmailpopup;
+
+    vm.search = "";
+    vm.showall = false;
+    vm.linhaAtiva = false;
+    vm.claro = true;
+    vm.vivo = true; 
+    vm.history = [];
+    vm.sp = 1;
 
     function opemEmailpopup(emailstatus, phone, email, operator) {
       ViewModelUtilsService.showModalEmailDetail(emailstatus, phone, email, operator);
@@ -78,6 +86,8 @@
       FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
         vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
         vm.customer = result;
+
+
         getPersonParent(vm.customer.IdParent);
         vm.singlePriceLocal = vm.customer.SinglePrice ? vm.customer.SinglePrice : 0; //single place formatado;
         if (vm.customer.Adresses) {
@@ -204,7 +214,23 @@
           $timeout(function () {
             document.getElementById('cpf').focus();
           }, 200);
+
+          vm.pricelist = [];
+          for (var i = 0; i < vm.customer.Phones.length; i++) {
+            var phoneNumber = vm.customer.Phones[i];
+            if (phoneNumber.IdPlanOption == '') {
+              vm.pricelist.push(0);
+            } else {
+              vm.pricelist.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value / 100);
+            }
+          }
+
+          vm.tempPhones = angular.copy(vm.customer.Phones);
+
+          vm.sp = 1;
+          addHistory();
         });
+
       });
     };
 
@@ -316,8 +342,8 @@
       //return;
 
       //TODO
-      //colocar breakpoint nos metodos localhost API, validar se novos atributos chegam
-      //revisar todos nomes entidade .net apos refact de nomes atributos
+      //colocar breakpoint nos metodos localhost API, validar se novos atributos chegam--Putting breakpoint the methods localhost API, validate the new assets come.
+      //revisar todos nomes entidade .net apos refact de nomes atributos -- Revisar of names or. net apos refact of attributes.
       var customerSend = {
         "Id": customer.Id,
         "DocumentNumber": UtilsService.clearDocumentNumber(customer.DocumentNumber),
@@ -720,6 +746,193 @@
 
     function onlyUnique(value, index, self) {
       return self.indexOf(value) === index;
+    }
+
+    vm.getPrice = getPrice;
+    function getPrice(id) {
+      console.log(id);
+      if (id == '')
+        return 0;
+      return vm.plans.find(x => x.Id == id).Value / 100;
+    }
+
+    vm.changedPlano = changedPlano;
+    function changedPlano(position, id) {
+
+      if (id == '' || id == null)
+        vm.pricelist[position] = 0;
+      else
+        vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
+    }
+
+    vm.onchecked = onchecked;
+    function onchecked(position) {
+      vm.customer.Phones[position] = angular.copy(vm.tempPhones[position]);
+    }
+
+    vm.onunchecked = onunchecked;
+    function onunchecked(position) {
+      vm.tempPhones[position] = angular.copy(vm.customer.Phones[position]);
+      var id = vm.tempPhones[position].IdPlanOption;
+      if (id == '' || id == null)
+        vm.pricelist[position] = 0;
+      else
+        vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
+    }
+
+    vm.onallchecked = onallchecked;
+    function onallchecked() {
+      vm.customer.Phones = angular.copy(vm.tempPhones);
+    }
+
+    vm.onallunchecked = onallunchecked;
+    function onallunchecked() {
+      vm.tempPhones = angular.copy(vm.customer.Phones);
+      for (var position = 0; position < vm.tempPhones.length; position++) {
+        var id = vm.tempPhones[position].IdPlanOption;
+        if (id == '' || id == null)
+          vm.pricelist[position] = 0;
+        else
+          vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
+      }
+    }
+
+    vm.onedit = onedit;
+    function onedit() {
+      ViewModelUtilsService.showModalCustomer(vm.customer,-1);
+    }
+
+    vm.ignoreAccents = function (item) {
+      if(vm.showall){
+        return true;
+      } else {
+        var text = removeAccents(item.NovoFormatoNumero.toLowerCase());
+        //alert(text);
+        var search_text = removeAccents(vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, ''));
+        var flag1 =text.indexOf(search_text) > -1;
+        var flag2 = true;
+        if(vm.linhaAtiva && !item.LinhaAtiva){
+          flag2 = false;
+        }
+        var flag3 = true;
+        if(!vm.claro){
+          var itm = vm.plans.find(x=>x.Id==item.IdPlanOption);
+          if(!itm){
+            flag3 = false;
+          } else {
+            text = removeAccents(itm.Description.toLowerCase());
+            flag3 = !(text.indexOf('claro')>-1);
+          }
+        }
+        var flag4 = true;
+        if(!vm.vivo){
+          var itm = vm.plans.find(x=>x.Id==item.IdPlanOption);
+          if(!itm){
+            flag4 = false;
+          } else {
+            text = removeAccents(itm.Description.toLowerCase());
+            flag4 = !(text.indexOf('vivo')>-1);
+          }
+        }
+
+        return flag1 && flag2 && flag3 && flag4;
+
+      }
+    };
+
+    vm.changedFilterAll = changedFilterAll;
+    function changedFilterAll(){
+      if(vm.showall){
+        vm.search = "";
+        vm.linhaAtiva = false;
+        vm.claro = true;
+        vm.vivo = true;  
+      }
+    }
+
+    vm.onUndo = onUndo;
+    function onUndo(){
+      vm.sp--;
+      var tmp = angular.copy(vm.history[vm.sp-1]);
+      vm.tempPhones = tmp.phones;
+      vm.pricelist = tmp.pricelist;
+      for (var position = 0; position < vm.tempPhones.length; position++) {
+        var id = vm.tempPhones[position].IdPlanOption;
+        if (id == '' || id == null)
+          vm.pricelist[position] = 0;
+        else
+          vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
+      }
+    }
+
+    vm.onRedo = onRedo;
+    function onRedo(){
+      vm.sp++;
+      var tmp = angular.copy(vm.history[vm.sp-1]);
+      vm.tempPhones = tmp.phones;
+      vm.pricelist = tmp.pricelist;
+      for (var position = 0; position < vm.tempPhones.length; position++) {
+        var id = vm.tempPhones[position].IdPlanOption;
+        if (id == '' || id == null)
+          vm.pricelist[position] = 0;
+        else
+          vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
+      }
+    }
+
+    vm.addHistory = addHistory;
+    function addHistory(){
+      if(vm.history.length>vm.sp){
+        vm.history.splice(vm.sp,vm.history.length-vm.sp);
+      }
+      var tmpPhones = angular.copy(vm.tempPhones);
+      var tmpPricelist = angular.copy(vm.pricelist);
+      vm.history.push({'phones':tmpPhones,'pricelist':tmpPricelist});
+      vm.sp = vm.history.length;
+    }
+
+    vm.telephonechanged = telephonechanged;
+    function telephonechanged($index){
+  //    addHistory();
+    }
+
+    vm.activechanged = activechanged;
+    function activechanged($index){
+      addHistory();
+    }
+
+    vm.changedPlano = changedPlano;
+    function changedPlano($index){
+      addHistory();
+      autmaticSum();
+    }
+
+    vm.pricechanged = pricechanged;
+    function pricechanged($index){
+      addHistory();
+      autmaticSum();
+    }
+
+    vm.nicknamechanged = nicknamechanged;
+    function nicknamechanged($index){
+      addHistory();
+    }
+
+    vm.changedAutoSum = changedAutoSum;
+    function changedAutoSum(){
+      if(vm.autoSum){
+        autmaticSum();
+      }
+    }
+
+    function autmaticSum(){
+      if(vm.autoSum){
+        vm.singlePriceLocal = 0;
+        for(var i=0;i<vm.pricelist.length;i++){
+          vm.singlePriceLocal+=vm.pricelist[i]*100;
+        }
+        vm.singlePriceLocal = vm.singlePriceLocal/100;  
+      }
     }
 
   }
