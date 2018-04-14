@@ -30,6 +30,9 @@
         $rootScope.$on('menu-hamburguer', function() {
             vm.menuCompress();
         })
+/*-----------------------------------*/
+
+
 
         vm.setMenuItemActive = function(screen) {
             saveMenu(screen)
@@ -46,6 +49,10 @@
                 FlowManagerService.changeMassChargingView();
             } else if(screen =='status-charging'){
                 FlowManagerService.changeStatusChargingView();
+            } else if(screen == 'allphone-lines'){
+                FlowManagerService.changeAllPhoneLinesView();
+            } else {
+                
             }
         }
         

@@ -17,6 +17,10 @@
                 <i class="glyphicon glyphicon-user" aria-hidden="true"></i>            
                 <span> Usuários </span>
             </div>
+            <div style="display:none"></div>
+<!-------------------------------------->
+
+
         </div>  
         <div title="Pagarme" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'list-customer'}" ng-click="vm.setMenuItemActive('list-customer')">     
             <div>       
@@ -43,6 +47,12 @@
                 <span> Status </span>
             </div>
         </div>  
+        <div title="AllPhoneLines" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'allphone-lines'}"  ng-click="vm.setMenuItemActive('allphone-lines')">            
+                <div>
+                    <i class="glyphicon glyphicon-credit-card" aria-hidden="true"></i>            
+                    <span> All Phones </span>
+                </div>
+            </div> 
     </div>  
      
     <div class="menu-views" ui-view name="menu-tab">                            
