@@ -104,6 +104,15 @@
           }
         }
       })
+      .state('tabs.allphone-lines',{
+        url: "/allphone-lines",
+        views: {
+          'menu-tab': {
+            templateUrl: "modules/allphonelines/allphonelines.html",
+            controller: 'AllPhoneLinesController as vm'
+          }
+        }
+      })
 
       $urlRouterProvider.otherwise('/');
       configErrorHandler($provide);
