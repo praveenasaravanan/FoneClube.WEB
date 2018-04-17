@@ -107,17 +107,13 @@
                     if(customer.Charged)
                     {
                         customer.status = customer.ChargingValidity[0].PaymentType == 1 ? 'PAGO' : 'CARREGANDO';
-
-                        
                             customer.registerPayd = false;
-
                             for(var i in customer.ChargingValidity)
                             {
                                 var charge = customer.ChargingValidity[i];
 
                                 if(charge.PaymentType == 2 && charge.BoletoId != 0)
                                 {
-                                    
                                     PagarmeService.getStatusBoletoRecursivo(charge.BoletoId, customer, vm, index, i).then(function (result) {
                                         
                                         // debugger;

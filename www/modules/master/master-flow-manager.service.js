@@ -18,6 +18,7 @@
         this.changeCadastro = changeCadastro;
         this.changeMassChargingView = changeMassChargingView;
         this.changeStatusChargingView = changeStatusChargingView;
+        this.changeAllPhoneLinesView = changeAllPhoneLinesView;
         this.goBack = goBack;
 
         function changeLoginView(){
@@ -67,6 +68,12 @@
             LocationService.change('tabs.status-charging', param);
             $rootScope.$broadcast('changeMenuItem', 'status-charging');
         }
+
+        function changeAllPhoneLinesView(param){
+            LocationService.change('tabs.allphone-lines', param);
+            $rootScope.$broadcast('changeMenuItem', 'allphone-lines');
+        }
+
         
         function goBack() {
             $window.history.back();

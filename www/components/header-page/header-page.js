@@ -18,8 +18,8 @@
       var vm = this;      
       vm.clickMenuHamburguer = function() {
         $rootScope.$broadcast('menu-hamburguer');
+      }
     }
-    }
-  
+
   })();
   
