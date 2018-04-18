@@ -93,6 +93,8 @@
                         <th style="width: 100px;">
                             <div class="s_cls s_lbl">
                                 <span for="portabilidadeTelefone">Preco:</span>
+                                <span style="cursor:pointer;" title="A-To-Z" ng-click="vm.PhonesAsc('price')" class="glyphicon glyphicon-triangle-bottom"></span>
+                                <span style="cursor:pointer;" title="Z-To-A" ng-click="vm.PhonesDesc('price')" class="glyphicon glyphicon-triangle-top"></span>
                             </div>
                         </th>
 
@@ -149,7 +151,7 @@
 
                         <td style="width: 130px;text-align: center;">
                             <div class="s_cls">
-                                <input id="preco" next-on-enter class="form-control" ng-focus="vm.onfocusPreco($index)" ng-blur="vm.onBlurPreco($index)" ng-change="vm.pricechanged($index)" ng-model="vm.pricelist[$index]"
+                                <input id="preco" next-on-enter class="form-control" ng-focus="vm.onfocusPreco($index)" ng-blur="vm.onBlurPreco($index)" ng-change="vm.pricechanged($index)" ng-model="phoneNumber.price"
                                     restrict="reject" style="width: 120px;">
                             </div>
                         </td>

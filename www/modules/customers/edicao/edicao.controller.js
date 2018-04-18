@@ -391,6 +391,7 @@
           vm.requesting = false;
           return;
         } else {
+          
           customerSend.Phones[item].DDD = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).DDD;
           customerSend.Phones[item].Number = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).Number;
         }
@@ -768,8 +769,8 @@
       autmaticSum();
     }
 
-    vm.onTapSendUser = onTapSendUser;
-    function onTapSendUser(customer) {
+    vm.onSendUser = onSendUser;
+    function onSendUser(customer) {
 
         var customerSend = {
             "Id": customer.Id,
@@ -789,7 +790,7 @@
             "IdParent": customer.IdParent,
             "NameContactParent": customer.NameContactParent,
             "IdCommissionLevel": customer.IdCommissionLevel,
-            "SinglePrice": vm.singlePriceLocal,
+            "SinglePrice": customer.SinglePrice,
             "DescriptionSinglePrice": customer.DescriptionSinglePrice
         }
 
@@ -802,7 +803,7 @@
     function onchecked(position) {
       vm.customer.Phones[position] = angular.copy(vm.tempPhones[position]);
       vm.showLoader = true;
-      onTapSendUser(vm.customer);
+      onSendUser(vm.customer);
     }
 
     vm.onfocusPreco = onfocusPreco;
@@ -831,7 +832,7 @@
     function onallchecked() {
       vm.customer.Phones = angular.copy(vm.tempPhones);
       vm.showLoader = true;
-      onTapSendUser(vm.customer);
+      onSendUser(vm.customer);
     }
 
     vm.onallunchecked = onallunchecked;
@@ -974,9 +975,10 @@
       if (vm.autoSum) {
         vm.singlePriceLocal = 0;
         for (var i = 0; i < vm.pricelist.length; i++) {
-          vm.singlePriceLocal += vm.pricelist[i] * 100;
+          vm.singlePriceLocal += vm.pricelist[i] ;
         }
-        vm.singlePriceLocal = vm.singlePriceLocal / 100;
+     //   vm.singlePriceLocal = vm.singlePriceLocal / 100;
+     vm.singlePriceLocal = vm.singlePriceLocal.toFixed(2);
       }
     }
 

@@ -101,7 +101,13 @@
                     var customer = vm.data.customers[i];
                     var psize = customer.Phones.length;
                     for (var j = 0; j < psize; j++) {
-                        vm.Phones.push(customer.Phones[j]);
+                        var tmpPhone = customer.Phones[j];
+                        if(tmpPhone.IdPlanOption==''){
+                        tmpPhone.price = 0;
+                        } else {
+                            tmpPhone.price = vm.plans.find(x => x.Id == tmpPhone.IdPlanOption).Value / 100                            
+                        }
+                        vm.Phones.push(tmpPhone);
                         vm.parentlist.push({'parent':i,'child':j});
                         customer.Phones[j].key = Math.random();
 
@@ -285,10 +291,13 @@
 
         vm.changedPlano = changedPlano;
         function changedPlano(position, id) {
-            if (id == '' || id == null)
+            if (id == '' || id == null){
                 vm.pricelist[position] = 0;
-            else
+                vm.tempPhones[position].price = 0;
+            } else {
                 vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
+                vm.tempPhones[position].price = vm.plans.find(x => x.Id == id).Value / 100;
+            }
             addHistory();
             autmaticSum();
         }
@@ -352,6 +361,10 @@
                 $scope.sortType = 'NickName';
                 $scope.sortReverse = false;
                 vm.tempPhones = vm.Phones.filter(x => x.NickName != undefined);
+            } else if (type == 'price'){
+                $scope.sortType = 'price';
+                $scope.sortReverse = false;
+                vm.tempPhones = vm.Phones.filter(x => x.price != '');
             }
         }
 
@@ -368,6 +381,10 @@
                 $scope.sortType = '-NickName';
                 $scope.sortReverse = false;
                 vm.tempPhones = vm.Phones.filter(x => x.NickName != undefined);
+            } else if (type == 'price'){
+                $scope.sortType = '-price';
+                $scope.sortReverse = false;
+                vm.tempPhones = vm.Phones.filter(x => x.price != '');
             }
         }
 
