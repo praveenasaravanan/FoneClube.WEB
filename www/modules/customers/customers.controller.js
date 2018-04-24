@@ -37,7 +37,7 @@
             //alert(vm.search);
             //return vm.search;
             //return vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~\s]/g, '');
-            return vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
+            return vm.search.replace(/[-!#$%&'()*+,\/:;?\[\]\\\_`{|}~]/g, '');
         }
 
         vm.ignoreAccents = function (item) {
@@ -48,14 +48,14 @@
             if (!vm.showall) {
                 var text = removeAccents(item.Name.toLowerCase());
                 //alert(text);
-                var search = removeAccents(vm.search.toLowerCase()).replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
+                var search = removeAccents(vm.search.toLowerCase()).replace(/[-!#$%&'()*+,\/:;?\[\]\\\_`{|}~]/g, '');
                 return text.indexOf(search) > -1;
             }
             else {
                 var objects = [];
                 var jsonstr = JSON.stringify(item);
                 var parsejson = JSON.parse(jsonstr);
-                var searchterm = vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
+                var searchterm = vm.search.replace(/\)\s/g,'').replace(/[-!#$%&'()*+,\/:;?\[\]\\\_`{|}~]/g, '');
                 objects = getKeys(parsejson, searchterm);
                 return objects.length > 0;
             }
