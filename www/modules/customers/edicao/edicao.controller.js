@@ -383,9 +383,12 @@
         }
       }
 
+
+      var digitosMinimosTelefone = 11
       //Regra: o telefone não pode ser incompleto, mass pode estar em branco
       for (var item in customerSend.Phones) {
-        if (customerSend.Phones[item].NovoFormatoNumero.length < 14 && customerSend.Phones[item].NovoFormatoNumero.length > 0) {
+        if (customerSend.Phones[item].NovoFormatoNumero.length < digitosMinimosTelefone && customerSend.Phones[item].NovoFormatoNumero.length > 0) {
+          debugger;
           DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.') });
           //showLoader.close();
           vm.requesting = false;
@@ -398,7 +401,7 @@
       }
 
       var arrayFiltered = customerSend.Phones.filter(function (number) {
-        return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8 && number.Delete == null;
+        return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8 && number.Delete == null && number.LinhaAtiva;
       });
 
       //Fix se o usuario não add CEP o array deve estar vazio;
@@ -414,6 +417,8 @@
           var right = true;
           for (var item in result) {
             if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {
+              
+              debugger;
               var msg = 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
                 .concat(arrayFiltered[item].NovoFormatoNumero).concat('</strong>, pertence ao cliente ')
                 .concat(result[item].DocumentNumber).concat(', ').concat(result[item].Name).concat('.');

@@ -621,7 +621,7 @@
 
         function getFoneclubePhonesOnly(array) {
             return array.filter(function (number) {
-                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8;
+                return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8 && number.LinhaAtiva;
             });
         }
 
