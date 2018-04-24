@@ -63,6 +63,7 @@
               
               <th scope="col"><strong>Status</strong></th>
               <th scope="col"><strong>Última Cobrança</strong></th>
+              <th scope="col"><strong>Ultimo pagamento</strong></th>
               <th scope="col"><strong>Nome</strong></th>
               <!-- <th scope="col"><strong>Telefones</strong></th>
               <th scope="col"><strong>Detalhes linha</strong></th> -->
@@ -83,6 +84,8 @@
     
               <td ng-class="{'status-green': customer.dataIgual == true}"><strong>{{customer.chargingDate}}</strong></td>
     
+              <td>{{customer.LastPaidDate}}</td>
+
               <td>{{customer.Name}}</td>
     
               <!-- <td>
