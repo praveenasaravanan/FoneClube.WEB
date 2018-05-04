@@ -16,8 +16,13 @@
     });
 
 
-  EdicaoController.inject = ['$scope', 'DataFactory', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog', '$http', '$sce', '$rootScope'];
-  function EdicaoController($scope, DataFactory, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog, $http, $sce, $rootScope) {
+  EdicaoController.inject = ['$scope', 'DataFactory', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog', '$http', '$sce', '$rootScope', 'localStorageService'];
+  function EdicaoController($scope, DataFactory, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog, $http, $sce, $rootScope,localStorageService) {
+
+    var checkvalidate = localStorageService.get("userid");
+    if (checkvalidate == null) {
+      FlowManagerService.changeLoginView();
+    }
     var vm = this;
     vm.showLoader = false;
     vm.data = DataFactory;
@@ -49,7 +54,9 @@
     vm.sp = 1;
 
     function opemEmailpopup(emailstatus, phone, email, operator) {
-      ViewModelUtilsService.showModalEmailDetail(emailstatus, phone, email, operator);
+      if (emailstatus != "") {
+        ViewModelUtilsService.showModalEmailDetail(emailstatus, phone, email, operator);
+      }
     }
 
     function onCheckCNPJ() {

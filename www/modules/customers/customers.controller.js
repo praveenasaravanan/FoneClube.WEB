@@ -6,8 +6,12 @@
         .controller('CustomersController', CustomersController);
 
     // <<<<<<< HEAD
-    CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService'];
-    function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService) {
+  CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService', 'localStorageService'];
+  function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService,localStorageService) {
+    var checkvalidate = localStorageService.get("userid");
+    if (checkvalidate == null) {
+      FlowManagerService.changeLoginView();
+    }
         var vm = this;
         vm.data = DataFactory;
         vm.onTapCustomer = onTapCustomer;
@@ -53,7 +57,8 @@
                 var search = removeAccents(vm.search.toLowerCase()).replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
                 return text.indexOf(search) > -1;
             }
-            else {
+            else
+            {
                 var objects = [];
                 var jsonstr = JSON.stringify(item);
                 var parsejson = JSON.parse(jsonstr);

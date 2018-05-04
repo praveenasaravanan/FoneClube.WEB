@@ -220,113 +220,131 @@
             -->
             <table class="s_table">
                 <thead>
-                    <tr>
+                  <tr>
 
-                        <th style="width: 40px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">STATUS:</span>
-                            </div>
-                        </th>
+                    <th style="width: 40px;">
+                      <div class="s_cls s_lbl">
+                        <span for="portabilidadeTelefone">STATUS:</span>
+                      </div>
+                    </th>
 
-                        <th style="width: 130px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">TELEFONE:</span>
-                            </div>
-                        </th>
+                    <th style="width: 130px;">
+                      <div class="s_cls s_lbl">
+                        <span for="portabilidadeTelefone">TELEFONE:</span>
+                      </div>
+                    </th>
+                    <th style="width: 40px;">
+                      <div class="s_cls s_lbl"><span for="portabilidadeTelefone">Email Action:</span></div>
+                    </th>
 
-                        <th style="width: 40px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">ATIVA:</span>
-                            </div>
-                        </th>
+                    <th style="width: 40px;">
+                      <div class="s_cls s_lbl">
+                        <span for="portabilidadeTelefone">ATIVA:</span>
+                      </div>
+                    </th>
 
 
-                        <th style="width: 100px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">Operadora + Plano:</span>
-                            </div>
-                        </th>
+                    <th style="width: 100px;">
+                      <div class="s_cls s_lbl">
+                        <span for="portabilidadeTelefone">Operadora + Plano:</span>
+                      </div>
+                    </th>
 
-                        <th style="width: 100px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">Preco:</span>
-                            </div>
-                        </th>
+                    <th style="width: 100px;">
+                      <div class="s_cls s_lbl">
+                        <span for="portabilidadeTelefone">Preco:</span>
+                      </div>
+                    </th>
 
-                        <th style="width: 100px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">Perfil:</span>
-                            </div>
-                        </th>
+                    <th style="width: 100px;">
+                      <div class="s_cls s_lbl">
+                        <span for="portabilidadeTelefone">Perfil:</span>
+                      </div>
+                    </th>
 
-                        <th style="width: 150px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">APELIDO:</span>
-                            </div>
-                        </th>
+                    <th style="width: 150px;">
+                      <div class="s_cls s_lbl">
+                        <span for="portabilidadeTelefone">APELIDO:</span>
+                      </div>
+                    </th>
 
-                        <th style="width: 100px;">
+                    <th style="width: 100px;">
 
-                        </th>
-                    </tr>
+                    </th>
+                  </tr>
                 </thead>
                 <tbody style="-webkit-user-select: text;  -moz-user-select: text;  -ms-user-select: text;  user-select: text;">
-                    <tr ng-repeat="phoneNumber in vm.tempPhones | filter : vm.ignoreAccents ">
+                  <tr ng-repeat="phoneNumber in vm.tempPhones | filter : vm.ignoreAccents ">
 
-                        <td style="width: 40px;">
-                            <div class="s_cls box-status" ng-style="phoneNumber.StatusOperator">{{phoneNumber.StatusDescription}}</div>
-                        </td>
+                    <td style="width: 40px;">
+                      <div class="s_cls box-status" ng-style="phoneNumber.StatusOperator">{{phoneNumber.StatusDescription}}</div>
+                    </td>
 
-                        <td style="width: 130px;text-align: center;">
-                            <div class="s_cls">
-                                <input id="portabilidadeTelefone" ng-change="vm.telephonechanged($index)" next-on-enter class="form-control" ng-model="phoneNumber.NovoFormatoNumero"
-                                    type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.validatePhoneNumber($index)"
-                                    style="width: 120px;">
-                            </div>
-                        </td>
+                    <td style="width: 130px;text-align: center;">
+                      <div class="s_cls">
+                        <input id="portabilidadeTelefone" ng-change="vm.telephonechanged($index)" next-on-enter class="form-control" ng-model="phoneNumber.NovoFormatoNumero"
+                               type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.validatePhoneNumber($index)"
+                               style="width: 120px;">
+                      </div>
+                    </td>
+                    <td style="width: 100px;">
+                      <div class="s_cls">
+                        <select next-on-enter class="form-control" ng-change="vm.opemEmailpopup(EmailstatusID,phoneNumber.NovoFormatoNumero,vm.customer.Email,phoneNumber.IdPlanOption)" ng-model="EmailstatusID" style="width: 160px;">
+                          <option value="">Selecione</option>
+                          <option name="3" value="3">Block-Perda(lost)</option>
+                          <option name="4" value="4">Block-Roube(theft)</option>
+                          <option name="5" value="5">Block-Gestor (admin – Crawler – robot)</option>
+                          <option name="6" value="6">Block-Anatel (4 month block)</option>
+                          <option name="7" value="7">DESBLOQUEIO (Universal Unblock)</option>
+                          <option name="8" value="8"> Troca de Plano (upgrade/downgrade)</option>
 
-                        <td style="width: 40px;">
-                            <toggle ng-change="vm.activechanged($index)" on="On" off="Off" ng-model="phoneNumber.LinhaAtiva"></toggle>
+                        </select>
 
-                        </td>
 
-                        <td style="width: 100px;">
-                            <div class="s_cls">
-                                <select id="qualPlanoContratar" next-on-enter class="form-control" ng-options="plan.Id as plan.Description for plan in vm.plans "
-                                    ng-model="phoneNumber.IdPlanOption" ng-change="vm.changedPlano($index,phoneNumber.IdPlanOption)"
-                                    style="width: 160px;">
-                                    <option value="">Selecione</option>
-                                </select>
-                            </div>
-                        </td>
+                      </div>
+                    </td>
+                    <td style="width: 40px;">
+                      <toggle ng-change="vm.activechanged($index)" on="On" off="Off" ng-model="phoneNumber.LinhaAtiva"></toggle>
 
-                        <td style="width: 130px;text-align: center;">
-                            <div class="s_cls">
-                                <input type="number" id="preco" next-on-enter class="form-control" ng-focus="vm.onfocusPreco($index)" ng-blur="vm.onBlurPreco($index)" ng-change="vm.pricechanged($index)" ng-model="vm.pricelist[$index]"
-                                    restrict="reject" style="width: 120px;">
-                            </div>
-                        </td>
+                    </td>
 
-                        <td style="width: 130px;text-align: center;">
-                            <div class="s_cls">
-                                <input id="perfill" next-on-enter class="form-control" restrict="reject" style="width: 120px;">
-                            </div>
-                        </td>
+                    <td style="width: 100px;">
+                      <div class="s_cls">
+                        <select id="qualPlanoContratar" next-on-enter class="form-control" ng-options="plan.Id as plan.Description for plan in vm.plans "
+                                ng-model="phoneNumber.IdPlanOption" ng-change="vm.changedPlano($index,phoneNumber.IdPlanOption)"
+                                style="width: 160px;">
+                          <option value="">Selecione</option>
+                        </select>
+                      </div>
+                    </td>
 
-                        <td>
-                            <div class="s_cls">
-                                <input id="comentarioValor" next-on-enter class="form-control" ng-change="vm.nicknamechanged()" ng-model="phoneNumber.NickName"
-                                    type="text" placeholder="Apelido" style="width: 100%;">
-                            </div>
-                        </td>
-                        <td style="display: flex; align-items: center;">
-                            <i class="glyphicon glyphicon-ok-circle checkcircle" ng-click="vm.onchecked( $index)"></i>
-                            <i class="glyphicon glyphicon-remove-circle uncheckcircle" ng-click="vm.onunchecked( $index)"></i>
-                            <button class="btn btn-primary" ng-click="vm.onedit()">
-                                <i class="glyphicon glyphicon-option-horizontal"></i>
-                            </button>
-                        </td>
-                    </tr>
+                    <td style="width: 130px;text-align: center;">
+                      <div class="s_cls">
+                        <input type="number" id="preco" next-on-enter class="form-control" ng-focus="vm.onfocusPreco($index)" ng-blur="vm.onBlurPreco($index)" ng-change="vm.pricechanged($index)" ng-model="vm.pricelist[$index]"
+                               restrict="reject" style="width: 120px;">
+                      </div>
+                    </td>
+
+                    <td style="width: 130px;text-align: center;">
+                      <div class="s_cls">
+                        <input id="perfill" next-on-enter class="form-control" restrict="reject" style="width: 120px;">
+                      </div>
+                    </td>
+
+                    <td>
+                      <div class="s_cls">
+                        <input id="comentarioValor" next-on-enter class="form-control" ng-change="vm.nicknamechanged()" ng-model="phoneNumber.NickName"
+                               type="text" placeholder="Apelido" style="width: 100%;">
+                      </div>
+                    </td>
+                    <td style="display: flex; align-items: center;">
+                      <i class="glyphicon glyphicon-ok-circle checkcircle" ng-click="vm.onchecked( $index)"></i>
+                      <i class="glyphicon glyphicon-remove-circle uncheckcircle" ng-click="vm.onunchecked( $index)"></i>
+                      <button class="btn btn-primary" ng-click="vm.onedit()">
+                        <i class="glyphicon glyphicon-option-horizontal"></i>
+                      </button>
+                    </td>
+                  </tr>
                 </tbody>
             </table>
         </div>
