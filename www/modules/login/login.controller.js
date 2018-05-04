@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('LoginController', LoginController);
 
-    LoginController.inject = ['FlowManagerService', '$scope', 'FireBaseManagerUtil', 'MainUtils', 'DialogFactory'];
-    function LoginController(FlowManagerService, $scope, FireBaseManagerUtil, MainUtils, DialogFactory) {
+  LoginController.inject = ['FlowManagerService', '$scope', 'FireBaseManagerUtil', 'MainUtils', 'DialogFactory','localStorageService'];
+  function LoginController(FlowManagerService, $scope, FireBaseManagerUtil, MainUtils, DialogFactory, localStorageService) {
         var vm = this;
         vm.login = login;
 
@@ -30,7 +30,10 @@
         function login(){            
             if(validaLogin())
             {
-                FlowManagerService.changeHomeView();
+              localStorageService.add("userid",'True')
+              FlowManagerService.changeHomeView();
+
+
             }
             else
             {
