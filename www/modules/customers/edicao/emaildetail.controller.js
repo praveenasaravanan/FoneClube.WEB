@@ -74,20 +74,17 @@
 
     function getEmailDetails(vm) {
       if (vm.operator == "8" || vm.operator == "9" || vm.operator == "10" || vm.operator == "11" || vm.operator == "12" || vm.operator == "13" || vm.operator == "14") {
-        vm.oper = 1;
+        vm.oper = "VIVO";
 
       }
       else {
 
-        vm.oper = 2;
+        vm.oper = 'CLARO';
+        vm.emailstatus = parseInt(vm.emailstatus) + 6;
        
       }
       FoneclubeService.getEmailDetails(vm).then(function (result) {
-        if (vm.oper == "2") {
-
-          vm.emailstatus = parseInt(vm.emailstatus) + 6;
-        }
-        debugger;
+        
         vm.subject = result.subject;
         vm.body = result.body.replace(/#DDDeTELEFONE/g, vm.phone);
         vm.cc = result.cc;
@@ -95,7 +92,7 @@
         vm.email = result.email;
         vm.from = result.from;
 
-        if (vm.oper =="1") {
+        if (vm.oper =="VIVO") {
           if (vm.emailstatus == "3" || vm.emailstatus == "4") {
             if (vm.email == null) {
 

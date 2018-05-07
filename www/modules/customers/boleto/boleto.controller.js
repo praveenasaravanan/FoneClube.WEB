@@ -19,6 +19,7 @@
             vm.customer = customer;
             var newCustomer;
             vm.etapaDados = true;
+            vm.chargeDisabled = true;
             vm.cobrancaRealizada = false;
             vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
             vm.comment = '';
@@ -27,6 +28,7 @@
             vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
             vm.onTapCancel = onTapCancel;
             vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
+            vm.checkOne = checkOne;
             vm.enviaEmail = true;
 
             vm.years = [2018,2017,2016,2015,2014,2013,2012,2011,2010];
@@ -44,12 +46,16 @@
     
             }
 
+          vm.Padrão = false;
+          vm.Excepcional = false;
+
           var CARTAO = 1;
           var BOLETO = 2;
           init();
 
           function init() {
             FoneclubeService.getHistoryPayment(customer.Id).then(function (result) {
+              console.log(result);
               vm.histories = result;
               console.log(vm.histories);
               for (var i in vm.histories) {
@@ -75,18 +81,46 @@
               });
 
           }
-    
-            function onTapConfirmarPagamento() {
+
+          function checkOne(val) {
+            //alert('xx');
+            vm.chargeDisabled = false;
+            if (val == '1') {
+              vm.chargeStatusfirst = true;
+              vm.chargeStatusSecond = false;
+              vm.chargeStatus = 1;
+            }
+            if (val == '2') {
+              vm.chargeStatusSecond = true;
+              vm.chargeStatusfirst = false;
+              vm.chargeStatus = 2;
+            }
+          }
+
+          function onTapConfirmarPagamento() {
+            debugger;
+            //alert(vm.Excepcional);
+            //if (!vm.claro) {
+            //  vm.Excepcional
                 if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
                     return;
+            }
+                if (!vm.chargeStatus) {
+                  vm.chargeStatusDiv = true;
+                  vm.etapaDados = false;
+                  vm.etapaConfirmacao = false;
                 }
-                vm.etapaDados = false;
-                vm.etapaConfirmacao = true;
+                else {
+                  vm.etapaDados = false;
+                  vm.etapaConfirmacao = true;
+                  vm.chargeStatusDiv = false;
+                }
             }
             
             function onTapCancel(number){
                 vm.etapaDados = true;
                 vm.etapaConfirmacao = false;
+                vm.chargeStatusDiv = false;
                 if (number == 1){
                     vm.amount = 0;
                     vm.comment = '';
@@ -216,7 +250,8 @@
                         BoletoId: idBoleto,
                         AcquireId: acquirer_id,
                         AnoVingencia:vm.year,
-                        MesVingencia:vm.month
+                        MesVingencia: vm.month,
+                        ChargeStatus: vm.chargeStatus
                     }
                 }
     

@@ -12,7 +12,14 @@
                 <!--remoção-->
                 <!--<div class="item item-divider">
                     -- Daqui pra baixo tudo será movido --
-                </div>-->             
+                </div>-->
+              <div style="float: right;" class="checkbox-wrapper">
+
+                <input type="checkbox" ng-model="vm.chargeStatusfirst" ng-change="vm.checkOne('1')" value="1" /><label> Padrao</label>
+                <br />
+                <input type="checkbox" ng-model="vm.chargeStatusSecond" ng-change="vm.checkOne('2')" value="2" /><label> Excepcional</label>
+
+              </div>
                 <h4>Dados Cartão de Crédito</h4>
                 <div class="form-group col-xs-12">
                     <label for="nomeCartao">Nome como no cartão:</label>
@@ -66,6 +73,18 @@
                         <!-- <button ng-click="vm.onTapConfirmarPagamento()" class="btn btn-success col-xs-12"> -->
                         Cobrar
                 </button>           
+            </div>
+            <div ng-if="vm.chargeStatusDiv">
+              <label>É preciso selecionar o tipo de cobrança para prosseguir na operação</label>
+              <div class="checkbox-wrapper">
+
+                <input type="checkbox" ng-model="vm.chargeStatusfirst" ng-change="vm.checkOne('1')" value="1" /><label> Padrao</label>
+                <br />
+                <input type="checkbox" ng-model="vm.chargeStatusSecond" ng-change="vm.checkOne('2')" value="2" /><label> Excepcional</label>
+
+              </div>
+              <button ng-click="vm.onTapCancel()" class="btn btn-danger col-xs-12">VOLTAR</button>
+              <button ng-click="vm.onTapConfirmarPagamento()" class="btn btn-success col-xs-12" ng-disabled="vm.chargeDisabled">Cobrar</button>
             </div>
 
             <div ng-if="vm.etapaConfirmacao">
