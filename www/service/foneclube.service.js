@@ -8,14 +8,14 @@
     FoneclubeService.inject = ['$q', 'HTTPService'];
     function FoneclubeService($q, HTTPService) {
 
-       ///var urlApi = 'http://webapidemo.devworkdemo.com/api';
-      //var urlApi = 'http://localhost:57078/api';
+      //var urlApi = 'http://webapidemo.devworkdemo.com/api';
+     // var urlApi = 'http://localhost:57078/api';
 
         //API HOMOL TEMP
        // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API QUE VAI SER PROD
-        var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
+         var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -505,7 +505,7 @@
 
       function SendEmailStatus(emaildetails) {
         var q = $q.defer();
-        HTTPService.postFile(urlApi.concat('/email/sendemailstatus/emaildetails'), emaildetails)
+        HTTPService.postFile(urlApi.concat('/email/sendemailstatus'), emaildetails)
           .then(function (result) {
             console.log(result);
             q.resolve(result);
@@ -522,7 +522,7 @@
       function getEmailDetails(emaildetails) {
         var q = $q.defer();
 
-        HTTPService.post(urlApi.concat('/email/getEmailDetails/emaildetails'), emaildetails)
+        HTTPService.post(urlApi.concat('/email/getEmailDetails'), emaildetails)
           .then(function (result) {
             q.resolve(result);
           })
@@ -536,7 +536,7 @@
       function saveemail(emaildetails) {
         var q = $q.defer();
 
-        HTTPService.post(urlApi.concat('/email/saveEmailDetails/emaildetails'), emaildetails)
+        HTTPService.post(urlApi.concat('/email/saveEmailDetails'), emaildetails)
           .then(function (result) {
             q.resolve(result);
           })

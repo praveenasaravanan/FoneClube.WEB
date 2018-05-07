@@ -21,6 +21,8 @@
         vm.amount = '';
         vm.comment = '';
         vm.cobrancaRealizada = false;
+        vm.chargeDisabled = true;
+        vm.checkOne = checkOne;
         console.log('ExistentCardPaymentModalController');
         vm.onTapPagar = onTapPagar;
         vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
@@ -45,19 +47,49 @@
             'phone' : getContactPhone(customer)
         }
 
+
+
+        vm.Padrão = false;
+        vm.Excepcional = false;
         vm.existentCustomer = existentCustomer;
+
+
+        function checkOne(val) {
+          //alert('xx');
+          vm.chargeDisabled = false;
+          if (val == '1') {
+            vm.chargeStatusfirst = true;
+            vm.chargeStatusSecond = false;
+            vm.chargeStatus = 1;
+          }
+          if (val == '2') {
+            vm.chargeStatusSecond = true;
+            vm.chargeStatusfirst = false;
+            vm.chargeStatus = 2;
+          }
+        }
+
 
         function onTapConfirmarPagamento() {
             if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
                 return;
             }
-            vm.etapaDados = false;
-            vm.etapaConfirmacao = true;
+            if (!vm.chargeStatus) {
+              vm.chargeStatusDiv = true;
+              vm.etapaDados = false;
+              vm.etapaConfirmacao = false;
+            }
+            else {
+              vm.etapaDados = false;
+              vm.etapaConfirmacao = true;
+              vm.chargeStatusDiv = false;
+            }
         }
         
         function onTapCancel(number){
             vm.etapaDados = true;
             vm.etapaConfirmacao = false;
+            vm.chargeStatusDiv = false;
             if (number == 1){
                 vm.amount = 0;
                 vm.comment = '';
@@ -136,7 +168,8 @@
                     CollectorName: MainUtils.getAgent(),
                     PaymentType: CARTAO,
                     AnoVingencia:vm.year,
-                    MesVingencia:vm.month
+                    MesVingencia: vm.month,
+                    ChargeStatus: vm.chargeStatus
                 }
             }
             FoneclubeService.postHistoryPayment(customerCharging).then(function(result){
