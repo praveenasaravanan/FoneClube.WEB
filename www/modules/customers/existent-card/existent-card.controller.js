@@ -114,7 +114,7 @@
                 debugger;
                 PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function(result){
                         vm.message = 'Transação concluída';
-
+                        vm.TransactionId = result.tid;
                         var emailObject = {
                             'To': vm.existentCustomer.email, //vm.existentCustomer
                             'TargetName' : vm.existentCustomer.name,
@@ -169,7 +169,8 @@
                     PaymentType: CARTAO,
                     AnoVingencia:vm.year,
                     MesVingencia: vm.month,
-                    ChargeStatus: vm.chargeStatus
+                    ChargeStatus: vm.chargeStatus,
+                    TransactionId: vm.TransactionId
                 }
             }
             FoneclubeService.postHistoryPayment(customerCharging).then(function(result){

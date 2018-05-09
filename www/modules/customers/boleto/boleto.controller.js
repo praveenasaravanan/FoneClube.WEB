@@ -188,7 +188,7 @@
                             
     
                             try{
-    
+                              vm.TransactionId = resultCapture.tid;
                                 PagarmeService.notifyCustomerBoleto(resultCapture.id, existentCustomer.email).then(function(resultNotify){
                                 vm.message = 'Boleto gerado com sucesso'
                                 vm.cobrancaRealizada = true;
@@ -251,7 +251,8 @@
                         AcquireId: acquirer_id,
                         AnoVingencia:vm.year,
                         MesVingencia: vm.month,
-                        ChargeStatus: vm.chargeStatus
+                      ChargeStatus: vm.chargeStatus,
+                      TransactionId: vm.TransactionId
                     }
                 }
     
