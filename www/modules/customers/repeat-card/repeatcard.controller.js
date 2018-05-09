@@ -168,7 +168,8 @@
 
 
                     PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function(result){
-                        debugger;
+                      debugger;
+                      vm.TransactionId = result.tid;
 
                         var customCustomer = {
                             Id:vm.customer.Id,
@@ -282,7 +283,8 @@
                         Comment:vm.comment,
                         Ammount: vm.amount,
                         CollectorName: MainUtils.getAgent(),
-                        PaymentType: CARTAO
+                        PaymentType: CARTAO,
+                        TransactionId: vm.TransactionId
                     }
                 }
 

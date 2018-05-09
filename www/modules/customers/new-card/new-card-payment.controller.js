@@ -195,8 +195,8 @@
 
 
                     PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function(result){
-                        debugger;
-
+                      debugger;
+                      vm.TransactionId = result.tid;
                         var customCustomer = {
                             Id:vm.customer.Id,
                             IdPagarme:result.customer.id
@@ -312,7 +312,8 @@
                         PaymentType: CARTAO,
                         AnoVingencia:vm.year,
                         MesVingencia: vm.month,
-                        ChargeStatus: vm.chargeStatus
+                        ChargeStatus: vm.chargeStatus,
+                        TransactionId: vm.TransactionId
                     }
                 }
 
