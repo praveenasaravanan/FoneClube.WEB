@@ -85,12 +85,12 @@
       }
       FoneclubeService.getEmailDetails(vm).then(function (result) {
         
-        vm.subject = result.subject;
-        vm.body = result.body.replace(/#DDDeTELEFONE/g, vm.phone);
-        vm.cc = result.cc;
-        vm.bcc = result.bcc;
-        vm.email = result.email;
-        vm.from = result.from;
+        vm.subject = result.Subject;
+        vm.body = result.Body.replace(/#DDDeTELEFONE/g, vm.Phone);
+        vm.cc = result.Cc;
+        vm.bcc = result.Bcc;
+        vm.email = result.Email;
+        vm.from = result.From;
 
         if (vm.oper =="VIVO") {
           if (vm.emailstatus == "3" || vm.emailstatus == "4") {
