@@ -27,6 +27,7 @@
     vm.showLoader = false;
     vm.data = DataFactory;
     vm.onTapSendUser = onTapSendUser;
+    vm.onTapSendUserAllCheck = onTapSendUserAllCheck;
     vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
     vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
     vm.validarCEP = validarCEP;
@@ -342,9 +343,15 @@
 
     function onTapSendUser(customer) {
 
-      debugger;
+     // vm.tempPhones = angular.copy(vm.customer.Phones);
       if (vm.requesting == true) return;
       vm.requesting = true;
+
+      for (var i = 0; i < vm.tempPhones.length; i++) {
+        vm.customer.Phones[i] = angular.copy(vm.tempPhones[i]);
+
+      }
+
 
       //debugger;
       //return;
@@ -455,7 +462,7 @@
       }
 
       function runPostUpdateCustomer(customerSend) {
-        debugger;
+        
         UtilsService.sendImageToUpload(vm.imageSelf, vm.imageFrente, vm.imageVerso).then(function (result) {
           for (var i in result) {
             customerSend.Photos = customerSend.Photos.filter(function (element) {
@@ -470,8 +477,14 @@
             customerSend.Photos.push({ Name: result[i].filename, Tipo: result[i].tipo });
           }
 
-          var parentDDD = vm.contactParent.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(0, 2);
-          var parentNumber = vm.contactParent.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(2, 11);
+          var parentDDD = "";
+          var parentNumber = "";
+          if (vm.contactParent != undefined)
+        {
+            var parentDDD = vm.contactParent.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(0, 2);
+            var parentNumber = vm.contactParent.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(2, 11);
+          }
+          
           var parentName = vm.customer.NameContactParent;
           // debugger;
 
@@ -534,6 +547,229 @@
               }
             })
         }
+        vm.requesting = false;
+        showLoader.close();
+      }
+
+      function postUpdateCustomerError(error) {
+        DialogFactory.showMessageDialog({ mensagem: error.statusText });
+        vm.requesting = false;
+        showLoader.close();
+      }
+    };
+    function onTapSendUserAllCheck(customer) {
+
+      // vm.tempPhones = angular.copy(vm.customer.Phones);
+      if (vm.requesting == true) return;
+      vm.requesting = true;
+
+      for (var i = 0; i < vm.tempPhones.length; i++) {
+        vm.customer.Phones[i] = angular.copy(vm.tempPhones[i]);
+
+      }
+
+
+      //debugger;
+      //return;
+
+      //TODO
+      //colocar breakpoint nos metodos localhost API, validar se novos atributos chegam--Putting breakpoint the methods localhost API, validate the new assets come.
+      //revisar todos nomes entidade .net apos refact de nomes atributos -- Revisar of names or. net apos refact of attributes.
+      var customerSend = {
+        "Id": customer.Id,
+        "DocumentNumber": UtilsService.clearDocumentNumber(customer.DocumentNumber),
+        "Register": customer.Register,
+        "Name": customer.Name,
+        "NickName": customer.NickName,
+        "Email": customer.Email,
+        "Born": customer.Born,
+        "Gender": customer.Gender,
+        "IdPlanOption": customer.IdPlanOption,
+        "IdPagarme": customer.IdPagarme,
+        "IdRole": customer.IdRole,
+        "Adresses": customer.Adresses,
+        "Phones": customer.Phones,
+        "Photos": customer.Photos,
+        "IdParent": customer.IdParent,
+        "NameContactParent": customer.NameContactParent,
+        "IdCommissionLevel": customer.IdCommissionLevel,
+        "SinglePrice": vm.singlePriceLocal,
+        "DescriptionSinglePrice": customer.DescriptionSinglePrice
+      }
+      var totalPriceValidade = 0;
+      for (var i in vm.customer.Phones) {
+        vm.plans.find(function (element, index, array) {
+          if (element.Id == vm.customer.Phones[i].IdPlanOption) {
+            totalPriceValidade = totalPriceValidade + element.Value / 100;
+          }
+        });
+      }
+      if (vm.singlePriceLocal) {
+        if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
+          DialogFactory.showMessageDialog({ mensagem: 'Preço único não pode ser maior do que o preço de todos os planos somados.' });
+          //showLoader.close();
+          vm.requesting = false;
+          return;
+        }
+      }
+
+
+      var digitosMinimosTelefone = 11
+      //Regra: o telefone não pode ser incompleto, mass pode estar em branco
+      for (var item in customerSend.Phones) {
+        if (customerSend.Phones[item].NovoFormatoNumero.length < digitosMinimosTelefone && customerSend.Phones[item].NovoFormatoNumero.length > 0) {
+          debugger;
+          DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.') });
+          //showLoader.close();
+          vm.requesting = false;
+          return;
+        } else {
+
+          customerSend.Phones[item].DDD = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).DDD;
+          customerSend.Phones[item].Number = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).Number;
+        }
+      }
+
+      var arrayFiltered = customerSend.Phones.filter(function (number) {
+        return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8 && number.Delete == null && number.LinhaAtiva;
+      });
+
+      //Fix se o usuario não add CEP o array deve estar vazio;
+      for (var i in customerSend.Adresses) {
+        if (customerSend.Adresses[i].Cep == '')
+          customerSend.Adresses.splice(i, 1);
+      }
+      var showLoader = DialogFactory.showLoader('Enviando Dados...');
+      if (arrayFiltered.length == 0) {
+        runPostUpdateCustomer(customerSend);
+      } else {
+        validadeNumbers(arrayFiltered).then(function (result) {
+          var right = true;
+          for (var item in result) {
+            if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {
+
+              debugger;
+              var msg = 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
+                .concat(arrayFiltered[item].NovoFormatoNumero).concat('</strong>, pertence ao cliente ')
+                .concat(result[item].DocumentNumber).concat(', ').concat(result[item].Name).concat('.');
+              DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: msg });
+              right = false;
+              vm.requesting = false;
+              showLoader.close();
+            }
+          }
+          for (var x in arrayFiltered) {
+            //nao deixa add o mesmo numero duas vezes para o mesmo cliente;
+            var twiceNumber = arrayFiltered.filter(function (element, index, array) {
+              return element.DDD == arrayFiltered[x].DDD && element.Number == arrayFiltered[x].Number;
+            });
+            if (twiceNumber.length > 1) {
+              DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'Você não pode cadastrar o mesmo telefone duas vezes para o cliente.' });
+              right = false;
+              vm.requesting = false;
+              showLoader.close();
+              break;
+            }
+          }
+          if (right) {
+            runPostUpdateCustomer(customerSend);
+          }
+        });
+      }
+
+      function runPostUpdateCustomer(customerSend) {
+
+        UtilsService.sendImageToUpload(vm.imageSelf, vm.imageFrente, vm.imageVerso).then(function (result) {
+          for (var i in result) {
+            customerSend.Photos = customerSend.Photos.filter(function (element) {
+              return element.Tipo != result[i].tipo;
+            });
+            // for (var x in customerSend.Photos) {
+            //     if (result[i].tipo == customerSend.Photos[x].Tipo) {
+            //         debugger;
+            //         customerSend.Photos.splice(x, 1);
+            //     }
+            // }
+            customerSend.Photos.push({ Name: result[i].filename, Tipo: result[i].tipo });
+          }
+
+          var parentDDD = "";
+          var parentNumber = "";
+          if (vm.contactParent != undefined) {
+            var parentDDD = vm.contactParent.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(0, 2);
+            var parentNumber = vm.contactParent.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(2, 11);
+          }
+
+          var parentName = vm.customer.NameContactParent;
+          // debugger;
+
+
+          var customerObj = {
+            'NameParent': vm.customer.NameContactParent,
+            'Id': customerSend.Id,
+            'PhoneDDDParent': parentDDD,
+            'PhoneNumberParent': parentNumber
+          }
+          debugger;
+          FoneclubeService.postCustomerParent(customerObj).then(function (result) {
+            // debugger;
+            if (result)
+              FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucesscheck).catch(postUpdateCustomerError);
+            else {
+              DialogFactory.dialogConfirm({ title: 'Andamento editar', mensagem: 'Não foi possível atualizar dados do pai da linha, deseja salvaro restante ( reomendável que sim ):', btn1: 'sim', btn2: 'não' })
+                .then(function (result) {
+                  if (result) {
+                    return;
+                   // FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucesscheck).catch(postUpdateCustomerError);
+                  } else {
+                    return;
+                  }
+                })
+            }
+          }).catch(function (erro) {
+
+            DialogFactory.dialogConfirm({ title: 'Andamento editar', mensagem: 'Não foi possível atualizar dados do pai da linha, deseja salvaro restante ( reomendável que sim ):', btn1: 'sim', btn2: 'não' })
+              .then(function (result) {
+                if (result) {
+                  return;
+                  ///FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucesscheck).catch(postUpdateCustomerError);
+                } else {
+                  return;
+                }
+              })
+
+          });
+
+
+
+
+
+
+        })
+
+      }
+
+      function postUpdateCustomerSucess(result) {
+        if (result) {
+          DialogFactory.dialogConfirm({ title: 'Edição Realizada', mensagem: 'Todos os dados pessoais enviados, edição Foneclube feita com sucesso.', btn1: 'Ir para Home', btn2: 'Visualizar Cliente' })
+            .then(function (result) {
+              if (result) {
+                FlowManagerService.changeCustomersView();
+                FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
+                  vm.data.customers.splice(index, 1, result);
+                  ViewModelUtilsService.showModalCustomer(result);
+                });
+              } else {
+                FlowManagerService.changeHomeView();
+              }
+            })
+        }
+        vm.requesting = false;
+        showLoader.close();
+      }
+
+      function postUpdateCustomerSucesscheck(result) {
+        
         vm.requesting = false;
         showLoader.close();
       }
@@ -631,6 +867,7 @@
           'LinhaAtiva': true
         }
       );
+      vm.tempPhones = angular.copy(vm.customer.Phones);
       resizeScroll();
     }
 

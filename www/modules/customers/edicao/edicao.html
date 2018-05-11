@@ -187,7 +187,7 @@
                         <span style="font-size:25px;color:red;width:50px" id="sizing-addon2">
                             ALL
                         </span>
-                        <i class="glyphicon glyphicon-ok-circle checkcircle" style="margin-left: 20px;" ng-click="vm.onallchecked()"></i>
+                        <i class="glyphicon glyphicon-ok-circle checkcircle" style="margin-left: 20px;" ng-click="vm.onTapSendUserAllCheck(vm.customer)"></i>
                         <i class="glyphicon glyphicon-remove-circle uncheckcircle" style="margin-left:5px;" ng-click="vm.onallunchecked()"></i>
                     </div>
                 </div>
@@ -338,7 +338,7 @@
                       </div>
                     </td>
                     <td style="display: flex; align-items: center;">
-                      <i class="glyphicon glyphicon-ok-circle checkcircle" ng-click="vm.onchecked( $index)"></i>
+                      <i class="glyphicon glyphicon-ok-circle checkcircle" ng-click="vm.onTapSendUserAllCheck(vm.customer)"></i>
                       <i class="glyphicon glyphicon-remove-circle uncheckcircle" ng-click="vm.onunchecked( $index)"></i>
                       <button class="btn btn-primary" ng-click="vm.onedit()">
                         <i class="glyphicon glyphicon-option-horizontal"></i>
@@ -353,7 +353,7 @@
         <button class="btn btn-primary col-sm-2 col-xs-12" ng-disabled="vm.requesting" ng-enter="vm.onTapSendUser(vm.customer)" ng-click="vm.onTapSendUser(vm.customer)">Enviar</button>
         <button ng-enter="vm.onTapNewPhoneNumber()" ng-click="vm.onTapNewPhoneNumber()" style="background: transparent; border: none; position: absolute; right: 0; padding-right: 16px;" class="s_button-icon">
             <i class="glyphicon glyphicon-plus"></i>
-            </i>
+            
         </button>
     </div>
 </div>
