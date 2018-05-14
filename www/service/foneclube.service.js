@@ -8,14 +8,14 @@
     FoneclubeService.inject = ['$q', 'HTTPService'];
     function FoneclubeService($q, HTTPService) {
 
-      //var urlApi = 'http://webapidemo.devworkdemo.com/api';
-      //var urlApi = 'http://localhost:57078/api';
+      /// var urlApi = 'http://webapidemo.devworkdemo.com/api';
+     /// var urlApi = 'http://localhost:57078/api';
 
-        //API HOMOL TEMP
-       // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+        //API HOMOL dispatchedCommision
+       var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API QUE VAI SER PROD
-        var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
+      // var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -53,7 +53,8 @@
       this.getEmailDetails = getEmailDetails;
       this.saveemail = saveemail;
         this.getDataPgt = getDataPgt;
-
+      this.getCommision = getCommision;
+      this.dispatchedCommision = dispatchedCommision;
 
         function getLastPaymentType(customer) {
             debugger;
@@ -332,6 +333,33 @@
 
             return q.promise;
         }
+
+      function getCommision(customerId) {
+        var q = $q.defer();
+        
+        HTTPService.get(urlApi.concat('/comission/customer/').concat(customerId))
+          .then(function (result) {
+            q.resolve(result);
+          })
+          .catch(function (error) {
+            q.reject(error);
+          });
+
+        return q.promise;;
+      }
+
+      function dispatchedCommision(customerId) {
+        var q = $q.defer();
+        HTTPService.get(urlApi.concat('/customer/').concat(customerId).concat('/dispatched'))
+          .then(function (result) {
+            q.resolve(result);
+          })
+          .catch(function (error) {
+            q.reject(error);
+          });
+
+        return q.promise;;
+      }
 
         function getCustomerPlans(register) {
             var q = $q.defer();

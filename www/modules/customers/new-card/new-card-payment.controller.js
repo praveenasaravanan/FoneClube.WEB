@@ -26,7 +26,12 @@
         vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
 
         vm.years = [2018,2017,2016,2015,2014,2013,2012,2011,2010];
-        vm.months = [1,2,3,4,5,6,7,8,9,10,11,12];
+        vm.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        vm.calculate = calculate;
+
+        vm.amount = 0;
+        vm.amountTemp = 0;
+        vm.bonus = 0;
         
         vm.year = new Date().getFullYear().toString();
         vm.month = (new Date().getMonth() + 1).toString();
@@ -37,6 +42,17 @@
 
         vm.chargeStatusfirst = false;
         vm.chargeStatusSecond = false;
+
+        init();
+        function init() {
+          FoneclubeService.getCommision(customer.Id).then(function (result) {
+            vm.bonus = result.Ammount;
+            calculate();
+          })
+            .catch(function (error) {
+
+            });
+        }
 
         function checkOne(val) {
           //alert('xx');
@@ -53,11 +69,24 @@
           }
         }
 
+        function calculate() {
+          var amount = isNumber(vm.amountTemp) ? vm.amountTemp : parseFloat(vm.amountTemp) / 100;
+          var bonus = isNumber(vm.bonus) ? vm.bonus : parseFloat(vm.bonus) / 100;
+          vm.amount = vm.pagar ? parseFloat(parseFloat(amount) - parseFloat(bonus)) : amount;
+          vm.amount = ((vm.amount < 0 ? 0 : vm.amount).toFixed(2));
+        }
+
         function onTapConfirmarPagamento() {
             debugger
             if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
                 return;
             }
+
+            if (parseInt(vm.amount) < 100) {
+              DialogFactory.showMessageDialog({ mensagem: 'Não é permitido cobranças a baixo de 1 Real', titulo: 'Aviso' });
+              return;
+            }
+
             if (!vm.chargeStatus) {
               vm.chargeStatusDiv = true;
               vm.etapaDados = false;
@@ -126,12 +155,6 @@
              console.log(newCustomer)
              console.log(cardData)
              console.log(vm.amount);
-
-            if(parseInt(vm.amount) < 100)
-            {
-                DialogFactory.showMessageDialog({mensagem:'Não é permitido cobranças a baixo de 1 Real', titulo: 'Aviso'});                            
-                return;
-            }
 
             paymentNewCustomer();
         }
@@ -313,7 +336,8 @@
                         AnoVingencia:vm.year,
                         MesVingencia: vm.month,
                         ChargeStatus: vm.chargeStatus,
-                        TransactionId: vm.TransactionId
+                        TransactionId: vm.TransactionId,
+                        ComissionConceded: vm.pagar
                     }
                 }
 
@@ -321,6 +345,12 @@
                 FoneclubeService.postHistoryPayment(customerCharging).then(function(result){
                     console.log('FoneclubeService.postHistoryPayment');
                     console.log(result);
+                    FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
+                      //alert('success!!');
+                    })
+                      .catch(function (error) {
+
+                      })
                 })
                 .catch(function(error){
                     console.log('catch error');
