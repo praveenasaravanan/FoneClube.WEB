@@ -21,7 +21,7 @@
             vm.etapaDados = true;
             vm.chargeDisabled = true;
             vm.cobrancaRealizada = false;
-            vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
+          vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
             vm.comment = '';
             console.log('BoletoModalController');
             vm.onTapPagar = onTapPagar;
@@ -29,10 +29,15 @@
             vm.onTapCancel = onTapCancel;
             vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
             vm.checkOne = checkOne;
-            vm.enviaEmail = true;
-
+          vm.enviaEmail = true;
+          vm.calculate = calculate;
             vm.years = [2018,2017,2016,2015,2014,2013,2012,2011,2010];
-            vm.months = [1,2,3,4,5,6,7,8,9,10,11,12];
+          vm.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+          vm.amount = 0;
+          vm.amountTemp = 0;
+          vm.amountTemp1 = 0;
+          vm.bonus = 0;
             
             vm.year = new Date().getFullYear().toString();
             vm.month = (new Date().getMonth() + 1).toString();
@@ -55,9 +60,7 @@
 
           function init() {
             FoneclubeService.getHistoryPayment(customer.Id).then(function (result) {
-              console.log(result);
               vm.histories = result;
-              console.log(vm.histories);
               for (var i in vm.histories) {
                 var history = vm.histories[i];
                 history.descriptionType = (history.PaymentType == CARTAO) ? 'Cartão de crédito' : 'Boleto';
@@ -65,6 +68,9 @@
                   vm.commentBoleto
                   vm.comment = history.Comment;
                   vm.amount = history.Ammount / 100;
+
+                  vm.amountTemp = vm.amount;
+                  vm.amountTemp1 = vm.amount;
                 }
                 if (history.PaymentType == BOLETO) {
                   PagarmeService.getStatusBoleto(history.BoletoId).then(function (result) {
@@ -79,7 +85,15 @@
               .catch(function (error) {
 
               });
+            
 
+            FoneclubeService.getCommision(customer.Id).then(function (result) {
+              vm.bonus = result.Ammount;
+              calculate();
+            })
+              .catch(function (error) {
+
+              });
           }
 
           function checkOne(val) {
@@ -97,6 +111,16 @@
             }
           }
 
+
+
+          function calculate() {
+            var amount = isNumber(vm.amountTemp) ? vm.amountTemp : parseFloat(vm.amountTemp) / 100;
+            var bonus = isNumber(vm.bonus) ? vm.bonus : parseFloat(vm.bonus) / 100;
+            vm.amountTemp1 = vm.pagar ? parseFloat(parseFloat(amount) - parseFloat(bonus)) : amount;
+            vm.amountTemp1 = ((vm.amountTemp1 < 0 ? 0 : vm.amountTemp1).toFixed(2));
+            vm.amount = vm.pagar ? vm.amountTemp1 : vm.amountTemp;
+          }
+
           function onTapConfirmarPagamento() {
             debugger;
             //alert(vm.Excepcional);
@@ -104,7 +128,13 @@
             //  vm.Excepcional
                 if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
                     return;
-            }
+                }
+
+                if (parseInt(vm.amount) < 100) {
+                  DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'Não é permitido cobranças a baixo de 1 Real' });
+                  return;
+                }
+
                 if (!vm.chargeStatus) {
                   vm.chargeStatusDiv = true;
                   vm.etapaDados = false;
@@ -137,10 +167,6 @@
               if (em[1] != undefined) {
                 vm.amount = vm.amount.toString().replace(".", "")
 
-              }
-              if (parseInt(vm.amount) < 100) {
-                DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'Não é permitido cobranças a baixo de 1 Real' });
-                return;
               }
     
                 vm.disableTapPay = true;
@@ -239,7 +265,7 @@
             }
     
             function saveHistoryPayment(idBoleto, acquirer_id){
-                
+              
                 var customerCharging = {
                     Id: vm.customer.Id,
                     Charging:{
@@ -252,13 +278,21 @@
                         AnoVingencia:vm.year,
                         MesVingencia: vm.month,
                       ChargeStatus: vm.chargeStatus,
-                      TransactionId: vm.TransactionId
+                      TransactionId: vm.TransactionId,
+                      ComissionConceded: vm.pagar // need to see the property nameComissionConceded
                     }
                 }
     
-                FoneclubeService.postHistoryPayment(customerCharging).then(function(result){
-                    console.log('FoneclubeService.postHistoryPayment');
-                    console.log(result);
+              FoneclubeService.postHistoryPayment(customerCharging).then(function (result) {
+
+                
+                FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
+                  //alert('success!!');
+                })
+                  .catch(function (error) {
+
+                  })
+                 
                 })
                 .catch(function(error){
                     console.log('catch error');

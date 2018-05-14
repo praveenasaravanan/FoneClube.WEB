@@ -15,9 +15,9 @@
                 </div>-->
               <div style="float: right;" class="checkbox-wrapper">
 
-                <input type="checkbox" ng-model="vm.chargeStatusfirst" ng-change="vm.checkOne('1')" value="1" /><label> Padrao</label>
+                <label><input type="checkbox" ng-model="vm.chargeStatusfirst" ng-change="vm.checkOne('1')" value="1" /> Padrao</label>
                 <br />
-                <input type="checkbox" ng-model="vm.chargeStatusSecond" ng-change="vm.checkOne('2')" value="2" /><label> Excepcional</label>
+                <label><input type="checkbox" ng-model="vm.chargeStatusSecond" ng-change="vm.checkOne('2')" value="2" /> Excepcional</label>
 
               </div>
                 <h4>Dados Cartão de Crédito</h4>
@@ -62,8 +62,24 @@
                 
 
                 <div class="form-group col-xs-12">
-                    <label for="quantia">Quantia:</label>
-                    <input id="quantia" next-on-enter class="form-control" ng-model="vm.amount" money-input type="tel">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Valor R$</th>
+                        <th><label><input type="checkbox" ng-model="vm.pagar" ng-change="vm.calculate()" /> Pagar</label><br />Bonus R$</th>
+                        <th>Valor Com Bonus R$</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td> <input id="quantia2" next-on-enter class="form-control" ng-change="vm.calculate()" ng-model="vm.amountTemp" money-input type="tel"></td>
+                        <td> <input id="quantia1" next-on-enter class="form-control" ng-model="vm.bonus" ng-change="vm.calculate()" money-input type="tel"></td>
+                        <td><input id="quantia" next-on-enter class="form-control" ng-disabled="true" ng-model="vm.amount" money-input type="tel"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                    <!--<label for="quantia">Quantia:</label>
+                    <input id="quantia" next-on-enter class="form-control" ng-model="vm.amount" money-input type="tel">-->
                 </div> 
                 <div class="form-group col-xs-12">
                     <label for="observacao">Observação:</label>
@@ -78,9 +94,9 @@
               <label>É preciso selecionar o tipo de cobrança para prosseguir na operação</label>
               <div class="checkbox-wrapper">
 
-                <input type="checkbox" ng-model="vm.chargeStatusfirst" ng-change="vm.checkOne('1')" value="1" /><label> Padrao</label>
+                <label><input type="checkbox" ng-model="vm.chargeStatusfirst" ng-change="vm.checkOne('1')" value="1" /> Padrao</label>
                 <br />
-                <input type="checkbox" ng-model="vm.chargeStatusSecond" ng-change="vm.checkOne('2')" value="2" /><label> Excepcional</label>
+                <label><input type="checkbox" ng-model="vm.chargeStatusSecond" ng-change="vm.checkOne('2')" value="2" /> Excepcional</label>
 
               </div>
               <button ng-click="vm.onTapCancel()" class="btn btn-danger col-xs-12">VOLTAR</button>
@@ -90,7 +106,7 @@
             <div ng-if="vm.etapaConfirmacao">
                 <div class="form-group col-xs-12">
                     <label for="quantia">Quantia:</label>
-                    <input id="quantia" class="form-control" ng-disabled="true" value="{{vm.amount/100 | currency:'R$' : 2}}" type="text">
+                    <input id="quantia" class="form-control" ng-disabled="true" value="{{vm.amount | currency:'R$' : 2}}" type="text">
                 </div> 
                 <div class="form-group col-xs-12">
                     <label for="metodo">Método:</label>
@@ -104,8 +120,8 @@
                         </uib-accordion-heading>
                         <div class="accordion-container">
                             <p>Data e hora: <strong>{{history.PaymentDate}}.</strong> </p>
-                            <p>Comentário: <strong>{{history.Comment}}.</strong> </p>
-                            <p>Valor: <strong>{{history.Ammount / 100 }} R$ </strong> </p>
+                            <p>Comentário: <strong>{{vm.comment}}.</strong> </p>
+                            <p>Valor: <strong>{{ vm.amount }} R$ </strong> </p>
                             <p>Tipo: <strong>{{history.descriptionType}} </strong> </p>
                             <p>Agente: <strong>{{history.CollectorName }} </strong> </p>
                             <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{history.StatusPayment }} </strong> </p>
