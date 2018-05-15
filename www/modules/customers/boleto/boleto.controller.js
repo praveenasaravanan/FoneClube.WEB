@@ -38,7 +38,7 @@
           vm.amountTemp = 0;
           vm.amountTemp1 = 0;
           vm.bonus = 0;
-            
+          vm.expirationDateField = 3;
             vm.year = new Date().getFullYear().toString();
             vm.month = (new Date().getMonth() + 1).toString();
     
@@ -57,7 +57,7 @@
           var CARTAO = 1;
           var BOLETO = 2;
           init();
-
+          calculate();
           function init() {
             FoneclubeService.getHistoryPayment(customer.Id).then(function (result) {
               vm.histories = result;
@@ -69,8 +69,8 @@
                   vm.comment = history.Comment;
                   vm.amount = history.Ammount / 100;
 
-                  vm.amountTemp = vm.amount;
-                  vm.amountTemp1 = vm.amount;
+                  vm.amountTemp = vm.amount.toFixed(2);
+                  vm.amountTemp1 = vm.amount.toFixed(2);
                 }
                 if (history.PaymentType == BOLETO) {
                   PagarmeService.getStatusBoleto(history.BoletoId).then(function (result) {
@@ -88,7 +88,7 @@
             
 
             FoneclubeService.getCommision(customer.Id).then(function (result) {
-              vm.bonus = result.Ammount;
+              vm.bonus = parseFloat(result.Ammount / 100).toFixed(2);
               calculate();
             })
               .catch(function (error) {
@@ -114,11 +114,21 @@
 
 
           function calculate() {
-            var amount = isNumber(vm.amountTemp) ? vm.amountTemp : parseFloat(vm.amountTemp) / 100;
-            var bonus = isNumber(vm.bonus) ? vm.bonus : parseFloat(vm.bonus) / 100;
-            vm.amountTemp1 = vm.pagar ? parseFloat(parseFloat(amount) - parseFloat(bonus)) : amount;
-            vm.amountTemp1 = ((vm.amountTemp1 < 0 ? 0 : vm.amountTemp1).toFixed(2));
-            vm.amount = vm.pagar ? vm.amountTemp1 : vm.amountTemp;
+            var amount = vm.amountTemp.toString().indexOf('.') > -1 ? parseFloat(vm.amountTemp) : parseFloat(vm.amountTemp) / 100;
+            var bonus = vm.bonus.toString().indexOf('.') > -1 ? parseFloat(vm.bonus) : parseFloat(vm.bonus) / 100;
+            vm.amountTemp1 = vm.pagar ? parseFloat(amount - bonus) : amount;
+            if (vm.pagar) {
+              vm.amount = parseFloat(vm.amountTemp1).toFixed(2);
+            }
+            else {
+              vm.amount = parseFloat(amount).toFixed(2);
+            }
+
+            if (isNaN(vm.amount)) {
+              vm.amount = 0;
+            }
+
+            vm.amountTemp1 = vm.amount;
           }
 
           function onTapConfirmarPagamento() {
@@ -130,8 +140,8 @@
                     return;
                 }
 
-                if (parseInt(vm.amount) < 100) {
-                  DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'Não é permitido cobranças a baixo de 1 Real' });
+                if (parseInt(vm.amount) < 1) {
+                  DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'Não é possível criar uma cobrança com valor inferior a R$1.00. Por favor corrija o valor ou opte por criar uma ordem de serviço com os detalhes desta cobrança.' });
                   return;
                 }
 

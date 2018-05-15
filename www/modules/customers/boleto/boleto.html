@@ -58,9 +58,9 @@
               </thead>
               <tbody>
                 <tr>
-                  <td> <input id="quantia2" next-on-enter class="form-control" ng-change="vm.calculate()" ng-model="vm.amountTemp" money-input type="tel"></td>
-                  <td> <input id="quantia1" next-on-enter class="form-control" ng-model="vm.bonus" ng-change="vm.calculate()"   money-input type="tel"></td>
-                  <td><input id="quantia" next-on-enter class="form-control" ng-disabled="true" ng-model="vm.amountTemp1" money-input type="tel"></td>
+                  <td> <input id="quantia2" money-input type="tel" next-on-enter class="form-control" ng-change="vm.calculate()" ng-model="vm.amountTemp"></td>
+                  <td> <input id="quantia1" money-input type="tel" next-on-enter class="form-control" ng-model="vm.bonus" ng-change="vm.calculate()" ></td>
+                  <td><input id="quantia" next-on-enter class="form-control" ng-disabled="true" ng-model="vm.amountTemp1"></td>
                 </tr>
               </tbody>
             </table>
@@ -119,7 +119,7 @@
         <div ng-if="vm.etapaConfirmacao">
           <div class="form-group col-xs-12">
             <label for="quantia">Quantia:</label>
-            <input id="quantia" class="form-control" ng-disabled="true" value="{{vm.amount | currency:'R$' : 2}}" type="text">
+            <input id="quantia" class="form-control" ng-disabled="true" value="{{vm.amountTemp1 | currency:'R$' : 2}}" type="text">
           </div>
           <div class="form-group col-xs-12">
             <label for="metodo">Método:</label>
@@ -143,7 +143,7 @@
                 </p>
                 <p>
                   Valor:
-                  <strong>{{vm.amount }} R$ </strong>
+                  <strong>{{vm.amountTemp1 }} R$ </strong>
                 </p>
                 <p>
                   Tipo:

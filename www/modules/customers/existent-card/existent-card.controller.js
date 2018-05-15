@@ -34,9 +34,17 @@
         
         vm.year = new Date().getFullYear().toString();
         vm.month = (new Date().getMonth() + 1).toString();
+        vm.calculate = calculate;
+
+        vm.amount = 0;
+        vm.amountTemp = 0;
+        vm.amountTemp1 = 0;
+        vm.bonus = 0;
 
         if (vm.customer.CacheIn) {
-            vm.amount = vm.customer.CacheIn;
+          vm.amount = vm.customer.CacheIn;
+          vm.amountTemp = vm.amount.toFixed(2);
+          vm.amountTemp1 = vm.amount.toFixed(2);
         }
         
         var existentCustomer = {
@@ -47,7 +55,16 @@
             'phone' : getContactPhone(customer)
         }
 
+        init();
+        function init() {
+          FoneclubeService.getCommision(customer.Id).then(function (result) {
+            vm.bonus = parseFloat(result.Ammount / 100).toFixed(2);
+            calculate();
+          })
+            .catch(function (error) {
 
+            });
+        }
 
         vm.Padrão = false;
         vm.Excepcional = false;
@@ -69,10 +86,32 @@
           }
         }
 
+        function calculate() {
+          var amount = vm.amountTemp.toString().indexOf('.') > -1 ? parseFloat(vm.amountTemp) : parseFloat(vm.amountTemp) / 100;
+          var bonus = vm.bonus.toString().indexOf('.') > -1 ? parseFloat(vm.bonus) : parseFloat(vm.bonus) / 100;
+          vm.amountTemp1 = vm.pagar ? parseFloat(amount - bonus) : amount;
+          if (vm.pagar) {
+            vm.amount = parseFloat(vm.amountTemp1).toFixed(2);
+          }
+          else {
+            vm.amount = parseFloat(amount).toFixed(2);
+          }
+
+          if (isNaN(vm.amount)) {
+            vm.amount = 0;
+          }
+
+          vm.amountTemp1 = vm.amount;
+        }
 
         function onTapConfirmarPagamento() {
             if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
                 return;
+            }
+
+            if (parseInt(vm.amount) < 1) {
+              DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'Não é possível criar uma cobrança com valor inferior a R$1.00. Por favor corrija o valor ou opte por criar uma ordem de serviço com os detalhes desta cobrança.' });
+              return;
             }
             if (!vm.chargeStatus) {
               vm.chargeStatusDiv = true;
@@ -101,11 +140,6 @@
             console.log('tap pagar existente')
             console.log(parseInt(vm.amount))
             console.log(card.id)
-            if(parseInt(vm.amount) < 100)
-            {
-                MainComponents.showSimpleToast('Não é permitido cobranças a baixo de 1 Real', 'Aviso');
-                return;
-            }
 
             vm.disableTapPay = true;
             vm.message = 'Iniciando transação';
