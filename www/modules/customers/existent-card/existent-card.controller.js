@@ -140,6 +140,11 @@
             console.log('tap pagar existente')
             console.log(parseInt(vm.amount))
             console.log(card.id)
+            var em = vm.amount.toString().split(".");
+            if (em[1] != undefined) {
+              vm.amount = vm.amount.toString().replace(".", "")
+
+            }
 
             vm.disableTapPay = true;
             vm.message = 'Iniciando transação';
