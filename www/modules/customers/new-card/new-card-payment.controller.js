@@ -215,7 +215,14 @@
 
         function paymentNewCustomer(){
 
-            debugger;
+          debugger;
+
+          var em = vm.amount.toString().split(".");
+          if (em[1] != undefined) {
+            vm.amount = vm.amount.toString().replace(".", "")
+
+          }
+
             vm.disableTapPay = true;
 
             PagarmeService.generateCardHash(cardData).then(function(cardHash){
