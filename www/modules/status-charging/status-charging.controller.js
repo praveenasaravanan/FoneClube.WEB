@@ -76,6 +76,9 @@
 
             function handleData(customers){
                 
+
+                // .toISOString().split('T')[0].replace('-','/').replace('-','/');
+
                 vm.callbackCount = 0;
                 vm.totalBoletoCharges = 0;
                 vm.totalReceived = 0;
@@ -95,8 +98,6 @@
                 for (var index in customers) {
                     var customer = customers[index];
                         
-
-                    // console.log(customer.Name)
                     try{
                         customer.phone = customer.Phones[0].DDD  + customer.Phones[0].Number;
                         var operadora = customer.Phones[0].IdOperator == 1 ? 'Claro': 'Vivo'

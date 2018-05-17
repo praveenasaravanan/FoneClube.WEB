@@ -1,20 +1,21 @@
-(function() {
-'use strict';
+(function () {
+    'use strict';
 
     angular
         .module('foneClub')
         .service('FoneclubeService', FoneclubeService);
 
-    FoneclubeService.inject = ['$q','HTTPService'];
-    function FoneclubeService($q,HTTPService) {
+    FoneclubeService.inject = ['$q', 'HTTPService'];
+    function FoneclubeService($q, HTTPService) {
 
-        // var urlApi = 'http://localhost:57078/api';
+      /// var urlApi = 'http://webapidemo.devworkdemo.com/api';
+     /// var urlApi = 'http://localhost:57078/api';
 
-        //API HOMOL TEMP
+        //API HOMOL dispatchedCommision
         var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API QUE VAI SER PROD
-    //   var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
+       ///var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -27,10 +28,10 @@
         this.postChargingClient = postChargingClient;
         this.postChargingClientCommitCard = postChargingClientCommitCard;
         this.postCustomerParent = postCustomerParent;
-        this.postUpdatePagarmeID = postUpdatePagarmeID ;
+        this.postUpdatePagarmeID = postUpdatePagarmeID;
         this.postSendEmail = postSendEmail;
         this.postGeraBoleto = postGeraBoleto
-        this.postCustomerComment = postCustomerComment ;
+        this.postCustomerComment = postCustomerComment;
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
         this.getOperators = getOperators;
@@ -40,427 +41,449 @@
         this.getCustomerByPhoneNumber = getCustomerByPhoneNumber;
         this.getCustomerById = getCustomerById;
         this.getChargingClients = getChargingClients;
-        this.getTblServiceOrders=getTblServiceOrders;
-        this.getCustomerParentByPhone=getCustomerParentByPhone;
-        this.getAllParents=getAllParents;
-        this.getLastPaymentType=getLastPaymentType
+        this.getTblServiceOrders = getTblServiceOrders;
+        this.getCustomerParentByPhone = getCustomerParentByPhone;
+        this.getAllParents = getAllParents;
+        this.getLastPaymentType = getLastPaymentType
         this.getStatusBlockedClaro = getStatusBlockedClaro;
         this.getChargeAndServiceOrderHistory = getChargeAndServiceOrderHistory;
         this.getChargeAndServiceOrderHistoryDinamic = getChargeAndServiceOrderHistoryDinamic;
-      this.getStatusCharging = getStatusCharging;
-      this.SendEmailStatus = SendEmailStatus;
-      
-        
-        function getLastPaymentType(customer){
+        this.getStatusCharging = getStatusCharging;
+       this.SendEmailStatus = SendEmailStatus;
+      this.getEmailDetails = getEmailDetails;
+      this.saveemail = saveemail;
+        this.getDataPgt = getDataPgt;
+      this.getCommision = getCommision;
+      this.dispatchedCommision = dispatchedCommision;
+
+        function getLastPaymentType(customer) {
             debugger;
-            var q=$q.defer();
+            var q = $q.defer();
             HTTPService.get(urlApi.concat('/profile/getpaymentmethod?personID='.concat(customer.Id)))
-            .then(function(result){
-                debugger;
-                q.resolve(result);
-            })
-            .catch(function(error){
-                debugger;
-                q.reject(error);
-            });
+                .then(function (result) {
+                    debugger;
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    debugger;
+                    q.reject(error);
+                });
 
-            return q.promise; 
-        }
-        
-        function getCustomerParentByPhone(phoneparent,personid){            
-            
-            var q=$q.defer();
-            HTTPService.get(urlApi.concat('/profile/customer/GetParentbyPhone?phoneparent='+phoneparent+ '&personid='+personid))
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
-
-            return q.promise; 
-            
+            return q.promise;
         }
 
-        function getAllParents(){
+        function getCustomerParentByPhone(phoneparent, personid) {
+
+            var q = $q.defer();
+            HTTPService.get(urlApi.concat('/profile/customer/GetParentbyPhone?phoneparent=' + phoneparent + '&personid=' + personid))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+
+        }
+
+        function getAllParents() {
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/profile/customer/GetParentAll'))
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
 
-        function getStatusCharging(month, year){
+        function getStatusCharging(month, year) {
             var q = $q.defer();
-            
+
             HTTPService.get(urlApi.concat('/charging/cobranca/status/vingencia/mes/' + month + '/ano/' + year))
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
 
-        function postCustomerComment(commentDetails){
-            
-            
-            var q=$q.defer();
-            HTTPService.post(urlApi.concat('/profile/comment'), commentDetails)
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+        function postCustomerComment(commentDetails) {
 
-            return q.promise; 
-            
+
+            var q = $q.defer();
+            HTTPService.post(urlApi.concat('/profile/comment'), commentDetails)
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+
         }
-        
-        
-        function postUpdatePerson(personCheckout){
+
+
+        function postUpdatePerson(personCheckout) {
             var q = $q.defer();
 
             HTTPService.post(urlApi.concat('/profile/update'), personCheckout)
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
 
-        function postDeletePerson(personCheckout){
+        function postDeletePerson(personCheckout) {
             var q = $q.defer();
 
             HTTPService.post(urlApi.concat('/profile/delete/customer'), personCheckout)
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
 
-        function postUpdatePersonAdress(personCheckout){
+        function postUpdatePersonAdress(personCheckout) {
             var q = $q.defer();
 
             HTTPService.post(urlApi.concat('/profile/updateAdress'), personCheckout)
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
 
-        function postBasePerson(personCheckout){
+        function postBasePerson(personCheckout) {
             var q = $q.defer();
 
             HTTPService.post(urlApi.concat('/profile/insert'), personCheckout)
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
 
-        function postCheckout(personCheckout){
+        function postCheckout(personCheckout) {
             var q = $q.defer();
 
             HTTPService.post(urlApi.concat('/profile/cadastro'), personCheckout)
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
 
-        function postHistoryPayment(personCharging){
+        function postHistoryPayment(personCharging) {
             var q = $q.defer();
 
             HTTPService.post(urlApi.concat('/profile/charging/insert'), personCharging)
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
-        
-        function postUpdateCustomer(customer){
+
+        function postUpdateCustomer(customer) {
             var q = $q.defer();
 
             HTTPService.post(urlApi.concat('/profile/customer/update'), customer)
-            .then(function(data){
-                q.resolve(data);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
-        
+
         function postOrderServicePerson(param) {
             var q = $q.defer();
 
             HTTPService.post(urlApi.concat('/profile/service/order'), param)
-            .then(function(data){
-                q.resolve(data);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
 
 
-        function postUpdatePagarmeID(customer){
+        function postUpdatePagarmeID(customer) {
             // customer/pagarme/id/insert
             var q = $q.defer();
-            
-                        HTTPService.post(urlApi.concat('/profile/customer/pagarme/id/insert'), customer)
-                        .then(function(data){
-                            q.resolve(data);
-                        })
-                        .catch(function(error){
-                            q.reject(error);
-                        });
-            
-                        return q.promise;
+
+            HTTPService.post(urlApi.concat('/profile/customer/pagarme/id/insert'), customer)
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
         }
 
         function postChargingClient(year, month, param) {
             var q = $q.defer();
             HTTPService.post(urlApi.concat('/charging/').concat(year).concat('/').concat(month).concat('/clients/').concat(param.ClientId).concat('/charging'), param)
-            .then(function(data){
-                q.resolve(data);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
             return q.promise;
         }
 
         function postChargingClientCommitCard(year, month, chargingId, param) {
             var q = $q.defer();
             HTTPService.post(urlApi.concat('/charging/').concat(year).concat('/').concat(month).concat('/clients/').concat(param.ClientId).concat('/charging/').concat(chargingId), param)
-            .then(function(data){
-                q.resolve(data);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
             return q.promise;
         }
 
         function postCustomerParent(param) {
             var q = $q.defer();
             HTTPService.post(urlApi.concat('/profile/customer/parent/insert'), param)
-            .then(function(data){
-                q.resolve(data);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
             return q.promise;
         }
 
         function postSendEmail(param) {
             var q = $q.defer();
             HTTPService.post(urlApi.concat('/email/send'), param)
-            .then(function(data){
-                q.resolve(data);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
             return q.promise;
         }
 
-        function postGeraBoleto(){
+        function postGeraBoleto() {
             var q = $q.defer();
             HTTPService.post(urlApi.concat('/pagarme/boleto'), param)
-            .then(function(data){
-                q.resolve(data);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
             return q.promise;
         }
 
-        function getPlans(){
+        function getPlans() {
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/account/plans'))
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
+
+      function getCommision(customerId) {
+        var q = $q.defer();
         
-        function getCustomerPlans(register){
+        HTTPService.get(urlApi.concat('/comission/customer/').concat(customerId))
+          .then(function (result) {
+            q.resolve(result);
+          })
+          .catch(function (error) {
+            q.reject(error);
+          });
+
+        return q.promise;;
+      }
+
+      function dispatchedCommision(customerId) {
+        var q = $q.defer();
+        HTTPService.get(urlApi.concat('/customer/').concat(customerId).concat('/dispatched'))
+          .then(function (result) {
+            q.resolve(result);
+          })
+          .catch(function (error) {
+            q.reject(error);
+          });
+
+        return q.promise;;
+      }
+
+        function getCustomerPlans(register) {
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/profile/customer/plans?documentNumber=').concat(register.toString()))
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
 
-        function getOperators(){
+        function getOperators() {
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/account/operators'))
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
-        
-        function getCustomerByCPF(param){
+
+        function getCustomerByCPF(param) {
 
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/profile/cliente?documentRegister='.concat(param)))
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
 
-        function getStatusBlockedClaro(ddd,numeroLinha){
-            
+        function getStatusBlockedClaro(ddd, numeroLinha) {
+
             var q = $q.defer();
 
-            HTTPService.get(urlApi.concat('/manager/phones/claro/status/linha/ddd/'+ ddd + '/numeroLinha/'+numeroLinha))
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+            HTTPService.get(urlApi.concat('/manager/phones/claro/status/linha/ddd/' + ddd + '/numeroLinha/' + numeroLinha))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
 
         // api/manager/phones/claro/status/linha/ddd/{ddd}/numeroLinha/{numeroLinha}
 
-        function getCustomers(){
+        function getCustomers() {
 
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/profile/customers'))
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
 
-        function getHistoryPayment(id){
+        function getHistoryPayment(id) {
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/profile/charges?personID='.concat(id)))
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
-        
-        function getTblServiceOrders(id)
-        {
+
+        function getTblServiceOrders(id) {
             var q = $q.defer();
             HTTPService.get(urlApi.concat('/profile/getorders?personID='.concat(id)))
-            .then(function(result)
-                  {
-                q.resolve(result);
-            })
-            .catch(function(error)
-                  {
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
             return q.promise;
         }
 
-        function getChargeAndServiceOrderHistory(id)
-        {
+        function getChargeAndServiceOrderHistory(id) {
             var q = $q.defer();
             HTTPService.get(urlApi.concat('/profile/getChargeAndServiceOrderHistory?personID='.concat(id)))
-            .then(function(result)
-                  {
-                q.resolve(result);
-            })
-            .catch(function(error)
-                  {
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
             return q.promise;
         }
 
-        function getChargeAndServiceOrderHistoryDinamic(id,index)
-        {
+        function getChargeAndServiceOrderHistoryDinamic(id, index) {
             var q = $q.defer();
             HTTPService.get(urlApi.concat('/profile/getChargeAndServiceOrderHistory?personID='.concat(id)))
-            .then(function(result)
-            {
-                result.indexLista = index
-                q.resolve(result);
-            })
-            .catch(function(error)
-                  {
-                q.reject(error);
-            });
+                .then(function (result) {
+                    result.indexLista = index
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
             return q.promise;
         }
 
@@ -469,40 +492,40 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/profile/phoneOwner'), param)
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
-        
+
         function getCustomerById(id) {
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/profile/cliente/id/'.concat(id)))
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
 
-        function getChargingClients(param){
+        function getChargingClients(param) {
             var q = $q.defer();
-            
+
             HTTPService.get(urlApi.concat('/charging/').concat(param.year).concat('/').concat(param.month).concat('/clients'))
-            .then(function(result){
-                q.resolve(result);
-            })
-            .catch(function(error){
-                q.reject(error);
-            });
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
 
             return q.promise;
         }
@@ -510,7 +533,24 @@
 
       function SendEmailStatus(emaildetails) {
         var q = $q.defer();
-        HTTPService.post(urlApi.concat('/email/sendemailstatus/emaildetails'), emaildetails)
+        HTTPService.postFile(urlApi.concat('/email/sendemailstatus'), emaildetails)
+          .then(function (result) {
+            console.log(result);
+            q.resolve(result);
+          })
+          .catch(function (error) {
+            console.log(error);
+            q.reject(error);
+          });
+
+        return q.promise;
+      }
+
+
+      function getEmailDetails(emaildetails) {
+        var q = $q.defer();
+
+        HTTPService.post(urlApi.concat('/email/getEmailDetails'), emaildetails)
           .then(function (result) {
             q.resolve(result);
           })
@@ -520,6 +560,34 @@
 
         return q.promise;
       }
+
+      function saveemail(emaildetails) {
+        var q = $q.defer();
+
+        HTTPService.post(urlApi.concat('/email/saveEmailDetails'), emaildetails)
+          .then(function (result) {
+            q.resolve(result);
+          })
+          .catch(function (error) {
+            q.reject(error);
+          });
+
+        return q.promise;
+      }
+
+        function getDataPgt(idPargarme) {
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/pagarme/transacao/dataUltimoPagamento/') + idPargarme)
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
 
     }
 })();

@@ -21,6 +21,8 @@
         vm.amount = '';
         vm.comment = '';
         vm.cobrancaRealizada = false;
+        vm.chargeDisabled = true;
+        vm.checkOne = checkOne;
         console.log('ExistentCardPaymentModalController');
         vm.onTapPagar = onTapPagar;
         vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
@@ -32,9 +34,17 @@
         
         vm.year = new Date().getFullYear().toString();
         vm.month = (new Date().getMonth() + 1).toString();
+        vm.calculate = calculate;
+
+        vm.amount = 0;
+        vm.amountTemp = 0;
+        vm.amountTemp1 = 0;
+        vm.bonus = 0;
 
         if (vm.customer.CacheIn) {
-            vm.amount = vm.customer.CacheIn;
+          vm.amount = vm.customer.CacheIn;
+          vm.amountTemp = vm.amount.toFixed(2);
+          vm.amountTemp1 = vm.amount.toFixed(2);
         }
         
         var existentCustomer = {
@@ -45,19 +55,80 @@
             'phone' : getContactPhone(customer)
         }
 
+        init();
+        function init() {
+          FoneclubeService.getCommision(customer.Id).then(function (result) {
+            vm.bonus = parseFloat(result.Ammount / 100).toFixed(2);
+            calculate();
+          })
+            .catch(function (error) {
+
+            });
+        }
+
+        vm.Padrão = false;
+        vm.Excepcional = false;
         vm.existentCustomer = existentCustomer;
+
+
+        function checkOne(val) {
+          //alert('xx');
+          vm.chargeDisabled = false;
+          if (val == '1') {
+            vm.chargeStatusfirst = true;
+            vm.chargeStatusSecond = false;
+            vm.chargeStatus = 1;
+          }
+          if (val == '2') {
+            vm.chargeStatusSecond = true;
+            vm.chargeStatusfirst = false;
+            vm.chargeStatus = 2;
+          }
+        }
+
+        function calculate() {
+          var amount = vm.amountTemp.toString().indexOf('.') > -1 ? parseFloat(vm.amountTemp) : parseFloat(vm.amountTemp) / 100;
+          var bonus = vm.bonus.toString().indexOf('.') > -1 ? parseFloat(vm.bonus) : parseFloat(vm.bonus) / 100;
+          vm.amountTemp1 = vm.pagar ? parseFloat(amount - bonus) : amount;
+          if (vm.pagar) {
+            vm.amount = parseFloat(vm.amountTemp1).toFixed(2);
+          }
+          else {
+            vm.amount = parseFloat(amount).toFixed(2);
+          }
+
+          if (isNaN(vm.amount)) {
+            vm.amount = 0;
+          }
+
+          vm.amountTemp1 = vm.amount;
+        }
 
         function onTapConfirmarPagamento() {
             if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
                 return;
             }
-            vm.etapaDados = false;
-            vm.etapaConfirmacao = true;
+
+            if (parseInt(vm.amount) < 1) {
+              DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'Não é possível criar uma cobrança com valor inferior a R$1.00. Por favor corrija o valor ou opte por criar uma ordem de serviço com os detalhes desta cobrança.' });
+              return;
+            }
+            if (!vm.chargeStatus) {
+              vm.chargeStatusDiv = true;
+              vm.etapaDados = false;
+              vm.etapaConfirmacao = false;
+            }
+            else {
+              vm.etapaDados = false;
+              vm.etapaConfirmacao = true;
+              vm.chargeStatusDiv = false;
+            }
         }
         
         function onTapCancel(number){
             vm.etapaDados = true;
             vm.etapaConfirmacao = false;
+            vm.chargeStatusDiv = false;
             if (number == 1){
                 vm.amount = 0;
                 vm.comment = '';
@@ -69,10 +140,10 @@
             console.log('tap pagar existente')
             console.log(parseInt(vm.amount))
             console.log(card.id)
-            if(parseInt(vm.amount) < 100)
-            {
-                MainComponents.showSimpleToast('Não é permitido cobranças a baixo de 1 Real', 'Aviso');
-                return;
+            var em = vm.amount.toString().split(".");
+            if (em[1] != undefined) {
+              vm.amount = vm.amount.toString().replace(".", "")
+
             }
 
             vm.disableTapPay = true;
@@ -82,7 +153,7 @@
                 debugger;
                 PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function(result){
                         vm.message = 'Transação concluída';
-
+                        vm.TransactionId = result.tid;
                         var emailObject = {
                             'To': vm.existentCustomer.email, //vm.existentCustomer
                             'TargetName' : vm.existentCustomer.name,
@@ -136,7 +207,9 @@
                     CollectorName: MainUtils.getAgent(),
                     PaymentType: CARTAO,
                     AnoVingencia:vm.year,
-                    MesVingencia:vm.month
+                    MesVingencia: vm.month,
+                    ChargeStatus: vm.chargeStatus,
+                    TransactionId: vm.TransactionId
                 }
             }
             FoneclubeService.postHistoryPayment(customerCharging).then(function(result){

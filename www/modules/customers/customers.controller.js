@@ -6,8 +6,12 @@
         .controller('CustomersController', CustomersController);
 
     // <<<<<<< HEAD
-    CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService'];
-    function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService) {
+  CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService', 'localStorageService'];
+  function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService,localStorageService) {
+    var checkvalidate = localStorageService.get("userid");
+    if (checkvalidate == null) {
+      FlowManagerService.changeLoginView();
+    }
         var vm = this;
         vm.data = DataFactory;
         vm.onTapCustomer = onTapCustomer;
@@ -20,6 +24,8 @@
         vm.onTapExcluir = onTapExcluir;
         vm.CustomerAsc = CustomerAsc;
         vm.CustomerDesc = CustomerDesc;
+        vm.dataPgtList = [];        
+     //   vm.data.customers = [];
         // =======
         //     CustomersController.inject = ['PagarmeService', '$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', 'UtilsService'];
         //     function CustomersController(PagarmeService, $ionicPopup, $ionicModal, $scope, ViewModelUtilsService, FoneclubeService, MainComponents, MainUtils, UtilsService) {
@@ -37,7 +43,7 @@
             //alert(vm.search);
             //return vm.search;
             //return vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~\s]/g, '');
-            return vm.search.replace(/[-!#$%&'()*+,\/:;?\[\]\\\_`{|}~]/g, '');
+            return vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
         }
 
         vm.ignoreAccents = function (item) {
@@ -48,14 +54,15 @@
             if (!vm.showall) {
                 var text = removeAccents(item.Name.toLowerCase());
                 //alert(text);
-                var search = removeAccents(vm.search.toLowerCase()).replace(/[-!#$%&'()*+,\/:;?\[\]\\\_`{|}~]/g, '');
+                var search = removeAccents(vm.search.toLowerCase()).replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
                 return text.indexOf(search) > -1;
             }
-            else {
+            else
+            {
                 var objects = [];
                 var jsonstr = JSON.stringify(item);
                 var parsejson = JSON.parse(jsonstr);
-                var searchterm = vm.search.replace(/\)\s/g,'').replace(/[-!#$%&'()*+,\/:;?\[\]\\\_`{|}~]/g, '');
+                var searchterm = vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
                 objects = getKeys(parsejson, searchterm);
                 return objects.length > 0;
             }
@@ -117,15 +124,23 @@
 
             $scope.sortType = 'Nome';
             $scope.sortReverse = false;
-            if (vm.data.customers !== undefined && $scope.clientList==undefined) {
+            vm.showLoader = false;
+            if (vm.data.customers !== undefined && $scope.clientList == undefined) {
+                vm.showLoader = true;
                 init();
+            }
+            if(vm.data.customers !== undefined){
+                if(vm.dataPgtList.length == vm.data.customers.length){
+                    for (var j = 0; j < vm.data.customers.length; j++) {
+                        vm.data.customers[j].dataPgt = vm.dataPgtList[j];
+                    }    
+                }    
             }
             $scope.clientList = vm.data.customers;
 
             return $scope.clientList;
         }, function (data) {
             if (data && data.length > 0) {
-                vm.showLoader = false;
                 getCustomers();
                 if (vm.data.customersCache) {
                     vm.data.customers = angular.copy(vm.data.customersCache);
@@ -167,7 +182,7 @@
 
         function onTapCustomer(customer, index) {
             console.log('customer')
-            console.log(customer)
+            console.log(customer);
             ViewModelUtilsService.showModalCustomer(customer, index);
         }
 
@@ -250,9 +265,9 @@
                 $scope.sortReverse = false;
                 $scope.clientList = vm.data.customers.filter(x => x.LastChargeDate != null);
             } else {
-                $scope.sortType = 'Register';
+                $scope.sortType = 'dataPgt';
                 $scope.sortReverse = false;
-                $scope.clientList = vm.data.customers.filter(x => x.Register != null);
+                $scope.clientList = vm.data.customers.filter(x => x.dataPgt != null);
             }
             FoneclubeService.getPlans().then(function (result) {
                 vm.plans = result;
@@ -269,35 +284,41 @@
                 $scope.sortReverse = false;
                 $scope.clientList = vm.data.customers.filter(x => x.LastChargeDate != null);
             } else {
-                $scope.sortType = '-Register';
+                $scope.sortType = '-dataPgt';
                 $scope.sortReverse = false;
-                $scope.clientList = vm.data.customers.filter(x => x.Register != null);
-            }
+                $scope.clientList = vm.data.customers.filter(x => x.dataPgt != null);
+            } 
         }
 
         function init() {
-            for(var i =0;i<vm.data.customers.length;i++){
+            for (var i = 0; i < vm.data.customers.length; i++) {
                 var customer = vm.data.customers[i];
-                FoneclubeService.getHistoryPayment(customer.Id).then(function (result) {
-                    console.log('FoneclubeService.getHistoryPayment');
-                    console.log(result);
-                    vm.histories = result;
-                    var date = "sfsfsdf" ;
-                    for (var i in vm.histories) {
-                        var history = vm.histories[i];
-                        
+                FoneclubeService.getDataPgt(customer.IdPagarme).then(function (result) {
+                    vm.dataPgtList.push(result);
+                    if(vm.dataPgtList.length == vm.data.customers.length){
+                        for (var j = 0; j < vm.data.customers.length; j++) {
+                            vm.data.customers[j].dataPgt = vm.dataPgtList[j];
+                        }
+                        vm.clientList = vm.data.customers;
+                        vm.showLoader = false;                        
                     }
-                    customer.datapgt = date;
-
                 })
-                    .catch(function (error) {
-                        console.log('catch error');
-                        console.log(error);
-                    });
-    
+                .catch(function (error) {
+                    console.log('catch error');
+                    console.log(error);
+                    vm.dataPgtList.push(null);
+                    if(vm.dataPgtList.length == vm.data.customers.length){
+                        
+                        for (var j = 0; j < vm.data.customers.length; j++) {
+                            vm.data.customers[j].dataPgt = vm.dataPgtList[j];
+                        }
+                        vm.clientList = vm.data.customers;
+                        vm.showLoader = false;
+                    }
+                });
             }
         }
 
-        
+
     }
 })();

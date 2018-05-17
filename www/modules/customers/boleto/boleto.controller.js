@@ -19,19 +19,26 @@
             vm.customer = customer;
             var newCustomer;
             vm.etapaDados = true;
+            vm.chargeDisabled = true;
             vm.cobrancaRealizada = false;
-            vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
+          vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
             vm.comment = '';
             console.log('BoletoModalController');
             vm.onTapPagar = onTapPagar;
             vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
             vm.onTapCancel = onTapCancel;
             vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
-            vm.enviaEmail = true;
-
+            vm.checkOne = checkOne;
+          vm.enviaEmail = true;
+          vm.calculate = calculate;
             vm.years = [2018,2017,2016,2015,2014,2013,2012,2011,2010];
-            vm.months = [1,2,3,4,5,6,7,8,9,10,11,12];
-            
+          vm.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+          vm.amount = 0;
+          vm.amountTemp = 0;
+          vm.amountTemp1 = 0;
+          vm.bonus = 0;
+          vm.expirationDateField = 3;
             vm.year = new Date().getFullYear().toString();
             vm.month = (new Date().getMonth() + 1).toString();
     
@@ -44,14 +51,16 @@
     
             }
 
+          vm.Padrão = false;
+          vm.Excepcional = false;
+
           var CARTAO = 1;
           var BOLETO = 2;
           init();
-
+          calculate();
           function init() {
             FoneclubeService.getHistoryPayment(customer.Id).then(function (result) {
               vm.histories = result;
-              console.log(vm.histories);
               for (var i in vm.histories) {
                 var history = vm.histories[i];
                 history.descriptionType = (history.PaymentType == CARTAO) ? 'Cartão de crédito' : 'Boleto';
@@ -59,6 +68,9 @@
                   vm.commentBoleto
                   vm.comment = history.Comment;
                   vm.amount = history.Ammount / 100;
+
+                  vm.amountTemp = vm.amount.toFixed(2);
+                  vm.amountTemp1 = vm.amount.toFixed(2);
                 }
                 if (history.PaymentType == BOLETO) {
                   PagarmeService.getStatusBoleto(history.BoletoId).then(function (result) {
@@ -73,20 +85,82 @@
               .catch(function (error) {
 
               });
+            
 
+            FoneclubeService.getCommision(customer.Id).then(function (result) {
+              vm.bonus = parseFloat(result.Ammount / 100).toFixed(2);
+              calculate();
+            })
+              .catch(function (error) {
+
+              });
           }
-    
-            function onTapConfirmarPagamento() {
+
+          function checkOne(val) {
+            //alert('xx');
+            vm.chargeDisabled = false;
+            if (val == '1') {
+              vm.chargeStatusfirst = true;
+              vm.chargeStatusSecond = false;
+              vm.chargeStatus = 1;
+            }
+            if (val == '2') {
+              vm.chargeStatusSecond = true;
+              vm.chargeStatusfirst = false;
+              vm.chargeStatus = 2;
+            }
+          }
+
+
+
+          function calculate() {
+            var amount = vm.amountTemp.toString().indexOf('.') > -1 ? parseFloat(vm.amountTemp) : parseFloat(vm.amountTemp) / 100;
+            var bonus = vm.bonus.toString().indexOf('.') > -1 ? parseFloat(vm.bonus) : parseFloat(vm.bonus) / 100;
+            vm.amountTemp1 = vm.pagar ? parseFloat(amount - bonus) : amount;
+            if (vm.pagar) {
+              vm.amount = parseFloat(vm.amountTemp1).toFixed(2);
+            }
+            else {
+              vm.amount = parseFloat(amount).toFixed(2);
+            }
+
+            if (isNaN(vm.amount)) {
+              vm.amount = 0;
+            }
+
+            vm.amountTemp1 = vm.amount;
+          }
+
+          function onTapConfirmarPagamento() {
+            debugger;
+            //alert(vm.Excepcional);
+            //if (!vm.claro) {
+            //  vm.Excepcional
                 if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
                     return;
                 }
-                vm.etapaDados = false;
-                vm.etapaConfirmacao = true;
+
+                if (parseInt(vm.amount) < 1) {
+                  DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'Não é possível criar uma cobrança com valor inferior a R$1.00. Por favor corrija o valor ou opte por criar uma ordem de serviço com os detalhes desta cobrança.' });
+                  return;
+                }
+
+                if (!vm.chargeStatus) {
+                  vm.chargeStatusDiv = true;
+                  vm.etapaDados = false;
+                  vm.etapaConfirmacao = false;
+                }
+                else {
+                  vm.etapaDados = false;
+                  vm.etapaConfirmacao = true;
+                  vm.chargeStatusDiv = false;
+                }
             }
             
             function onTapCancel(number){
                 vm.etapaDados = true;
                 vm.etapaConfirmacao = false;
+                vm.chargeStatusDiv = false;
                 if (number == 1){
                     vm.amount = 0;
                     vm.comment = '';
@@ -103,10 +177,6 @@
               if (em[1] != undefined) {
                 vm.amount = vm.amount.toString().replace(".", "")
 
-              }
-              if (parseInt(vm.amount) < 100) {
-                DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'Não é permitido cobranças a baixo de 1 Real' });
-                return;
               }
     
                 vm.disableTapPay = true;
@@ -154,7 +224,7 @@
                             
     
                             try{
-    
+                              vm.TransactionId = resultCapture.tid;
                                 PagarmeService.notifyCustomerBoleto(resultCapture.id, existentCustomer.email).then(function(resultNotify){
                                 vm.message = 'Boleto gerado com sucesso'
                                 vm.cobrancaRealizada = true;
@@ -205,7 +275,7 @@
             }
     
             function saveHistoryPayment(idBoleto, acquirer_id){
-                
+              
                 var customerCharging = {
                     Id: vm.customer.Id,
                     Charging:{
@@ -216,13 +286,23 @@
                         BoletoId: idBoleto,
                         AcquireId: acquirer_id,
                         AnoVingencia:vm.year,
-                        MesVingencia:vm.month
+                        MesVingencia: vm.month,
+                      ChargeStatus: vm.chargeStatus,
+                      TransactionId: vm.TransactionId,
+                      ComissionConceded: vm.pagar // need to see the property nameComissionConceded
                     }
                 }
     
-                FoneclubeService.postHistoryPayment(customerCharging).then(function(result){
-                    console.log('FoneclubeService.postHistoryPayment');
-                    console.log(result);
+              FoneclubeService.postHistoryPayment(customerCharging).then(function (result) {
+
+                
+                FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
+                  //alert('success!!');
+                })
+                  .catch(function (error) {
+
+                  })
+                 
                 })
                 .catch(function(error){
                     console.log('catch error');

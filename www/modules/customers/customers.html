@@ -25,8 +25,8 @@
                                 <span style="cursor:pointer;" title="Z-To-A" class="glyphicon glyphicon-triangle-top" ng-click="vm.CustomerDesc('Nome')"></span></th>
                             <th>Ultima Cobranca <span title="A-To-Z"  ng-click="vm.CustomerAsc('Hist')" style="cursor:pointer;" class="glyphicon glyphicon-triangle-bottom"></span>
                                 <span style="cursor:pointer;" title="Z-To-A" class="glyphicon glyphicon-triangle-top" ng-click="vm.CustomerDesc('Hist')"></span></th>
-                        <!--    <th>Data Pgt <span title="A-To-Z"  ng-click="vm.CustomerAsc('Pgt')" style="cursor:pointer;" class="glyphicon glyphicon-triangle-bottom"></span>
-                                <span style="cursor:pointer;" title="Z-To-A" class="glyphicon glyphicon-triangle-top" ng-click="vm.CustomerDesc('Pgt')"></span></th> -->
+                            <th>Data Pgt <span title="A-To-Z"  ng-click="vm.CustomerAsc('Pgt')" style="cursor:pointer;" class="glyphicon glyphicon-triangle-bottom"></span>
+                                <span style="cursor:pointer;" title="Z-To-A" class="glyphicon glyphicon-triangle-top" ng-click="vm.CustomerDesc('Pgt')"></span></th> 
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -47,7 +47,7 @@
                         <td><button class="btn btn-primary" ng-click="vm.onTapCustomer(customer, $index)"> <i class="glyphicon glyphicon-edit"></i> </button></td>
                         <td data-title="Nome" style="cursor:pointer;" ng-click="vm.onTapCustomerEdit(customer, $index)"> {{customer.Name}} </td>
                         <td data-title="Ultima Cobranca" style="cursor:pointer;" ng-click="vm.onTapCustomerEdit(customer, $index)"> {{customer.LastChargeDate|date:'dd-MM-yyyy'}} </td>
-                      <!--  <td data-title="Data Pgt" style="cursor:pointer;" ng-click="vm.onTapCustomerEdit(customer, $index)"> {{customer.Register|date:'dd-MM-yyyy'}} </td> -->
+                      <td data-title="Data Pgt" style="cursor:pointer;" ng-click="vm.onTapCustomerEdit(customer, $index)"> {{customer.dataPgt|date:'dd-MM-yyyy'}} </td>
                         
                         <td data-title="Ações">
                           <button class="btn btn-primary" ng-click="vm.onTapBoletoPayment(customer)"><i class="glyphicon glyphicon-retweet"></i></button>
