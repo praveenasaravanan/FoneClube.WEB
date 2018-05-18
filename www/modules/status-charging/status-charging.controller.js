@@ -37,7 +37,7 @@
                     FoneclubeService.getUpdatePagarme().then(function (result) {
                         console.log('result ' + result)
                         if(result)
-                         alert('Lista pagarme atualizada')
+                         alert('Lista pagarme atualizada, por favor recarregue a página sem cache.')
                         else
                             alert('Lista pagarme não atualizada')
 
