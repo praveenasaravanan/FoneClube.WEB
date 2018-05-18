@@ -15,6 +15,7 @@
             vm.totalReceived = '...';
             vm.searchStatusCharging = searchStatusCharging;
             vm.formatAmmout = formatAmmout
+            vm.onTapUpdatePagarme = onTapUpdatePagarme;
             
             var totalRecebidoBoleto = 0;
             var interval;
@@ -22,6 +23,31 @@
             vm.loading = false;
             vm.loadingMessage = 'Carregando...';
 
+            var carregandoPagarme = false;
+            vm.mensagemPagarme = 'Update base Pagarme'
+
+
+            function onTapUpdatePagarme(){
+                console.log('teste');
+                // getUpdatePagarme
+                if(!carregandoPagarme)
+                {
+                    carregandoPagarme = true;
+                    vm.mensagemPagarme = 'Aguarde...';
+                    FoneclubeService.getUpdatePagarme().then(function (result) {
+                        console.log('result ' + result)
+                        if(result)
+                         alert('Lista pagarme atualizada')
+                        else
+                            alert('Lista pagarme não atualizada')
+
+
+                        carregandoPagarme = false; 
+                        vm.mensagemPagarme = 'Update base Pagarme'
+                    });
+                }
+                
+            }
 
             function searchStatusCharging(){
                 // console.log('searchStatusCharging')

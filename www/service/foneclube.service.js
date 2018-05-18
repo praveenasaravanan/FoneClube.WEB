@@ -12,10 +12,10 @@
      /// var urlApi = 'http://localhost:57078/api';
 
         //API HOMOL dispatchedCommision
-        var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+        // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API QUE VAI SER PROD
-       ///var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
+       var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -55,6 +55,7 @@
         this.getDataPgt = getDataPgt;
       this.getCommision = getCommision;
       this.dispatchedCommision = dispatchedCommision;
+      this.getUpdatePagarme = getUpdatePagarme;
 
         function getLastPaymentType(customer) {
             debugger;
@@ -105,6 +106,20 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/charging/cobranca/status/vingencia/mes/' + month + '/ano/' + year))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
+
+        function getUpdatePagarme() {
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/pagarme/transacao/update'))
                 .then(function (result) {
                     q.resolve(result);
                 })
