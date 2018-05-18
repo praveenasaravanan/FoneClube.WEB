@@ -10,12 +10,12 @@
         function PagarmeService($q, HTTPService) {
     
             //live
-            // var apiKey = 'ak_live_fP7ceLSpdBe8gCXGTywVRmC5VTkvN0'
-            // var encriptionKey = 'ek_live_U52ijlxsDgB8mk0rzcJde7HYHzqWYl';
+            var apiKey = 'ak_live_fP7ceLSpdBe8gCXGTywVRmC5VTkvN0'
+            var encriptionKey = 'ek_live_U52ijlxsDgB8mk0rzcJde7HYHzqWYl';
     
             //Testes
-            var apiKey = 'ak_test_rIMnFMFbwNJR1A5RuTmSULl9xxDdoM';
-            var encriptionKey = 'ek_test_5rLvyIU3tqMGHKAj94kpCuqSWT37Ps';
+            // var apiKey = 'ak_test_rIMnFMFbwNJR1A5RuTmSULl9xxDdoM';
+            // var encriptionKey = 'ek_test_5rLvyIU3tqMGHKAj94kpCuqSWT37Ps';
     
             this.getCards = getCards;
             this.getCustomers = getCustomers;
@@ -299,10 +299,16 @@
 
             function getStatusBoletoRecursivo(boletoId, elemento, viewModel,indexCustomerModel, indexChargeModel){
                 var q = $q.defer();
+
+                if(elemento.Name == 'Marcio da Rocha Lima JR')
+                 debugger;
     
                 HTTPService.get('https://api.pagar.me/1/transactions?api_key='.concat(apiKey).concat('&id=').concat(boletoId))
                 .then(function(result){
                     
+
+                    
+
                     try{
                         result[0].elemento = elemento;
                         result[0].vm = viewModel;

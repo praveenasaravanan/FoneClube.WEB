@@ -86,7 +86,7 @@
     
             <tr>
               
-              <td ng-class="{'status-red': !customer.Charged, 'status-green': customer.status == 'PAGO', 'status-blue': customer.status == 'PENDENTE'}">
+              <td ng-class="{'status-red': !customer.Charged, 'status-green': customer.Charged, 'status-blue': customer.selectedCharge.StatusDescription == 'PENDENTE', 'status-yellow': customer.selectedCharge.StatusDescription == 'CARREGANDO' }">
                   <strong>{{customer.selectedCharge.StatusDescription}}</strong>
                   <strong ng-if="customer.selectedCharge.StatusDescription == undefined || customer.selectedCharge.StatusDescription == null"> NÃO COBRADO</strong>
               </td>

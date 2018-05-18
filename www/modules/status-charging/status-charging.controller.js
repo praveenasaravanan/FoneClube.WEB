@@ -133,20 +133,27 @@
 
                     if(customer.Charged)
                     {
-                        customer.status = customer.ChargingValidity[0].PaymentType == 1 ? 'PAGO' : 'CARREGANDO';
+                        // customer.status = customer.ChargingValidity[0].PaymentType == 1 ? 'PAGO' : 'CARREGANDO';
                             customer.registerPayd = false;
                             for(var i in customer.ChargingValidity)
                             {
                                 var charge = customer.ChargingValidity[i];
+
+                                if(charge.PaymentType == 1)
+                                {
+                                    customer.ChargingValidity[i].StatusDescription = 'PAGO'
+                                }
 
                                 if(charge.PaymentType == 2 && charge.BoletoId != 0)
                                 {
                                     PagarmeService.getStatusBoletoRecursivo(charge.BoletoId, customer, vm, index, i).then(function (result) {
                                         
                                         // debugger;
+                                        result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'INVÁLIDO'
+
                                         if(result[0].status == "waiting_payment")
                                         {
-                                            charge.StatusDescription = 'PENDENTE';
+                                            // charge.StatusDescription = 'PENDENTE';
 
                                             // debugger;
                                             result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'PENDENTE'
@@ -188,7 +195,8 @@
         
                                     })
                                 }
-                                else if(charge.BoletoId == 0){
+                                
+                                if(charge.BoletoId == 0 && charge.PaymentType == 2){
                                     if(vm.customers[index].ChargingValidity[i].StatusDescription == 'CARREGANDO')
                                     {
                                         vm.customers[index].ChargingValidity[i].StatusDescription = 'INVÁLIDO'
