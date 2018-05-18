@@ -24,7 +24,7 @@
             vm.loadingMessage = 'Carregando...';
 
             var carregandoPagarme = false;
-            vm.mensagemPagarme = 'Update base Pagarme'
+            vm.mensagemPagarme = 'Refresh DB'
 
 
             function onTapUpdatePagarme(){
@@ -43,7 +43,7 @@
 
 
                         carregandoPagarme = false; 
-                        vm.mensagemPagarme = 'Update base Pagarme'
+                        vm.mensagemPagarme = 'Refresh DB'
                     });
                 }
                 
