@@ -15,10 +15,6 @@
             <div class="form-group col-xs-6 col-sm-1">
                 <button class="btn btn-primary busca-status" ng-click="vm.searchStatusCharging()" ng-disabled="vm.resquenting || vm.loading">Buscar</button>
             </div>
-    
-            <!-- <div on-tap="vm.onTapUpdatePagarme()" class="form-group col-xs-2 col-sm-1 totalizadores massive-selection buttom-mode">
-                <label class="form-check-label buttom-mode" for="exampleCheck1">{{vm.mensagemPagarme}}</label>
-              </div> -->
 
               <div class="form-group col-xs-2 col-sm-1 totalizadores massive-selection">
                 <button class="btn btn-primary busca-status" ng-click="vm.onTapUpdatePagarme()">{{vm.mensagemPagarme}}</button>
@@ -86,7 +82,7 @@
     
             <tr>
               
-              <td ng-class="{'status-red': !customer.Charged, 'status-green': customer.Charged, 'status-blue': customer.selectedCharge.StatusDescription == 'PENDENTE', 'status-yellow': customer.selectedCharge.StatusDescription == 'CARREGANDO' }">
+              <td ng-class="{'status-red': !customer.Charged, 'status-green': customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'INVÁLIDO', 'status-blue': customer.selectedCharge.StatusDescription == 'PENDENTE', 'status-grey': customer.selectedCharge.StatusDescription == 'CARREGANDO' }">
                   <strong>{{customer.selectedCharge.StatusDescription}}</strong>
                   <strong ng-if="customer.selectedCharge.StatusDescription == undefined || customer.selectedCharge.StatusDescription == null"> NÃO COBRADO</strong>
               </td>
