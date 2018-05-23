@@ -24,7 +24,7 @@
         vm.onTapExcluir = onTapExcluir;
         vm.CustomerAsc = CustomerAsc;
         vm.CustomerDesc = CustomerDesc;
-        vm.dataPgtList = [];        
+        vm.dataPgtList = [];
      //   vm.data.customers = [];
         // =======
         //     CustomersController.inject = ['PagarmeService', '$ionicPopup', '$ionicModal', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainComponents', 'MainUtils', 'UtilsService'];
@@ -133,8 +133,8 @@
                 if(vm.dataPgtList.length == vm.data.customers.length){
                     for (var j = 0; j < vm.data.customers.length; j++) {
                         vm.data.customers[j].dataPgt = vm.dataPgtList[j];
-                    }    
-                }    
+                    }
+                }
             }
             $scope.clientList = vm.data.customers;
 
@@ -287,7 +287,7 @@
                 $scope.sortType = '-dataPgt';
                 $scope.sortReverse = false;
                 $scope.clientList = vm.data.customers.filter(x => x.dataPgt != null);
-            } 
+            }
         }
 
         function init() {
@@ -300,7 +300,7 @@
                             vm.data.customers[j].dataPgt = vm.dataPgtList[j];
                         }
                         vm.clientList = vm.data.customers;
-                        vm.showLoader = false;                        
+                        vm.showLoader = false;
                     }
                 })
                 .catch(function (error) {
@@ -308,7 +308,7 @@
                     console.log(error);
                     vm.dataPgtList.push(null);
                     if(vm.dataPgtList.length == vm.data.customers.length){
-                        
+
                         for (var j = 0; j < vm.data.customers.length; j++) {
                             vm.data.customers[j].dataPgt = vm.dataPgtList[j];
                         }

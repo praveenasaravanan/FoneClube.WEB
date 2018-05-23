@@ -9,7 +9,8 @@
                         <span class="input-group-addon" id="sizing-addon2">
                             <i class="glyphicon glyphicon-search"></i>
                         </span>
-                        <input ng-disabled="vm.showall" type="text" class="form-control" placeholder="Buscar(Telefone)" ng-model="vm.search" aria-describedby="sizing-addon2">
+                        <input ng-disabled="vm.showall" type="text" class="form-control" placeholder="Buscar(Telefone)"
+                               ng-model="vm.search" aria-describedby="sizing-addon2">
                     </div>
                 </div>
                 <div class="form-group col-xs-3 col-sm-1" style="margin-top: 10px;">
@@ -22,15 +23,18 @@
                 </div>
                 <div class="form-group col-xs-3 col-sm-2">
                     <div class="input-group">
-                        <input id="chkShowall" type="checkbox" ng-model="vm.showall" ng-change="vm.changedFilterAll()" ng-checked="false" />
+                        <input id="chkShowall" type="checkbox" ng-model="vm.showall" ng-change="vm.changedFilterAll()"
+                               ng-checked="false"/>
                         <label for="chkShowall">Tudo</label>
-                        <input id="linhaAtiva" type="checkbox" ng-model="vm.linhaAtiva" ng-checked="false" ng-disabled="vm.showall" />
+                        <input id="linhaAtiva" type="checkbox" ng-model="vm.linhaAtiva" ng-checked="false"
+                               ng-disabled="vm.showall"/>
                         <label for="linhaAtiva">Linha Ativa</label>
                     </div>
                     <div class="input-group">
-                        <input id="claro" type="checkbox" ng-model="vm.claro" ng-checked="true" ng-disabled="vm.showall" />
+                        <input id="claro" type="checkbox" ng-model="vm.claro" ng-checked="true"
+                               ng-disabled="vm.showall"/>
                         <label for="claro">Claro</label>
-                        <input id="vivo" type="checkbox" ng-model="vm.vivo" ng-checked="true" ng-disabled="vm.showall" />
+                        <input id="vivo" type="checkbox" ng-model="vm.vivo" ng-checked="true" ng-disabled="vm.showall"/>
                         <label for="vivo">Vivo</label>
                     </div>
                 </div>
@@ -39,9 +43,12 @@
                         <span style="font-size:25px;color:red;width:50px" id="sizing-addon2">
                             ALL
                         </span>
-                        <i class="glyphicon glyphicon-ok-circle checkcircle" style="margin-left: 20px;" ng-click="vm.onallchecked()"></i>
-                        <i class="glyphicon glyphicon-remove-circle uncheckcircle" style="margin-left:5px;" ng-click="vm.onallunchecked()"></i>
-                        <button class="btn btn-primary" style="margin-left:10px" ng-click="vm.onShowMore()" ng-disabled="vm.totalDisplayed>vm.Phones.length">
+                        <i class="glyphicon glyphicon-ok-circle checkcircle" style="margin-left: 20px;"
+                           ng-click="vm.onallchecked()"></i>
+                        <i class="glyphicon glyphicon-remove-circle uncheckcircle" style="margin-left:5px;"
+                           ng-click="vm.onallunchecked()"></i>
+                        <button class="btn btn-primary" style="margin-left:10px" ng-click="vm.onShowMore()"
+                                ng-disabled="vm.totalDisplayed>vm.Phones.length">
                             {{vm.showAllText}}
                         </button>
                     </div>
@@ -59,123 +66,146 @@
 
             <table class="s_table">
                 <thead>
-                    <tr>
+                <tr>
 
-                        <th style="width: 40px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">STATUS:</span>
-                            </div>
-                        </th>
+                    <th style="width: 40px;">
+                        <div class="s_cls s_lbl">
+                            <span for="portabilidadeTelefone">STATUS:</span>
+                        </div>
+                    </th>
 
-                        <th style="width: 130px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">TELEFONE:</span>
-                                <span style="cursor:pointer;" title="A-To-Z" ng-click="vm.PhonesAsc('NovoFormatoNumero')" class="glyphicon glyphicon-triangle-bottom"></span>
-                                <span style="cursor:pointer;" title="Z-To-A" ng-click="vm.PhonesDesc('NovoFormatoNumero')" class="glyphicon glyphicon-triangle-top"></span>
-                            </div>
-                        </th>
+                    <th style="width: 130px;">
+                        <div class="s_cls s_lbl">
+                            <span for="portabilidadeTelefone">TELEFONE:</span>
+                            <span style="cursor:pointer;" title="A-To-Z" ng-click="vm.PhonesAsc('NovoFormatoNumero')"
+                                  class="glyphicon glyphicon-triangle-bottom"></span>
+                            <span style="cursor:pointer;" title="Z-To-A" ng-click="vm.PhonesDesc('NovoFormatoNumero')"
+                                  class="glyphicon glyphicon-triangle-top"></span>
+                        </div>
+                    </th>
 
-                        <th style="width: 40px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">ATIVA:</span>
-                            </div>
-                        </th>
+                    <th style="width: 40px;">
+                        <div class="s_cls s_lbl">
+                            <span for="portabilidadeTelefone">ATIVA:</span>
+                        </div>
+                    </th>
 
 
-                        <th style="width: 100px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">Operadora + Plano:</span>
-                                <span style="cursor:pointer;" title="A-To-Z" ng-click="vm.PhonesAsc('IdPlanOption')" class="glyphicon glyphicon-triangle-bottom"></span>
-                                <span style="cursor:pointer;" title="Z-To-A" ng-click="vm.PhonesDesc('IdPlanOption')" class="glyphicon glyphicon-triangle-top"></span>
-                            </div>
-                        </th>
+                    <th style="width: 100px;">
+                        <div class="s_cls s_lbl">
+                            <span for="portabilidadeTelefone">Operadora + Plano:</span>
+                            <span style="cursor:pointer;" title="A-To-Z" ng-click="vm.PhonesAsc('IdPlanOption')"
+                                  class="glyphicon glyphicon-triangle-bottom"></span>
+                            <span style="cursor:pointer;" title="Z-To-A" ng-click="vm.PhonesDesc('IdPlanOption')"
+                                  class="glyphicon glyphicon-triangle-top"></span>
+                        </div>
+                    </th>
 
-                        <th style="width: 100px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">Preco:</span>
-                                <span style="cursor:pointer;" title="A-To-Z" ng-click="vm.PhonesAsc('price')" class="glyphicon glyphicon-triangle-bottom"></span>
-                                <span style="cursor:pointer;" title="Z-To-A" ng-click="vm.PhonesDesc('price')" class="glyphicon glyphicon-triangle-top"></span>
-                            </div>
-                        </th>
+                    <th style="width: 100px;">
+                        <div class="s_cls s_lbl">
+                            <span for="portabilidadeTelefone">Preco:</span>
+                            <span style="cursor:pointer;" title="A-To-Z" ng-click="vm.PhonesAsc('price')"
+                                  class="glyphicon glyphicon-triangle-bottom"></span>
+                            <span style="cursor:pointer;" title="Z-To-A" ng-click="vm.PhonesDesc('price')"
+                                  class="glyphicon glyphicon-triangle-top"></span>
+                        </div>
+                    </th>
 
-                        <th style="width: 100px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">Perfil:</span>
-                                <span style="cursor:pointer;" title="A-To-Z" ng-click="vm.PhonesAsc('')" class="glyphicon glyphicon-triangle-bottom"></span>
-                                <span style="cursor:pointer;" title="Z-To-A" ng-click="vm.PhonesDesc('')" class="glyphicon glyphicon-triangle-top"></span>
-                            </div>
-                        </th>
+                    <th style="width: 100px;">
+                        <div class="s_cls s_lbl">
+                            <span for="portabilidadeTelefone">Perfil:</span>
+                            <span style="cursor:pointer;" title="A-To-Z" ng-click="vm.PhonesAsc('')"
+                                  class="glyphicon glyphicon-triangle-bottom"></span>
+                            <span style="cursor:pointer;" title="Z-To-A" ng-click="vm.PhonesDesc('')"
+                                  class="glyphicon glyphicon-triangle-top"></span>
+                        </div>
+                    </th>
 
-                        <th style="width: 150px;">
-                            <div class="s_cls s_lbl">
-                                <span for="portabilidadeTelefone">APELIDO:</span>
-                                <span style="cursor:pointer;" title="A-To-Z" ng-click="vm.PhonesAsc('NickName')" class="glyphicon glyphicon-triangle-bottom"></span>
-                                <span style="cursor:pointer;" title="Z-To-A" ng-click="vm.PhonesDesc('NickName')" class="glyphicon glyphicon-triangle-top"></span>
-                            </div>
-                        </th>
+                    <th style="width: 150px;">
+                        <div class="s_cls s_lbl">
+                            <span for="portabilidadeTelefone">APELIDO:</span>
+                            <span style="cursor:pointer;" title="A-To-Z" ng-click="vm.PhonesAsc('NickName')"
+                                  class="glyphicon glyphicon-triangle-bottom"></span>
+                            <span style="cursor:pointer;" title="Z-To-A" ng-click="vm.PhonesDesc('NickName')"
+                                  class="glyphicon glyphicon-triangle-top"></span>
+                        </div>
+                    </th>
 
-                        <th style="width: 100px;">
+                    <th style="width: 100px;">
 
-                        </th>
-                    </tr>
+                    </th>
+                </tr>
                 </thead>
                 <tbody style="-webkit-user-select: text;  -moz-user-select: text;  -ms-user-select: text;  user-select: text;">
-                    <tr ng-repeat="phoneNumber in vm.tempPhones| orderBy:sortType  | filter : vm.ignoreAccents |limitTo:vm.totalDisplayed">
+                <!--<tr ng-repeat="phoneNumber in vm.tempPhones| orderBy:sortType  | filter : vm.ignoreAccents |limitTo:vm.totalDisplayed">-->
+                <tr ng-repeat="phoneNumber in vm.tempPhones| orderBy:sortType  | filter : vm.ignoreAccents">
 
-                        <td style="width: 40px;">
-                            <div class="s_cls box-status" ng-style="phoneNumber.StatusOperator">{{phoneNumber.StatusDescription}}</div>
-                        </td>
+                    <td style="width: 40px;">
+                        <div class="s_cls box-status" ng-style="phoneNumber.StatusOperator">
+                            {{phoneNumber.StatusDescription}}
+                        </div>
+                    </td>
 
-                        <td style="width: 130px;text-align: center;">
-                            <div class="s_cls">
-                                <input id="portabilidadeTelefone" ng-change="vm.telephonechanged($index)" next-on-enter class="form-control" ng-model="phoneNumber.NovoFormatoNumero"
-                                    type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject" ng-change="vm.validatePhoneNumber($index)"
-                                    style="width: 120px;">
-                            </div>
-                        </td>
+                    <td style="width: 130px;text-align: center;">
+                        <div class="s_cls">
+                            <input id="portabilidadeTelefone" ng-change="vm.telephonechanged($index)" next-on-enter
+                                   class="form-control" ng-model="phoneNumber.NovoFormatoNumero"
+                                   type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject"
+                                   ng-change="vm.validatePhoneNumber($index)"
+                                   style="width: 120px;">
+                        </div>
+                    </td>
 
-                        <td style="width: 40px;">
-                            <toggle ng-change="vm.activechanged($index)" on="On" off="Off" ng-model="phoneNumber.LinhaAtiva"></toggle>
+                    <td style="width: 40px;">
+                        <toggle ng-change="vm.activechanged($index)" on="On" off="Off"
+                                ng-model="phoneNumber.LinhaAtiva"></toggle>
 
-                        </td>
+                    </td>
 
-                        <td style="width: 100px;">
-                            <div class="s_cls">
-                                <select id="qualPlanoContratar" next-on-enter class="form-control" ng-options="plan.Id as plan.Description for plan in vm.plans "
-                                    ng-model="phoneNumber.IdPlanOption" ng-change="vm.changedPlano($index,phoneNumber.IdPlanOption)"
+                    <td style="width: 100px;">
+                        <div class="s_cls">
+                            <select id="qualPlanoContratar" next-on-enter class="form-control"
+                                    ng-options="plan.Id as plan.Description for plan in vm.plans "
+                                    ng-model="phoneNumber.IdPlanOption"
+                                    ng-change="vm.changedPlano($index,phoneNumber.IdPlanOption)"
                                     style="width: 160px;">
-                                    <option value="">Selecione</option>
-                                </select>
-                            </div>
-                        </td>
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+                    </td>
 
-                        <td style="width: 130px;text-align: center;">
-                            <div class="s_cls">
-                                <input id="preco" next-on-enter class="form-control" ng-focus="vm.onfocusPreco($index)" ng-blur="vm.onBlurPreco($index)" ng-change="vm.pricechanged($index)" ng-model="phoneNumber.price"
-                                    restrict="reject" style="width: 120px;">
-                            </div>
-                        </td>
+                    <td style="width: 130px;text-align: center;">
+                        <div class="s_cls">
+                            <input id="preco" next-on-enter class="form-control" ng-focus="vm.onfocusPreco($index)"
+                                   ng-blur="vm.onBlurPreco($index)" ng-change="vm.pricechanged($index)"
+                                   ng-model="phoneNumber.price"
+                                   restrict="reject" style="width: 120px;">
+                        </div>
+                    </td>
 
-                        <td style="width: 130px;text-align: center;">
-                            <div class="s_cls">
-                                <input id="perfill" next-on-enter class="form-control" restrict="reject" style="width: 120px;">
-                            </div>
-                        </td>
+                    <td style="width: 130px;text-align: center;">
+                        <div class="s_cls">
+                            <input id="perfill" next-on-enter class="form-control" restrict="reject"
+                                   style="width: 120px;">
+                        </div>
+                    </td>
 
-                        <td>
-                            <div class="s_cls">
-                                <input id="comentarioValor" next-on-enter class="form-control" ng-change="vm.nicknamechanged()" ng-model="phoneNumber.NickName"
-                                    type="text" placeholder="Apelido" style="width: 100%;">
-                            </div>
-                        </td>
-                        <td style="display: flex; align-items: center;">
-                            <i class="glyphicon glyphicon-ok-circle checkcircle" ng-click="vm.onchecked( $index)"></i>
-                            <i class="glyphicon glyphicon-remove-circle uncheckcircle" ng-click="vm.onunchecked( $index)"></i>
-                            <button class="btn btn-primary" ng-click="vm.onedit($index)">
-                                <i class="glyphicon glyphicon-option-horizontal"></i>
-                            </button>
-                        </td>
-                    </tr>
+                    <td>
+                        <div class="s_cls">
+                            <input id="comentarioValor" next-on-enter class="form-control"
+                                   ng-change="vm.nicknamechanged()" ng-model="phoneNumber.NickName"
+                                   type="text" placeholder="Apelido" style="width: 100%;">
+                        </div>
+                    </td>
+                    <td style="display: flex; align-items: center;">
+                        <i class="glyphicon glyphicon-ok-circle checkcircle" ng-click="vm.onchecked( $index)"></i>
+                        <i class="glyphicon glyphicon-remove-circle uncheckcircle"
+                           ng-click="vm.onunchecked( $index)"></i>
+                        <button class="btn btn-primary" ng-click="vm.onedit($index)">
+                            <i class="glyphicon glyphicon-option-horizontal"></i>
+                        </button>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

@@ -11,6 +11,8 @@
             
             console.log('--- StatusChargingController --- ' );
 
+            vm.month = new Date().getMonth() + 1;
+            vm.year = new Date().getFullYear();
             vm.totalCharged = '...';
             vm.totalReceived = '...';
             vm.searchStatusCharging = searchStatusCharging;

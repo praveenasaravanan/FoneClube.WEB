@@ -120,7 +120,7 @@
             // if(number % 2)
             // {
             //     vm.customer.Phones[number].StatusOperator = {'background-color':'green'}
-            //     vm.customer.Phones[number].StatusDescription = 'A' 
+            //     vm.customer.Phones[number].StatusDescription = 'A'
             // }
             // else
             // {
@@ -225,15 +225,19 @@
           }, 200);
 
           vm.pricelist = [];
+          vm.pricelistVIP = [];
           for (var i = 0; i < vm.customer.Phones.length; i++) {
             var phoneNumber = vm.customer.Phones[i];
             if (phoneNumber.IdPlanOption == '') {
               vm.pricelist.push(0);
+              vm.pricelistVIP.push(0);
             } else {
               vm.pricelist.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value / 100);
+              vm.pricelistVIP.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value / 100);
+
             }
           }
-
+            // vm.pricelistVIP = vm.pricelist;
           vm.tempPhones = angular.copy(vm.customer.Phones);
 
           vm.sp = 1;
@@ -263,7 +267,7 @@
                 return removeAccents(info.NameParent.toString().toLowerCase()).indexOf(removeAccents(searchTerm.toLowerCase())) > -1;
             });
 
-            // var match = _.filter(response, function (info) {                                
+            // var match = _.filter(response, function (info) {
             //     //alert(info.NameParent);
             //     if(info.NameParent != null)
             //         //return info.NameParent.startsWith(searchTerm);
@@ -408,7 +412,7 @@
           vm.requesting = false;
           return;
         } else {
-          
+
           customerSend.Phones[item].DDD = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).DDD;
           customerSend.Phones[item].Number = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).Number;
         }
@@ -431,7 +435,7 @@
           var right = true;
           for (var item in result) {
             if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {
-              
+
               debugger;
               var msg = 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
                 .concat(arrayFiltered[item].NovoFormatoNumero).concat('</strong>, pertence ao cliente ')
@@ -462,7 +466,7 @@
       }
 
       function runPostUpdateCustomer(customerSend) {
-        
+
         UtilsService.sendImageToUpload(vm.imageSelf, vm.imageFrente, vm.imageVerso).then(function (result) {
           for (var i in result) {
             customerSend.Photos = customerSend.Photos.filter(function (element) {
@@ -484,7 +488,7 @@
             var parentDDD = vm.contactParent.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(0, 2);
             var parentNumber = vm.contactParent.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(2, 11);
           }
-          
+
           var parentName = vm.customer.NameContactParent;
           // debugger;
 
@@ -769,7 +773,7 @@
       }
 
       function postUpdateCustomerSucesscheck(result) {
-        
+
         vm.requesting = false;
         showLoader.close();
       }
@@ -834,7 +838,7 @@
     }
 
     // function getContactParentName() {
-    //     if (vm.contactParent.length < 13) { 
+    //     if (vm.contactParent.length < 13) {
     //         vm.customer.IdParent = "";
     //         return
     //     }
@@ -1213,7 +1217,7 @@
       addHistory();
     }
 
-    vm.changedAutoSum = changedAutoSum;
+     vm.changedAutoSum = changedAutoSum;
     function changedAutoSum() {
       if (vm.autoSum) {
         autmaticSum();
@@ -1224,10 +1228,16 @@
       if (vm.autoSum) {
         vm.singlePriceLocal = 0;
         for (var i = 0; i < vm.pricelist.length; i++) {
-          vm.singlePriceLocal += vm.pricelist[i] ;
+            if(vm.pricelistVIP[i] > 0){
+                vm.singlePriceLocal += vm.pricelistVIP[i] ;
+            }
+            else {
+                vm.singlePriceLocal += vm.pricelist[i] ;
+            }
+
         }
      //   vm.singlePriceLocal = vm.singlePriceLocal / 100;
-     vm.singlePriceLocal = vm.singlePriceLocal.toFixed(2);
+     vm.singlePriceLocal = 'R$'+vm.singlePriceLocal.toFixed(2);
       }
     }
 
