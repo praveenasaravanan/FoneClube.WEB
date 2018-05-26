@@ -68,6 +68,7 @@
             FoneclubeService.getChargeAndServiceOrderHistory(customer.Id).then(function (result) {
                 console.log('FoneclubeService.getChargeAndServiceOrderHistory');
                 console.log(result);
+                // debugger;
                 vm.chargesAndOrders = result;
                 for (var i in vm.chargesAndOrders) {
                     var data = vm.chargesAndOrders[i];
@@ -177,7 +178,7 @@
 
         function initCardList(customerId) {
 
-
+            debugger;
             PagarmeService.getCard(customerId)
                 .then(function (result) {
                     vm.cards = result;

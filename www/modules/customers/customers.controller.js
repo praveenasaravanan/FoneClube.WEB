@@ -291,6 +291,7 @@
         }
 
         function init() {
+            debugger;
             for (var i = 0; i < vm.data.customers.length; i++) {
                 var customer = vm.data.customers[i];
                 FoneclubeService.getDataPgt(customer.IdPagarme).then(function (result) {

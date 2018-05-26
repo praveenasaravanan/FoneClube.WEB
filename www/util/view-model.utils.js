@@ -10,7 +10,7 @@
 
 
         //todo colocar cria~ção na hora do show garantindo sempre limpeza ao abrir
-        this.modalCustomerData = {};        
+        this.modalCustomerData = {};
         this.showModalCustomer = showModalCustomer;
         this.showModalComment=showModalComment;
 
@@ -27,46 +27,46 @@
 
         this.modalBoletoData = {};
         this.modalRepeatBoletoData={};
-        
+
         this.modalCardData={};
         this.modalRepeatCardData={};
       this.showModalBoleto = showModalBoleto;
       this.showModalBoletoPayment = showModalBoletoPayment;
-      
+
         this.showModalRepeatBoleto=showModalRepeatBoleto;
       this.showModalRepeatCard = showModalRepeatCard
       this.showModalEmailDetail = showModalEmailDetail;
-        
+
 
         function showModal(data){
 
             this.modalData = data;
             var service = this;
 
-            DialogFactory.showTemplate('modules/lista-customer/checkout-customer-modal.html');           
+            DialogFactory.showTemplate('modules/lista-customer/checkout-customer-modal.html');
         }
 
         function showModalCustomer(data, index){
             this.modalCustomerData = data;
             this.modalCustomerData.index = index;
             var service = this;
-        
+
             DialogFactory.showTemplate('modules/customers/customers-modal/customer-modal.html');
         }
 
         function showModalNewCardPayment(data){
             this.modalNewCardPaymentData = data;
             var service = this;
-           
+
             DialogFactory.showTemplate('modules/customers/new-card/new-card-payment.html');
         }
-        function showModalComment(data){        
+        function showModalComment(data){
             this.modalCommentData = data;
-            var service = this;          
+            var service = this;
             DialogFactory.showTemplate('modules/customers/comment/comment.html');
         }
-        
-        
+
+
 
         function showModalExistentCardPayment(data,card){
             this.modalExistentCardPaymentData = data;
@@ -77,8 +77,8 @@
         }
 
        function showModalBoleto(data){
-            this.modalBoletoData = data;           
-            var service = this;           
+            this.modalBoletoData = data;
+            var service = this;
 
             DialogFactory.showTemplate('modules/customers/boleto/boleto.html');
        }
@@ -92,17 +92,17 @@
             debugger;
             this.modalBoletoData = data;
             this.modalRepeatBoletoData = payment;
-            var service = this;           
+            var service = this;
             DialogFactory.showTemplate('modules/customers/repeat-boleto/repeat-boleto.html');
         }
         function showModalRepeatCard(payment,data){
             debugger;
             this.modalCardData = data;
             this.modalRepeatCardData = payment;
-            var service = this;           
+            var service = this;
             DialogFactory.showTemplate('modules/customers/repeat-card/repeat-card.html');
         }
-        
+
         function showModalPaymentHistoryDetail(history, customer) {
             this.modalPaymentDetailHistory = history;
             this.modalPaymentDetailCustomer = customer;

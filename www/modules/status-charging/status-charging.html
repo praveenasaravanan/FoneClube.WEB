@@ -1,7 +1,7 @@
 <div class="home" ng-class="{'force-select': vm.selecaoMassiva }">
     <fone-header title="Status de cobrança"></fone-header>
 
-    <div class="row container-data">
+    <div class="row container-data" style="margin-top: 48px;">
         <div class="form-group col-xs-6 col-sm-1">
             <label for="mes">Mês:</label>
             <input type="number" class="form-control" placeholder="Mês" ng-model="vm.month"
@@ -18,7 +18,6 @@
                     ng-disabled="vm.resquenting || vm.loading">Buscar
             </button>
         </div>
-
 
 
         <div class="form-group col-xs-2 col-sm-1 totalizadores massive-selection">
@@ -64,12 +63,14 @@
 
     </div>
 
-    <table class="table table-hover">
+    <!--<table class="table table-hover">-->
+    <table st-table="displayedCollection" st-safe-src="vm.customers"
+           class="table table-striped table-bordered">
         <div ng-if="vm.loading" class="loading-status">{{vm.loadingMessage}}</div>
         <thead ng-show="!vm.loading">
         <tr>
 
-            <th scope="col"><strong>Status</strong></th>
+            <th scope="col" style="text-align: center;"><strong>Status</strong></th>
             <th scope="col"><strong>Última Cobrança</strong></th>
             <th scope="col"><strong>Ultimo pagamento</strong></th>
             <th scope="col"><strong>Nome</strong></th>
@@ -81,14 +82,26 @@
 
         </tr>
         </thead>
-        <tbody ng-repeat="customer in vm.customers" ng-show="!vm.loading">
+        <tbody ng-repeat="customer in displayedCollection" ng-show="!vm.loading">
 
         <tr>
-
-            <td ng-class="{'status-red': !customer.Charged, 'status-green': customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'INVÁLIDO', 'status-blue': customer.selectedCharge.StatusDescription == 'PENDENTE', 'status-grey': customer.selectedCharge.StatusDescription == 'CARREGANDO' }">
-                <strong>{{customer.selectedCharge.StatusDescription}}</strong>
-                <strong ng-if="customer.selectedCharge.StatusDescription == undefined || customer.selectedCharge.StatusDescription == null">
-                    NÃO COBRADO</strong>
+            <td style="text-align: center;">
+            <!--<td ng-class="{'status-red': !customer.Charged, 'status-green': customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'INVÁLIDO', 'status-blue': customer.selectedCharge.StatusDescription == 'PENDENTE', 'status-grey': customer.selectedCharge.StatusDescription == 'CARREGANDO' }">-->
+                <!--<strong>{{customer.selectedCharge.StatusDescription}}</strong>-->
+                <!--<strong ng-if="customer.selectedCharge.StatusDescription == undefined || customer.selectedCharge.StatusDescription == null">-->
+                    <!--NÃO COBRADO</strong>-->
+                <svg height="10" width="10" ng-if="!customer.Charged" style="text-align: center">
+                    <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="red" />
+                </svg>
+                <svg height="10" width="10" ng-if="customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'PENDENTE'">
+                    <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="green" />
+                </svg>
+                <svg height="10" width="10" ng-if="customer.selectedCharge.StatusDescription == 'PENDENTE'">
+                    <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="blue" />
+                </svg>
+                <svg height="10" width="10" ng-if="customer.selectedCharge.StatusDescription == 'CARREGANDO'">
+                    <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="grey" />
+                </svg>
             </td>
 
             <td ng-class="{'status-green': customer.dataIgual == true}"><strong>{{customer.chargingDate}}</strong></td>
@@ -150,6 +163,13 @@
         </tr>
 
         </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5" class="text-center">
+                <div st-pagination="" st-items-by-page="7" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+        </tfoot>
     </table>
 
 </div>
