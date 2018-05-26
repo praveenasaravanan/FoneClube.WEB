@@ -96,12 +96,16 @@
                                 <p>Agente:
                                     <strong>{{chargeAndOrder.Charges.CollectorName }} </strong>
                                 </p>
+                                <p ng-if="vm.boleto_url != ''">
+                                    <a href="{{vm.boleto_url}}">{{vm.boleto_url}}</a>
+                                </p>
+
                                 <!--<p ng-if="chargeAndOrder.Charges.StatusPayment != undefined">Status pagamento:-->
                                     <!--<strong>{{chargeAndOrder.Charges }} </strong>-->
                                 <!--</p>-->
                             </div>
                             <button class="btn btn-info col-xs-12 col-sm-3" ng-click="vm.onTapPaymentHistoryDetail(chargeAndOrder.Charges);"> + Info </button>
-                            &nbsp;&nbsp;&nbsp;&nbsp;vigência: {{chargeAndOrder.CreatedDate | date:'yyyy/MM'}}
+                            &nbsp;&nbsp;&nbsp;&nbsp;vigência: {{chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM'}}
                         </div>
                         <div ng-if="chargeAndOrder.IsServiceOrder">
                             <uib-accordion-heading>

@@ -1,4 +1,4 @@
-<div class="edicao-container">
+<div class="edicao-container" style="margin-top: 48px;">
     <fone-header title="Editar Cadastro"></fone-header>
     <img class="loader" ng-if="vm.showLoader">
     <h2 ng-click="vm.openDados = !vm.openDados" class="form-group col-xs-12 display-3">Dados Iniciais
@@ -371,8 +371,8 @@
                     <td style="width: 130px;text-align: center;">
                         <div class="s_cls">
                             <input type="number" id="preco_vip" next-on-enter class="form-control"
-                                   ng-focus="vm.onfocusPreco($index)" ng-blur="vm.onBlurPreco($index)"
-                                   ng-change="vm.pricechanged($index)" ng-model="vm.pricelistVIP[$index]"
+                                   ng-focus="vm.onfocusPrecoVIP($index)" ng-blur="vm.onBlurPrecoVIP($index)"
+                                   ng-change="vm.pricechangedVIP($index)" ng-model="vm.pricelistVIP[$index]"
                                    restrict="reject" style="width: 120px;">
                         </div>
                     </td>

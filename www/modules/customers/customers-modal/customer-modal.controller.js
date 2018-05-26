@@ -40,6 +40,7 @@
                             var pagarmeID = result[0].id;
                             updatePagarmeId(pagarmeID);
                             initCardList(pagarmeID);
+                            getBoleto_url(pagarmeID);
                             etapaEscolhaCartao();
                         }
                         catch (erro) {
@@ -63,12 +64,13 @@
             else {
                 etapaEscolhaCartao();
                 initCardList(customer.IdPagarme);
+                getBoleto_url(customer.IdPagarme);
             }
 
             FoneclubeService.getChargeAndServiceOrderHistory(customer.Id).then(function (result) {
                 console.log('FoneclubeService.getChargeAndServiceOrderHistory');
                 console.log(result);
-                // debugger;
+                debugger;
                 vm.chargesAndOrders = result;
                 for (var i in vm.chargesAndOrders) {
                     var data = vm.chargesAndOrders[i];
@@ -174,7 +176,25 @@
 
         }
 
+        function getBoleto_url(customerId) {
 
+            debugger;
+            PagarmeService.getBoletoUrl(customerId)
+                .then(function (result) {
+                    if(result.length > 0){
+                        vm.boleto_url = result.boleto_url;
+                    }
+                    vm.boleto_url = '';
+                    console.log('-- boleto url --');
+                    console.log(result);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    // vm.message = 'falha ao recuperar cartão';
+                });
+
+
+        }
 
         function initCardList(customerId) {
 

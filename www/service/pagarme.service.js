@@ -32,6 +32,22 @@
         this.generateCardHash = generateCardHash;
         this.notifyCustomerBoleto = notifyCustomerBoleto;
 
+        this.getBoletoUrl = getBoletoUrl;
+
+        function getBoletoUrl(id) {
+            var q = $q.defer();
+
+            HTTPService.get('https://api.pagar.me/1/transactions?api_key='.concat(apiKey).concat('&id=').concat(id))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
+
 
         function getCards() {
 
