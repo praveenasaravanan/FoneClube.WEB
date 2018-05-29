@@ -7,6 +7,8 @@
     
         StatusChargingController.inject = ['FlowManagerService', 'MainUtils', 'FoneclubeService', 'PagarmeService', '$interval'];
         function StatusChargingController(FlowManagerService, MainUtils, FoneclubeService, PagarmeService, $interval) {
+
+            debugger;
             var vm = this;
             
             console.log('--- StatusChargingController --- ' );
@@ -30,6 +32,7 @@
 
 
             function onTapUpdatePagarme(){
+                debugger;
                 console.log('teste');
                 // getUpdatePagarme
                 if(!carregandoPagarme)
@@ -54,6 +57,7 @@
             function searchStatusCharging(){
                 // console.log('searchStatusCharging')
                 // console.log( vm.month + ' ' + vm.year);
+                debugger;
                 vm.loading = true;
                 vm.totalReceivedReady = false;
 
@@ -85,6 +89,7 @@
             }
 
             function allStatusLoaded(){
+                debugger;
                 for (var index in vm.customers) {
                     
                     for(var i in vm.customers[index].ChargingValidity)
@@ -104,7 +109,7 @@
 
             function handleData(customers){
                 
-
+                debugger;
                 // .toISOString().split('T')[0].replace('-','/').replace('-','/');
 
                 vm.callbackCount = 0;
@@ -230,7 +235,7 @@
             }
 
             function loadPaymentHistory(){
-                
+                debugger;
                 for (var index in vm.customers) {
                    
                     FoneclubeService.getChargeAndServiceOrderHistoryDinamic(vm.customers[index].Id, index).then(function (result) {

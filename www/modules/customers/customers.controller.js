@@ -47,6 +47,7 @@
         }
 
         vm.ignoreAccents = function (item) {
+            // debugger;
             //alert(item.Name);     
             if (!vm.search)
                 return true;
@@ -121,6 +122,7 @@
         }
 
         var getCustomers = $scope.$watch(function () {
+            debugger;
 
             $scope.sortType = 'Nome';
             $scope.sortReverse = false;

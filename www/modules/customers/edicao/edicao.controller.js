@@ -87,6 +87,7 @@
 
     init();
     function init() {
+        debugger;
       if (!vm.cpf) {
         FlowManagerService.changeCustomersView();
         return;
@@ -116,7 +117,7 @@
             vm.customer.Phones[number].StatusOperator = { 'background-color': 'grey' }
             vm.customer.Phones[number].StatusDescription = 'C'
 
-            debugger
+            // debugger
             // if(number % 2)
             // {
             //     vm.customer.Phones[number].StatusOperator = {'background-color':'green'}
@@ -1209,9 +1210,14 @@
 
     vm.pricechanged = pricechanged;
     function pricechanged($index) {
+
       autmaticSum();
     }
+      vm.pricechangedVIP = pricechangedVIP;
+      function pricechangedVIP($index) {
 
+          autmaticSum();
+      }
     vm.nicknamechanged = nicknamechanged;
     function nicknamechanged($index) {
       addHistory();
@@ -1225,6 +1231,7 @@
     }
 
     function autmaticSum() {
+        debugger;
       if (vm.autoSum) {
         vm.singlePriceLocal = 0;
         for (var i = 0; i < vm.pricelist.length; i++) {
@@ -1237,7 +1244,7 @@
 
         }
      //   vm.singlePriceLocal = vm.singlePriceLocal / 100;
-     vm.singlePriceLocal = 'R$'+vm.singlePriceLocal.toFixed(2);
+        vm.singlePriceLocal = 'R$'+vm.singlePriceLocal.toFixed(2);
       }
     }
 

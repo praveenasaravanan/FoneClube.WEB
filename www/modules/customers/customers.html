@@ -1,27 +1,23 @@
 <div class="customers-container">
     <fone-header title="Clientes"></fone-header>
     <!-- <<<<<<< HEAD -->
-    <img class="loader" ng-if="vm.showLoader">
-    <div class="col-xs-12" ng-show="!vm.showLoader">
+    <!--<img class="loader" ng-if="vm.showLoader">-->
+    <div class="col-xs-12">
         <div class="form-container" style="margin-top: 50px;">
-            <div class="form-group col-xs-9 col-sm-3">
-                <div class="input-group">
-                    <span class="input-group-addon" id="sizing-addon2"><i class="glyphicon glyphicon-search"></i></span>
-                    <input type="text" class="form-control" placeholder="Buscar" ng-model="vm.search"
-                           aria-describedby="sizing-addon2" id="search" autofocus>
-                </div>
-            </div>
-            <script>
-//                $(document).ready(function () {
-                    $("#search").focus();
-//                });
-            </script>
-            <div class="form-group col-xs-3 col-sm-3">
-                <div class="input-group" style="line-height:35px;">
-                    <input id="chkShowall" type="checkbox" ng-model="vm.showall" ng-checked="false"/>
-                    <label for="chkShowall">Tudo</label>
-                </div>
-            </div>
+            <!--<div class="form-group col-xs-9 col-sm-3">-->
+                <!--<div class="input-group">-->
+                    <!--<span class="input-group-addon" id="sizing-addon2"><i class="glyphicon glyphicon-search"></i></span>-->
+                    <!--<input type="text" class="form-control" placeholder="Buscar" ng-model="vm.search"-->
+                           <!--aria-describedby="sizing-addon2" id="aaaa" autofocus>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="form-group col-xs-3 col-sm-3">-->
+                <!--<div class="input-group" style="line-height:35px;">-->
+                    <!--<input id="chkShowall" type="checkbox" ng-model="vm.showall" ng-checked="false"/>-->
+                    <!--<label for="chkShowall">Tudo</label>-->
+                <!--</div>-->
+            <!--</div>-->
 
             <div class="form-group  table-responsive-vertical shadow-z-1 col-xs-12">
                 <!--<table id="table" class="table table-hover table-condensed table-striped table-bordered">-->
@@ -31,7 +27,7 @@
                     <thead>
                     <tr>
                         <th></th>
-                        <th st-sort="Name" style="cursor: pointer" class="st-sort-ascent">
+                        <th st-sort="Name" style="cursor: pointer;font-weight: bold;" class="st-sort-ascent">
                             <!--<div class="row">-->
                             <!--<div class="col-sm-2" style="margin-top: 5px;">-->
                             Nome
@@ -53,7 +49,7 @@
 
                             <!--</div>-->
                         </th>
-                        <th st-sort="LastChargeDate" style="cursor: pointer">
+                        <th st-sort="LastChargeDate" style="cursor: pointer;font-weight: bold;">
                             <!--<div class="row">-->
                             <!--<div class="col-sm-4" style="margin-top: -4px;">-->
                             Ultima Cobranca
@@ -72,7 +68,7 @@
                             <!--</div>-->
                             <!--</div>-->
                         </th>
-                        <th st-sort="dataPgt" style="cursor: pointer">
+                        <th st-sort="dataPgt" style="cursor: pointer;font-weight: bold;">
                             <!--<div class="row">-->
                             <!--<div class="col-sm-3" style="margin-top: -4px;">-->
                             Data Pgt
@@ -93,14 +89,23 @@
 
                             <!--</div>-->
                         </th>
-                        <th>Ações</th>
+                        <th style="font-weight: bold;">Ações</th>
                     </tr>
                     </thead>
+                    <tr>
+
+                        <th colspan="5"><input st-search="" class="form-control" placeholder="Buscar" type="text" id="aaaa" autofocus/></th>
+
+                    </tr>
                     <tbody style="-webkit-user-select: text;-moz-user-select: text;-ms-user-select: text;user-select: text;">
 
 
-                    <tr ng-repeat="customer in displayedCollection | orderBy:sortType:sortReverse | filter : vm.ignoreAccents">
-
+                    <tr ng-repeat="customer in displayedCollection">
+                        <script>
+                            //                        $(document).ready(function(){
+                            document.getElementById("aaaa").focus();
+                            //                        });
+                        </script>
                         <td>
                             <button class="btn btn-primary" ng-click="vm.onTapCustomer(customer, $index)"><i
                                     class="glyphicon glyphicon-edit"></i></button>
@@ -126,7 +131,6 @@
                             <!--<button class="btn btn-danger" ng-click="vm.onTapExcluir(customer)" > Excluir cliente </button>-->
                         </td>
                     </tr>
-
                     </tbody>
                     <tfoot>
                     <tr>
@@ -135,11 +139,18 @@
                         </td>
                     </tr>
                     </tfoot>
+
                 </table>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#aaaa").focus();
+    });
+</script>
 <!-- =======
 
     <ion-content class="posicao-inicial" overflow-scroll="true">
