@@ -87,7 +87,7 @@
         }
 
         function calculate() {
-            debugger;
+            debugger
           var amount = vm.amountTemp.toString().indexOf('.') > -1 ? parseFloat(vm.amountTemp) : parseFloat(vm.amountTemp) / 100;
           var bonus = vm.bonus.toString().indexOf('.') > -1 ? parseFloat(vm.bonus) : parseFloat(vm.bonus) / 100;
           vm.amountTemp1 = vm.pagar ? parseFloat(amount - bonus) : amount;
