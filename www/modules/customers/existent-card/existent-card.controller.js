@@ -26,6 +26,11 @@
         console.log('ExistentCardPaymentModalController');
         vm.onTapPagar = onTapPagar;
         vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
+
+        // listener for changing date time
+        vm.onDate_time = onDate_time;
+        vm.date_time_selected = false;
+
         vm.onTapCancel = onTapCancel;
         vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
 
@@ -34,6 +39,7 @@
         
         vm.year = new Date().getFullYear().toString();
         vm.month = (new Date().getMonth() + 1).toString();
+        vm.date_time = new Date().getFullYear().toString();
         vm.calculate = calculate;
 
         vm.amount = 0;
@@ -70,6 +76,12 @@
         vm.Excepcional = false;
         vm.existentCustomer = existentCustomer;
 
+
+        function onDate_time(date_time) {
+            if(date_time){
+                vm.date_time_selected = true;
+            }
+        }
 
         function checkOne(val) {
           //alert('xx');

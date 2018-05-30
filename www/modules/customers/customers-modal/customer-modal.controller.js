@@ -172,6 +172,7 @@
 
         function onTapComment() {
             console.log('onTapComment');
+            debugger
             ViewModelUtilsService.showModalComment(customer);
 
         }
