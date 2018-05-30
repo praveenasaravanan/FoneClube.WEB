@@ -214,7 +214,7 @@
         }
 
         function onTapCard(card) {
-
+            debugger;
             //vm.card = card;
             //etapaQuantia();
             console.log('onTapCard')
