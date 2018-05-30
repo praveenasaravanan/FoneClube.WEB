@@ -87,6 +87,7 @@
         }
 
         function calculate() {
+            debugger;
           var amount = vm.amountTemp.toString().indexOf('.') > -1 ? parseFloat(vm.amountTemp) : parseFloat(vm.amountTemp) / 100;
           var bonus = vm.bonus.toString().indexOf('.') > -1 ? parseFloat(vm.bonus) : parseFloat(vm.bonus) / 100;
           vm.amountTemp1 = vm.pagar ? parseFloat(amount - bonus) : amount;
@@ -105,6 +106,7 @@
         }
 
         function onTapConfirmarPagamento() {
+            debugger;
             if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
                 return;
             }
@@ -126,6 +128,7 @@
         }
         
         function onTapCancel(number){
+            debugger;
             vm.etapaDados = true;
             vm.etapaConfirmacao = false;
             vm.chargeStatusDiv = false;
@@ -137,6 +140,7 @@
         }
 
         function onTapPagar(){
+            debugger;
             console.log('tap pagar existente')
             console.log(parseInt(vm.amount))
             console.log(card.id)
@@ -195,6 +199,7 @@
         }
 
         function saveHistoryPayment(){
+            debugger;
             console.log('saveHistoryPayment');
             console.log(MainUtils.getAgent());
             console.log(vm.comment);
@@ -224,6 +229,7 @@
         }
 
         function getContactPhone(customer){
+            debugger;
             var contacts = UtilsService.getContactPhoneFromPhones(customer.Phones);
             if (!contacts || contacts.length == 0 || contacts[0].DDD == '' || contacts[0].Number == '') {
                 DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'É necessário cadastrar Telefone de Contato para este cliente.'});
@@ -237,6 +243,7 @@
         }
         
         function getAddress(customer) {
+            debugger;
             var address = customer.Adresses;
             if (!address || address.length == 0) {
                 DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'É necessário cadastrar um Endereço para este cliente.'});

@@ -15,7 +15,8 @@
         'ui.router',
         'ui.toggle',
         'autoCompleteModule',
-        'smart-table'
+        'smart-table',
+        'g1b.datetime-inputs'
 
     ]);
 
