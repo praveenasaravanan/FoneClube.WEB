@@ -26,10 +26,19 @@
         console.log('ExistentCardPaymentModalController');
         vm.onTapPagar = onTapPagar;
         vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
-
+        // begin for addming comment
         // listener for changing date time
-        vm.onDate_time = onDate_time;
-        vm.date_time_selected = false;
+        vm.onDate = onDate;
+        vm.onTime = onTime;
+        vm.date_selected = false;
+        vm.time_selected = false;
+
+        vm.date = "";
+        vm.time = "";
+
+        vm.onTapAddComment = onTapAddComment;
+
+        // end for adding comment
 
         vm.onTapCancel = onTapCancel;
         vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
@@ -76,13 +85,49 @@
         vm.Excepcional = false;
         vm.existentCustomer = existentCustomer;
 
+        // listener when clicking Schedule button
+        function onTapAddComment(data){
+            debugger;
+            data.intIdPerson=customer.Id;
+            data.txtDescription = "Cartao nao passou R$" + data.amount +" on " + vm.date.toString();
+            // data.dteRegister = ""
+            data.bitPendingInteraction = true;
 
-        function onDate_time(date_time) {
-            if(date_time){
-                vm.date_time_selected = true;
+            // alert(data.txtDescription)
+
+            FoneclubeService.postCustomerComment(data).then(function(result){
+                debugger;
+                console.log(result);
+                if(result){
+                    DialogFactory.showAlertDialog({message: 'Inserido com sucesso'});
+                }
+                else
+                    DialogFactory.showAlertDialog({message: 'Inserido falhou'});
+            })
+                .catch(function(error){
+                    console.log('catch error');
+                    console.log(error);
+                });
+
+        }
+        // listener when selecting date for scheduling
+        function onDate(date) {
+            debugger
+            if(date){
+                vm.date_selected = true;
+                vm.date = date;
             }
         }
 
+        // listener when selecting time for scheduling
+        function onTime(time) {
+            debugger
+            if(time){
+                vm.time_selected = true;
+                vm.time = time;
+                // alert(vm.time)
+            }
+        }
         function checkOne(val) {
           //alert('xx');
           vm.chargeDisabled = false;

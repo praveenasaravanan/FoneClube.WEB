@@ -475,7 +475,7 @@
     z-index: 2;
     top: 4.5em;
     width: 100%;
-    min-width: 350px;
+    min-width: 250px;
     height: auto;
     padding: 0;
     background-color: #efefef;
@@ -786,7 +786,7 @@
     z-index: 2;
     top: 4.5em;
     width: 100%;
-    min-width: 350px;
+    min-width: 200px;
     height: auto;
     padding: 0;
     background-color: #efefef;
