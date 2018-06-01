@@ -24,6 +24,9 @@
         vm.onTapExcluir = onTapExcluir;
         vm.CustomerAsc = CustomerAsc;
         vm.CustomerDesc = CustomerDesc;
+        // vm.checkShowAll = checkShowAll;
+        // listenr for on-change of search box
+        vm.filterCustomer = filterCustomer;
         vm.dataPgtList = [];
      //   vm.data.customers = [];
         // =======
@@ -178,6 +181,14 @@
         //     console.log(error.statusText); // mensagem de erro para tela, caso precise
         // });
 
+        // function checkShowAll() {
+        //
+        // }
+        function filterCustomer() {
+            if(vm.showall){
+                vm.clientList = $filter();
+            }
+        }
         function onTapCustomerEdit(customer, index) {
             FlowManagerService.changeEdicaoView(customer);
         }

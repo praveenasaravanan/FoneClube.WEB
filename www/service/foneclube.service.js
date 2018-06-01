@@ -49,6 +49,8 @@
         this.getChargeAndServiceOrderHistory = getChargeAndServiceOrderHistory;
         this.getChargeAndServiceOrderHistoryDinamic = getChargeAndServiceOrderHistoryDinamic;
         this.getStatusCharging = getStatusCharging;
+
+        this.getStatusChargingOfCustomer = getStatusChargingOfCustomer;
        this.SendEmailStatus = SendEmailStatus;
       this.getEmailDetails = getEmailDetails;
       this.saveemail = saveemail;
@@ -92,6 +94,20 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/profile/customer/GetParentAll'))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
+
+        function getStatusChargingOfCustomer(id, month, year) {
+            var q = $q.defer();
+            debugger
+            HTTPService.get(urlApi.concat('/charging/cobranca/status/vingencia/cliente/'+id+'/mes/' + month + '/ano/' + year))
                 .then(function (result) {
                     q.resolve(result);
                 })

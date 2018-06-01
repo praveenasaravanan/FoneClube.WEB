@@ -79,16 +79,16 @@
                                 <p>Tipo:
                                     <strong>{{chargeAndOrder.Charges.descriptionType}} </strong>
 
-                                    <svg height="10" width="10" ng-if="!vm.customer.Charged" style="text-align: center">
+                                    <svg height="10" width="10" ng-if="!vm.charged_status.Charged" style="text-align: center">
                                         <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="red" />
                                     </svg>
-                                    <svg height="10" width="10" ng-if="vm.customer.Charged && vm.customer.selectedCharge.StatusDescription != 'CARREGANDO' && vm.customer.selectedCharge.StatusDescription != 'PENDENTE'">
+                                    <svg height="10" width="10" ng-if="vm.charged_status.Charged && vm.charged_status.selectedCharge.StatusDescription != 'CARREGANDO' && vm.charged_status.selectedCharge.StatusDescription != 'PENDENTE'">
                                         <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="green" />
                                     </svg>
-                                    <svg height="10" width="10" ng-if="vm.customer.selectedCharge.StatusDescription == 'PENDENTE'">
+                                    <svg height="10" width="10" ng-if="vm.charged_status.selectedCharge.StatusDescription == 'PENDENTE'">
                                         <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="blue" />
                                     </svg>
-                                    <svg height="10" width="10" ng-if="vm.customer.selectedCharge.StatusDescription == 'CARREGANDO'">
+                                    <svg height="10" width="10" ng-if="vm.charged_status.selectedCharge.StatusDescription == 'CARREGANDO'">
                                         <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="grey" />
                                     </svg>
                                     &nbsp;&nbsp;Final: <label ng-if="vm.cards[0]">{{vm.cards[0].last_digits}}</label>

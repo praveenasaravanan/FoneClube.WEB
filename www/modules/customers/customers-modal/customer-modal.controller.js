@@ -8,6 +8,8 @@
     CustomerModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'FoneclubeService', 'FlowManagerService', 'DialogFactory'];
     function CustomerModalController(ViewModelUtilsService, PagarmeService, FoneclubeService, FlowManagerService, DialogFactory) {
         var vm = this;
+        vm.month = new Date().getMonth() + 1;
+        vm.year = new Date().getFullYear();
         vm.onTapNewCardPayment = onTapNewCardPayment;
         vm.onTapBoleto = onTapBoleto;
         vm.onTapCard = onTapCard;
@@ -66,6 +68,12 @@
                 initCardList(customer.IdPagarme);
                 getBoleto_url(customer.IdPagarme);
             }
+            FoneclubeService.getStatusChargingOfCustomer(customer.Id,vm.month,vm.year).then(function (result) {
+                console.log('getStatusChargingOfCustomer')
+                console.log(result)
+                debugger
+                vm.charged_status = result;
+            });
 
             FoneclubeService.getChargeAndServiceOrderHistory(customer.Id).then(function (result) {
                 console.log('FoneclubeService.getChargeAndServiceOrderHistory');
