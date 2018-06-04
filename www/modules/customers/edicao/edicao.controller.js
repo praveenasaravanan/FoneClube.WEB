@@ -242,6 +242,7 @@
           vm.tempPhones = angular.copy(vm.customer.Phones);
 
           vm.sp = 1;
+          debugger
           addHistory();
         });
 
@@ -347,7 +348,7 @@
     }
 
     function onTapSendUser(customer) {
-
+      debugger
      // vm.tempPhones = angular.copy(vm.customer.Phones);
       if (vm.requesting == true) return;
       vm.requesting = true;
@@ -467,7 +468,7 @@
       }
 
       function runPostUpdateCustomer(customerSend) {
-
+        debugger
         UtilsService.sendImageToUpload(vm.imageSelf, vm.imageFrente, vm.imageVerso).then(function (result) {
           for (var i in result) {
             customerSend.Photos = customerSend.Photos.filter(function (element) {
@@ -854,6 +855,7 @@
     // }
 
     function onTapNewPhoneNumber() {
+      debugger
       vm.customer.Phones.push(
         {
           'Id': null,
@@ -877,6 +879,7 @@
     }
 
     function onTapRemoveNewNumber(position) {
+      debugger
       DialogFactory.dialogConfirm({ titulo: 'Excluir Número', mensagem: 'Deseja realmente remover este número?' })
         .then(function (res) {
           if (res) {
@@ -1235,12 +1238,15 @@
       if (vm.autoSum) {
         vm.singlePriceLocal = 0;
         for (var i = 0; i < vm.pricelist.length; i++) {
-            if(vm.pricelistVIP[i] > 0){
-                vm.singlePriceLocal += vm.pricelistVIP[i] ;
-            }
-            else {
-                vm.singlePriceLocal += vm.pricelist[i] ;
-            }
+          if(vm.tempPhones[i].LinhaAtiva){
+              if(vm.pricelistVIP[i] > 0){
+                  vm.singlePriceLocal += vm.pricelistVIP[i] ;
+              }
+              else {
+                  vm.singlePriceLocal += vm.pricelist[i] ;
+              }
+          }
+
 
         }
      //   vm.singlePriceLocal = vm.singlePriceLocal / 100;

@@ -63,7 +63,10 @@
                         is-open="status.open" ng-repeat="chargeAndOrder in vm.chargesAndOrders">
                         <div ng-if="chargeAndOrder.IsCharge">
                             <uib-accordion-heading>
+                                <!--{{vm.chargesAndOrders.length-$index}}ª Cob.   {{ chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM/dd'}}   R${{chargeAndOrder.Charges.Ammount / 100 }}   {{chargeAndOrder.Charges.descriptionType}}-->
+
                                 {{vm.chargesAndOrders.length-$index}}ª Cob.   {{ chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM/dd'}}   R${{chargeAndOrder.Charges.Ammount / 100 }}   {{chargeAndOrder.Charges.descriptionType}}
+
                                 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}" ></i>
                             </uib-accordion-heading>
                             <div class="accordion-container">
@@ -82,16 +85,16 @@
                                     <svg height="10" width="10" ng-if="!vm.charged_status.Charged" style="text-align: center">
                                         <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="red" />
                                     </svg>
-                                    <svg height="10" width="10" ng-if="vm.charged_status.Charged && vm.charged_status.selectedCharge.StatusDescription != 'CARREGANDO' && vm.charged_status.selectedCharge.StatusDescription != 'PENDENTE'">
+                                    <svg height="10" width="10" ng-if="vm.charged_status.Charged && vm.charged_status.ChargingValidity[0].StatusDescription != 'CARREGANDO' && vm.charged_status.ChargingValidity[0].StatusDescription != 'PENDENTE'">
                                         <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="green" />
                                     </svg>
-                                    <svg height="10" width="10" ng-if="vm.charged_status.selectedCharge.StatusDescription == 'PENDENTE'">
+                                    <svg height="10" width="10" ng-if="vm.charged_status.ChargingValidity[0].StatusDescription == 'PENDENTE'">
                                         <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="blue" />
                                     </svg>
-                                    <svg height="10" width="10" ng-if="vm.charged_status.selectedCharge.StatusDescription == 'CARREGANDO'">
+                                    <svg height="10" width="10" ng-if="vm.charged_status.ChargingValidity[0].StatusDescription == 'CARREGANDO'">
                                         <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="grey" />
                                     </svg>
-                                    &nbsp;&nbsp;Final: <label ng-if="vm.cards[0]">{{vm.cards[0].last_digits}}</label>
+                                    &nbsp;&nbsp;<label ng-if="chargeAndOrder.Charges.descriptionType =='Cartão de crédito'">Final: {{vm.cards[0].last_digits}}</label>
                                 </p>
                                 <p>Agente:
                                     <strong>{{chargeAndOrder.Charges.CollectorName }} </strong>
@@ -109,7 +112,7 @@
                         </div>
                         <div ng-if="chargeAndOrder.IsServiceOrder">
                             <uib-accordion-heading>
-                                {{vm.chargesAndOrders.length-$index}}ª O.S.   {{chargeAndOrder.ServiceOrders.Description}}
+                                {{$index}}ª O.S.   {{chargeAndOrder.ServiceOrders.Description}}
                                 <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
                             </uib-accordion-heading>
                             <div class="accordion-container">
