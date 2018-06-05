@@ -83,6 +83,9 @@
                 console.log(result);
                 debugger;
                 vm.chargesAndOrders = result;
+                vm.chargesArray = []
+                vm.osArray = [];
+                vm.osDescArray = [];
                 for (var i in vm.chargesAndOrders) {
                     var data = vm.chargesAndOrders[i];
                     if (data.IsCharge) {
@@ -91,8 +94,21 @@
                         if (data.Charges.PaymentType == BOLETO) {
                             setStatusBoleto(data.Charges);
                         }
+                        vm.chargesArray.push(data)
                     }
+                    if (data.IsServiceOrder){
+                        vm.osArray.push(data);
+                        // vm.chargesAndOrders.pop()
+                    }
+                    // else {
+                    //     vm.osArray.push(vm.chargesAndOrders[i]);
+                    //
+                    // }
                 }
+                for (var i in vm.osArray){
+                    vm.osDescArray.push(vm.osArray[vm.osArray.length-i]);
+                }
+
                 customer.chargesAndOrders = vm.chargesAndOrders;
             });
 
