@@ -1239,7 +1239,7 @@
         vm.singlePriceLocal = 0;
         for (var i = 0; i < vm.pricelist.length; i++) {
           if(vm.tempPhones[i].LinhaAtiva){
-              if(vm.pricelistVIP[i] > 0){
+              if(vm.pricelistVIP[i] >= 0){
                   vm.singlePriceLocal += vm.pricelistVIP[i] ;
               }
               else {
