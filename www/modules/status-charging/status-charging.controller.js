@@ -19,7 +19,6 @@
             vm.totalReceived = '...';
             vm.searchStatusCharging = searchStatusCharging;
             vm.formatAmmout = formatAmmout
-            vm.formaTransaction = formaTransaction
             vm.onTapUpdatePagarme = onTapUpdatePagarme;
             
             var totalRecebidoBoleto = 0;
@@ -292,13 +291,6 @@
 
             function formatAmmout(value){
                 return  parseFloat(parseInt(value) / 100).toString().replace('.',',')
-            }
-
-            function formaTransaction(value){
-                if(value.toString().length < 3)
-                    return '';
-                else
-                    return value;
             }
             
             

@@ -12,10 +12,10 @@
      /// var urlApi = 'http://localhost:57078/api';
 
         //API HOMOL dispatchedCommision
-        // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+        var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API QUE VAI SER PROD
-       var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
+       // var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -248,6 +248,7 @@
         }
 
         function postUpdateCustomer(customer) {
+            debugger
             var q = $q.defer();
 
             HTTPService.post(urlApi.concat('/profile/customer/update'), customer)
@@ -431,7 +432,7 @@
                 .catch(function (error) {
                     q.reject(error);
                 });
-
+            debugger
             return q.promise;
         }
 

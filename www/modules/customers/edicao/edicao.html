@@ -27,11 +27,13 @@
                            ng-model="vm.customer.DocumentNumber" type="text"
                            ng-change="vm.validarCPF()" mask="99.999.999/9999-99" restrict="reject">
                 </div>
-                <div ng-repeat="phoneNumber in vm.customer.Phones | filter: {'IdPlanOption' : 0} | limitTo:1">
+                <!--<div ng-repeat="phoneNumber in vm.customer.Phones | filter: {'IdPlanOption' : 0} | limitTo:1">-->
                     <!--<div class="row">-->
                         <div class="form-group col-sm-3 col-xs-12">
                             <label for="dataNasc">Telefone "atual" de contato:</label>
-                            <input id="dataNasc" next-on-enter class="form-control" ng-model="phoneNumber.NovoFormatoNumero"
+                            <!--<input type="hidden" id="phone_id" value="{{$index}}">-->
+                            <!--<input type="hidden" id="phone_num" value="{{phoneNumber.NovoFormatoNumero}}">-->
+                            <input id="dataNasc" next-on-enter class="form-control" ng-model="vm.actual_phone"
                                    type="tel" placeholder="(xx) 99999-9999"
                                    mask="(99) 9?9999-9999" restrict="reject">
                         </div>
@@ -44,7 +46,7 @@
                             <!--</select>-->
                         <!--</div>-->
                     <!--</div>-->
-                </div>
+                <!--</div>-->
                 <div class="form-group col-sm-3 col-xs-12" style="margin-top: 10px;">
                     <label for="email">Email:</label>
                     <input id="email" next-on-enter class="form-control" ng-model="vm.customer.Email" type="text">

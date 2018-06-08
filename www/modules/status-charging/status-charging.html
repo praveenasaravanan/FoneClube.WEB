@@ -71,14 +71,12 @@
         <tr>
 
             <th scope="col" style="text-align: center;"><strong>Status</strong></th>
-            <th scope="col"><strong>Id</strong></th>
             <th scope="col"><strong>Última Cobrança</strong></th>
             <th scope="col"><strong>Ultimo pagamento</strong></th>
             <th scope="col"><strong>Nome</strong></th>
             <!-- <th scope="col"><strong>Telefones</strong></th>
             <th scope="col"><strong>Detalhes linha</strong></th> -->
             <th scope="col"><strong>Tipo</strong></th>
-            
             <th scope="col"><strong>Valor cobrado cliente</strong></th>
             <!-- <th scope="col"><strong>Teste</strong></th> -->
 
@@ -104,22 +102,6 @@
                 <svg height="10" width="10" ng-if="customer.selectedCharge.StatusDescription == 'CARREGANDO'">
                     <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="grey" />
                 </svg>
-            </td>
-
-            
-            <td>
-                <select
-                        ng-if="customer.ChargingValidity.length > 0"
-                        ng-show="customer.ChargingValidity.length > 1"
-                        ng-model="customer.selectedCharge"
-                        ng-options="vm.formaTransaction(item.TransactionId) for item in customer.ChargingValidity"
-                        ng-init="customer.selectedCharge = customer.ChargingValidity[0]">
-                </select>
-
-
-                <div ng-if="customer.ChargingValidity.length == 1">{{ vm.formaTransaction(customer.ChargingValidity[0].TransactionId) }}</div>
-
-
             </td>
 
             <td ng-class="{'status-green': customer.dataIgual == true}"><strong>{{customer.chargingDate}}</strong></td>
@@ -151,7 +133,6 @@
                 </div>
 
             </td>
-
 
             <td>
                 <select

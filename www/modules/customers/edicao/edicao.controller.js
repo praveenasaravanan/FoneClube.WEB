@@ -93,6 +93,9 @@
         return;
       }
       var showDialog = DialogFactory.showLoader('Carregando dados...');
+
+      var documentnum = UtilsService.clearDocumentNumber(vm.cpf);
+
       FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
         vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
         vm.customer = result;
@@ -227,16 +230,33 @@
 
           vm.pricelist = [];
           vm.pricelistVIP = [];
+          debugger
           for (var i = 0; i < vm.customer.Phones.length; i++) {
             var phoneNumber = vm.customer.Phones[i];
+            if(phoneNumber.PrecoVipStatus){
+                vm.pricelistVIP.push(phoneNumber.AmmountPrecoVip);
+            }
+            else {
+                vm.pricelistVIP.push(0);
+            }
             if (phoneNumber.IdPlanOption == '') {
               vm.pricelist.push(0);
-              vm.pricelistVIP.push(0);
+
             } else {
               vm.pricelist.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value / 100);
-              vm.pricelistVIP.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value / 100);
+              // vm.pricelistVIP.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value / 100);
 
             }
+          }
+            debugger
+          for (var i = 0; i < vm.customer.Phones.length; i++) {
+              var phoneNumber = vm.customer.Phones[i];
+              if(phoneNumber.IdPlanOption == 0){
+                vm.actual_phone = phoneNumber.NovoFormatoNumero;
+                vm.actual_id = i;
+                break
+              }
+
           }
             // vm.pricelistVIP = vm.pricelist;
           vm.tempPhones = angular.copy(vm.customer.Phones);
@@ -358,6 +378,11 @@
 
       }
 
+      for (var i = 0; i < customer.Phones.length; i++){
+          customer.Phones[i].PrecoVipStatus = true
+          customer.Phones[i].AmmountPrecoVip = vm.pricelistVIP[i]
+      }
+      customer.Phones[vm.actual_id].NovoFormatoNumero = vm.actual_phone;
 
       //debugger;
       //return;
@@ -394,6 +419,7 @@
           }
         });
       }
+      debugger
       if (vm.singlePriceLocal) {
         if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
           DialogFactory.showMessageDialog({ mensagem: 'Preço único não pode ser maior do que o preço de todos os planos somados.' });
@@ -403,6 +429,7 @@
         }
       }
 
+      debugger
 
       var digitosMinimosTelefone = 11
       //Regra: o telefone não pode ser incompleto, mass pode estar em branco
@@ -430,6 +457,9 @@
           customerSend.Adresses.splice(i, 1);
       }
       var showLoader = DialogFactory.showLoader('Enviando Dados...');
+
+      debugger
+
       if (arrayFiltered.length == 0) {
         runPostUpdateCustomer(customerSend);
       } else {
@@ -461,6 +491,7 @@
               break;
             }
           }
+          debugger
           if (right) {
             runPostUpdateCustomer(customerSend);
           }
@@ -503,7 +534,7 @@
           }
           debugger;
           FoneclubeService.postCustomerParent(customerObj).then(function (result) {
-            // debugger;
+            debugger;
             if (result)
               FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
             else {
