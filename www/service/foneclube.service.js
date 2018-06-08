@@ -9,7 +9,7 @@
     function FoneclubeService($q, HTTPService) {
 
       /// var urlApi = 'http://webapidemo.devworkdemo.com/api';
-     /// var urlApi = 'http://localhost:57078/api';
+        // var urlApi = 'http://localhost:57078/api';
 
         //API HOMOL dispatchedCommision
         var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
@@ -382,7 +382,7 @@
 
       function dispatchedCommision(customerId) {
         var q = $q.defer();
-        HTTPService.get(urlApi.concat('/customer/').concat(customerId).concat('/dispatched'))
+        HTTPService.post(urlApi.concat('/comission/customer/').concat(customerId).concat('/dispatched'))
           .then(function (result) {
             q.resolve(result);
           })
