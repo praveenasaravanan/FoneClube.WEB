@@ -6,12 +6,16 @@
         .controller('CustomersController', CustomersController);
 
     // <<<<<<< HEAD
-  CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService', 'localStorageService'];
-  function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService,localStorageService) {
+  CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService', 'localStorageService', '$templateCache'];
+  function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService,localStorageService, $templateCache) {
+    
+    
     var checkvalidate = localStorageService.get("userid");
     if (checkvalidate == null) {
       FlowManagerService.changeLoginView();
     }
+
+    
         var vm = this;
         vm.data = DataFactory;
         vm.onTapCustomer = onTapCustomer;
@@ -24,6 +28,7 @@
         vm.onTapExcluir = onTapExcluir;
         vm.CustomerAsc = CustomerAsc;
         vm.CustomerDesc = CustomerDesc;
+        
         // vm.checkShowAll = checkShowAll;
         // listenr for on-change of search box
         vm.filterCustomer = filterCustomer;

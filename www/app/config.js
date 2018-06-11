@@ -62,6 +62,7 @@
         }
       })
       .state('tabs.customers', {
+        cache: false,
         url: "/customers",
         views: {
           'menu-tab': {

@@ -16,8 +16,8 @@
     });
 
 
-  EdicaoController.inject = ['$scope', 'DataFactory', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog', '$http', '$sce', '$rootScope', 'localStorageService'];
-  function EdicaoController($scope, DataFactory, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog, $http, $sce, $rootScope,localStorageService) {
+  EdicaoController.inject = ['$scope', 'DataFactory', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', '$stateParams', 'FlowManagerService', '$timeout', 'HubDevService', '$q', '$ionicScrollDelegate', 'UtilsService', 'DialogFactory', 'ngDialog', '$http', '$sce', '$rootScope', 'localStorageService', '$templateCache'];
+  function EdicaoController($scope, DataFactory, ViewModelUtilsService, FoneclubeService, MainUtils, $stateParams, FlowManagerService, $timeout, HubDevService, $q, $ionicScrollDelegate, UtilsService, DialogFactory, ngDialog, $http, $sce, $rootScope,localStorageService, $templateCache) {
 
     var checkvalidate = localStorageService.get("userid");
     if (checkvalidate == null) {
@@ -87,6 +87,9 @@
 
     init();
     function init() {
+      
+      $templateCache.removeAll();
+      
         debugger;
       if (!vm.cpf) {
         FlowManagerService.changeCustomersView();
@@ -411,6 +414,14 @@
         "SinglePrice": vm.singlePriceLocal,
         "DescriptionSinglePrice": customer.DescriptionSinglePrice
       }
+
+      var newFoneclubeDocument = false;
+      FoneclubeService.getStatusDocument(customerSend.DocumentNumber).then(function (result) {
+        newFoneclubeDocument = result;
+      
+
+      
+
       var totalPriceValidade = 0;
       for (var i in vm.customer.Phones) {
         vm.plans.find(function (element, index, array) {
@@ -463,10 +474,13 @@
       if (arrayFiltered.length == 0) {
         runPostUpdateCustomer(customerSend);
       } else {
+
+        // barrando devido seroutro cpf
+        debugger;
         validadeNumbers(arrayFiltered).then(function (result) {
           var right = true;
           for (var item in result) {
-            if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {
+            if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber) && !newFoneclubeDocument) {
 
               debugger;
               var msg = 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
@@ -593,7 +607,12 @@
         vm.requesting = false;
         showLoader.close();
       }
+
+      });
+      // aqui
     };
+
+
     function onTapSendUserAllCheck(customer) {
 
       // vm.tempPhones = angular.copy(vm.customer.Phones);
@@ -680,6 +699,8 @@
       if (arrayFiltered.length == 0) {
         runPostUpdateCustomer(customerSend);
       } else {
+
+        debugger;
         validadeNumbers(arrayFiltered).then(function (result) {
           var right = true;
           for (var item in result) {
@@ -935,6 +956,9 @@
     }
 
     function validatePhoneNumber(position) {
+
+      debugger;
+
       if (vm.requesting || vm.customer.Phones[position].NovoFormatoNumero.length < 14) return;
       var number = {
         ddd: UtilsService.getPhoneNumberFromStringToJson(vm.customer.Phones[position].NovoFormatoNumero).DDD,

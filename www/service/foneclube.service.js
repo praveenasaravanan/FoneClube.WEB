@@ -9,10 +9,10 @@
     function FoneclubeService($q, HTTPService) {
 
       /// var urlApi = 'http://webapidemo.devworkdemo.com/api';
-        // var urlApi = 'http://localhost:57078/api';
+        var urlApi = 'http://localhost:57078/api';
 
         //API HOMOL dispatchedCommision
-        var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+        // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API QUE VAI SER PROD
        // var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
@@ -49,6 +49,7 @@
         this.getChargeAndServiceOrderHistory = getChargeAndServiceOrderHistory;
         this.getChargeAndServiceOrderHistoryDinamic = getChargeAndServiceOrderHistoryDinamic;
         this.getStatusCharging = getStatusCharging;
+        this.getStatusDocument = getStatusDocument;
 
         this.getStatusChargingOfCustomer = getStatusChargingOfCustomer;
        this.SendEmailStatus = SendEmailStatus;
@@ -552,6 +553,20 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/charging/').concat(param.year).concat('/').concat(param.month).concat('/clients'))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
+
+        function getStatusDocument(documentNumber){
+            var q = $q.defer();
+            
+            HTTPService.get(urlApi.concat('/profile/customer/status/new/document/').concat(documentNumber))
                 .then(function (result) {
                     q.resolve(result);
                 })
