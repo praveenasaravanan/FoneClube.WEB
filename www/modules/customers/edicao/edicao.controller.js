@@ -261,6 +261,16 @@
               }
 
           }
+          if(!vm.actual_phone){
+              for (var i = 0; i < vm.customer.Phones.length; i++) {
+                  var phoneNumber = vm.customer.Phones[i];
+                  if(phoneNumber.LinhaAtiva == false){
+                      vm.actual_phone = phoneNumber.NovoFormatoNumero;
+                      vm.actual_id = i;
+                      break
+                  }
+              }
+          }
             // vm.pricelistVIP = vm.pricelist;
           vm.tempPhones = angular.copy(vm.customer.Phones);
 
@@ -1294,7 +1304,7 @@
         vm.singlePriceLocal = 0;
         for (var i = 0; i < vm.pricelist.length; i++) {
           if(vm.tempPhones[i].LinhaAtiva){
-              if(vm.pricelistVIP[i] >= 0){
+              if(vm.pricelistVIP[i] > 0){
                   vm.singlePriceLocal += vm.pricelistVIP[i] ;
               }
               else {

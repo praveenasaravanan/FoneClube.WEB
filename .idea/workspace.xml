@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a6d44719-43f5-4a41-b934-5971859aa0ea" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/modules/customers/customers-modal/customer-modal.controller.js" afterPath="$PROJECT_DIR$/www/modules/customers/customers-modal/customer-modal.controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/modules/customers/customers-modal/customer-modal.html" afterPath="$PROJECT_DIR$/www/modules/customers/customers-modal/customer-modal.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/service/foneclube.service.js" afterPath="$PROJECT_DIR$/www/service/foneclube.service.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,83 +14,36 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="edicao.controller.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/www/modules/customers/edicao/edicao.controller.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="1235" column="28" lean-forward="true" selection-start-line="1235" selection-start-column="28" selection-end-line="1235" selection-end-column="28" />
-              <folding>
-                <marker date="1528163318517" expanded="true" signature="10523:10541" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="foneclube.service.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/www/service/foneclube.service.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="83">
-              <caret line="489" column="41" lean-forward="true" selection-start-line="489" selection-start-column="41" selection-end-line="489" selection-end-column="41" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="customer-modal.controller.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/www/modules/customers/customers-modal/customer-modal.controller.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="423">
-              <caret line="106" column="17" lean-forward="true" selection-start-line="106" selection-start-column="17" selection-end-line="106" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="customer-modal.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/www/modules/customers/customers-modal/customer-modal.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
-              <caret line="62" column="99" lean-forward="true" selection-start-line="62" selection-start-column="99" selection-end-line="62" selection-end-column="99" />
-              <folding>
-                <element signature="n#style#0;n#h4#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#2;n#div#2;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#1;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#svg#0;n#p#3;n#div#0;n#div#0;n#div#1;n#uib-accordion#1;n#div#2;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-                <element signature="e#9161#9167#0" expanded="true" />
-                <element signature="e#9167#9173#0" expanded="true" />
-                <element signature="e#10166#10172#0" expanded="true" />
-                <element signature="e#10172#10178#0" expanded="true" />
-                <element signature="e#10178#10184#0" expanded="true" />
-                <element signature="e#10184#10190#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="utils.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/www/util/utils.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="19" column="71" lean-forward="false" selection-start-line="19" selection-start-column="71" selection-end-line="19" selection-end-column="71" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="edicao.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/www/modules/customers/edicao/edicao.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6528">
-              <caret line="413" column="75" lean-forward="false" selection-start-line="413" selection-start-column="75" selection-end-line="413" selection-end-column="75" />
+            <state relative-caret-position="6001">
+              <caret line="353" column="64" lean-forward="false" selection-start-line="353" selection-start-column="54" selection-end-line="353" selection-end-column="64" />
               <folding>
-                <element signature="n#td#0;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#3;n#div#0;n#!!top" expanded="false" />
-                <element signature="n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#3;n#div#0;n#!!top" expanded="false" />
-                <element signature="n#td#2;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#3;n#div#0;n#!!top" expanded="false" />
                 <element signature="n#style#0;n#button#1;n#div#4;n#div#0;n#!!top" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="edicao.controller.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/www/modules/customers/edicao/edicao.controller.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="326">
+              <caret line="261" column="67" lean-forward="false" selection-start-line="261" selection-start-column="67" selection-end-line="261" selection-end-column="67" />
+              <folding>
+                <marker date="1528597970000" expanded="true" signature="11514:11532" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="foneclube.service.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/www/service/foneclube.service.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -108,12 +60,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>$filter</find>
-      <find>postCustomerComment</find>
-      <find>onTapAddComment</find>
-      <find>minute</find>
-      <find>toggleEditPopover()</find>
-      <find>selected</find>
       <find>date</find>
       <find>Valor</find>
       <find>chargesAndOrders</find>
@@ -124,20 +70,26 @@
       <find>clientList</find>
       <find>getDataPgt</find>
       <find>vm.data</find>
-      <find>dataPgt</find>
       <find>tempPhones</find>
       <find>Linha Ativa</find>
       <find>showModalExistentCardPayment</find>
       <find>É preciso selecionar o tipo de cobrança para prosseguir na operação</find>
       <find>onTapCard</find>
-      <find>vm.tempPhones</find>
       <find>Enviar</find>
-      <find>postUpdateCustomer</find>
       <find>getPlans</find>
-      <find>vm.pricelist</find>
       <find>getcustomerbycp</find>
       <find>charged_status</find>
       <find>getChargeAndServiceOrderHistory</find>
+      <find>postUpdateCustomer</find>
+      <find>vm.requesting</find>
+      <find>pricelist</find>
+      <find>vm.pricelist</find>
+      <find>onTapSendUser</find>
+      <find>getCustomerByCPF</find>
+      <find>getBoletoUrl</find>
+      <find>contactParent</find>
+      <find>dataPgt</find>
+      <find>vm.tempPhones</find>
     </findStrings>
     <dirStrings>
       <dir>C:\FoneClube.WEB</dir>
@@ -154,10 +106,8 @@
         <option value="$PROJECT_DIR$/www/modules/lista-customer/lista-customer.html" />
         <option value="$PROJECT_DIR$/www/modules/customers/boleto/boleto.html" />
         <option value="$PROJECT_DIR$/www/service/pagarme.service.js" />
-        <option value="$PROJECT_DIR$/www/modules/allphonelines/allphonelines.html" />
         <option value="$PROJECT_DIR$/www/content/css/main.min.css" />
         <option value="$PROJECT_DIR$/www/modules/status-charging/status-charging.controller.js" />
-        <option value="$PROJECT_DIR$/www/modules/customers/edicao/edicao.html" />
         <option value="$PROJECT_DIR$/www/modules/status-charging/status-charging.html" />
         <option value="$PROJECT_DIR$/www/lib/date_time/date_time_input.js" />
         <option value="$PROJECT_DIR$/www/lib/angular-datetime-inputs/dist/datetime-inputs.min.css" />
@@ -171,11 +121,15 @@
         <option value="$PROJECT_DIR$/www/modules/allphonelines/allphonelines.controller.js" />
         <option value="$PROJECT_DIR$/www/modules/customers/customers.controller.js" />
         <option value="$PROJECT_DIR$/www/modules/customers/customers.html" />
-        <option value="$PROJECT_DIR$/www/service/foneclube.service.js" />
         <option value="$PROJECT_DIR$/test.html" />
-        <option value="$PROJECT_DIR$/www/modules/customers/edicao/edicao.controller.js" />
         <option value="$PROJECT_DIR$/www/modules/customers/customers-modal/customer-modal.controller.js" />
         <option value="$PROJECT_DIR$/www/modules/customers/customers-modal/customer-modal.html" />
+        <option value="$PROJECT_DIR$/www/modules/login/login.html" />
+        <option value="$PROJECT_DIR$/www/modules/allphonelines/allphonelines.html" />
+        <option value="$PROJECT_DIR$/www/modules/customers/edicao/edicao.html" />
+        <option value="$PROJECT_DIR$/node_modules/node-sass/lib/binding.js" />
+        <option value="$PROJECT_DIR$/www/modules/customers/edicao/edicao.controller.js" />
+        <option value="$PROJECT_DIR$/www/service/foneclube.service.js" />
       </list>
     </option>
   </component>
@@ -201,6 +155,7 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
     <handled-path value="$PROJECT_DIR$/www/lib/angular-auto-complete/node_modules" />
     <handled-path value="$PROJECT_DIR$/www/lib/angular-date-time-input/node_modules" />
+    <handled-path value="$PROJECT_DIR$/www/lib/angular-datetime-inputs/node_modules" />
     <handled-path value="$PROJECT_DIR$/www/lib/angular-file-upload/node_modules" />
     <handled-path value="$PROJECT_DIR$/www/lib/angular-smart-table/node_modules" />
     <handled-path value="$PROJECT_DIR$/www/lib/angularjs-bootstrap-datetimepicker/node_modules" />
@@ -210,10 +165,10 @@
     <handled-path value="$PROJECT_DIR$/www/lib/underscore/node_modules" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="290" />
-    <option name="width" value="1073" />
-    <option name="height" value="735" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="315" />
+    <option name="width" value="1048" />
+    <option name="height" value="728" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -233,8 +188,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -251,40 +204,22 @@
               <item name="FoneClube.WEB" type="b2602c69:ProjectViewProjectNode" />
               <item name="FoneClube.WEB" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="www" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="modules" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="FoneClube.WEB" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FoneClube.WEB" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="www" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="modules" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="customers" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="FoneClube.WEB" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FoneClube.WEB" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="www" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="modules" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="customers" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="customers-modal" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="FoneClube.WEB" type="b2602c69:ProjectViewProjectNode" />
-              <item name="FoneClube.WEB" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="www" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="service" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="nodejs_interpreter_path" value="C:/Program Files/nodejs/node" />
-    <property name="last_opened_file_path" value="C:/xampp/htdocs/Datatable" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -323,24 +258,34 @@
       <workItem from="1527947134058" duration="651000" />
       <workItem from="1528008577323" duration="9913000" />
       <workItem from="1528083114410" duration="3010000" />
-      <workItem from="1528163277794" duration="7926000" />
+      <workItem from="1528163277794" duration="10126000" />
+      <workItem from="1528326181255" duration="1131000" />
+      <workItem from="1528328189626" duration="456000" />
+      <workItem from="1528329705499" duration="22000" />
+      <workItem from="1528331786741" duration="1054000" />
+      <workItem from="1528333498590" duration="10839000" />
+      <workItem from="1528434414778" duration="8975000" />
+      <workItem from="1528583760149" duration="2787000" />
+      <workItem from="1528588227998" duration="3557000" />
+      <workItem from="1528654762540" duration="737000" />
+      <workItem from="1528758140172" duration="1475000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="133961000" />
+    <option name="totallyTimeSpent" value="167194000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="315" y="0" width="1048" height="728" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19472913" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1637597" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.584" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38801262" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33596215" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -365,20 +310,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/www/app/config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1870">
-          <caret line="110" column="54" lean-forward="true" selection-start-line="110" selection-start-column="54" selection-end-line="110" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/www/modules/allphonelines/allphonelines.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="37" lean-forward="true" selection-start-line="0" selection-start-column="37" selection-end-line="0" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/www/service/pagarme.service.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
@@ -604,27 +535,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/www/modules/allphonelines/allphonelines.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="47" lean-forward="true" selection-start-line="12" selection-start-column="47" selection-end-line="12" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/www/service/pagarme.service.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="12" column="60" lean-forward="false" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/www/modules/customers/customers.controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2516">
-          <caret line="148" column="17" lean-forward="false" selection-start-line="148" selection-start-column="16" selection-end-line="148" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/www/modules/status-charging/status-charging.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="254">
@@ -660,19 +570,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/www/modules/customers/edicao/edicao.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6528">
-          <caret line="413" column="75" lean-forward="false" selection-start-line="413" selection-start-column="75" selection-end-line="413" selection-end-column="75" />
-          <folding>
-            <element signature="n#td#0;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#3;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#3;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#td#2;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#3;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#button#1;n#div#4;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -684,63 +581,90 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="19" column="71" lean-forward="false" selection-start-line="19" selection-start-column="71" selection-end-line="19" selection-end-column="71" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/modules/login/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="47" lean-forward="true" selection-start-line="5" selection-start-column="47" selection-end-line="5" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/modules/allphonelines/allphonelines.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="195" column="57" lean-forward="true" selection-start-line="195" selection-start-column="57" selection-end-line="195" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/modules/customers/customers-modal/customer-modal.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="676">
+          <caret line="62" column="99" lean-forward="true" selection-start-line="62" selection-start-column="99" selection-end-line="62" selection-end-column="99" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/modules/customers/customers-modal/customer-modal.controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2888">
+          <caret line="209" column="45" lean-forward="false" selection-start-line="209" selection-start-column="45" selection-end-line="209" selection-end-column="45" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/www/modules/customers/customers.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-34">
-          <caret line="95" column="0" lean-forward="false" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="493">
+          <caret line="120" column="97" lean-forward="false" selection-start-line="120" selection-start-column="90" selection-end-line="120" selection-end-column="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/service/pagarme.service.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="19" column="33" lean-forward="true" selection-start-line="19" selection-start-column="33" selection-end-line="19" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/modules/customers/customers.controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="139" column="65" lean-forward="false" selection-start-line="139" selection-start-column="65" selection-end-line="139" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/node-sass/lib/binding.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="3" lean-forward="false" selection-start-line="16" selection-start-column="3" selection-end-line="16" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/modules/customers/edicao/edicao.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6001">
+          <caret line="353" column="64" lean-forward="false" selection-start-line="353" selection-start-column="54" selection-end-line="353" selection-end-column="64" />
+          <folding>
+            <element signature="n#style#0;n#button#1;n#div#4;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/www/modules/customers/edicao/edicao.controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="1235" column="28" lean-forward="true" selection-start-line="1235" selection-start-column="28" selection-end-line="1235" selection-end-column="28" />
+        <state relative-caret-position="326">
+          <caret line="261" column="67" lean-forward="false" selection-start-line="261" selection-start-column="67" selection-end-line="261" selection-end-column="67" />
           <folding>
-            <marker date="1528163318517" expanded="true" signature="10523:10541" ph="..." />
+            <marker date="1528597970000" expanded="true" signature="11514:11532" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/www/service/foneclube.service.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="83">
-          <caret line="489" column="41" lean-forward="true" selection-start-line="489" selection-start-column="41" selection-end-line="489" selection-end-column="41" />
+        <state relative-caret-position="255">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/www/modules/customers/customers-modal/customer-modal.controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="106" column="17" lean-forward="true" selection-start-line="106" selection-start-column="17" selection-end-line="106" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/www/modules/customers/customers-modal/customer-modal.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="62" column="99" lean-forward="true" selection-start-line="62" selection-start-column="99" selection-end-line="62" selection-end-column="99" />
-          <folding>
-            <element signature="n#style#0;n#h4#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#button#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#button#2;n#div#2;n#div#0;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#svg#0;n#p#3;n#div#0;n#div#0;n#div#1;n#uib-accordion#1;n#div#2;n#div#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="e#9161#9167#0" expanded="true" />
-            <element signature="e#9167#9173#0" expanded="true" />
-            <element signature="e#10166#10172#0" expanded="true" />
-            <element signature="e#10172#10178#0" expanded="true" />
-            <element signature="e#10178#10184#0" expanded="true" />
-            <element signature="e#10184#10190#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
