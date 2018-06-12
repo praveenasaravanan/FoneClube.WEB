@@ -9,10 +9,10 @@
     function FoneclubeService($q, HTTPService) {
 
       /// var urlApi = 'http://webapidemo.devworkdemo.com/api';
-        var urlApi = 'http://localhost:57078/api';
+        // var urlApi = 'http://localhost:57078/api';
 
         //API HOMOL dispatchedCommision
-        // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+        var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API QUE VAI SER PROD
        // var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
