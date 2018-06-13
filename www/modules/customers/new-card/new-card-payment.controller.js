@@ -364,12 +364,16 @@
                 FoneclubeService.postHistoryPayment(customerCharging).then(function(result){
                     console.log('FoneclubeService.postHistoryPayment');
                     console.log(result);
-                    FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
-                      //alert('success!!');
-                    })
-                      .catch(function (error) {
 
+                    if(vm.pagar)
+                    {   FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
+                        //alert('success!!');
                       })
+                        .catch(function (error) {
+  
+                        })
+                    }
+                    
                 })
                 .catch(function(error){
                     console.log('catch error');

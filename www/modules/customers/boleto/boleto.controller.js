@@ -295,13 +295,16 @@
     
               FoneclubeService.postHistoryPayment(customerCharging).then(function (result) {
 
-                
-                FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
-                  //alert('success!!');
-                })
-                  .catch(function (error) {
-
-                  })
+                if(vm.pagar)
+                {
+                    FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
+                        //alert('success!!');
+                      })
+                        .catch(function (error) {
+      
+                        })
+                }
+               
                  
                 })
                 .catch(function(error){
