@@ -324,7 +324,7 @@
 
                     <td style="width: 130px;text-align: center;">
                         <div class="s_cls">
-                            <input id="portabilidadeTelefone" ng-change="vm.telephonechanged($index)" next-on-enter
+                            <input id="portabilidadeTelefone" ng-change="vm.telephonechanged($index, phoneNumber.NovoFormatoNumero)" next-on-enter
                                    class="form-control" ng-model="phoneNumber.NovoFormatoNumero"
                                    type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject"
                                    ng-change="vm.validatePhoneNumber($index)"
