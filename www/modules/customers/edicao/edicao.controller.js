@@ -383,18 +383,22 @@
     function onTapSendUser(customer) {
       debugger
      // vm.tempPhones = angular.copy(vm.customer.Phones);
-      if (vm.requesting == true) return;
+      if (vm.requesting == true) 
+        return;
+
       vm.requesting = true;
 
-      for (var i = 0; i < vm.tempPhones.length; i++) {
-        vm.customer.Phones[i] = angular.copy(vm.tempPhones[i]);
+      // for (var i = 0; i < vm.tempPhones.length; i++) {
+      //   vm.customer.Phones[i] = angular.copy(vm.tempPhones[i]);
 
-      }
+      // }
 
-      for (var i = 0; i < customer.Phones.length; i++){
-          customer.Phones[i].PrecoVipStatus = true
-          customer.Phones[i].AmmountPrecoVip = vm.pricelistVIP[i]
-      }
+      // source code de maluco, em um Mês assim quebraria a base, não podemos transformar tudo em preço vip aleatoriamente
+      // for (var i = 0; i < customer.Phones.length; i++){
+      //     customer.Phones[i].PrecoVipStatus = true
+      //     customer.Phones[i].AmmountPrecoVip = vm.pricelistVIP[i]
+      // }
+
       customer.Phones[vm.actual_id].NovoFormatoNumero = vm.actual_phone;
 
       //debugger;
@@ -416,7 +420,7 @@
         "IdPagarme": customer.IdPagarme,
         "IdRole": customer.IdRole,
         "Adresses": customer.Adresses,
-        "Phones": customer.Phones,
+        "Phones": vm.customer.Phones,
         "Photos": customer.Photos,
         "IdParent": customer.IdParent,
         "NameContactParent": customer.NameContactParent,
@@ -452,24 +456,28 @@
         }
       }
 
-      // debugger
+      // validar
+      debugger
 
       var digitosMinimosTelefone = 11
       //Regra: o telefone não pode ser incompleto, mass pode estar em branco
       for (var item in customerSend.Phones) {
+
         if (customerSend.Phones[item].NovoFormatoNumero.length < digitosMinimosTelefone && customerSend.Phones[item].NovoFormatoNumero.length > 0) {
           // debugger;
           DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.') });
           //showLoader.close();
           vm.requesting = false;
           return;
-        } else {
+        } 
+        else {
 
-          customerSend.Phones[item].DDD = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).DDD;
-          customerSend.Phones[item].Number = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).Number;
+          // customerSend.Phones[item].DDD = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).DDD;
+          // customerSend.Phones[item].Number = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).Number;
         }
-      }
 
+      }
+      debugger
       var arrayFiltered = customerSend.Phones.filter(function (number) {
         return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8 && number.Delete == null && number.LinhaAtiva;
       });
@@ -1275,6 +1283,7 @@
       
       vm.customer.Phones[$index].DDD = ddd;
       vm.customer.Phones[$index].Number = phone;
+      vm.customer.Phones[$index].NovoFormatoNumero = ddd + phone;
       
       // console.log("telephonechanged")
       // console.log($index);
