@@ -399,14 +399,10 @@
       //     customer.Phones[i].AmmountPrecoVip = vm.pricelistVIP[i]
       // }
 
-      customer.Phones[vm.actual_id].NovoFormatoNumero = vm.actual_phone;
+      // customer.Phones[vm.actual_id].NovoFormatoNumero = vm.actual_phone;
 
       //debugger;
       //return;
-
-      //TODO
-      //colocar breakpoint nos metodos localhost API, validar se novos atributos chegam--Putting breakpoint the methods localhost API, validate the new assets come.
-      //revisar todos nomes entidade .net apos refact de nomes atributos -- Revisar of names or. net apos refact of attributes.
       var customerSend = {
         "Id": customer.Id,
         "DocumentNumber": UtilsService.clearDocumentNumber(customer.DocumentNumber),
@@ -420,7 +416,7 @@
         "IdPagarme": customer.IdPagarme,
         "IdRole": customer.IdRole,
         "Adresses": customer.Adresses,
-        "Phones": vm.customer.Phones,
+        "Phones": vm.tempPhones,
         "Photos": customer.Photos,
         "IdParent": customer.IdParent,
         "NameContactParent": customer.NameContactParent,
@@ -1285,16 +1281,16 @@
       vm.customer.Phones[$index].Number = phone;
       vm.customer.Phones[$index].NovoFormatoNumero = ddd + phone;
       
-      // console.log("telephonechanged")
-      // console.log($index);
-      // console.log(vm.customer.Phones);
+      vm.tempPhones[$index].DDD = ddd;
+      vm.tempPhones[$index].Number = phone;
+      vm.tempPhones[$index].NovoFormatoNumero = ddd + phone;
 
       debugger;
-      // vm.customer.Phones[$index]
     }
 
     vm.activechanged = activechanged;
     function activechanged($index) {
+      debugger;
       addHistory();
     }
 
