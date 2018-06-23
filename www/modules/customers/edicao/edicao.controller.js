@@ -105,7 +105,8 @@
 
 
         getPersonParent(vm.customer.IdParent);
-        vm.singlePriceLocal = vm.customer.SinglePrice ? vm.customer.SinglePrice : 0; //single place formatado;
+        
+        vm.singlePriceLocal = result.SinglePrice > 0  ? 'R$'+ (vm.customer.SinglePrice / 100).toFixed(2) : 0; //single place formatado;
         if (vm.customer.Adresses) {
           for (var i = 0; i < vm.customer.Adresses.length; i++) {
             vm.customer.Adresses[i].StreetNumber = parseInt(vm.customer.Adresses[i].StreetNumber); //deve ser int por causa da mascara
@@ -424,6 +425,12 @@
         "SinglePrice": vm.singlePriceLocal,
         "DescriptionSinglePrice": customer.DescriptionSinglePrice
       }
+
+      try{
+        customerSend.SinglePrice = customerSend.SinglePrice.replace('R','').replace('$','').replace('.','');
+      }
+      catch(erro){}
+
 
       debugger;
 
