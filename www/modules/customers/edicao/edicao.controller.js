@@ -427,7 +427,7 @@
       }
 
       try{
-        customerSend.SinglePrice = customerSend.SinglePrice.replace('R','').replace('$','').replace('.','');
+        customerSend.SinglePrice = customerSend.SinglePrice.replace('R','').replace('$','').replace('.','').replace(',','');
       }
       catch(erro){}
 
