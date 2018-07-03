@@ -152,8 +152,8 @@
                 if (vm.plans[plan].Description.endsWith('VIVO')) {
                   vm.customer.Phones[number].operadora = '1'; //seta a operadora local
 
-                  vm.customer.Phones[number].StatusOperator = { 'background-color': 'green' }
-                  vm.customer.Phones[number].StatusDescription = 'A'
+                  // vm.customer.Phones[number].StatusOperator = { 'background-color': 'green' }
+                  // vm.customer.Phones[number].StatusDescription = 'A'
                 } else {
                   vm.customer.Phones[number].operadora = '2'; //seta a operadora local
 
