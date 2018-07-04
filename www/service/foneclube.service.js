@@ -46,6 +46,7 @@
         this.getAllParents = getAllParents;
         this.getLastPaymentType = getLastPaymentType
         this.getStatusBlockedClaro = getStatusBlockedClaro;
+        this.getStatusLinhaClaro = getStatusLinhaClaro;
         this.getChargeAndServiceOrderHistory = getChargeAndServiceOrderHistory;
         this.getChargeAndServiceOrderHistoryDinamic = getChargeAndServiceOrderHistoryDinamic;
         this.getStatusCharging = getStatusCharging;
@@ -452,7 +453,21 @@
             return q.promise;
         }
 
-        // api/manager/phones/claro/status/linha/ddd/{ddd}/numeroLinha/{numeroLinha}
+        function getStatusLinhaClaro(ddd, numeroLinha, numero) {
+
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/manager/phones/claro/status/linha/ddd/' + ddd + '/numeroLinha/' + numeroLinha + '/details'))
+                .then(function (result) {
+                    result.index = numero
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
 
         function getCustomers() {
 

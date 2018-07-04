@@ -157,27 +157,49 @@
                 } else {
                   vm.customer.Phones[number].operadora = '2'; //seta a operadora local
 
-                  console.log('tentando coletar')
-                  FoneclubeService.getStatusBlockedClaro(vm.customer.Phones[number].DDD, vm.customer.Phones[number].Number).then(function (result) {
-                    console.log('retorno ' + result)
-                    if (!result) {
-                      vm.customer.Phones[number].StatusOperator = { 'background-color': 'green' }
-                      vm.customer.Phones[number].StatusDescription = 'A'
+                  FoneclubeService.getStatusLinhaClaro(vm.customer.Phones[number].DDD, vm.customer.Phones[number].Number, number).then(function (result) {
+                    debugger;
+                    console.log('-- retorno ' + vm.customer.Phones[result.index].DDD + ' ' + vm.customer.Phones[result.index].Number)
+                    console.log(result)
+                    if (result.Ativa) {
+                      vm.customer.Phones[result.index].StatusOperator = { 'background-color': 'green' }
+                      vm.customer.Phones[result.index].StatusDescription = 'A'
                     }
-                    else {
-                      vm.customer.Phones[number].StatusOperator = { 'background-color': 'red' }
-                      vm.customer.Phones[number].StatusDescription = 'B'
+      
+                    if (result.Bloqueada)  {
+                      vm.customer.Phones[result.index].StatusOperator = { 'background-color': 'red' }
+                      vm.customer.Phones[result.index].StatusDescription = 'B'
                     }
-
+      
+                    vm.tempPhones = angular.copy(vm.customer.Phones);
+      
                   });
+                  
+                  
+                  
 
                 }
               }
+
+
+
             }
 
+            
+
+            // aqui funciona
+            //  vm.customer.Phones[number].StatusOperator = { 'background-color': 'green' }
+            //  vm.customer.Phones[number].StatusDescription = 'A'
+            
+            // aqui n funciona
+            debugger;
+            
 
 
           }
+
+          // coletaStatusCrawler();
+
 
           listaPlanosUsados = listaPlanosUsados.filter(vm.onlyUnique)
           for (var i in listaPlanosUsados) {
@@ -350,6 +372,8 @@
       }
     };
 
+    
+
     function populaPai(customer) {
 
       vm.customer.NameContactParent = customer.NameParent;
@@ -432,7 +456,7 @@
       catch(erro){}
 
 
-      debugger;
+      // debugger;
 
       var newFoneclubeDocument = false;
       FoneclubeService.getStatusDocument(customerSend.DocumentNumber).then(function (result) {
@@ -460,7 +484,7 @@
       }
 
       // validar
-      debugger
+      // debugger
 
       var digitosMinimosTelefone = 11
       //Regra: o telefone não pode ser incompleto, mass pode estar em branco
@@ -480,7 +504,7 @@
         }
 
       }
-      debugger
+      // debugger
       var arrayFiltered = customerSend.Phones.filter(function (number) {
         return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8 && number.Delete == null && number.LinhaAtiva;
       });
@@ -571,7 +595,7 @@
           }
           // debugger;
           FoneclubeService.postCustomerParent(customerObj).then(function (result) {
-            debugger;
+            // debugger;
             if (result)
               FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
             else {
@@ -1292,12 +1316,12 @@
       vm.tempPhones[$index].Number = phone;
       vm.tempPhones[$index].NovoFormatoNumero = ddd + phone;
 
-      debugger;
+      // debugger;
     }
 
     vm.activechanged = activechanged;
     function activechanged($index) {
-      debugger;
+      // debugger;
       addHistory();
     }
 
