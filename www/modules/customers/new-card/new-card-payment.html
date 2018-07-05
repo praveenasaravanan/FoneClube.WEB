@@ -82,6 +82,10 @@
                     <input id="quantia" next-on-enter class="form-control" ng-model="vm.amount" money-input type="tel">-->
                 </div> 
                 <div class="form-group col-xs-12">
+                    <label for="observacao">Observação cliente:</label>
+                    <input id="observacao"  class="form-control" ng-model="vm.customerComment" type="text">
+                </div> 
+                <div class="form-group col-xs-12">
                     <label for="observacao">Observação:</label>
                     <input id="observacao" ng-enter="vm.onTapConfirmarPagamento()" class="form-control" ng-model="vm.comment" type="text">
                 </div> 

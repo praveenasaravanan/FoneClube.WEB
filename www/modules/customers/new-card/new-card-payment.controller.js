@@ -248,6 +248,7 @@
                             'To': vm.newCustomer.email, //vm.newCustomer.email
                             'TargetName' : vm.newCustomer.name,
                             'TargetTextBlue' : $filter('currency')(vm.amount / 100, ""),
+                            'CustomerComment':vm.customerComment,
                             // 'TargetSecondaryText' : vm.commentBoleto,
                             'TemplateType' : 1
                         }

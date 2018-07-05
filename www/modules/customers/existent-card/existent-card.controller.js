@@ -213,12 +213,15 @@
                 vm.message = 'Transação efetuada';
                 debugger;
                 PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function(result){
+                        
                         vm.message = 'Transação concluída';
                         vm.TransactionId = result.tid;
+
                         var emailObject = {
                             'To': vm.existentCustomer.email, //vm.existentCustomer
                             'TargetName' : vm.existentCustomer.name,
                             'TargetTextBlue' : $filter('currency')(vm.amount / 100, ""),
+                            'CustomerComment':vm.customerComment,
                             // 'TargetSecondaryText' : vm.commentBoleto,
                             'TemplateType' : 1
                         }

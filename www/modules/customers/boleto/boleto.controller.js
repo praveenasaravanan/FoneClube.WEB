@@ -209,6 +209,7 @@
                                     'TargetName' : existentCustomer.name,
                                     'TargetTextBlue': resultCapture.boleto_url,
                                     'TargetSecondaryText' : vm.commentBoleto,
+                                    'CustomerComment':vm.customerComment,
                                     'TemplateType' : 2
                                 }
         
