@@ -217,12 +217,15 @@
                         vm.message = 'Transação concluída';
                         vm.TransactionId = result.tid;
 
+                        if(vm.customerComment == undefined)
+                            vm.customerComment = ''
+
                         var emailObject = {
                             'To': vm.existentCustomer.email, //vm.existentCustomer
                             'TargetName' : vm.existentCustomer.name,
                             'TargetTextBlue' : $filter('currency')(vm.amount / 100, ""),
-                            'CustomerComment':vm.customerComment,
-                            // 'TargetSecondaryText' : vm.commentBoleto,
+                            // 'CustomerComment':vm.customerComment,
+                            'TargetSecondaryText' : vm.customerComment,
                             'TemplateType' : 1
                         }
 

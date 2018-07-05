@@ -244,11 +244,15 @@
                             IdPagarme:result.customer.id
                         }
 
+                        if(vm.customerComment == undefined)
+                            vm.customerComment = ''
+
                         var emailObject = {
                             'To': vm.newCustomer.email, //vm.newCustomer.email
                             'TargetName' : vm.newCustomer.name,
                             'TargetTextBlue' : $filter('currency')(vm.amount / 100, ""),
-                            'CustomerComment':vm.customerComment,
+                            // 'CustomerComment':vm.customerComment,
+                            'TargetSecondaryText' : vm.customerComment,
                             // 'TargetSecondaryText' : vm.commentBoleto,
                             'TemplateType' : 1
                         }

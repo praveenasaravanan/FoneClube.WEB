@@ -204,12 +204,15 @@
                             if(vm.enviaEmail)
                             {
                                 debugger;
+                                if(vm.customerComment == undefined)
+                                    vm.customerComment = ''
+
                                 var emailObject = {
                                     'To': existentCustomer.email, //existentCustomer.email
                                     'TargetName' : existentCustomer.name,
                                     'TargetTextBlue': resultCapture.boleto_url,
-                                    'TargetSecondaryText' : vm.commentBoleto,
-                                    'CustomerComment':vm.customerComment,
+                                    'TargetSecondaryText' : vm.customerComment,
+                                    // 'CustomerComment':vm.customerComment,
                                     'TemplateType' : 2
                                 }
         
