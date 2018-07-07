@@ -215,7 +215,7 @@
                                     // 'CustomerComment':vm.customerComment,
                                     'TemplateType' : 2
                                 }
-        
+                                vm.boleto_url = resultCapture.boleto_url;
                                 FoneclubeService.postSendEmail(emailObject).then(function(result){
                                     console.log('FoneclubeService.postHistoryPayment');
                                     console.log(result);
@@ -297,30 +297,28 @@
                     }
                 }
     
-              FoneclubeService.postHistoryPayment(customerCharging).then(function (result) {
+                FoneclubeService.postHistoryPayment(customerCharging).then(function (result) {
 
-                if(vm.pagar)
-                {
-                    FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
-                        //alert('success!!');
-                      })
-                        .catch(function (error) {
-      
-                        })
+                    if(vm.pagar)
+                    {
+                        FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
+                            //alert('success!!');
+                          })
+                            .catch(function (error) {
+          
+                            })
+                    }
+                   
+                     
+                    })
+                    .catch(function(error){
+                        console.log('catch error');
+                        console.log(error);
+                    });
+        
+        
                 }
-               
-                 
-                })
-                .catch(function(error){
-                    console.log('catch error');
-                    console.log(error);
-                });
-    
-    
-            }
-    
-    
-            function getContactPhone(customer){
+                function getContactPhone(customer){
                 var contacts = UtilsService.getContactPhoneFromPhones(customer.Phones);
                 if (!contacts || contacts.length == 0  || contacts[0].DDD == '' || contacts[0].Number == '') {
                     DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'É necessário cadastrar Telefone de Contato para este cliente.'});

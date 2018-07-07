@@ -6,6 +6,7 @@
         .controller('CustomerModalController', CustomerModalController);
 
     CustomerModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'FoneclubeService', 'FlowManagerService', 'DialogFactory'];
+
     function CustomerModalController(ViewModelUtilsService, PagarmeService, FoneclubeService, FlowManagerService, DialogFactory) {
         var vm = this;
         vm.so_cnt = 0;
@@ -44,7 +45,7 @@
                             var pagarmeID = result[0].id;
                             updatePagarmeId(pagarmeID);
                             initCardList(pagarmeID);
-                            getBoleto_url(pagarmeID);
+                            // getBoleto_url(pagarmeID);
                             etapaEscolhaCartao();
                         }
                         catch (erro) {
@@ -68,9 +69,9 @@
             else {
                 etapaEscolhaCartao();
                 initCardList(customer.IdPagarme);
-                getBoleto_url(customer.IdPagarme);
+                // getBoleto_url(customer.IdPagarme);
             }
-            FoneclubeService.getStatusChargingOfCustomer(customer.Id,vm.month,vm.year).then(function (result) {
+            FoneclubeService.getStatusChargingOfCustomer(customer.Id, vm.month, vm.year).then(function (result) {
                 console.log('getStatusChargingOfCustomer')
                 console.log(result)
                 debugger
@@ -92,11 +93,18 @@
                         data.Charges.descriptionType = (data.Charges.PaymentType == CARTAO) ? 'Cartão de crédito' : 'Boleto';
 
                         if (data.Charges.PaymentType == BOLETO) {
-                            setStatusBoleto(data.Charges);
+                            // setStatusBoleto(data.Charges);
+                            PagarmeService.getBoletoUrl(data.Charges.BoletoId).then(function (result) {
+                                data.Charges.boleto_url = result[0].boleto_url;
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                            // data.Charges.boleto_url = getBoleto_url(data.Charges.BoletoId);
                         }
                         vm.chargesArray.push(data)
                     }
-                    if (data.IsServiceOrder){
+                    if (data.IsServiceOrder) {
                         vm.osArray.push(data);
                         // vm.chargesAndOrders.pop()
                     }
@@ -105,8 +113,8 @@
                     //
                     // }
                 }
-                for (var i in vm.osArray){
-                    vm.osDescArray.push(vm.osArray[vm.osArray.length-i]);
+                for (var i in vm.osArray) {
+                    vm.osDescArray.push(vm.osArray[vm.osArray.length - i]);
                 }
 
                 customer.chargesAndOrders = vm.chargesAndOrders;
@@ -121,7 +129,7 @@
                     history.descriptionType = (history.PaymentType == CARTAO) ? 'Cartão de crédito' : 'Boleto';
 
                     if (history.PaymentType == BOLETO) {
-                        setStatusBoleto(history);
+
                     }
                 }
                 customer.histories = vm.histories;
@@ -143,21 +151,31 @@
                 });
         }
 
+        // function getBoleto_url(boletoId) {
+        //
+        //     PagarmeService.getStatusBoleto(boletoId).then(function (result) {
+        //         return result[0].boleto_url;
+        //
+        //     })
+        //
+        //
+        // }
+
         function onTapExcluir() {
             var personCheckout = {
                 'DocumentNumber': customer.DocumentNumber
             };
-            DialogFactory.dialogConfirm({ mensagem: 'Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?' })
+            DialogFactory.dialogConfirm({mensagem: 'Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?'})
                 .then(function (value) {
                     if (value) {
                         FoneclubeService.postDeletePerson(personCheckout).then(function (result) {
                             console.log(result);
                             if (result) {
-                                DialogFactory.showMessageDialog({ message: 'Usuário foi removido com sucesso, no próximo carregamento da lista ele não será mais exibido' });
+                                DialogFactory.showMessageDialog({message: 'Usuário foi removido com sucesso, no próximo carregamento da lista ele não será mais exibido'});
                                 closeThisDialog(0);
                             }
                             else
-                                DialogFactory.showMessageDialog({ message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber });
+                                DialogFactory.showMessageDialog({message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber});
                         })
                             .catch(function (error) {
                                 console.log('catch error');
@@ -172,6 +190,7 @@
             console.log(history)
             PagarmeService.getStatusBoleto(history.BoletoId).then(function (result) {
                 history.StatusPayment = result[0].status;
+                boleto_url
             })
         }
 
@@ -204,25 +223,6 @@
 
         }
 
-        function getBoleto_url(customerId) {
-
-            debugger;
-            PagarmeService.getBoletoUrl(customerId)
-                .then(function (result) {
-                    if(result.length > 0){
-                        vm.boleto_url = result.boleto_url;
-                    }
-                    vm.boleto_url = '';
-                    console.log('-- boleto url --');
-                    console.log(result);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    // vm.message = 'falha ao recuperar cartão';
-                });
-
-
-        }
 
         function initCardList(customerId) {
 

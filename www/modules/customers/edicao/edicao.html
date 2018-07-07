@@ -324,7 +324,7 @@
 
                     <td style="width: 130px;text-align: center;">
                         <div class="s_cls">
-                            <input id="portabilidadeTelefone" ng-change="vm.telephonechanged($index, phoneNumber.NovoFormatoNumero)" next-on-enter
+                            <input id="portabilidadeTelefone" ng-change="vm.telephonechanged($index)" next-on-enter
                                    class="form-control" ng-model="phoneNumber.NovoFormatoNumero"
                                    type="tel" placeholder="(xx) 99999-9999" mask="(99) 9?9999-9999" restrict="reject"
                                    ng-change="vm.validatePhoneNumber($index)"
@@ -369,7 +369,7 @@
 
                     <td style="width: 130px;text-align: center;">
                         <div class="s_cls">
-                            <input type="number" id="preco" next-on-enter class="form-control"
+                            <input money-input type="tel" id="preco" next-on-enter class="form-control"
                                    ng-focus="vm.onfocusPreco($index)" ng-blur="vm.onBlurPreco($index)"
                                    ng-change="vm.pricechanged($index)" ng-model="vm.pricelist[$index]"
                                    restrict="reject" style="width: 120px;">
@@ -377,7 +377,7 @@
                     </td>
                     <td style="width: 130px;text-align: center;">
                         <div class="s_cls">
-                            <input type="number" id="preco_vip" next-on-enter class="form-control"
+                            <input money-input type="tel" id="preco_vip" next-on-enter class="form-control"
                                    ng-focus="vm.onfocusPrecoVIP($index)" ng-blur="vm.onBlurPrecoVIP($index)"
                                    ng-change="vm.pricechangedVIP($index)" ng-model="vm.pricelistVIP[$index]"
                                    restrict="reject" style="width: 120px;">
