@@ -32,7 +32,7 @@
         init();
 
         function init() {
-            debugger
+            //debugger
             if (!customer.IdPagarme) {
 
                 PagarmeService.getCustomer(customer.DocumentNumber)
@@ -74,27 +74,36 @@
             FoneclubeService.getStatusChargingOfCustomer(customer.Id, vm.month, vm.year).then(function (result) {
                 console.log('getStatusChargingOfCustomer')
                 console.log(result)
-                debugger
+                //debugger
                 vm.charged_status = result[0];
                 console.log('getStatusChargingOfCustomer')
             });
 
+            // vm.chargesArray
+            // Charges.boleto_url
             FoneclubeService.getChargeAndServiceOrderHistory(customer.Id).then(function (result) {
                 console.log('FoneclubeService.getChargeAndServiceOrderHistory');
                 console.log(result);
-                debugger;
+                // debugger;
                 vm.chargesAndOrders = result;
-                vm.chargesArray = []
+
+                vm.chargesArray = [] // na moral ning merece 
                 vm.osArray = [];
                 vm.osDescArray = [];
+
                 for (var i in vm.chargesAndOrders) {
                     var data = vm.chargesAndOrders[i];
+                    // debugger;
                     if (data.IsCharge) {
                         data.Charges.descriptionType = (data.Charges.PaymentType == CARTAO) ? 'Cartão de crédito' : 'Boleto';
 
                         if (data.Charges.PaymentType == BOLETO) {
                             // setStatusBoleto(data.Charges);
-                            PagarmeService.getBoletoUrl(data.Charges.BoletoId).then(function (result) {
+                            PagarmeService.getBoletoUrl(data.Charges.BoletoId, vm.chargesAndOrders, i).then(function (result) {
+                                
+                                
+                                // debugger;
+                                result.chargesAndOrders[result.index].Charges.boleto_url = result[0].boleto_url
                                 data.Charges.boleto_url = result[0].boleto_url;
                             })
                             .catch(function (error) {
@@ -102,7 +111,7 @@
                             });
                             // data.Charges.boleto_url = getBoleto_url(data.Charges.BoletoId);
                         }
-                        vm.chargesArray.push(data)
+                        vm.chargesArray.push(data) // na moral ning merece
                     }
                     if (data.IsServiceOrder) {
                         vm.osArray.push(data);
@@ -218,7 +227,7 @@
 
         function onTapComment() {
             console.log('onTapComment');
-            debugger
+            //debugger
             ViewModelUtilsService.showModalComment(customer);
 
         }
@@ -226,7 +235,7 @@
 
         function initCardList(customerId) {
 
-            debugger;
+            //debugger;
             PagarmeService.getCard(customerId)
                 .then(function (result) {
                     vm.cards = result;
@@ -242,7 +251,7 @@
         }
 
         function onTapCard(card) {
-            debugger;
+            //debugger;
             //vm.card = card;
             //etapaQuantia();
             console.log('onTapCard')

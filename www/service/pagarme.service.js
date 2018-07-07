@@ -34,11 +34,13 @@
 
         this.getBoletoUrl = getBoletoUrl;
 
-        function getBoletoUrl(id) {
+        function getBoletoUrl(id, chargesAndOrders, index) {
             var q = $q.defer();
 
             HTTPService.get('https://api.pagar.me/1/transactions?api_key='.concat(apiKey).concat('&id=').concat(id))
                 .then(function (result) {
+                    result.index = index;
+                    result.chargesAndOrders = chargesAndOrders;
                     q.resolve(result);
                 })
                 .catch(function (error) {
