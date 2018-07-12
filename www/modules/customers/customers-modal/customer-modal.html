@@ -103,7 +103,7 @@
                         <div class="col-sm-6">
                             <div uib-accordion-group class="panel-default" ng-init="status.open = true"
                                  is-open="status.open" ng-repeat="chargeAndOrder in vm.chargesAndOrders">
-                                 
+
                                 <div ng-if="chargeAndOrder.IsCharge">
                                     <uib-accordion-heading>
                                         <!--{{vm.chargesAndOrders.length-$index}}ª Cob.   {{ chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM/dd'}}   R${{chargeAndOrder.Charges.Ammount / 100 }}   {{chargeAndOrder.Charges.descriptionType}}-->
@@ -153,7 +153,10 @@
                                         <p>Agente:
                                             <strong>{{chargeAndOrder.Charges.CollectorName }} </strong>
                                         </p>
-                                        <p>vigência: {{chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM'}}
+                                        <p>Vigência: {{chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM'}}
+                                        </p>
+                                        
+                                        <p>Status: {{chargeAndOrder.Charges.PaymentStatusDescription == '' ? 'Sem transaction associada' : chargeAndOrder.Charges.PaymentStatusDescription}}
                                         </p>
                                         <p ng-if="chargeAndOrder.Charges.boleto_url">
                                             <a href="{{chargeAndOrder.Charges.boleto_url}}">{{chargeAndOrder.Charges.boleto_url}}</a>
