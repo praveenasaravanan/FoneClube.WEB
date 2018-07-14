@@ -37,6 +37,7 @@
         this.getOperators = getOperators;
         this.getCustomers = getCustomers;
         this.getCustomerByCPF = getCustomerByCPF;
+        this.getCustomerWithPhoneStatus = getCustomerWithPhoneStatus;
         this.getHistoryPayment = getHistoryPayment;
         this.getCustomerByPhoneNumber = getCustomerByPhoneNumber;
         this.getCustomerById = getCustomerById;
@@ -425,6 +426,35 @@
 
         function getCustomerByCPF(param) {
 
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/profile/cliente?documentRegister='.concat(param)))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+            debugger
+            return q.promise;
+        }
+
+        function getCustomerWithPhoneStatus(param) {
+
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/profile/cliente/phone/status?documentRegister='.concat(param)))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+            debugger
+            return q.promise;
+        }
+
+        function getCustomerWithPhoneStatus(param){
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/profile/cliente?documentRegister='.concat(param)))

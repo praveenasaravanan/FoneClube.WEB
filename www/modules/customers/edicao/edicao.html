@@ -316,8 +316,10 @@
                 <tbody style="-webkit-user-select: text;  -moz-user-select: text;  -ms-user-select: text;  user-select: text;">
                 <tr ng-repeat="phoneNumber in vm.tempPhones | filter : vm.ignoreAccents ">
 
+                    <!-- <div class="s_cls box-status" ng-style="(phoneNumber.StatusVivo.Ativa == true || phoneNumber.StatusClaro.Ativa == true ) ? {'background-color':'green'} : {'background-color': 'grey'}"> -->
                     <td style="width: 40px;">
-                        <div class="s_cls box-status" ng-style="phoneNumber.StatusOperator">
+                        
+                        <div class="s_cls box-status" ng-style="(phoneNumber.StatusVivo.Ativa == true || phoneNumber.StatusClaro.Ativa == true ) ? { 'background-color':'green' } : { 'background-color':'grey' }">
                             {{phoneNumber.StatusDescription}}
                         </div>
                     </td>

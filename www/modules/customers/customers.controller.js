@@ -130,7 +130,7 @@
         }
 
         var getCustomers = $scope.$watch(function () {
-            debugger;
+            // debugger;
 
             $scope.sortType = 'Nome';
             $scope.sortReverse = false;
@@ -225,13 +225,13 @@
             ViewModelUtilsService.showModalBoleto(customer);
         }
         function onTapRepeatLastCharge(customer) {
-            debugger;
+            // debugger;
             console.log('onTapRepeatLastCharge')
             FoneclubeService.getLastPaymentType(customer).then(function (result) {
                 console.log(result);
-                debugger;
+                // debugger;
                 if (result["intIdPaymentType"] == 1) {
-                    debugger;
+                    // debugger;
                     /*ViewModelUtilsService.showModalRepeatBoleto(result,customer);*/
                     ViewModelUtilsService.showModalRepeatCard(result, customer);
                 }
@@ -309,7 +309,7 @@
         }
 
         function init() {
-            debugger;
+            // debugger;
             for (var i = 0; i < vm.data.customers.length; i++) {
                 var customer = vm.data.customers[i];
                 FoneclubeService.getDataPgt(customer.IdPagarme).then(function (result) {
