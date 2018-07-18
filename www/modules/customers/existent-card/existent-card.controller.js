@@ -229,6 +229,13 @@
                             'TemplateType' : 1
                         }
 
+                        
+                        if(vm.pagar && vm.bonus != '0.00')
+                        {
+                            emailObject.DiscountPrice = ($filter('currency')(vm.bonus / 100, "")).replace('.',',')
+                        }
+
+
                         FoneclubeService.postSendEmail(emailObject).then(function(result){
                             console.log('FoneclubeService.postHistoryPayment');
                             console.log(result);

@@ -219,10 +219,10 @@
                                 vm.boleto_url = resultCapture.boleto_url;
 
                                 debugger;
-                                
+
                                 if(vm.pagar && vm.bonus != '0.00')
                                 {
-                                    emailObject.DiscountPrice = ($filter('currency')(vm.amount / 100, "")).replace('.',',')
+                                    emailObject.DiscountPrice = ($filter('currency')(vm.bonus / 100, "")).replace('.',',')
                                 }
 
                                 FoneclubeService.postSendEmail(emailObject).then(function(result){
