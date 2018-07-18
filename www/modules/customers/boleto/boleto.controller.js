@@ -6,8 +6,8 @@
             .controller('BoletoModalController', BoletoModalController);
     
     // <<<<<<< HEAD
-        BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService'];
-        function BoletoModalController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService) {
+        BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService', '$filter'];
+        function BoletoModalController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService, $filter) {
     // =======
     //     BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainComponents', 'MainUtils', 'FoneclubeService', 'UtilsService'];
     //     function BoletoModalController(ViewModelUtilsService, PagarmeService, MainComponents, MainUtils, FoneclubeService, UtilsService) {
@@ -132,7 +132,7 @@
           }
 
           function onTapConfirmarPagamento() {
-            debugger;
+            // debugger;
             //alert(vm.Excepcional);
             //if (!vm.claro) {
             //  vm.Excepcional
@@ -182,7 +182,7 @@
                 vm.disableTapPay = true;
                 vm.message = 'Iniciando transação';
                 vm.instructions = 'FoneClub - 2017'
-                debugger;
+                // debugger;
                 // PagarmeService.postBoleto(vm.amount, vm.commentBoleto, existentCustomer)
                 //  .then(function(result){
                 //     console.log(result);
@@ -200,10 +200,10 @@
 
                      PagarmeService.postBoletoDirect(vm.amount, vm.commentBoleto, existentCustomer, addExpirationDays(vm.expirationDateField)).then(function(resultCapture){
     
-                            debugger;
+                            // debugger;
                             if(vm.enviaEmail)
                             {
-                                debugger;
+                                // debugger;
                                 if(vm.customerComment == undefined)
                                     vm.customerComment = ''
 
@@ -215,7 +215,16 @@
                                     // 'CustomerComment':vm.customerComment,
                                     'TemplateType' : 2
                                 }
+                                
                                 vm.boleto_url = resultCapture.boleto_url;
+
+                                debugger;
+                                
+                                if(vm.pagar && vm.bonus != '0.00')
+                                {
+                                    emailObject.DiscountPrice = ($filter('currency')(vm.amount / 100, "")).replace('.',',')
+                                }
+
                                 FoneclubeService.postSendEmail(emailObject).then(function(result){
                                     console.log('FoneclubeService.postHistoryPayment');
                                     console.log(result);
