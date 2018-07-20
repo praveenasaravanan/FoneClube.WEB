@@ -12,14 +12,14 @@
     
 
     <div class="container-texto">
-        <p><h3>Assunto</h3></p>
-        <textarea class="largura-area-texto" ng-model="vm.currentTemplate.Subject"></textarea>
-
-        <p><h3>Descrição</h3></p>
-        <textarea class="largura-area-texto altura-area-texto" ng-model="vm.currentTemplate.Description"></textarea>
-
-        <button type="button" class="btn btn-success" ng-click="vm.onClickConfirmChange()">Confirmar</button>
-    </div>
+            <p ><h3 ng-show="vm.currentTemplate.Subject.length > 0">Assunto</h3></p>
+            <textarea ng-show="vm.currentTemplate.Subject.length > 0" class="largura-area-texto" ng-model="vm.currentTemplate.Subject"></textarea>
+    
+            <p><h3>Descrição</h3></p>
+            <textarea class="largura-area-texto altura-area-texto" ng-model="vm.currentTemplate.Description"></textarea>
+    
+            <button type="button" class="btn btn-success" ng-disabled="vm.confirmButton" ng-click="vm.onClickConfirmChange()">Confirmar</button>
+        </div>
 
 </div>
       

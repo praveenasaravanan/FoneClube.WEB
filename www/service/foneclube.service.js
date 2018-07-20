@@ -32,6 +32,8 @@
         this.postSendEmail = postSendEmail;
         this.postGeraBoleto = postGeraBoleto
         this.postCustomerComment = postCustomerComment;
+        this.postUpdateTemplate = postUpdateTemplate;
+        
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
         this.getOperators = getOperators;
@@ -346,6 +348,18 @@
         function postGeraBoleto() {
             var q = $q.defer();
             HTTPService.post(urlApi.concat('/pagarme/boleto'), param)
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+            return q.promise;
+        }
+
+        function postUpdateTemplate(param) {
+            var q = $q.defer();
+            HTTPService.post(urlApi.concat('/email/template/update'), param)
                 .then(function (data) {
                     q.resolve(data);
                 })
