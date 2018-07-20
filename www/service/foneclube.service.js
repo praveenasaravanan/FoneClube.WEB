@@ -52,15 +52,15 @@
         this.getChargeAndServiceOrderHistoryDinamic = getChargeAndServiceOrderHistoryDinamic;
         this.getStatusCharging = getStatusCharging;
         this.getStatusDocument = getStatusDocument;
-
         this.getStatusChargingOfCustomer = getStatusChargingOfCustomer;
-       this.SendEmailStatus = SendEmailStatus;
-      this.getEmailDetails = getEmailDetails;
-      this.saveemail = saveemail;
+        this.SendEmailStatus = SendEmailStatus;
+        this.getEmailDetails = getEmailDetails;
+        this.saveemail = saveemail;
         this.getDataPgt = getDataPgt;
-      this.getCommision = getCommision;
-      this.dispatchedCommision = dispatchedCommision;
-      this.getUpdatePagarme = getUpdatePagarme;
+        this.getCommision = getCommision;
+        this.dispatchedCommision = dispatchedCommision;
+        this.getUpdatePagarme = getUpdatePagarme;
+        this.getTemplates = getTemplates;
 
         function getLastPaymentType(customer) {
             debugger;
@@ -671,6 +671,20 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/pagarme/transacao/dataUltimoPagamento/') + idPargarme)
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
+
+        function getTemplates(){
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/email/templates'))
                 .then(function (result) {
                     q.resolve(result);
                 })
