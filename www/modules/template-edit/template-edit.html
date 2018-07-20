@@ -11,7 +11,7 @@
 
     
 
-    <div class="container-texto">
+    <div class="container-texto" ng-show="vm.currentTemplate != undefined">
             <p ><h3 ng-show="vm.currentTemplate.Subject.length > 0">Assunto</h3></p>
             <textarea ng-show="vm.currentTemplate.Subject.length > 0" class="largura-area-texto" ng-model="vm.currentTemplate.Subject"></textarea>
     
