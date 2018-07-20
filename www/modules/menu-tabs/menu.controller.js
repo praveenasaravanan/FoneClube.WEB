@@ -37,6 +37,7 @@
         vm.setMenuItemActive = function(screen) {
             saveMenu(screen)
             
+            
             if(screen == 'home') {
                 FlowManagerService.changeHomeView();
             } else if (screen == 'cadastro') {
@@ -51,6 +52,8 @@
                 FlowManagerService.changeStatusChargingView();
             } else if(screen == 'allphone-lines'){
                 FlowManagerService.changeAllPhoneLinesView();
+            } else if(screen == 'template-edit'){
+                FlowManagerService.changeTemplateEdit();
             } else {
                 
             }

@@ -19,6 +19,7 @@
         this.changeMassChargingView = changeMassChargingView;
         this.changeStatusChargingView = changeStatusChargingView;
         this.changeAllPhoneLinesView = changeAllPhoneLinesView;
+        this.changeTemplateEdit = changeTemplateEdit;
         this.goBack = goBack;
 
         function changeLoginView(){
@@ -74,6 +75,10 @@
             $rootScope.$broadcast('changeMenuItem', 'allphone-lines');
         }
 
+        function changeTemplateEdit(param){
+            LocationService.change('tabs.template-edit', param);
+            $rootScope.$broadcast('changeMenuItem', 'template-edit');
+        }
         
         function goBack() {
             $window.history.back();
