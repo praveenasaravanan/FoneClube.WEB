@@ -167,9 +167,17 @@
                                         
                                         <p>Status: {{chargeAndOrder.Charges.PaymentStatusDescription == '' ? 'Sem transaction associada' : chargeAndOrder.Charges.PaymentStatusDescription}}
                                         </p>
+
+
+
                                         <p ng-if="chargeAndOrder.Charges.boleto_url">
                                             <a href="{{chargeAndOrder.Charges.boleto_url}}">{{chargeAndOrder.Charges.boleto_url}}</a>
                                         </p>
+
+                                        <button class="btn separador-botao"
+                                        ngclipboard data-clipboard-text="{{chargeAndOrder.Charges.boleto_url}}"> Copiar link Boleto
+                                        </button>
+                                        
 
                                         <!--<p ng-if="chargeAndOrder.Charges.StatusPayment != undefined">Status pagamento:-->
                                         <!--<strong>{{chargeAndOrder.Charges }} </strong>-->

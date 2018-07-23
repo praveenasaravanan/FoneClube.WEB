@@ -17,6 +17,7 @@
         'autoCompleteModule',
         'smart-table',
         'g1b.datetime-inputs'
+        ,'ngclipboard'
 
     ]);
 
