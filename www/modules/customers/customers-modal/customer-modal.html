@@ -38,8 +38,17 @@
                     <button title="Cobrança com boleto" class="btn btn-primary" ng-click="vm.onTapBoleto()"
                             style="margin-bottom:5px;"><img src="./content/img/Boleto.png" width="25px" height="15px">
                     </button>
+
+                    <button class="btn btn-primary" ng-click="vm.onTapUpdatePagarme()">{{vm.mensagemPagarme}}
+                    </button>
                     <!--<button ng-click="vm.onTapExcluir()" class="btn btn-danger col-xs-12">Excluir cliente</button>-->
                 </div>
+
+                <!-- <div class="form-group col-xs-2 col-sm-1 totalizadores massive-selection">
+                    <button class="btn btn-primary" ng-click="vm.onTapUpdatePagarme()">{{vm.mensagemPagarme}}
+                    </button>
+                </div> -->
+
             </div>
             <div style="clear:both;"></div>
             <div ng-if="vm.etapaEscolhaCartao">

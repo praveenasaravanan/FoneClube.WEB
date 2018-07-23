@@ -29,6 +29,13 @@
         console.log('customer modal controller')
         console.log(customer);
 
+        var carregandoPagarme = false;
+        vm.mensagemPagarme = 'Refresh DB'
+        vm.onTapUpdatePagarme = onTapUpdatePagarme;
+
+
+           
+
         init();
 
         function init() {
@@ -158,6 +165,29 @@
                     console.log('catch error');
                     console.log(error);
                 });
+        }
+
+        function onTapUpdatePagarme(){
+            debugger;
+            console.log('teste');
+            // getUpdatePagarme
+            if(!carregandoPagarme)
+            {
+                carregandoPagarme = true;
+                vm.mensagemPagarme = 'Aguarde...';
+                FoneclubeService.getUpdatePagarme().then(function (result) {
+                    console.log('result ' + result)
+                    if(result)
+                     alert('Lista pagarme atualizada, por favor recarregue a página sem cache.')
+                    else
+                        alert('Lista pagarme não atualizada')
+
+
+                    carregandoPagarme = false; 
+                    vm.mensagemPagarme = 'Refresh DB'
+                });
+            }
+            
         }
 
         // function getBoleto_url(boletoId) {
