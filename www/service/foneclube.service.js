@@ -8,14 +8,14 @@
     FoneclubeService.inject = ['$q', 'HTTPService'];
     function FoneclubeService($q, HTTPService) {
 
-        
+
         // var urlApi = 'http://localhost:57078/api';
 
-        //API tests 
-        // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+        //API tests
+        var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API live
-        var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
+        // var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -33,7 +33,7 @@
         this.postGeraBoleto = postGeraBoleto
         this.postCustomerComment = postCustomerComment;
         this.postUpdateTemplate = postUpdateTemplate;
-        
+
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
         this.getOperators = getOperators;
@@ -63,6 +63,7 @@
         this.dispatchedCommision = dispatchedCommision;
         this.getUpdatePagarme = getUpdatePagarme;
         this.getTemplates = getTemplates;
+        this.getStatusAPI  = getStatusAPI
 
         function getLastPaymentType(customer) {
             debugger;
@@ -385,7 +386,7 @@
 
       function getCommision(customerId) {
         var q = $q.defer();
-        
+
         HTTPService.get(urlApi.concat('/comission/customer/').concat(customerId))
           .then(function (result) {
             q.resolve(result);
@@ -624,7 +625,7 @@
 
         function getStatusDocument(documentNumber){
             var q = $q.defer();
-            
+
             HTTPService.get(urlApi.concat('/profile/customer/status/new/document/').concat(documentNumber))
                 .then(function (result) {
                     q.resolve(result);
@@ -699,6 +700,19 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/email/templates'))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
+        function getStatusAPI(){
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/status/database/name'))
                 .then(function (result) {
                     q.resolve(result);
                 })

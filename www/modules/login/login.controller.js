@@ -5,10 +5,15 @@
         .module('foneClub')
         .controller('LoginController', LoginController);
 
-  LoginController.inject = ['FlowManagerService', '$scope', 'FireBaseManagerUtil', 'MainUtils', 'DialogFactory','localStorageService'];
-  function LoginController(FlowManagerService, $scope, FireBaseManagerUtil, MainUtils, DialogFactory, localStorageService) {
+  LoginController.inject = ['FlowManagerService', '$scope', 'FireBaseManagerUtil', 'MainUtils', 'DialogFactory','localStorageService', 'FoneclubeService'];
+  function LoginController(FlowManagerService, $scope, FireBaseManagerUtil, MainUtils, DialogFactory, localStorageService, FoneclubeService) {
         var vm = this;
         vm.login = login;
+
+         FoneclubeService.getStatusAPI().then(function(result){
+                vm.statusBase = result;
+                console.log(result)
+            })
 
         function validaLogin(){
 
@@ -27,7 +32,7 @@
             return false;
         }
 
-        function login(){            
+        function login(){
             if(validaLogin())
             {
               localStorageService.add("userid",'True')
@@ -37,8 +42,8 @@
             }
             else
             {
-                DialogFactory.showMessageDialog({mensagem: 'Usuário ou senha incorretos', titulo: 'Alerta'});                
-            }            
+                DialogFactory.showMessageDialog({mensagem: 'Usuário ou senha incorretos', titulo: 'Alerta'});
+            }
         }
 
     }

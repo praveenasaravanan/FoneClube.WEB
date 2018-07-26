@@ -1,10 +1,11 @@
- 
+
 <div class="login-container">
     <div class="box">
     <div id="header">
-        <div class="icon-header"><img src="./content/img/pi-logo.png" > FONECLUBE</div>      
-        <div id="bottom-head">[ v.0.3.3 ]</div>
-    </div> 
+        <div class="icon-header"><img src="./content/img/pi-logo.png" > FONECLUBE</div>
+        <div id="bottom-head">[ v.0.3.4 ]</div>
+        <div id="bottom-head">{{ vm.statusBase }}</div>
+    </div>
         <form novalidate name="vm.formLogin">
             <div class="form-group">
                 <label for="usr">Nome:</label>
@@ -18,5 +19,5 @@
             <button class="btn btn-success col-md-3" ng-enter="vm.login()" ng-click="vm.login()"  ng-disabled="!vm.formLogin.$valid">Login</button>
         </form>
     <div id="footer-box"></div>
-    </div>    
-</div>         
+    </div>
+</div>
