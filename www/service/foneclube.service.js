@@ -33,6 +33,7 @@
         this.postGeraBoleto = postGeraBoleto
         this.postCustomerComment = postCustomerComment;
         this.postUpdateTemplate = postUpdateTemplate;
+        this.postSoftDeletePhone = postSoftDeletePhone;
 
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
@@ -361,6 +362,18 @@
         function postUpdateTemplate(param) {
             var q = $q.defer();
             HTTPService.post(urlApi.concat('/email/template/update'), param)
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+            return q.promise;
+        }
+
+        function postSoftDeletePhone(param) {
+            var q = $q.defer();
+            HTTPService.post(urlApi.concat('/profile/delete/soft/phone'), param)
                 .then(function (data) {
                     q.resolve(data);
                 })
@@ -709,6 +722,7 @@
 
             return q.promise;
         }
+
         function getStatusAPI(){
             var q = $q.defer();
 

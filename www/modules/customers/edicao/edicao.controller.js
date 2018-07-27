@@ -87,11 +87,11 @@
 
     init();
 
-    
+
     function init() {
-      
+
       $templateCache.removeAll();
-      
+
         // // debugger;
       if (!vm.cpf) {
         FlowManagerService.changeCustomersView();
@@ -106,11 +106,12 @@
 
 
         vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
+        debugger;
         vm.customer = result;
 
 
         getPersonParent(vm.customer.IdParent);
-        
+
         vm.singlePriceLocal = result.SinglePrice > 0  ? 'R$'+ (vm.customer.SinglePrice / 100).toFixed(2) : 0; //single place formatado;
         if (vm.customer.Adresses) {
           for (var i = 0; i < vm.customer.Adresses.length; i++) {
@@ -122,7 +123,7 @@
 
 
           FoneclubeService.getCustomerWithPhoneStatus(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
-            
+
             vm.tempPhones = angular.copy(result.Phones);
             debugger
           })
@@ -175,24 +176,24 @@
                     // debugger;
                     console.log('-- retorno ' + vm.customer.Phones[result.index].DDD + ' ' + vm.customer.Phones[result.index].Number)
                     console.log(result)
-                    
+
                     // if (result.Ativa) {
                     //   vm.customer.Phones[result.index].StatusOperator = { 'background-color': 'green' }
                     //   vm.customer.Phones[result.index].StatusDescription = 'A'
                     // }
-      
+
                     // if (result.Bloqueada)  {
                     //   vm.customer.Phones[result.index].StatusOperator = { 'background-color': 'red' }
                     //   vm.customer.Phones[result.index].StatusDescription = 'B'
                     // }
-      
+
                     vm.tempPhones = angular.copy(vm.customer.Phones);
                      debugger;
-      
+
                   });
-                  
-                  
-                  
+
+
+
 
                 }
               }
@@ -201,15 +202,15 @@
 
             }
 
-            
+
 
             // aqui funciona
             //  vm.customer.Phones[number].StatusOperator = { 'background-color': 'green' }
             //  vm.customer.Phones[number].StatusDescription = 'A'
-            
+
             // aqui n funciona
             // debugger;
-            
+
 
 
           }
@@ -388,7 +389,7 @@
       }
     };
 
-    
+
 
     function populaPai(customer) {
 
@@ -424,7 +425,7 @@
     function onTapSendUser(customer) {
       // debugger
      // vm.tempPhones = angular.copy(vm.customer.Phones);
-      if (vm.requesting == true) 
+      if (vm.requesting == true)
         return;
 
       vm.requesting = true;
@@ -477,9 +478,9 @@
       var newFoneclubeDocument = false;
       FoneclubeService.getStatusDocument(customerSend.DocumentNumber).then(function (result) {
         newFoneclubeDocument = result;
-      
 
-      
+
+
 
       var totalPriceValidade = 0;
       for (var i in vm.customer.Phones) {
@@ -512,7 +513,7 @@
           //showLoader.close();
           vm.requesting = false;
           return;
-        } 
+        }
         else {
 
           // customerSend.Phones[item].DDD = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).DDD;
@@ -1195,12 +1196,36 @@
 
     vm.onunchecked = onunchecked;
     function onunchecked(position) {
-      vm.tempPhones[position] = angular.copy(vm.customer.Phones[position]);
-      var id = vm.tempPhones[position].IdPlanOption;
-      if (id == '' || id == null)
-        vm.pricelist[position] = 0;
-      else
-        vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
+
+      debugger;
+
+      var phone =
+      {
+        "Id": vm.tempPhones[position].Id,
+      };
+
+
+      var r = confirm("Deseja fazer um soft delete nessa linha?");
+    if (r == true) {
+        FoneclubeService.postSoftDeletePhone(phone).then(function(result){
+            debugger;
+            if(result)
+              vm.tempPhones[position].Delete = true;
+        })
+    } else {
+        txt = "You pressed Cancel!";
+    }
+
+      // vm.tempPhones[position].Id
+
+      // vm.tempPhones[position] = angular.copy(vm.customer.Phones[position]);
+      // var id = vm.tempPhones[position].IdPlanOption;
+      // if (id == '' || id == null)
+      //   vm.pricelist[position] = 0;
+      // else
+      //   vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
+
+
     }
 
     vm.onallchecked = onallchecked;
@@ -1323,11 +1348,11 @@
       //    addHistory();
       var ddd = phone.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(0, 2)
       var phone = phone.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(2, 11)
-      
+
       vm.customer.Phones[$index].DDD = ddd;
       vm.customer.Phones[$index].Number = phone;
       vm.customer.Phones[$index].NovoFormatoNumero = ddd + phone;
-      
+
       vm.tempPhones[$index].DDD = ddd;
       vm.tempPhones[$index].Number = phone;
       vm.tempPhones[$index].NovoFormatoNumero = ddd + phone;
