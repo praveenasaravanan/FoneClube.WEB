@@ -8,18 +8,19 @@
     // <<<<<<< HEAD
   CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService', 'localStorageService', '$templateCache'];
   function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService,localStorageService, $templateCache) {
-    
-    
+
+
     var checkvalidate = localStorageService.get("userid");
     if (checkvalidate == null) {
       FlowManagerService.changeLoginView();
     }
 
-    
+
         var vm = this;
         vm.data = DataFactory;
         vm.onTapCustomer = onTapCustomer;
         vm.onTapCustomerEdit = onTapCustomerEdit;
+        vm.onDeleteCustomer = onDeleteCustomer;
         vm.showLoader = true;
         vm.onTapRepeatLastCharge = onTapRepeatLastCharge;
         vm.onTapBoleto = onTapBoleto;
@@ -28,7 +29,7 @@
         vm.onTapExcluir = onTapExcluir;
         vm.CustomerAsc = CustomerAsc;
         vm.CustomerDesc = CustomerDesc;
-        
+
         // vm.checkShowAll = checkShowAll;
         // listenr for on-change of search box
         vm.filterCustomer = filterCustomer;
@@ -56,7 +57,7 @@
 
         vm.ignoreAccents = function (item) {
             // debugger;
-            //alert(item.Name);     
+            //alert(item.Name);
             if (!vm.search)
                 return true;
             //alert(vm.showall);
@@ -240,7 +241,7 @@
                 }
                 else if(result["intIdPaymentType"]==3)
                     {
-                        
+
                     }*/
             })
                 .catch(function (error) {
@@ -306,6 +307,26 @@
                 $scope.sortReverse = false;
                 $scope.clientList = vm.data.customers.filter(x => x.dataPgt != null);
             }
+        }
+
+        function onDeleteCustomer(customer){
+            console.log(customer);
+                  var r = confirm("Deseja fazer um soft delete nesse cliente?");
+                    if (r == true) {
+                        console.log(vm.data.customers)
+                        FoneclubeService.postSoftDeleteCustomer(customer).then(function(result){
+                            console.log(result)
+                            debugger;
+                            // if(result)
+                            // vm.tempPhones[position].Delete = true;
+                        }).catch(function (error) {
+
+                                console.log(error);
+                            });
+
+                    } else {
+                        txt = "You pressed Cancel!";
+                    }
         }
 
         function init() {
