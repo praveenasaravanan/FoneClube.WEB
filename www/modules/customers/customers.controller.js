@@ -315,9 +315,15 @@
                     if (r == true) {
                         console.log(vm.data.customers)
                         FoneclubeService.postSoftDeleteCustomer(customer).then(function(result){
-                            console.log(result)
+
                             debugger;
-                            // if(result)
+                            if(result)
+                            {
+                                alert('Cliente deletado');
+                                customer.SoftDelete = true;
+                                console.log(result)
+
+                            }
                             // vm.tempPhones[position].Delete = true;
                         }).catch(function (error) {
 

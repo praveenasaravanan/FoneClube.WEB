@@ -98,28 +98,28 @@
                     <tbody style="-webkit-user-select: text;-moz-user-select: text;-ms-user-select: text;user-select: text;">
 
 
-                    <tr ng-repeat="customer in displayedCollection">
+                    <tr ng-repeat="customer in displayedCollection" >
                         <script>
                             //                        $(document).ready(function(){
                             document.getElementById("aaaa").focus();
                             //                        });
                         </script>
-                        <td>
+                        <td ng-show="!customer.SoftDelete">
                             <button class="btn btn-primary" ng-click="vm.onTapCustomer(customer, $index)"><i
                                     class="glyphicon glyphicon-edit"></i></button>
                         </td>
-                        <td data-title="Nome" style="cursor:pointer;" ng-click="vm.onTapCustomerEdit(customer, $index)">
+                        <td ng-show="!customer.SoftDelete" data-title="Nome" style="cursor:pointer;" ng-click="vm.onTapCustomerEdit(customer, $index)">
                             {{customer.Name}}
                         </td>
-                        <td data-title="Ultima Cobranca" style="cursor:pointer;"
+                        <td ng-show="!customer.SoftDelete" data-title="Ultima Cobranca" style="cursor:pointer;"
                             ng-click="vm.onTapCustomerEdit(customer, $index)">
                             {{customer.LastChargeDate|date:'dd-MM-yyyy'}}
                         </td>
-                        <td data-title="Data Pgt" style="cursor:pointer;"
+                        <td ng-show="!customer.SoftDelete" data-title="Data Pgt" style="cursor:pointer;"
                             ng-click="vm.onTapCustomerEdit(customer, $index)"> {{customer.dataPgt|date:'dd-MM-yyyy'}}
                         </td>
 
-                        <td data-title="Ações">
+                        <td ng-show="!customer.SoftDelete" data-title="Ações">
                             <button class="btn btn-primary" ng-click="vm.onTapBoletoPayment(customer)"><i
                                     class="glyphicon glyphicon-retweet"></i></button>
                             <button class="btn btn-primary" ng-click="vm.onTapNewCardPayment(customer)"><i
