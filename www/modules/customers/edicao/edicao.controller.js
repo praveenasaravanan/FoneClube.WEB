@@ -423,7 +423,7 @@
     }
 
     function onTapSendUser(customer) {
-      // debugger
+       debugger
      // vm.tempPhones = angular.copy(vm.customer.Phones);
       if (vm.requesting == true)
         return;
@@ -442,7 +442,6 @@
       // }
 
       // customer.Phones[vm.actual_id].NovoFormatoNumero = vm.actual_phone;
-
       // //debugger;
       //return;
       var customerSend = {
@@ -507,6 +506,7 @@
       //Regra: o telefone não pode ser incompleto, mass pode estar em branco
       for (var item in customerSend.Phones) {
 
+        customerSend.Phones[item].NovoFormatoNumero = customerSend.Phones[item].DDD + customerSend.Phones[item].Number
         if (customerSend.Phones[item].NovoFormatoNumero.length < digitosMinimosTelefone && customerSend.Phones[item].NovoFormatoNumero.length > 0) {
           // // debugger;
           DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.') });
