@@ -82,9 +82,6 @@
       vm.CPFField = false;
     }
 
-
-
-
     init();
 
 
