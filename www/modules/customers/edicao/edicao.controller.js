@@ -103,12 +103,9 @@
 
       FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
 
-
-
         vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
         debugger;
         vm.customer = result;
-
 
         getPersonParent(vm.customer.IdParent);
 
@@ -139,26 +136,15 @@
             vm.customer.Phones[number].StatusOperator = { 'background-color': 'grey' }
             vm.customer.Phones[number].StatusDescription = 'C'
 
-            // // debugger
-            // if(number % 2)
-            // {
-            //     vm.customer.Phones[number].StatusOperator = {'background-color':'green'}
-            //     vm.customer.Phones[number].StatusDescription = 'A'
-            // }
-            // else
-            // {
-            //     vm.customer.Phones[number].StatusOperator = {'background-color':'red'}
-            //     vm.customer.Phones[number].StatusDescription = 'B'
-            // }
-
-            //vm.customer.Phones[number].IdOperator = vm.customer.Phones[number].IdOperator.toString(); //deve ser string por causa do ng-options
-            //vm.customer.Phones[number].IdPlanOption = vm.customer.Phones[number].IdPlanOption.toString(); //deve ser string por causa do ng-options
             if (vm.customer.Phones[number].Portability) {
               vm.customer.Phones[number].Portability = 'true';
-            } else {
+            } 
+            else {
               vm.customer.Phones[number].Portability = 'false';
             }
+
             vm.customer.Phones[number].NovoFormatoNumero = getNumberString(vm.customer.Phones[number]); //popula o novo campo vm.<telefone>
+
             for (var plan in vm.plans) {
 
               listaPlanosUsados.push(vm.customer.Phones[number].IdPlanOption);
@@ -166,10 +152,8 @@
               if (vm.plans[plan].Id == vm.customer.Phones[number].IdPlanOption) {
                 if (vm.plans[plan].Description.endsWith('VIVO')) {
                   vm.customer.Phones[number].operadora = '1'; //seta a operadora local
-
-                  // vm.customer.Phones[number].StatusOperator = { 'background-color': 'green' }
-                  // vm.customer.Phones[number].StatusDescription = 'A'
-                } else {
+                } 
+                else {
                   vm.customer.Phones[number].operadora = '2'; //seta a operadora local
 
                   FoneclubeService.getStatusLinhaClaro(vm.customer.Phones[number].DDD, vm.customer.Phones[number].Number, number).then(function (result) {
@@ -177,23 +161,10 @@
                     console.log('-- retorno ' + vm.customer.Phones[result.index].DDD + ' ' + vm.customer.Phones[result.index].Number)
                     console.log(result)
 
-                    // if (result.Ativa) {
-                    //   vm.customer.Phones[result.index].StatusOperator = { 'background-color': 'green' }
-                    //   vm.customer.Phones[result.index].StatusDescription = 'A'
-                    // }
-
-                    // if (result.Bloqueada)  {
-                    //   vm.customer.Phones[result.index].StatusOperator = { 'background-color': 'red' }
-                    //   vm.customer.Phones[result.index].StatusDescription = 'B'
-                    // }
-
                     vm.tempPhones = angular.copy(vm.customer.Phones);
                      debugger;
 
                   });
-
-
-
 
                 }
               }
@@ -430,20 +401,12 @@
 
       vm.requesting = true;
 
-      // for (var i = 0; i < vm.tempPhones.length; i++) {
-      //   vm.customer.Phones[i] = angular.copy(vm.tempPhones[i]);
+      // update phones of input
+      for (var i in vm.tempPhones) {
+        vm.tempPhones[i].DDD = UtilsService.getPhoneNumberFromStringToJson(vm.tempPhones[i].NovoFormatoNumero).DDD;
+        vm.tempPhones[i].Number = UtilsService.getPhoneNumberFromStringToJson(vm.tempPhones[i].NovoFormatoNumero).Number;
+      }
 
-      // }
-
-      // source code de maluco, em um Mês assim quebraria a base, não podemos transformar tudo em preço vip aleatoriamente
-      // for (var i = 0; i < customer.Phones.length; i++){
-      //     customer.Phones[i].PrecoVipStatus = true
-      //     customer.Phones[i].AmmountPrecoVip = vm.pricelistVIP[i]
-      // }
-
-      // customer.Phones[vm.actual_id].NovoFormatoNumero = vm.actual_phone;
-      // //debugger;
-      //return;
       var customerSend = {
         "Id": customer.Id,
         "DocumentNumber": UtilsService.clearDocumentNumber(customer.DocumentNumber),
@@ -513,11 +476,6 @@
           //showLoader.close();
           vm.requesting = false;
           return;
-        }
-        else {
-
-          // customerSend.Phones[item].DDD = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).DDD;
-          // customerSend.Phones[item].Number = UtilsService.getPhoneNumberFromStringToJson(customerSend.Phones[item].NovoFormatoNumero).Number;
         }
 
       }
