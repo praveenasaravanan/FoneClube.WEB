@@ -254,7 +254,7 @@
               vm.pricelist.push(0);
 
             } else {
-              vm.pricelist.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value / 100);
+              vm.pricelist.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value);
               // vm.pricelistVIP.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value / 100);
 
             }
@@ -1095,7 +1095,7 @@
       if (id == '' || id == null)
         vm.pricelist[position] = 0;
       else
-        vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
+        vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value ;
       addHistory();
       autmaticSum();
     }
@@ -1198,7 +1198,7 @@
         if (id == '' || id == null)
           vm.pricelist[position] = 0;
         else
-          vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
+          vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value;
       }
     }
 
