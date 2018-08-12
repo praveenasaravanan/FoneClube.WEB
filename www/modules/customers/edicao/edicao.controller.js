@@ -1349,13 +1349,14 @@
     }
 
     function autmaticSum() {
-        // // debugger;
+
+        debugger;
       if (vm.autoSum) {
         vm.singlePriceLocal = 0;
         for (var i = 0; i < vm.pricelist.length; i++) {
           if(vm.tempPhones[i].LinhaAtiva){
-              if(vm.pricelistVIP[i] > 0){
-                  vm.singlePriceLocal += vm.pricelistVIP[i] ;
+              if(vm.tempPhones[i].AmmountPrecoVip > 0){
+                  vm.singlePriceLocal += vm.tempPhones[i].AmmountPrecoVip ;
               }
               else {
                   vm.singlePriceLocal += vm.pricelist[i] ;
@@ -1364,7 +1365,7 @@
 
 
         }
-     //   vm.singlePriceLocal = vm.singlePriceLocal / 100;
+        vm.singlePriceLocal = vm.singlePriceLocal / 100;
         vm.singlePriceLocal = 'R$'+vm.singlePriceLocal.toFixed(2);
       }
     }
