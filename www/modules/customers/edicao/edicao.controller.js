@@ -201,21 +201,22 @@
             return element.IsFoneclube == null || element.IsFoneclube == false;
           });
           if (dontHaveContact.length == 0) {
-            vm.customer.Phones.push({
-              'Id': null,
-              'DDD': '',
-              'Number': '',
-              'IsFoneclube': null,
-              'IdOperator': 0,
-              'Portability': 'false',
-              'NickName': '',
-              'IdPlanOption': 0,
-              'Inative': false,
-              'Delete': false,
-              'NovoFormatoNumero': '',
-              'operadora': '1',
-              'key': Math.random()
-            });
+            vm.actual_phone = '(11) 11111-1111'
+            // vm.customer.Phones.push({
+            //   'Id': null,
+            //   'DDD': '',
+            //   'Number': '',
+            //   'IsFoneclube': null,
+            //   'IdOperator': 0,
+            //   'Portability': 'false',
+            //   'NickName': '',
+            //   'IdPlanOption': 0,
+            //   'Inative': false,
+            //   'Delete': false,
+            //   'NovoFormatoNumero': '',
+            //   'operadora': '1',
+            //   'key': Math.random()
+            // });
           }
 
           // Fix caso não exista endereço -- É necessário manter esse fix por causa de clientes que tenham esse array vazio
