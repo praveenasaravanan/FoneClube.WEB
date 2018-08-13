@@ -533,7 +533,26 @@
       }
 
       function runPostUpdateCustomer(customerSend) {
-        // // debugger
+        
+        debugger
+        // valida preenchimento de telefones
+        for(var i in customerSend.Phones)
+        {
+          var ddd = customerSend.Phones[i].DDD;
+          var number = customerSend.Phones[i].Number;
+
+          var dddIsNum = /^\d+$/.test(ddd);
+          var numberIsNum = /^\d+$/.test(number);
+
+          if(!dddIsNum || !numberIsNum || ddd.length == 0 || number.length == 0)
+          {
+            alert("Os telefones devem estar preenchidos com DDD e Número. Ajuste e refaça o envio.");
+            vm.requesting = false;
+            showLoader.close();
+            return;
+          }
+        }
+
         UtilsService.sendImageToUpload(vm.imageSelf, vm.imageFrente, vm.imageVerso).then(function (result) {
           for (var i in result) {
             customerSend.Photos = customerSend.Photos.filter(function (element) {
@@ -1160,13 +1179,23 @@
         "Id": vm.tempPhones[position].Id,
       };
 
+      if(phone.Id == null)
+      {
+        vm.tempPhones[position].Delete = true;
+        vm.tempPhones.splice(position, 1);
+        return;
+      }
+        
 
       var r = confirm("Deseja fazer um soft delete nessa linha?");
     if (r == true) {
         FoneclubeService.postSoftDeletePhone(phone).then(function(result){
             debugger;
-            if(result)
+            if(result){
               vm.tempPhones[position].Delete = true;
+              vm.tempPhones.splice(position, 1);
+            }
+              
         })
     } else {
         txt = "You pressed Cancel!";
