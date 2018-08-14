@@ -89,7 +89,6 @@
 
       $templateCache.removeAll();
 
-        // // ;
       if (!vm.cpf) {
         FlowManagerService.changeCustomersView();
         return;
@@ -102,7 +101,6 @@
 
         vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
         vm.customer = result;
-        debugger;
 
         getPersonParent(vm.customer.IdParent);
 
@@ -382,8 +380,17 @@
       for (var i in vm.tempPhones) {
         vm.tempPhones[i].DDD = UtilsService.getPhoneNumberFromStringToJson(vm.tempPhones[i].NovoFormatoNumero).DDD;
         vm.tempPhones[i].Number = UtilsService.getPhoneNumberFromStringToJson(vm.tempPhones[i].NovoFormatoNumero).Number;
-      }
 
+        if(vm.tempPhones[i].IsFoneclube != true)
+        {
+          vm.tempPhones[i].IsFoneclube = false;
+          vm.tempPhones[i].DDD = UtilsService.getPhoneNumberFromStringToJson(vm.actual_phone).DDD;
+          vm.tempPhones[i].Number = UtilsService.getPhoneNumberFromStringToJson(vm.actual_phone).Number;
+        }
+        
+      }
+      
+      debugger;
       var customerSend = {
         "Id": customer.Id,
         "DocumentNumber": UtilsService.clearDocumentNumber(customer.DocumentNumber),
@@ -1081,43 +1088,6 @@
       autmaticSum();
     }
 
-    vm.onSendUser = onSendUser;
-    function onSendUser(customer) {
-
-        var customerSend = {
-            "Id": customer.Id,
-            "DocumentNumber": UtilsService.clearDocumentNumber(customer.DocumentNumber),
-            "Register": customer.Register,
-            "Name": customer.Name,
-            "NickName": customer.NickName,
-            "Email": customer.Email,
-            "Born": customer.Born,
-            "Gender": customer.Gender,
-            "IdPlanOption": customer.IdPlanOption,
-            "IdPagarme": customer.IdPagarme,
-            "IdRole": customer.IdRole,
-            "Adresses": customer.Adresses,
-            "Phones": customer.Phones,
-            "Photos": customer.Photos,
-            "IdParent": customer.IdParent,
-            "NameContactParent": customer.NameContactParent,
-            "IdCommissionLevel": customer.IdCommissionLevel,
-            "SinglePrice": customer.SinglePrice,
-            "DescriptionSinglePrice": customer.DescriptionSinglePrice
-        }
-
-        FoneclubeService.postUpdateCustomer(customerSend).then(function(result){
-            vm.showLoader = false;
-        })
-    };
-
-    vm.onchecked = onchecked;
-    function onchecked(position) {
-      vm.customer.Phones[position] = angular.copy(vm.tempPhones[position]);
-      vm.showLoader = true;
-      onSendUser(vm.customer);
-    }
-
     vm.onfocusPreco = onfocusPreco;
     function onfocusPreco(position){
         vm.tempPrice = vm.pricelist[position];
@@ -1163,13 +1133,7 @@
 
     }
 
-    vm.onallchecked = onallchecked;
-    function onallchecked() {
-      vm.customer.Phones = angular.copy(vm.tempPhones);
-      vm.showLoader = true;
-      onSendUser(vm.customer);
-    }
-
+    // TODO ajustar ou remover
     vm.onallunchecked = onallunchecked;
     function onallunchecked() {
       vm.tempPhones = angular.copy(vm.customer.Phones);
