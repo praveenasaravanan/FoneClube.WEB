@@ -102,6 +102,7 @@
 
         vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
         vm.customer = result;
+        debugger;
 
         getPersonParent(vm.customer.IdParent);
 
@@ -371,7 +372,7 @@
 
     function onTapSendUser(customer) {
        
-     // vm.tempPhones = angular.copy(vm.customer.Phones);
+     
       if (vm.requesting == true)
         return;
 
@@ -632,7 +633,7 @@
 
     function onTapSendUserAllCheck(customer) {
 
-      // vm.tempPhones = angular.copy(vm.customer.Phones);
+
       if (vm.requesting == true) return;
       vm.requesting = true;
 
@@ -640,10 +641,6 @@
         vm.customer.Phones[i] = angular.copy(vm.tempPhones[i]);
 
       }
-
-
-      // //;
-      //return;
 
       //TODO
       //colocar breakpoint nos metodos localhost API, validar se novos atributos chegam--Putting breakpoint the methods localhost API, validate the new assets come.
@@ -1135,8 +1132,6 @@
 
     vm.onunchecked = onunchecked;
     function onunchecked(position) {
-
-      ;
 
       var phone =
       {
