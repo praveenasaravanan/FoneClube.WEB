@@ -5,7 +5,7 @@
         .module('foneClub')
         .controller('CustomersController', CustomersController);
 
-    // <<<<<<< HEAD
+    
   CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService', 'localStorageService', '$templateCache'];
   function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService,localStorageService, $templateCache) {
 
@@ -339,29 +339,59 @@
             // debugger;
             for (var i = 0; i < vm.data.customers.length; i++) {
                 var customer = vm.data.customers[i];
-                FoneclubeService.getDataPgt(customer.IdPagarme).then(function (result) {
-                    vm.dataPgtList.push(result);
-                    if(vm.dataPgtList.length == vm.data.customers.length){
-                        for (var j = 0; j < vm.data.customers.length; j++) {
-                            vm.data.customers[j].dataPgt = vm.dataPgtList[j];
-                        }
-                        vm.clientList = vm.data.customers;
-                        vm.showLoader = false;
-                    }
-                })
-                .catch(function (error) {
-                    console.log('catch error');
-                    console.log(error);
-                    vm.dataPgtList.push(null);
-                    if(vm.dataPgtList.length == vm.data.customers.length){
 
-                        for (var j = 0; j < vm.data.customers.length; j++) {
-                            vm.data.customers[j].dataPgt = vm.dataPgtList[j];
+                
+                if(customer.IdPagarme != undefined)
+                {
+                    FoneclubeService.getDataPgt(customer.IdPagarme).then(function (result) {
+                        vm.dataPgtList.push(result);
+                        if(vm.dataPgtList.length == vm.data.customers.length){
+                            for (var j = 0; j < vm.data.customers.length; j++) {
+                                vm.data.customers[j].dataPgt = vm.dataPgtList[j];
+                            }
+                            vm.clientList = vm.data.customers;
+                            vm.showLoader = false;
                         }
-                        vm.clientList = vm.data.customers;
-                        vm.showLoader = false;
+                    })
+                    .catch(function (error) {
+                        console.log('catch error');
+                        // console.log(error);
+                        try{
+
+                            vm.dataPgtList.push(null);
+                            if(vm.dataPgtList.length == vm.data.customers.length){
+
+                                for (var j = 0; j < vm.data.customers.length; j++) {
+                                    vm.data.customers[j].dataPgt = vm.dataPgtList[j];
+                                }
+                                vm.clientList = vm.data.customers;
+                                vm.showLoader = false;
+                            }
+
+                        }
+                        catch(e){}
+                    });
+                
+                }
+                else{
+                    try{
+
+                        vm.dataPgtList.push(null);
+                        if(vm.dataPgtList.length == vm.data.customers.length){
+
+                            for (var j = 0; j < vm.data.customers.length; j++) {
+                                vm.data.customers[j].dataPgt = vm.dataPgtList[j];
+                            }
+                            vm.clientList = vm.data.customers;
+                            vm.showLoader = false;
+                        }
+
                     }
-                });
+                    catch(e){}
+                }
+                    
+
+                
             }
         }
 

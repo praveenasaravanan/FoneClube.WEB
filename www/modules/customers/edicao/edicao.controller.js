@@ -1245,6 +1245,9 @@
       if (vm.showall) {
         return true;
       } else {
+
+        try{
+
         var text = removeAccents(item.NovoFormatoNumero.toLowerCase());
         //alert(text);
         var search_text = removeAccents(vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, ''));
@@ -1275,6 +1278,13 @@
         }
 
         return flag1 && flag2 && flag3 && flag4;
+
+        
+      }
+      catch(e){
+        console.log('Erro lowercase');
+        // console.log(e);
+      }
 
       }
     };
