@@ -89,7 +89,7 @@
 
       $templateCache.removeAll();
 
-        // // debugger;
+        // // ;
       if (!vm.cpf) {
         FlowManagerService.changeCustomersView();
         return;
@@ -101,7 +101,6 @@
       FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
 
         vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
-        debugger;
         vm.customer = result;
 
         getPersonParent(vm.customer.IdParent);
@@ -117,14 +116,15 @@
 
 
           FoneclubeService.getCustomerWithPhoneStatus(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
-
-            vm.tempPhones = angular.copy(result.Phones);
-            debugger
+            
+            // se der divergencia fazer foreach
+            // vm.tempPhones = angular.copy(result.Phones);
+            
           })
 
 
           vm.plans = result;
-          // // debugger;
+          
           var listaPlanosUsados = [];
 
           for (var number in vm.customer.Phones) {
@@ -154,12 +154,13 @@
                   vm.customer.Phones[number].operadora = '2'; //seta a operadora local
 
                   FoneclubeService.getStatusLinhaClaro(vm.customer.Phones[number].DDD, vm.customer.Phones[number].Number, number).then(function (result) {
-                    // debugger;
+                    
                     console.log('-- retorno ' + vm.customer.Phones[result.index].DDD + ' ' + vm.customer.Phones[result.index].Number)
                     console.log(result)
 
+                    
                     vm.tempPhones = angular.copy(vm.customer.Phones);
-                     debugger;
+                    
 
                   });
 
@@ -170,25 +171,10 @@
 
             }
 
-
-
-            // aqui funciona
-            //  vm.customer.Phones[number].StatusOperator = { 'background-color': 'green' }
-            //  vm.customer.Phones[number].StatusDescription = 'A'
-
-            // aqui n funciona
-            // debugger;
-
-
-
           }
-
-          // coletaStatusCrawler();
-
 
           listaPlanosUsados = listaPlanosUsados.filter(vm.onlyUnique)
           for (var i in listaPlanosUsados) {
-            // // debugger
             var teste = listaPlanosUsados[i];
           }
 
@@ -242,7 +228,7 @@
 
           vm.pricelist = [];
           vm.pricelistVIP = [];
-          // // debugger
+          // // 
           for (var i = 0; i < vm.customer.Phones.length; i++) {
             var phoneNumber = vm.customer.Phones[i];
             if(phoneNumber.PrecoVipStatus){
@@ -261,7 +247,7 @@
 
             }
           }
-            // // debugger
+            // // 
           for (var i = 0; i < vm.customer.Phones.length; i++) {
               var phoneNumber = vm.customer.Phones[i];
               if(phoneNumber.IdPlanOption == 0){
@@ -282,10 +268,11 @@
               }
           }
             // vm.pricelistVIP = vm.pricelist;
+            
           vm.tempPhones = angular.copy(vm.customer.Phones);
 
           vm.sp = 1;
-          // // debugger
+          // // 
           addHistory();
         });
 
@@ -312,15 +299,6 @@
                 return removeAccents(info.NameParent.toString().toLowerCase()).indexOf(removeAccents(searchTerm.toLowerCase())) > -1;
             });
 
-            // var match = _.filter(response, function (info) {
-            //     //alert(info.NameParent);
-            //     if(info.NameParent != null)
-            //         //return info.NameParent.startsWith(searchTerm);
-            //         return removeAccents(info.NameParent.toString().toLowerCase()).indexOf(removeAccents(searchTerm.toLowerCase())) > -1;
-            // });
-
-            // vm.loading = false;
-            // return _.pluck(match, 'NameParent');
           }).catch(function (error) {
             console.log('error: ' + error);
           });
@@ -335,8 +313,7 @@
         };
       },
       itemSelected: function (e) {
-        //vm.contactParent="(21) 98156-7560";
-        //alert(JSON.stringify(e));
+    
         var contactNo = "(" + e.item.DDDParent + ") " + e.item.PhoneParent.toString().substring(0, 5) + "-" + e.item.PhoneParent.toString().substring(5, 9);
         vm.contactParent = contactNo;
       }
@@ -393,7 +370,7 @@
     }
 
     function onTapSendUser(customer) {
-       debugger
+       
      // vm.tempPhones = angular.copy(vm.customer.Phones);
       if (vm.requesting == true)
         return;
@@ -434,7 +411,7 @@
       catch(erro){}
 
 
-      // // debugger;
+      // // ;
 
       var newFoneclubeDocument = false;
       FoneclubeService.getStatusDocument(customerSend.DocumentNumber).then(function (result) {
@@ -451,7 +428,7 @@
           }
         });
       }
-      // // debugger
+      // // 
       if (vm.singlePriceLocal) {
         if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
           DialogFactory.showMessageDialog({ mensagem: 'Preço único não pode ser maior do que o preço de todos os planos somados.' });
@@ -462,7 +439,7 @@
       }
 
       // validar
-      // // debugger
+      // // 
 
       var digitosMinimosTelefone = 11
       //Regra: o telefone não pode ser incompleto, mass pode estar em branco
@@ -470,7 +447,7 @@
 
         customerSend.Phones[item].NovoFormatoNumero = customerSend.Phones[item].DDD + customerSend.Phones[item].Number
         if (customerSend.Phones[item].NovoFormatoNumero.length < digitosMinimosTelefone && customerSend.Phones[item].NovoFormatoNumero.length > 0) {
-          // // debugger;
+          // // ;
           DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.') });
           //showLoader.close();
           vm.requesting = false;
@@ -478,7 +455,7 @@
         }
 
       }
-      // // debugger
+      // // 
       var arrayFiltered = customerSend.Phones.filter(function (number) {
         return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8 && number.Delete == null && number.LinhaAtiva;
       });
@@ -490,20 +467,20 @@
       }
       var showLoader = DialogFactory.showLoader('Enviando Dados...');
 
-      // // debugger
+      // // 
 
       if (arrayFiltered.length == 0) {
         runPostUpdateCustomer(customerSend);
       } else {
 
         // barrando devido seroutro cpf
-        // // debugger;
+        // // ;
         validadeNumbers(arrayFiltered).then(function (result) {
           var right = true;
           for (var item in result) {
             if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber) && !newFoneclubeDocument) {
 
-              // // debugger;
+              // // ;
               var msg = 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
                 .concat(arrayFiltered[item].NovoFormatoNumero).concat('</strong>, pertence ao cliente ')
                 .concat(result[item].DocumentNumber).concat(', ').concat(result[item].Name).concat('.');
@@ -526,7 +503,7 @@
               break;
             }
           }
-          // // debugger
+          // // 
           if (right) {
             runPostUpdateCustomer(customerSend);
           }
@@ -535,7 +512,7 @@
 
       function runPostUpdateCustomer(customerSend) {
         
-        debugger
+        
         // valida preenchimento de telefones
         for(var i in customerSend.Phones)
         {
@@ -561,7 +538,7 @@
             });
             // for (var x in customerSend.Photos) {
             //     if (result[i].tipo == customerSend.Photos[x].Tipo) {
-            // //         debugger;
+            // //         ;
             //         customerSend.Photos.splice(x, 1);
             //     }
             // }
@@ -577,7 +554,7 @@
           }
 
           var parentName = vm.customer.NameContactParent;
-          // // debugger;
+          // // ;
 
 
           var customerObj = {
@@ -586,9 +563,9 @@
             'PhoneDDDParent': parentDDD,
             'PhoneNumberParent': parentNumber
           }
-          // // debugger;
+          // // ;
           FoneclubeService.postCustomerParent(customerObj).then(function (result) {
-            // // debugger;
+            // // ;
             if (result)
               FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
             else {
@@ -665,7 +642,7 @@
       }
 
 
-      // //debugger;
+      // //;
       //return;
 
       //TODO
@@ -714,7 +691,7 @@
       //Regra: o telefone não pode ser incompleto, mass pode estar em branco
       for (var item in customerSend.Phones) {
         if (customerSend.Phones[item].NovoFormatoNumero.length < digitosMinimosTelefone && customerSend.Phones[item].NovoFormatoNumero.length > 0) {
-          // // debugger;
+          // // ;
           DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.') });
           //showLoader.close();
           vm.requesting = false;
@@ -740,13 +717,13 @@
         runPostUpdateCustomer(customerSend);
       } else {
 
-        // // debugger;
+        // // ;
         validadeNumbers(arrayFiltered).then(function (result) {
           var right = true;
           for (var item in result) {
             if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)) {
 
-              // // debugger;
+              // // ;
               var msg = 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
                 .concat(arrayFiltered[item].NovoFormatoNumero).concat('</strong>, pertence ao cliente ')
                 .concat(result[item].DocumentNumber).concat(', ').concat(result[item].Name).concat('.');
@@ -784,7 +761,7 @@
             });
             // for (var x in customerSend.Photos) {
             //     if (result[i].tipo == customerSend.Photos[x].Tipo) {
-            // //         debugger;
+            // //         ;
             //         customerSend.Photos.splice(x, 1);
             //     }
             // }
@@ -799,7 +776,7 @@
           }
 
           var parentName = vm.customer.NameContactParent;
-          // // debugger;
+          // // ;
 
 
           var customerObj = {
@@ -808,9 +785,9 @@
             'PhoneDDDParent': parentDDD,
             'PhoneNumberParent': parentNumber
           }
-          // // debugger;
+          // // ;
           FoneclubeService.postCustomerParent(customerObj).then(function (result) {
-            // // debugger;
+            // // ;
             if (result)
               FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucesscheck).catch(postUpdateCustomerError);
             else {
@@ -931,23 +908,8 @@
       });
     }
 
-    // function getContactParentName() {
-    //     if (vm.contactParent.length < 13) {
-    //         vm.customer.IdParent = "";
-    //         return
-    //     }
-    //     var param = {
-    //         ddd: clearPhoneNumber(vm.contactParent).substring(0, 2),
-    //         numero: clearPhoneNumber(vm.contactParent).substring(2)
-    //     }
-    //     FoneclubeService.getCustomerByPhoneNumber(param).then(function(result) {
-    //         vm.customer.IdParent = result.Id;
-    //         vm.customer.NameContactParent = result.Name;
-    //     })
-    // }
-
     function onTapNewPhoneNumber() {
-      // // debugger
+      // 
       vm.customer.Phones.push(
         {
           'Id': null,
@@ -966,12 +928,13 @@
           'LinhaAtiva': true
         }
       );
+
       vm.tempPhones = angular.copy(vm.customer.Phones);
       resizeScroll();
     }
 
     function onTapRemoveNewNumber(position) {
-      // // debugger
+      // // 
       DialogFactory.dialogConfirm({ titulo: 'Excluir Número', mensagem: 'Deseja realmente remover este número?' })
         .then(function (res) {
           if (res) {
@@ -997,7 +960,7 @@
 
     function validatePhoneNumber(position) {
 
-      // // debugger;
+      // // ;
 
       if (vm.requesting || vm.customer.Phones[position].NovoFormatoNumero.length < 14) return;
       var number = {
@@ -1173,7 +1136,7 @@
     vm.onunchecked = onunchecked;
     function onunchecked(position) {
 
-      debugger;
+      ;
 
       var phone =
       {
@@ -1189,28 +1152,19 @@
         
 
       var r = confirm("Deseja fazer um soft delete nessa linha?");
-    if (r == true) {
-        FoneclubeService.postSoftDeletePhone(phone).then(function(result){
-            debugger;
-            if(result){
-              vm.tempPhones[position].Delete = true;
-              vm.tempPhones.splice(position, 1);
-            }
-              
-        })
-    } else {
-        txt = "You pressed Cancel!";
-    }
-
-      // vm.tempPhones[position].Id
-
-      // vm.tempPhones[position] = angular.copy(vm.customer.Phones[position]);
-      // var id = vm.tempPhones[position].IdPlanOption;
-      // if (id == '' || id == null)
-      //   vm.pricelist[position] = 0;
-      // else
-      //   vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
-
+      if (r == true) {
+          FoneclubeService.postSoftDeletePhone(phone).then(function(result){
+              ;
+              if(result){
+                vm.tempPhones[position].Delete = true;
+                vm.tempPhones.splice(position, 1);
+              }
+                
+          })
+      } 
+      else {
+          txt = "You pressed Cancel!";
+      }
 
     }
 
@@ -1356,12 +1310,12 @@
       vm.tempPhones[$index].Number = phone;
       vm.tempPhones[$index].NovoFormatoNumero = ddd + phone;
 
-      // // debugger;
+      // // ;
     }
 
     vm.activechanged = activechanged;
     function activechanged($index) {
-      // // debugger;
+      // // ;
       addHistory();
     }
 
@@ -1390,7 +1344,7 @@
 
     function autmaticSum() {
 
-        debugger;
+        ;
       if (vm.autoSum) {
         vm.singlePriceLocal = 0;
         for (var i = 0; i < vm.pricelist.length; i++) {
