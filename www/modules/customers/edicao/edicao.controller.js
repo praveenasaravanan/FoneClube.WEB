@@ -115,7 +115,7 @@
 
 
           FoneclubeService.getCustomerWithPhoneStatus(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
-            
+            debugger
             // se der divergencia fazer foreach
             // vm.tempPhones = angular.copy(result.Phones);
             
@@ -166,8 +166,6 @@
                 }
               }
 
-
-
             }
 
           }
@@ -187,21 +185,6 @@
           });
           if (dontHaveContact.length == 0) {
             vm.actual_phone = '(11) 11111-1111'
-            // vm.customer.Phones.push({
-            //   'Id': null,
-            //   'DDD': '',
-            //   'Number': '',
-            //   'IsFoneclube': null,
-            //   'IdOperator': 0,
-            //   'Portability': 'false',
-            //   'NickName': '',
-            //   'IdPlanOption': 0,
-            //   'Inative': false,
-            //   'Delete': false,
-            //   'NovoFormatoNumero': '',
-            //   'operadora': '1',
-            //   'key': Math.random()
-            // });
           }
 
           // Fix caso não exista endereço -- É necessário manter esse fix por causa de clientes que tenham esse array vazio
@@ -226,27 +209,20 @@
           }, 200);
 
           vm.pricelist = [];
-          vm.pricelistVIP = [];
-          // // 
+          
           for (var i = 0; i < vm.customer.Phones.length; i++) {
             var phoneNumber = vm.customer.Phones[i];
-            if(phoneNumber.PrecoVipStatus){
-                vm.pricelistVIP.push(phoneNumber.AmmountPrecoVip);
-            }
-            else {
-                vm.pricelistVIP.push(0);
-            }
+            
             if (phoneNumber.IdPlanOption == '') {
               vm.pricelist.push(0);
 
-            } else {
+            } 
+            else {
               vm.pricelist.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value);
               vm.customer.Phones[i]['Price'] = vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value;
-              // vm.pricelistVIP.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value / 100);
-
             }
           }
-            // // 
+             
           for (var i = 0; i < vm.customer.Phones.length; i++) {
               var phoneNumber = vm.customer.Phones[i];
               if(phoneNumber.IdPlanOption == 0){
@@ -266,8 +242,7 @@
                   }
               }
           }
-            // vm.pricelistVIP = vm.pricelist;
-            
+
           vm.tempPhones = angular.copy(vm.customer.Phones);
 
           vm.sp = 1;
@@ -321,13 +296,11 @@
     vm.getParentDataByPhone = getParentDataByPhone;
 
     function getParentDataByPhone(phoneparent, personid) {
-      //alert(phoneparent+ " "+personid);
+  
       if (phoneparent && personid) {
         phoneparent = phoneparent.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(2, 11);
         FoneclubeService.getCustomerParentByPhone(phoneparent, personid).then(function (result) {
           console.log(result);
-          //alert(phoneparent);
-          //alert(personid);
           vm.customer.NameContactParent = result.NameParent;
         }).catch(function (error) {
           console.log('error: ' + error);
@@ -418,15 +391,9 @@
       }
       catch(erro){}
 
-
-      // // ;
-
       var newFoneclubeDocument = false;
       FoneclubeService.getStatusDocument(customerSend.DocumentNumber).then(function (result) {
         newFoneclubeDocument = result;
-
-
-
 
       var totalPriceValidade = 0;
       for (var i in vm.customer.Phones) {
@@ -436,18 +403,14 @@
           }
         });
       }
-      // // 
+
       if (vm.singlePriceLocal) {
         if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
           DialogFactory.showMessageDialog({ mensagem: 'Preço único não pode ser maior do que o preço de todos os planos somados.' });
-          //showLoader.close();
           vm.requesting = false;
           return;
         }
       }
-
-      // validar
-      // // 
 
       var digitosMinimosTelefone = 11
       //Regra: o telefone não pode ser incompleto, mass pode estar em branco
@@ -455,40 +418,33 @@
 
         customerSend.Phones[item].NovoFormatoNumero = customerSend.Phones[item].DDD + customerSend.Phones[item].Number
         if (customerSend.Phones[item].NovoFormatoNumero.length < digitosMinimosTelefone && customerSend.Phones[item].NovoFormatoNumero.length > 0) {
-          // // ;
           DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.') });
-          //showLoader.close();
           vm.requesting = false;
           return;
         }
 
       }
-      // // 
+      
       var arrayFiltered = customerSend.Phones.filter(function (number) {
         return number.IsFoneclube == true && number.DDD.length == 2 && number.Number.length >= 8 && number.Delete == null && number.LinhaAtiva;
       });
 
-      //Fix se o usuario não add CEP o array deve estar vazio;
       for (var i in customerSend.Adresses) {
         if (customerSend.Adresses[i].Cep == '')
           customerSend.Adresses.splice(i, 1);
       }
       var showLoader = DialogFactory.showLoader('Enviando Dados...');
 
-      // // 
-
       if (arrayFiltered.length == 0) {
         runPostUpdateCustomer(customerSend);
-      } else {
+      } 
+      else {
 
-        // barrando devido seroutro cpf
-        // // ;
         validadeNumbers(arrayFiltered).then(function (result) {
           var right = true;
           for (var item in result) {
             if (result[item].DocumentNumber && result[item].DocumentNumber != UtilsService.clearDocumentNumber(vm.customer.DocumentNumber) && !newFoneclubeDocument) {
 
-              // // ;
               var msg = 'Você não pode cadastrar o mesmo telefone para dois clientes.</br>O número <strong>'
                 .concat(arrayFiltered[item].NovoFormatoNumero).concat('</strong>, pertence ao cliente ')
                 .concat(result[item].DocumentNumber).concat(', ').concat(result[item].Name).concat('.');
@@ -544,26 +500,19 @@
             customerSend.Photos = customerSend.Photos.filter(function (element) {
               return element.Tipo != result[i].tipo;
             });
-            // for (var x in customerSend.Photos) {
-            //     if (result[i].tipo == customerSend.Photos[x].Tipo) {
-            // //         ;
-            //         customerSend.Photos.splice(x, 1);
-            //     }
-            // }
+          
             customerSend.Photos.push({ Name: result[i].filename, Tipo: result[i].tipo });
           }
 
           var parentDDD = "";
           var parentNumber = "";
           if (vm.contactParent != undefined)
-        {
+          {
             var parentDDD = vm.contactParent.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(0, 2);
             var parentNumber = vm.contactParent.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(2, 11);
           }
 
           var parentName = vm.customer.NameContactParent;
-          // // ;
-
 
           var customerObj = {
             'NameParent': vm.customer.NameContactParent,
@@ -571,9 +520,8 @@
             'PhoneDDDParent': parentDDD,
             'PhoneNumberParent': parentNumber
           }
-          // // ;
+          
           FoneclubeService.postCustomerParent(customerObj).then(function (result) {
-            // // ;
             if (result)
               FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
             else {
@@ -598,11 +546,6 @@
               })
 
           });
-
-
-
-
-
 
         })
 
@@ -1220,11 +1163,6 @@
       vm.pricelist = tmp.pricelist;
       for (var position = 0; position < vm.tempPhones.length; position++) {
         var id = vm.tempPhones[position].IdPlanOption;
- /*       if (id == '' || id == null)
-          vm.pricelist[position] = 0;
-        else
-          vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
-          */
       }
     }
 
@@ -1236,11 +1174,6 @@
       vm.pricelist = tmp.pricelist;
       for (var position = 0; position < vm.tempPhones.length; position++) {
         var id = vm.tempPhones[position].IdPlanOption;
-/*        if (id == '' || id == null)
-          vm.pricelist[position] = 0;
-        else
-          vm.pricelist[position] = vm.plans.find(x => x.Id == id).Value / 100;
-          */
       }
     }
 
@@ -1257,7 +1190,6 @@
 
     vm.telephonechanged = telephonechanged;
     function telephonechanged($index, phone) {
-      //    addHistory();
       var ddd = phone.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(0, 2)
       var phone = phone.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(2, 11)
 
@@ -1268,27 +1200,23 @@
       vm.tempPhones[$index].DDD = ddd;
       vm.tempPhones[$index].Number = phone;
       vm.tempPhones[$index].NovoFormatoNumero = ddd + phone;
-
-      // // ;
     }
 
     vm.activechanged = activechanged;
     function activechanged($index) {
-      // // ;
       addHistory();
     }
 
 
     vm.pricechanged = pricechanged;
     function pricechanged($index) {
-
       autmaticSum();
     }
-      vm.pricechangedVIP = pricechangedVIP;
-      function pricechangedVIP($index) {
+    vm.pricechangedVIP = pricechangedVIP;
+    function pricechangedVIP($index) {
 
-          autmaticSum();
-      }
+        autmaticSum();
+    }
     vm.nicknamechanged = nicknamechanged;
     function nicknamechanged($index) {
       addHistory();
@@ -1303,7 +1231,6 @@
 
     function autmaticSum() {
 
-        ;
       if (vm.autoSum) {
         vm.singlePriceLocal = 0;
         for (var i = 0; i < vm.pricelist.length; i++) {
@@ -1315,7 +1242,6 @@
                   vm.singlePriceLocal += vm.pricelist[i] ;
               }
           }
-
 
         }
         vm.singlePriceLocal = vm.singlePriceLocal / 100;
