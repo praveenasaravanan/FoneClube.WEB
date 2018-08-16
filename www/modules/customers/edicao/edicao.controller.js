@@ -343,16 +343,33 @@
 
     function onTapSendUser(customer) {
        
-     
+     debugger;
       if (vm.requesting == true)
         return;
 
       vm.requesting = true;
 
+      var dontHaveContact = vm.tempPhones.filter(function (element, index, array) {
+        return element.IsFoneclube == null || element.IsFoneclube == false;
+      });
+
+      if(dontHaveContact.length == 0)
+      {
+        debugger;
+        var contactPhone = {
+          "DDD":UtilsService.getPhoneNumberFromStringToJson(vm.actual_phone).DDD,
+          "Number":UtilsService.getPhoneNumberFromStringToJson(vm.actual_phone).Number,
+          "IsFoneclube": false
+        }
+
+        vm.tempPhones.push(contactPhone);
+      }
+
       // update phones of input
       for (var i in vm.tempPhones) {
         vm.tempPhones[i].DDD = UtilsService.getPhoneNumberFromStringToJson(vm.tempPhones[i].NovoFormatoNumero).DDD;
         vm.tempPhones[i].Number = UtilsService.getPhoneNumberFromStringToJson(vm.tempPhones[i].NovoFormatoNumero).Number;
+
 
         if(vm.tempPhones[i].IsFoneclube != true)
         {
