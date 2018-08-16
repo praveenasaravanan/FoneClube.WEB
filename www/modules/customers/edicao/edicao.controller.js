@@ -413,11 +413,13 @@
       }
 
       var digitosMinimosTelefone = 11
-      //Regra: o telefone não pode ser incompleto, mass pode estar em branco
+      
+      //Regra: o telefone não pode ser incompleto, mass pode estar em branco, se for de contato foge da regra
       for (var item in customerSend.Phones) {
 
         customerSend.Phones[item].NovoFormatoNumero = customerSend.Phones[item].DDD + customerSend.Phones[item].Number
-        if (customerSend.Phones[item].NovoFormatoNumero.length < digitosMinimosTelefone && customerSend.Phones[item].NovoFormatoNumero.length > 0) {
+        if (customerSend.Phones[item].NovoFormatoNumero.length < digitosMinimosTelefone && customerSend.Phones[item].NovoFormatoNumero.length > 0 && customerSend.Phones[item].IsFoneclube) {
+          debugger;
           DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.') });
           vm.requesting = false;
           return;
