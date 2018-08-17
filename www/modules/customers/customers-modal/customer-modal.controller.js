@@ -39,7 +39,7 @@
         init();
 
         function init() {
-            //debugger
+            debugger
             if (!customer.IdPagarme) {
 
                 PagarmeService.getCustomer(customer.DocumentNumber)
@@ -108,10 +108,13 @@
                             // setStatusBoleto(data.Charges);
                             PagarmeService.getBoletoUrl(data.Charges.BoletoId, vm.chargesAndOrders, i).then(function (result) {
                                 
+                                try{
+                                    // debugger;
+                                    result.chargesAndOrders[result.index].Charges.boleto_url = result[0].boleto_url
+                                    data.Charges.boleto_url = result[0].boleto_url;
+                                }
+                                catch(erro){}
                                 
-                                // debugger;
-                                result.chargesAndOrders[result.index].Charges.boleto_url = result[0].boleto_url
-                                data.Charges.boleto_url = result[0].boleto_url;
                             })
                             .catch(function (error) {
                                 console.log(error);
