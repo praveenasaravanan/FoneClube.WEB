@@ -29,6 +29,12 @@
 
             var carregandoPagarme = false;
             vm.mensagemPagarme = 'Refresh DB'
+            vm.changeSelect = changeSelect
+
+            function changeSelect(param){
+                console.log('Change select' + param)
+                console.log(param)
+            }
 
 
             function onTapUpdatePagarme(){
@@ -145,6 +151,12 @@
                             for(var i in customer.ChargingValidity)
                             {
                                 var charge = customer.ChargingValidity[i];
+
+                                try
+                                {
+                                    customer.ChargingValidity[i].BoletoExpires = new Date(customer.ChargingValidity[i].BoletoExpires).toISOString().split('T')[0].replace('-','/').replace('-','/');
+                                }
+                                catch(erro){}
 
                                 if(charge.PaymentType == 1)
                                 {

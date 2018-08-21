@@ -73,6 +73,8 @@
             <th scope="col" style="text-align: center;"><strong>Status</strong></th>
             <th scope="col"><strong>Última Cobrança</strong></th>
             <th scope="col"><strong>Ultimo pagamento</strong></th>
+            <th scope="col"><strong>Vencimento Boleto</strong></th>
+            <!-- <th scope="col"><strong>Valor cobrança</strong></th> -->
             <th scope="col"><strong>Nome</strong></th>
             <!-- <th scope="col"><strong>Telefones</strong></th>
             <th scope="col"><strong>Detalhes linha</strong></th> -->
@@ -107,6 +109,8 @@
             <td ng-class="{'status-green': customer.dataIgual == true}"><strong>{{customer.chargingDate}}</strong></td>
 
             <td><strong></strong>{{customer.LastPaidDate}}</strong></td>
+            <td><strong></strong>{{customer.selectedCharge.BoletoExpires}}</strong></td>
+            <!-- <td><strong></strong>{{customer.Charging.Ammount / 100}}</strong></td> -->
 
             <td>{{customer.Name}}</td>
 
@@ -140,7 +144,8 @@
                         ng-show="customer.ChargingValidity.length > 1"
                         ng-model="customer.selectedCharge"
                         ng-options="vm.formatAmmout(item.Ammount) for item in customer.ChargingValidity"
-                        ng-init="customer.selectedCharge = customer.ChargingValidity[0]">
+                        ng-init="customer.selectedCharge = customer.ChargingValidity[0]"
+                        ng-change="vm.changeSelect(customer.selectedCharge)">
                 </select>
 
 
