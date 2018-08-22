@@ -318,12 +318,13 @@
         function getStatusBoletoRecursivo(boletoId, elemento, viewModel, indexCustomerModel, indexChargeModel) {
             var q = $q.defer();
 
-            if (elemento.Name == 'Marcio da Rocha Lima JR')
-                debugger;
+            
 
             HTTPService.get('https://api.pagar.me/1/transactions?api_key='.concat(apiKey).concat('&id=').concat(boletoId))
                 .then(function (result) {
 
+                    // if (elemento.Name == 'Antonia Maria da Silva Barboza')
+                    //     debugger
 
                     try {
                         result[0].elemento = elemento;
@@ -332,7 +333,7 @@
                         result[0].indexCharge = indexChargeModel
                     }
                     catch (erro) {
-                        // debugger
+                        debugger
                     }
 
 

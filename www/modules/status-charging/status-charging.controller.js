@@ -146,7 +146,9 @@
 
                     if(customer.Charged)
                     {
-                        // customer.status = customer.ChargingValidity[0].PaymentType == 1 ? 'PAGO' : 'CARREGANDO';
+                        
+
+                        
                             customer.registerPayd = false;
                             for(var i in customer.ChargingValidity)
                             {
@@ -167,18 +169,18 @@
                                 {
                                     PagarmeService.getStatusBoletoRecursivo(charge.BoletoId, customer, vm, index, i).then(function (result) {
                                         
-                                        // ;
+                                        // if(result[0].vm.customers[result[0].indexCustomer].Name == 'Antonia Maria da Silva Barboza')
+                                        //     debugger
+                                        
                                         result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'INVÁLIDO'
 
                                         if(result[0].status == "waiting_payment")
                                         {
-                                            // charge.StatusDescription = 'PENDENTE';
-
-                                            // ;
                                             result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'PENDENTE'
 
+                                            
                                             if(!result[0].elemento.registerPayd){
-                                                result[0].elemento.status = charge.StatusDescription;
+                                                result[0].elemento.status = result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription;
                                             }
                                         }
                                         else if(result[0].status == "paid"){
