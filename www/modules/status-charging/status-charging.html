@@ -98,12 +98,15 @@
                 <svg height="10" width="10" ng-if="customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'PENDENTE'">
                     <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="green" />
                 </svg>
-                <svg height="10" width="10" ng-if="customer.selectedCharge.StatusDescription == 'PENDENTE'">
+                <svg height="10" width="10" ng-if="customer.selectedCharge.StatusDescription == 'PENDENTE' && customer.selectedCharge.Expired != true">
                     <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="blue" />
                 </svg>
                 <svg height="10" width="10" ng-if="customer.selectedCharge.StatusDescription == 'CARREGANDO'">
                     <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="grey" />
                 </svg>
+                <!-- <svg height="10" width="10" ng-if="customer.selectedCharge.Expired == true">
+                    <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="yellow" />
+                </svg> -->
             </td>
 
             <td ng-class="{'status-green': customer.dataIgual == true}"><strong>{{customer.chargingDate}}</strong></td>
@@ -133,7 +136,11 @@
 
             <td>
                 <div ng-if="customer.ChargingValidity[0].Charged">
-                    {{ customer.ChargingValidity[0].PaymentType == 1 ? 'CARTÃO' : 'BOLETO' }}
+                    <!-- {{ customer.ChargingValidity[0].PaymentType == 1 ? 'CARTÃO' : 'BOLETO' }} -->
+
+                    <a ng-if="customer.selectedCharge.PaymentType != 1" ng-href="{{customer.selectedCharge.BoletoLink}}" target="_blank">BOLETO</a>
+                    
+                    <p ng-if="customer.selectedCharge.PaymentType == 1">CARTÃO</p>
                 </div>
 
             </td>
