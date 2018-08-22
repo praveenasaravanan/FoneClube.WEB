@@ -8,7 +8,7 @@
         StatusChargingController.inject = ['FlowManagerService', 'MainUtils', 'FoneclubeService', 'PagarmeService', '$interval'];
         function StatusChargingController(FlowManagerService, MainUtils, FoneclubeService, PagarmeService, $interval) {
 
-            debugger;
+            ;
             var vm = this;
             
             console.log('--- StatusChargingController --- ' );
@@ -38,7 +38,7 @@
 
 
             function onTapUpdatePagarme(){
-                debugger;
+                ;
                 console.log('teste');
                 // getUpdatePagarme
                 if(!carregandoPagarme)
@@ -63,7 +63,7 @@
             function searchStatusCharging(){
                 // console.log('searchStatusCharging')
                 // console.log( vm.month + ' ' + vm.year);
-                debugger;
+                ;
                 vm.loading = true;
                 vm.totalReceivedReady = false;
 
@@ -95,7 +95,7 @@
             }
 
             function allStatusLoaded(){
-                debugger;
+                ;
                 for (var index in vm.customers) {
                     
                     for(var i in vm.customers[index].ChargingValidity)
@@ -115,7 +115,7 @@
 
             function handleData(customers){
                 
-                debugger;
+                ;
                 // .toISOString().split('T')[0].replace('-','/').replace('-','/');
 
                 vm.callbackCount = 0;
@@ -167,14 +167,14 @@
                                 {
                                     PagarmeService.getStatusBoletoRecursivo(charge.BoletoId, customer, vm, index, i).then(function (result) {
                                         
-                                        // debugger;
+                                        // ;
                                         result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'INVÁLIDO'
 
                                         if(result[0].status == "waiting_payment")
                                         {
                                             // charge.StatusDescription = 'PENDENTE';
 
-                                            // debugger;
+                                            // ;
                                             result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'PENDENTE'
 
                                             if(!result[0].elemento.registerPayd){
@@ -193,14 +193,14 @@
 
                                             result[0].elemento.registerPayd = true;
                                             result[0].elemento.status = charge.StatusDescription;
-                                            // debugger
+                                            // 
                                             console.log('Adicionando ' + parseInt(result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Ammount,10))
                                             console.log('Adicionando ' + totalRecebidoBoleto)
                                             totalRecebidoBoleto += parseInt(result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Ammount,10)
                                             result[0].vm.totalReceived += parseInt(result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Ammount,10)
                                         }
                                         else{
-                                            // debugger;
+                                            // ;
                                         }
 
                                         result[0].vm.callbackCount++;
@@ -247,7 +247,7 @@
             }
 
             function loadPaymentHistory(){
-                debugger;
+                ;
                 for (var index in vm.customers) {
                    
                     FoneclubeService.getChargeAndServiceOrderHistoryDinamic(vm.customers[index].Id, index).then(function (result) {
@@ -298,6 +298,13 @@
                         
                     });
 
+                }
+
+                for (var index in vm.customers) {
+                    if(vm.customers[index].chargingDate == undefined || vm.customers[index].chargingDate == null){
+                        // debugger;
+                        vm.customers[index].chargingDate = new Date('2000/01/01').toISOString().split('T')[0].replace('-','/').replace('-','/');
+                    }
                 }
             }
 

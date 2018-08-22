@@ -72,7 +72,7 @@
 
             <th scope="col" style="text-align: center;"><strong>Status</strong></th>
             <th scope="col"><strong>Última Cobrança</strong></th>
-            <th scope="col"><strong>Ultimo pagamento</strong></th>
+            <th scope="col"><strong>Ultimo pag.</strong></th>
             <th scope="col"><strong>Vencimento Boleto</strong></th>
             <!-- <th scope="col"><strong>Valor cobrança</strong></th> -->
             <th scope="col"><strong>Nome</strong></th>
@@ -84,7 +84,8 @@
 
         </tr>
         </thead>
-        <tbody ng-repeat="customer in displayedCollection" ng-show="!vm.loading">
+        <!-- <tbody ng-repeat="customer in displayedCollection  | orderBy:'-chargingDate' " ng-show="!vm.loading"> -->
+        <tbody ng-repeat="customer in displayedCollection  | orderBy:['ChargingValidity[0].StatusDescription', '-chargingDate']" ng-show="!vm.loading">
 
         <tr>
             <td style="text-align: center;">
@@ -92,15 +93,20 @@
                 <!--<strong>{{customer.selectedCharge.StatusDescription}}</strong>-->
                 <!--<strong ng-if="customer.selectedCharge.StatusDescription == undefined || customer.selectedCharge.StatusDescription == null">-->
                     <!--NÃO COBRADO</strong>-->
-                <svg height="10" width="10" ng-if="!customer.Charged" style="text-align: center">
-                    <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="red" />
-                </svg>
-                <svg height="10" width="10" ng-if="customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'PENDENTE'">
-                    <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="green" />
-                </svg>
-                <svg height="10" width="10" ng-if="customer.selectedCharge.StatusDescription == 'PENDENTE' && customer.selectedCharge.Expired != true">
-                    <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="blue" />
-                </svg>
+
+                <div ng-if="!customer.Charged">
+                    <strong><p>NÃO COBRADO</p></strong>
+                </div>
+
+                <div  ng-if="customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'PENDENTE'">
+                    <strong><p style="color: green;">PAGO</p></strong>
+                </div>
+                
+                <div  ng-if="customer.selectedCharge.StatusDescription == 'PENDENTE' && customer.selectedCharge.Expired != true">
+                    <strong><p style="color: blue;">COBRADO</p></strong>
+                </div>
+
+  
                 <svg height="10" width="10" ng-if="customer.selectedCharge.StatusDescription == 'CARREGANDO'">
                     <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="grey" />
                 </svg>
