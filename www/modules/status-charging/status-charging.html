@@ -71,15 +71,18 @@
         <tr>
 
             <th scope="col" style="text-align: center;"><strong>Status</strong></th>
-            <th scope="col"><strong>Última Cobrança</strong></th>
+            <th scope="col"><strong>Última Cob.</strong></th>
+            <th scope="col"><strong>R$ Cobrado</strong></th>
+            <th scope="col"><strong>Tipo</strong></th>
+            <th scope="col"><strong>Vencimento</strong></th>
             <th scope="col"><strong>Ultimo pag.</strong></th>
-            <th scope="col"><strong>Vencimento Boleto</strong></th>
+            <th scope="col"><strong>R$ Pago</strong></th>
             <!-- <th scope="col"><strong>Valor cobrança</strong></th> -->
             <th scope="col"><strong>Nome</strong></th>
             <!-- <th scope="col"><strong>Telefones</strong></th>
             <th scope="col"><strong>Detalhes linha</strong></th> -->
-            <th scope="col"><strong>Tipo</strong></th>
-            <th scope="col"><strong>R$ Cobrado</strong></th>
+            
+            
             <!-- <th scope="col"><strong>Teste</strong></th> -->
 
         </tr>
@@ -117,9 +120,54 @@
 
             <td ng-class="{'status-green': customer.dataIgual == true}"><strong>{{customer.chargingDate}}</strong></td>
 
-            <td><strong></strong>{{customer.LastPaidDate}}</strong></td>
+            <td>
+                <select
+                        ng-if="customer.ChargingValidity.length > 0"
+                        ng-show="customer.ChargingValidity.length > 1"
+                        ng-model="customer.selectedCharge"
+                        ng-options="vm.formatAmmout(item.Ammount) for item in customer.ChargingValidity"
+                        ng-init="customer.selectedCharge = customer.ChargingValidity[0]"
+                        ng-change="vm.changeSelect(customer.selectedCharge)">
+                </select>
+
+
+                <div ng-if="customer.ChargingValidity.length == 1">{{ customer.ammout}}</div>
+
+
+            </td>
+
+            <td>
+                <div ng-if="customer.ChargingValidity[0].Charged">
+                    <!-- {{ customer.ChargingValidity[0].PaymentType == 1 ? 'CARTÃO' : 'BOLETO' }} -->
+
+                    <a ng-if="customer.selectedCharge.PaymentType != 1" ng-href="{{customer.selectedCharge.BoletoLink}}" target="_blank">BOLETO</a>
+                    
+                    <p ng-if="customer.selectedCharge.PaymentType == 1">CARTÃO</p>
+                </div>
+
+            </td>
+
             <td><strong></strong>{{customer.selectedCharge.BoletoExpires}}</strong></td>
+            <td><strong></strong>{{customer.LastPaidDate}}</strong></td>
             <!-- <td><strong></strong>{{customer.Charging.Ammount / 100}}</strong></td> -->
+
+            <td>
+                <select
+                        ng-if="customer.ChargingValidity.length > 0"
+                        ng-show="customer.ChargingValidity.length > 1"
+                        ng-model="customer.selectedCharge"
+                        ng-options="vm.formatAmmout(item.Ammount) for item in customer.ChargingValidity"
+                        ng-init="customer.selectedCharge = customer.ChargingValidity[0]"
+                        ng-change="vm.changeSelect(customer.selectedCharge)">
+                </select>
+
+                <div ng-if="customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'PENDENTE'">
+                    <div ng-if="customer.ChargingValidity.length == 1">{{ customer.ammout}}</div>
+                </div>
+                
+
+
+            </td>
 
             <td>{{customer.Name}}</td>
 
@@ -140,32 +188,9 @@
                 {{customer.selectedPhone.PlanDescription}}
             </td> -->
 
-            <td>
-                <div ng-if="customer.ChargingValidity[0].Charged">
-                    <!-- {{ customer.ChargingValidity[0].PaymentType == 1 ? 'CARTÃO' : 'BOLETO' }} -->
+            
 
-                    <a ng-if="customer.selectedCharge.PaymentType != 1" ng-href="{{customer.selectedCharge.BoletoLink}}" target="_blank">BOLETO</a>
-                    
-                    <p ng-if="customer.selectedCharge.PaymentType == 1">CARTÃO</p>
-                </div>
-
-            </td>
-
-            <td>
-                <select
-                        ng-if="customer.ChargingValidity.length > 0"
-                        ng-show="customer.ChargingValidity.length > 1"
-                        ng-model="customer.selectedCharge"
-                        ng-options="vm.formatAmmout(item.Ammount) for item in customer.ChargingValidity"
-                        ng-init="customer.selectedCharge = customer.ChargingValidity[0]"
-                        ng-change="vm.changeSelect(customer.selectedCharge)">
-                </select>
-
-
-                <div ng-if="customer.ChargingValidity.length == 1">{{ customer.ammout}}</div>
-
-
-            </td>
+            
 
             <!-- <td>
                 <select
