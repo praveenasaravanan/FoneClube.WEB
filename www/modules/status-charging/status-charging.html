@@ -70,8 +70,8 @@
         <thead ng-show="!vm.loading">
         <tr>
 
-            <th scope="col" style="text-align: center;"><strong>Status</strong></th>
             <th scope="col"><strong>Última Cob.</strong></th>
+            <th scope="col" style="text-align: center;"><strong>Status</strong></th>
             <th scope="col"><strong>R$ Cobrado</strong></th>
             <th scope="col"><strong>Tipo</strong></th>
             <th scope="col"><strong>Vencimento</strong></th>
@@ -91,6 +91,9 @@
         <tbody ng-repeat="customer in displayedCollection  | orderBy:['ChargingValidity[0].StatusDescription', '-chargingDate']" ng-show="!vm.loading">
 
         <tr>
+
+                <td ng-class="{'status-green': customer.dataIgual == true}"><strong>{{customer.chargingDate}}</strong></td>
+
             <td style="text-align: center;">
             <!--<td ng-class="{'status-red': !customer.Charged, 'status-green': customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'INVÁLIDO', 'status-blue': customer.selectedCharge.StatusDescription == 'PENDENTE', 'status-grey': customer.selectedCharge.StatusDescription == 'CARREGANDO' }">-->
                 <!--<strong>{{customer.selectedCharge.StatusDescription}}</strong>-->
@@ -105,7 +108,7 @@
                     <strong><p style="color: green;">PAGO</p></strong>
                 </div>
                 
-                <div  ng-if="customer.selectedCharge.StatusDescription == 'PENDENTE'">
+                <div  ng-if="customer.selectedCharge.StatusDescription == 'PENDENTE' && customer.selectedCharge.Expired != true">
                     <strong><p style="color: blue;">COBRADO</p></strong>
                 </div>
 
@@ -113,12 +116,19 @@
                 <svg height="10" width="10" ng-if="customer.selectedCharge.StatusDescription == 'CARREGANDO'">
                     <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="grey" />
                 </svg>
+
+                <div  ng-if="customer.selectedCharge.Expired == true && customer.selectedCharge.PaymentType == 2">
+                    <strong><p style="color: red;">VENCIDO</p></strong>
+                </div>
+
+                <!-- customer.selectedCharge.Expired -->
+
                 <!-- <svg height="10" width="10" ng-if="customer.selectedCharge.Expired == true">
                     <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="yellow" />
                 </svg> -->
             </td>
 
-            <td ng-class="{'status-green': customer.dataIgual == true}"><strong>{{customer.chargingDate}}</strong></td>
+            
 
             <td>
                 <select
