@@ -101,6 +101,16 @@
 
         vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
         vm.customer = result;
+        
+        if(result.Id == 4158)
+        {
+          vm.hideColunaLinhaAtiva = true;
+          vm.hideColunaPrecoVip = true;
+          vm.hideColunaPrecoFC = true;
+          vm.hideColunaPerfil = true;
+          vm.hideColunaApelido = true;
+        }
+          
 
         getPersonParent(vm.customer.IdParent);
 

@@ -199,7 +199,7 @@
                     </button>
                 </div>
                 <div class="form-group col-xs-3 col-sm-2">
-                    <div class="input-group">
+                    <div class="input-group"> 
                         <input id="chkShowall" type="checkbox" ng-model="vm.showall" ng-change="vm.changedFilterAll()"
                                ng-checked="false"/>
                         <label for="chkShowall">Tudo</label>
@@ -273,7 +273,7 @@
                         <div class="s_cls s_lbl"><span for="portabilidadeTelefone">Email Action:</span></div>
                     </th>
 
-                    <th style="width: 40px;">
+                    <th style="width: 40px;" ng-if="!vm.hideColunaLinhaAtiva">
                         <div class="s_cls s_lbl">
                             <span for="portabilidadeTelefone">ATIVA:</span>
                         </div>
@@ -291,18 +291,18 @@
                             <span for="portabilidadeTelefone">PrecoFC:</span>
                         </div>
                     </th>
-                    <th style="width: 100px;">
+                    <th ng-if="!vm.hideColunaPrecoVip" style="width: 100px;">
                         <div class="s_cls s_lbl">
                             <span for="portabilidadeTelefone">PrecoVIP:</span>
                         </div>
                     </th>
-                    <th style="width: 100px;">
+                    <th ng-if='!vm.hideColunaPerfil' style="width: 100px;">
                         <div class="s_cls s_lbl">
                             <span for="portabilidadeTelefone">Perfil:</span>
                         </div>
                     </th>
 
-                    <th style="width: 150px;">
+                    <th ng-if='!vm.hideColunaApelido' style="width: 150px;">
                         <div class="s_cls s_lbl">
                             <span for="portabilidadeTelefone">APELIDO:</span>
                         </div>
@@ -351,7 +351,8 @@
 
                         </div>
                     </td>
-                    <td style="width: 40px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+
+                    <td ng-if="!vm.hideColunaLinhaAtiva" style="width: 40px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
                         <toggle ng-change="vm.activechanged($index)" on="On" off="Off"
                                 ng-model="phoneNumber.LinhaAtiva"></toggle>
 
@@ -377,21 +378,21 @@
                                    restrict="reject" style="width: 120px;">
                         </div>
                     </td>
-                    <td style="width: 130px;text-align: center;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+                    <td ng-if="!vm.hideColunaPrecoVip" style="width: 130px;text-align: center;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
                         <div class="s_cls">
                             <input money-input type="tel" id="preco_vip" next-on-enter class="form-control"
                                    ng-model="phoneNumber.AmmountPrecoVip"
                                    restrict="reject" style="width: 120px;">
                         </div>
                     </td>
-                    <td style="width: 130px;text-align: center;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+                    <td ng-if='!vm.hideColunaPerfil' style="width: 130px;text-align: center;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
                         <div class="s_cls">
                             <input id="perfill" next-on-enter class="form-control" restrict="reject"
                                    style="width: 120px;">
                         </div>
                     </td>
 
-                    <td ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+                    <td ng-if='!vm.hideColunaApelido' ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
                         <div class="s_cls">
                             <input id="comentarioValor" next-on-enter class="form-control"
                                    ng-change="vm.nicknamechanged()" ng-model="phoneNumber.NickName"

@@ -67,15 +67,15 @@
         this.getStatusAPI  = getStatusAPI
 
         function getLastPaymentType(customer) {
-            debugger;
+            
             var q = $q.defer();
             HTTPService.get(urlApi.concat('/profile/getpaymentmethod?personID='.concat(customer.Id)))
                 .then(function (result) {
-                    debugger;
+                    
                     q.resolve(result);
                 })
                 .catch(function (error) {
-                    debugger;
+                    
                     q.reject(error);
                 });
 
@@ -113,7 +113,6 @@
 
         function getStatusChargingOfCustomer(id, month, year) {
             var q = $q.defer();
-            debugger
             HTTPService.get(urlApi.concat('/charging/cobranca/status/vingencia/cliente/'+id+'/mes/' + month + '/ano/' + year))
                 .then(function (result) {
                     q.resolve(result);
@@ -255,7 +254,7 @@
         }
 
         function postUpdateCustomer(customer) {
-            debugger
+            
             var q = $q.defer();
 
             HTTPService.post(urlApi.concat('/profile/customer/update'), customer)
@@ -476,7 +475,7 @@
                 .catch(function (error) {
                     q.reject(error);
                 });
-            debugger
+            
             return q.promise;
         }
 
@@ -491,7 +490,7 @@
                 .catch(function (error) {
                     q.reject(error);
                 });
-            debugger
+            
             return q.promise;
         }
 
@@ -505,7 +504,7 @@
                 .catch(function (error) {
                     q.reject(error);
                 });
-            debugger
+            
             return q.promise;
         }
 
