@@ -120,6 +120,9 @@
                         </td>
 
                         <td ng-show="!customer.SoftDelete" data-title="Ações">
+                                
+                            <button ng-show="customer.Orphan"  class="btn btn-warning"><i
+                                    class="glyphicon glyphicon-exclamation-sign"></i></button>
                             <button class="btn btn-primary" ng-click="vm.onTapBoletoPayment(customer)"><i
                                     class="glyphicon glyphicon-retweet"></i></button>
                             <button class="btn btn-primary" ng-click="vm.onTapNewCardPayment(customer)"><i
