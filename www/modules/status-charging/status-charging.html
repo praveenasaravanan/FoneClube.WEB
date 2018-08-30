@@ -87,8 +87,8 @@
 
         </tr>
         </thead>
-        <!-- <tbody ng-repeat="customer in displayedCollection  | orderBy:'-chargingDate' " ng-show="!vm.loading"> -->
-        <tbody ng-repeat="customer in displayedCollection  | orderBy:['ChargingValidity[0].StatusDescription', '-chargingDate']" ng-show="!vm.loading">
+        <!-- <tbody ng-repeat="customer in displayedCollection  | orderBy:'-chargingDate' " ng-show="!vm.loading"> 'ChargingValidity[0].StatusDescription', -->
+        <tbody ng-repeat="customer in displayedCollection  | orderBy:['-chargingDate']" ng-show="!vm.loading">
 
         <tr>
 
