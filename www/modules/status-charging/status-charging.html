@@ -104,7 +104,7 @@
                     <strong><p>NÃO COBRADO</p></strong>
                 </div>
 
-                <div  ng-if="customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'PENDENTE'">
+                <div  ng-if="customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'PENDENTE' && customer.selectedCharge.StatusDescription != 'REFUNDED' ">
                     <strong><p style="color: green;">PAGO</p></strong>
                 </div>
                 
@@ -119,6 +119,10 @@
 
                 <div  ng-if="customer.selectedCharge.Expired == true && customer.selectedCharge.PaymentType == 2">
                     <strong><p style="color: red;">VENCIDO</p></strong>
+                </div>
+
+                <div  ng-if="customer.selectedCharge.StatusDescription == 'REFUNDED'">
+                    <strong><p style="color: purple;">REFUNDED</p></strong>
                 </div>
 
                 <!-- customer.selectedCharge.Expired -->

@@ -160,7 +160,7 @@
                                 }
                                 catch(erro){}
 
-                                if(charge.PaymentType == 1)
+                                if(charge.PaymentType == 1 && charge.StatusDescription != 'Refunded')
                                 {
                                     customer.ChargingValidity[i].StatusDescription = 'PAGO'
                                 }
@@ -183,9 +183,9 @@
                                                 result[0].elemento.status = result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription;
                                             }
                                         }
-                                        else if(result[0].status == "paid"){
+                                        else if(result[0].status == "paid" ){
                                             
-                                            charge.StatusDescription = 'PAGO';
+                                            // charge.StatusDescription = 'PAGO';
                                             result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'PAGO'
                                             try{
                                                 
@@ -203,6 +203,7 @@
                                         }
                                         else{
                                             // ;
+                                            
                                         }
 
                                         result[0].vm.callbackCount++;
@@ -215,6 +216,11 @@
                                         }
         
                                     })
+                                }
+
+                                if(charge.PaymentType == 1 && charge.StatusDescription == 'Refunded')
+                                {
+                                    customer.ChargingValidity[i].StatusDescription = 'REFUNDED'
                                 }
                                 
                                 if(charge.BoletoId == 0 && charge.PaymentType == 2){
