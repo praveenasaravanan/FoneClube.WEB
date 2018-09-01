@@ -57,7 +57,7 @@
                     Cartões disponíveis
                 </h4>
 
-                <uib-accordion close-others="oneAtATime">
+                <!-- <uib-accordion close-others="oneAtATime">
                     <div uib-accordion-group class="panel-default"
                          ng-init="vm.cards.length == 1 ? status.open = true : status.open = false"
                          is-open="status.open" ng-repeat="card in vm.cards">
@@ -75,16 +75,27 @@
                             cobrança
                         </button>
                     </div>
-                </uib-accordion>
+                </uib-accordion> -->
+
+                
+                    <accordion-group ng-repeat="group in vm.groups" heading="{{group.title}}" is-open="group.open">
+                      <accordion-heading>
+                                some text here
+                                
+                           
+                      </accordion-heading>
+                      This is just some content to illustrate fancy headings.
+                    </accordion-group>    
+                
 
                 <h4>Cobranças & Ordens de Serviço</h4>
 
-                <uib-accordion close-others="oneAtATime">
+                <!-- <uib-accordion close-others="oneAtATime">
                     <div class="row">
                         <div class="col-sm-6">
                             <div uib-accordion-group class="panel-default" ng-init="status.open = true"
                                  is-open="status.open" ng-repeat="os in vm.osDescArray" ng-if="$index > 0">
-                                <!--<div >-->
+                                
                                 <uib-accordion-heading>
                                     {{vm.osArray.length-$index}}ª O.S.
                                     {{vm.osArray[vm.osArray.length-$index].ServiceOrders.Description}}
@@ -102,11 +113,9 @@
                                     <p>Pendete interação:
                                         <strong>{{vm.osArray[vm.osArray.length-$index].ServiceOrders.PendingInteraction}} </strong>
                                     </p>
-                                    <!--<p>Tipo: <strong>{{history.descriptionType}} </strong> </p>
-                                <p>Agente: <strong>{{history.CollectorName }} </strong> </p>
-                                <p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{history.StatusPayment }} </strong> </p>-->
+                                
                                 </div>
-                                <!--</div>-->
+                               
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -115,7 +124,6 @@
 
                                 <div ng-if="chargeAndOrder.IsCharge">
                                     <uib-accordion-heading>
-                                        <!--{{vm.chargesAndOrders.length-$index}}ª Cob.   {{ chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM/dd'}}   R${{chargeAndOrder.Charges.Ammount / 100 }}   {{chargeAndOrder.Charges.descriptionType}}-->
 
                                         {{vm.chargesArray.length-$index}}ª Cob. {{
                                         chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM/dd'}}
@@ -179,42 +187,19 @@
                                         ngclipboard data-clipboard-text="{{chargeAndOrder.Charges.boleto_url}}"> Copiar link Boleto
                                         </button>
                                         
-
-                                        <!--<p ng-if="chargeAndOrder.Charges.StatusPayment != undefined">Status pagamento:-->
-                                        <!--<strong>{{chargeAndOrder.Charges }} </strong>-->
-                                        <!--</p>-->
                                     </div>
                                     <button class="btn btn-info col-xs-12 col-sm-3"
                                             ng-click="vm.onTapPaymentHistoryDetail(chargeAndOrder.Charges);"> + Info
                                     </button>
 
                                 </div>
-                                <!--<div ng-if="chargeAndOrder.IsServiceOrder">-->
-                                <!--<uib-accordion-heading>-->
-                                <!--{{vm.chargesAndOrders.length-$index}}ª O.S.   {{chargeAndOrder.ServiceOrders.Description}}-->
-                                <!--<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>-->
-                                <!--</uib-accordion-heading>-->
-                                <!--<div class="accordion-container">-->
-                                <!--<p>Criado em:-->
-                                <!--<strong>{{chargeAndOrder.ServiceOrders.RegisterDate | date: 'yyyy/MM/dd hh:mm:ss a'}}.</strong>-->
-                                <!--</p>-->
-                                <!--<p>Comentário:-->
-                                <!--<strong>{{chargeAndOrder.ServiceOrders.Description}}.</strong>-->
-                                <!--</p>-->
-                                <!--<p>Pendete interação:-->
-                                <!--<strong>{{chargeAndOrder.ServiceOrders.PendingInteraction}} </strong>-->
-                                <!--</p>-->
-                                <!--&lt;!&ndash;<p>Tipo: <strong>{{history.descriptionType}} </strong> </p>-->
-                                <!--<p>Agente: <strong>{{history.CollectorName }} </strong> </p>-->
-                                <!--<p ng-if="history.StatusPayment != undefined" >Status pagamento: <strong>{{history.StatusPayment }} </strong> </p>&ndash;&gt;-->
-                                <!--</div>-->
-                                <!--</div>-->
+                                
                             </div>
                         </div>
                     </div>
 
 
-                </uib-accordion>
+                </uib-accordion> -->
             </div>
 
             <div ng-if="vm.etapaQuantia" class="etapa-quantia">

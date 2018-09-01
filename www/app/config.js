@@ -5,9 +5,9 @@
   angular.module('foneClub')
     .config(masterConfiguration);
 
-  function masterConfiguration($urlRouterProvider,$ionicConfigProvider,$provide, $stateProvider){
+  function masterConfiguration($urlRouterProvider,$ionicConfigProvider,$provide, $stateProvider, $locationProvider){
 
-      configRouteProvider($ionicConfigProvider)
+      configRouteProvider($ionicConfigProvider, $locationProvider)
 
       $stateProvider.state('master', {
         url: '/',
@@ -133,10 +133,16 @@
       configErrorHandler($provide);
   }
 
-  function configRouteProvider($ionicConfigProvider){
+  function configRouteProvider($ionicConfigProvider, $locationProvider){
       $ionicConfigProvider.views.maxCache(0);
       $ionicConfigProvider.tabs.position('bottom');
-      //$ionicConfigProvider.views.transition('android');
+
+      // $locationProvider.html5Mode(true).hashPrefix('!');
+
+      // $locationProvider.html5Mode({
+      //   enabled: true,
+      //   requireBase: false
+      // });
   }
 
   function configErrorHandler($provide){
