@@ -56,6 +56,7 @@
                 <h4>
                     Cartões disponíveis
                 </h4>
+                <br>
 
                 <!-- <uib-accordion close-others="oneAtATime">
                     <div uib-accordion-group class="panel-default"
@@ -87,13 +88,14 @@
                       </v-pane-header>
             
                       <v-pane-content >
-                        <p>Bandeira: {{card.brand}}</p>
+                        <div>
+                            <p>Bandeira: {{card.brand}}</p>
                             <p>Final: {{card.last_digits}}</p>
                             <p>{{card.valid ? 'Cartão válido' : 'Cartão inválido/vencido'}}</p>
+                            <button class="btn btn-success col-xs-12 col-sm-3" ng-click="vm.onTapCard(card)"> Nova
+                                    cobrança
+                                </button>
                         </div>
-                        <button class="btn btn-success col-xs-12 col-sm-3" ng-click="vm.onTapCard(card)"> Nova
-                            cobrança
-                        </button>
                         </v-accordion>
                       </v-pane-content>
                     </v-pane>
