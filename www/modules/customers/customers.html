@@ -91,14 +91,15 @@
                     </thead>
                     <tr>
 
-                        <th colspan="5"><input st-search="" class="form-control" placeholder="Buscar" type="text"
-                                               id="aaaa" autofocus/></th>
+                        <!-- <th colspan="5"><input st-search="" class="form-control" placeholder="Buscar" type="text"
+                                               id="aaaa" autofocus/></th> -->
+                        <input type="text" class="form-control" placeholder="Buscar" ng-model="vm.search" ng-change="vm.changeSearch()" aria-describedby="sizing-addon2">
 
                     </tr>
                     <tbody style="-webkit-user-select: text;-moz-user-select: text;-ms-user-select: text;user-select: text;">
 
 
-                    <tr ng-repeat="customer in displayedCollection" >
+                    <tr ng-repeat="customer in displayedCollection | filter : vm.searchIgnoreAccent" >
                         <script>
                             //                        $(document).ready(function(){
                             document.getElementById("aaaa").focus();
