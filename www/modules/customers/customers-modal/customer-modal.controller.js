@@ -8,7 +8,13 @@
     CustomerModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'FoneclubeService', 'FlowManagerService', 'DialogFactory'];
 
     function CustomerModalController(ViewModelUtilsService, PagarmeService, FoneclubeService, FlowManagerService, DialogFactory) {
+        
         var vm = this;
+        var customer = ViewModelUtilsService.modalCustomerData;
+        var CARTAO = 1;
+        var BOLETO = 2;
+        var carregandoPagarme = false;
+
         vm.so_cnt = 0;
         vm.co_cnt = 0;
         vm.month = new Date().getMonth() + 1;
@@ -21,49 +27,29 @@
         vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
         vm.onTapOrdemServico = onTapOrdemServico;
         vm.cancelarPagamento = etapaEscolhaCartao;
-        vm.onTapComment = onTapComment
-        var customer = ViewModelUtilsService.modalCustomerData;
+        vm.onTapComment = onTapComment;
         vm.customer = customer;
-        var CARTAO = 1;
-        var BOLETO = 2;
-        console.log('customer modal controller')
-        console.log(customer);
-
-        var carregandoPagarme = false;
-        vm.mensagemPagarme = 'Refresh DB'
+        vm.mensagemPagarme = 'Refresh DB';
         vm.onTapUpdatePagarme = onTapUpdatePagarme;
-
-
-           
 
         init();
 
         function init() {
-            debugger
+            
             if (!customer.IdPagarme) {
 
                 PagarmeService.getCustomer(customer.DocumentNumber)
                     .then(function (result) {
-                        console.log('- get customer')
-                        console.log(result)
-
 
                         try {
                             var pagarmeID = result[0].id;
                             updatePagarmeId(pagarmeID);
                             initCardList(pagarmeID);
-                            // getBoleto_url(pagarmeID);
                             etapaEscolhaCartao();
                         }
                         catch (erro) {
-                            console.log('cliente sem id pagarme ainda')
+                            console.log(erro);
                         }
-                        /*
-                        var pagarmeID = result[0].id;
-                        updatePagarmeId(pagarmeID);
-                        initCardList(pagarmeID);
-                        etapaEscolhaCartao();
-                        */
 
                     })
                     .catch(function (error) {
@@ -76,40 +62,30 @@
             else {
                 etapaEscolhaCartao();
                 initCardList(customer.IdPagarme);
-                // getBoleto_url(customer.IdPagarme);
             }
             FoneclubeService.getStatusChargingOfCustomer(customer.Id, vm.month, vm.year).then(function (result) {
-                console.log('getStatusChargingOfCustomer')
-                console.log(result)
-                //debugger
                 vm.charged_status = result[0];
-                console.log('getStatusChargingOfCustomer')
             });
 
-            // vm.chargesArray
-            // Charges.boleto_url
             FoneclubeService.getChargeAndServiceOrderHistory(customer.Id).then(function (result) {
-                console.log('FoneclubeService.getChargeAndServiceOrderHistory');
-                console.log(result);
-                // debugger;
+                
                 vm.chargesAndOrders = result;
 
-                vm.chargesArray = [] // na moral ning merece 
+                vm.chargesArray = []  
                 vm.osArray = [];
                 vm.osDescArray = [];
 
                 for (var i in vm.chargesAndOrders) {
                     var data = vm.chargesAndOrders[i];
-                    // debugger;
+                    
                     if (data.IsCharge) {
                         data.Charges.descriptionType = (data.Charges.PaymentType == CARTAO) ? 'Cartão de crédito' : 'Boleto';
 
                         if (data.Charges.PaymentType == BOLETO) {
-                            // setStatusBoleto(data.Charges);
+                            
                             PagarmeService.getBoletoUrl(data.Charges.BoletoId, vm.chargesAndOrders, i).then(function (result) {
                                 
                                 try{
-                                    // debugger;
                                     result.chargesAndOrders[result.index].Charges.boleto_url = result[0].boleto_url
                                     data.Charges.boleto_url = result[0].boleto_url;
                                 }
@@ -119,18 +95,14 @@
                             .catch(function (error) {
                                 console.log(error);
                             });
-                            // data.Charges.boleto_url = getBoleto_url(data.Charges.BoletoId);
+                            
                         }
                         vm.chargesArray.push(data) // na moral ning merece
                     }
                     if (data.IsServiceOrder) {
                         vm.osArray.push(data);
-                        // vm.chargesAndOrders.pop()
                     }
-                    // else {
-                    //     vm.osArray.push(vm.chargesAndOrders[i]);
-                    //
-                    // }
+                    
                 }
                 for (var i in vm.osArray) {
                     vm.osDescArray.push(vm.osArray[vm.osArray.length - i]);
@@ -140,8 +112,7 @@
             });
 
             FoneclubeService.getHistoryPayment(customer.Id).then(function (result) {
-                console.log('FoneclubeService.getHistoryPayment');
-                console.log(result);
+                
                 vm.histories = result;
                 for (var i in vm.histories) {
                     var history = vm.histories[i];
@@ -171,17 +142,15 @@
         }
 
         function onTapUpdatePagarme(){
-            debugger;
-            console.log('teste');
-            // getUpdatePagarme
+           
             if(!carregandoPagarme)
             {
                 carregandoPagarme = true;
                 vm.mensagemPagarme = 'Aguarde...';
                 FoneclubeService.getUpdatePagarme().then(function (result) {
-                    console.log('result ' + result)
+                    
                     if(result)
-                     alert('Lista pagarme atualizada, por favor recarregue a página sem cache.')
+                        alert('Lista pagarme atualizada, por favor recarregue a página sem cache.')
                     else
                         alert('Lista pagarme não atualizada')
 
@@ -192,16 +161,6 @@
             }
             
         }
-
-        // function getBoleto_url(boletoId) {
-        //
-        //     PagarmeService.getStatusBoleto(boletoId).then(function (result) {
-        //         return result[0].boleto_url;
-        //
-        //     })
-        //
-        //
-        // }
 
         function onTapExcluir() {
             var personCheckout = {
@@ -259,21 +218,15 @@
 
 
         function onTapComment() {
-            console.log('onTapComment');
-            //debugger
             ViewModelUtilsService.showModalComment(customer);
-
         }
 
 
         function initCardList(customerId) {
 
-            //debugger;
             PagarmeService.getCard(customerId)
                 .then(function (result) {
                     vm.cards = result;
-                    console.log('-- cards --')
-                    console.log(result)
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -284,18 +237,11 @@
         }
 
         function onTapCard(card) {
-            //debugger;
-            //vm.card = card;
-            //etapaQuantia();
-            console.log('onTapCard')
             ViewModelUtilsService.showModalExistentCardPayment(customer, card);
-
         }
 
         function onTapBoleto(card) {
-            console.log('onTapBoleto')
             ViewModelUtilsService.showModalBoleto(customer);
-
         }
 
         function onTapPagar() {
@@ -320,18 +266,11 @@
                         'number': '000000000'
                     }
                 }
-                //vm.message = 'Usuário incompleto';
             }
-
-            console.log('on tap pagar');
-            console.log(vm.card.id);
-            console.log(vm.customer);
-            console.log(vm.amount);
-            console.log(customer);
 
             PagarmeService.postTransactionExistentCard(vm.amount, vm.card.id, customer)
                 .then(function (result) {
-                    console.log('nova transac ' + result);
+                    
                     vm.message = 'Transação efetuada';
                     PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function (result) {
 
@@ -347,10 +286,7 @@
                             console.log(error);
 
                         });
-                })
-
-
-            console.log(customer)
+            })
 
 
         }
