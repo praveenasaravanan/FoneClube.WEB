@@ -78,14 +78,26 @@
                 </uib-accordion> -->
 
                 
-                    <accordion-group ng-repeat="group in vm.groups" heading="{{group.title}}" is-open="group.open">
-                      <accordion-heading>
-                                some text here
-                                
-                           
-                      </accordion-heading>
-                      This is just some content to illustrate fancy headings.
-                    </accordion-group>    
+                <v-accordion id="accordionB" class="vAccordion--default" multiple control="accordionB" >
+
+                    <v-pane  expanded="false" ng-init="vm.cards.length == 1 ? status.open = true : status.open = false"
+                    is-open="status.open" ng-repeat="card in vm.cards">
+                      <v-pane-header>
+                        <h5>Cartão Final: {{card.last_digits}}</h5>
+                      </v-pane-header>
+            
+                      <v-pane-content >
+                        <p>Bandeira: {{card.brand}}</p>
+                            <p>Final: {{card.last_digits}}</p>
+                            <p>{{card.valid ? 'Cartão válido' : 'Cartão inválido/vencido'}}</p>
+                        </div>
+                        <button class="btn btn-success col-xs-12 col-sm-3" ng-click="vm.onTapCard(card)"> Nova
+                            cobrança
+                        </button>
+                        </v-accordion>
+                      </v-pane-content>
+                    </v-pane>
+                  </v-accordion>   
                 
 
                 <h4>Cobranças & Ordens de Serviço</h4>
