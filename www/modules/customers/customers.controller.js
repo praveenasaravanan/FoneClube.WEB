@@ -108,7 +108,7 @@
         }
 
         function changeSearch(){
-            vm.searchIgnoreAccent = vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '').replace(' ', '');
+            vm.searchIgnoreAccent = vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '')
         }
 
         var getCustomers = $scope.$watch(function () {
