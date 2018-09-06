@@ -8,20 +8,7 @@
     <div class="modal-container">
         <div class="container col-xs-12">
             <div>
-                <!--<table style="width:100%" cellpadding="0" cellspacing="0">
-                <tr>
-                <td>
-                    <button title="Editar cliente" ng-click="vm.onTapEditar(); closeThisDialog(0);" class="btn btn-primary" style="margin-bottom:5px;"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i></button>
-                </td>
-                <td style="width:60%;"><div style="min-height:20px;"><h4 style="margin:0px; padding-left:10px;padding-right:10px;">{{vm.customer.Name}}</h4></div></td>
-                <td style="text-align:right;">
-                    <button title="Criar ordem de serviço" ng-click="vm.onTapComment(); closeThisDialog(0);" class="btn btn-primary"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button>
-                    <button title="Cobrança com novo cartão" class="btn btn-primary" ng-click="vm.onTapNewCardPayment()"><i class="glyphicon glyphicon-credit-card" aria-hidden="true"></i></button>
-                    <button title="Cobrança com boleto" class="btn btn-primary" ng-click="vm.onTapBoleto()" style="margin-bottom:5px;"><img src="./content/img/Boleto.png" width="25px" height="15px"></button>
-                    <button ng-click="vm.onTapExcluir()" class="btn btn-danger col-xs-12">Excluir cliente</button>
-                </td>
-                </tr>
-                </table> -->
+         
                 <div class="col-xs-1" style="padding-left:0px;padding-right:0px;">
                     <button title="Editar cliente" ng-click="vm.onTapEditar(); closeThisDialog(0);"
                             class="btn btn-primary" style="margin-bottom:5px;"><i class="glyphicon glyphicon-edit"
@@ -41,13 +28,8 @@
 
                     <button class="btn btn-primary" ng-click="vm.onTapUpdatePagarme()">{{vm.mensagemPagarme}}
                     </button>
-                    <!--<button ng-click="vm.onTapExcluir()" class="btn btn-danger col-xs-12">Excluir cliente</button>-->
+                    
                 </div>
-
-                <!-- <div class="form-group col-xs-2 col-sm-1 totalizadores massive-selection">
-                    <button class="btn btn-primary" ng-click="vm.onTapUpdatePagarme()">{{vm.mensagemPagarme}}
-                    </button>
-                </div> -->
 
             </div>
             <div style="clear:both;"></div>
@@ -57,34 +39,13 @@
                     Cartões disponíveis
                 </h4>
                 <br>
-
-                <!-- <uib-accordion close-others="oneAtATime">
-                    <div uib-accordion-group class="panel-default"
-                         ng-init="vm.cards.length == 1 ? status.open = true : status.open = false"
-                         is-open="status.open" ng-repeat="card in vm.cards">
-                        <uib-accordion-heading>
-                            Cartão Final: {{card.last_digits}}
-                            <i class="pull-right glyphicon"
-                               ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-                        </uib-accordion-heading>
-                        <div class="accordion-container">
-                            <p>Bandeira: {{card.brand}}</p>
-                            <p>Final: {{card.last_digits}}</p>
-                            <p>{{card.valid ? 'Cartão válido' : 'Cartão inválido/vencido'}}</p>
-                        </div>
-                        <button class="btn btn-success col-xs-12 col-sm-3" ng-click="vm.onTapCard(card)"> Nova
-                            cobrança
-                        </button>
-                    </div>
-                </uib-accordion> -->
-
                 
                 <v-accordion id="accordionB" class="vAccordion--default" multiple control="accordionB" >
 
                     <v-pane  expanded="false" ng-init="vm.cards.length == 1 ? status.open = true : status.open = false"
                     is-open="status.open" ng-repeat="card in vm.cards">
-                      <v-pane-header>
-                        <h5>Cartão Final: {{card.last_digits}}</h5>
+                      <v-pane-header class="fundo-header">
+                         <h5>Cartão Final: {{card.last_digits}}</h5>
                       </v-pane-header>
             
                       <v-pane-content >
@@ -104,116 +65,112 @@
 
                 <h4>Cobranças & Ordens de Serviço</h4>
 
-                <!-- <uib-accordion close-others="oneAtATime">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div uib-accordion-group class="panel-default" ng-init="status.open = true"
-                                 is-open="status.open" ng-repeat="os in vm.osDescArray" ng-if="$index > 0">
-                                
-                                <uib-accordion-heading>
-                                    {{vm.osArray.length-$index}}ª O.S.
+                <v-accordion  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
+
+                    <v-pane  expanded="true" ng-init="status.open = true"
+                    is-open="status.open" ng-repeat="os in vm.osDescArray" ng-if="$index > 0">
+                      <v-pane-header>
+                        {{vm.osArray.length-$index}}ª O.S.
                                     {{vm.osArray[vm.osArray.length-$index].ServiceOrders.Description}}
-                                    <i class="pull-right glyphicon"
-                                       ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-                                </uib-accordion-heading>
-                                <div class="accordion-container">
-                                    <p>Criado em:
-                                        <strong>{{vm.osArray[vm.osArray.length-$index].ServiceOrders.RegisterDate |
-                                            date: 'yyyy/MM/dd hh:mm:ss a'}}.</strong>
-                                    </p>
-                                    <p>Comentário:
-                                        <strong>{{vm.osArray[vm.osArray.length-$index].ServiceOrders.Description}}.</strong>
-                                    </p>
-                                    <p>Pendete interação:
-                                        <strong>{{vm.osArray[vm.osArray.length-$index].ServiceOrders.PendingInteraction}} </strong>
-                                    </p>
+                      </v-pane-header>
+            
+                      <v-pane-content >
+                        <p>Criado em:
+                            <strong>{{vm.osArray[vm.osArray.length-$index].ServiceOrders.RegisterDate |
+                                date: 'yyyy/MM/dd hh:mm:ss a'}}.</strong>
+                        </p>
+                        <p>Comentário:
+                            <strong>{{vm.osArray[vm.osArray.length-$index].ServiceOrders.Description}}.</strong>
+                        </p>
+                        <p>Pendete interação:
+                            <strong>{{vm.osArray[vm.osArray.length-$index].ServiceOrders.PendingInteraction}} </strong>
+                        </p>
+                    
+                        </v-accordion>
+                      </v-pane-content>
+                    </v-pane>
+                  </v-accordion>  
+
+                  <v-accordion  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
+
+                    <v-pane  expanded="true" ng-init="status.open = true"
+                    is-open="status.open" ng-repeat="chargeAndOrder in vm.chargesArray">
+
+    
+                      <v-pane-header >
+                        {{vm.chargesArray.length-$index}}ª Cob. {{
+                            chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM/dd'}}
+                            R${{chargeAndOrder.Charges.Ammount / 100 }}
+                            {{chargeAndOrder.Charges.descriptionType}}
+                      </v-pane-header>
+            
+                      <v-pane-content >
+
+                            <p>Criado em:
+                                    <strong>{{chargeAndOrder.Charges.PaymentDate | date: 'yyyy/MM/dd hh:mm:ss
+                                        a'}}.</strong>
+                                </p>
+                                <p>Comentário:
+                                    <strong>{{chargeAndOrder.Charges.Comment}}.</strong>
+                                </p>
+                                <p>Valor:
+                                    <strong>{{chargeAndOrder.Charges.Ammount / 100 }} R$ </strong>
+                                </p>
+                                <p>Tipo:
+                                    <strong>{{chargeAndOrder.Charges.descriptionType}} </strong>
+
+                                    <svg height="10" width="10" ng-if="!vm.charged_status.Charged"
+                                         style="text-align: center">
+                                        <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="red"/>
+                                    </svg>
+                                    <svg height="10" width="10"
+                                         ng-if="vm.charged_status.Charged && vm.charged_status.ChargingValidity[0].StatusDescription != 'CARREGANDO' && vm.charged_status.ChargingValidity[0].StatusDescription != 'PENDENTE'">
+                                        <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="green"/>
+                                    </svg>
+                                    <svg height="10" width="10"
+                                         ng-if="vm.charged_status.ChargingValidity[0].StatusDescription == 'PENDENTE'">
+                                        <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="blue"/>
+                                    </svg>
+                                    <svg height="10" width="10"
+                                         ng-if="vm.charged_status.ChargingValidity[0].StatusDescription == 'CARREGANDO'">
+                                        <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="grey"/>
+                                    </svg>
+                                    &nbsp;&nbsp;<label
+                                            ng-if="chargeAndOrder.Charges.descriptionType =='Cartão de crédito'">Final:
+                                        {{vm.cards[0].last_digits}}</label>
+                                </p>
+                                <p>Agente:
+                                    <strong>{{chargeAndOrder.Charges.CollectorName }} </strong>
+                                </p>
+                                <p>Vigência: {{chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM'}}
+                                </p>
                                 
-                                </div>
-                               
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div uib-accordion-group class="panel-default" ng-init="status.open = true"
-                                 is-open="status.open" ng-repeat="chargeAndOrder in vm.chargesAndOrders">
-
-                                <div ng-if="chargeAndOrder.IsCharge">
-                                    <uib-accordion-heading>
-
-                                        {{vm.chargesArray.length-$index}}ª Cob. {{
-                                        chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM/dd'}}
-                                        R${{chargeAndOrder.Charges.Ammount / 100 }}
-                                        {{chargeAndOrder.Charges.descriptionType}}
-
-                                        <i class="pull-right glyphicon"
-                                           ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-                                    </uib-accordion-heading>
-                                    <div class="accordion-container">
-                                        <p>Criado em:
-                                            <strong>{{chargeAndOrder.Charges.PaymentDate | date: 'yyyy/MM/dd hh:mm:ss
-                                                a'}}.</strong>
-                                        </p>
-                                        <p>Comentário:
-                                            <strong>{{chargeAndOrder.Charges.Comment}}.</strong>
-                                        </p>
-                                        <p>Valor:
-                                            <strong>{{chargeAndOrder.Charges.Ammount / 100 }} R$ </strong>
-                                        </p>
-                                        <p>Tipo:
-                                            <strong>{{chargeAndOrder.Charges.descriptionType}} </strong>
-
-                                            <svg height="10" width="10" ng-if="!vm.charged_status.Charged"
-                                                 style="text-align: center">
-                                                <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="red"/>
-                                            </svg>
-                                            <svg height="10" width="10"
-                                                 ng-if="vm.charged_status.Charged && vm.charged_status.ChargingValidity[0].StatusDescription != 'CARREGANDO' && vm.charged_status.ChargingValidity[0].StatusDescription != 'PENDENTE'">
-                                                <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="green"/>
-                                            </svg>
-                                            <svg height="10" width="10"
-                                                 ng-if="vm.charged_status.ChargingValidity[0].StatusDescription == 'PENDENTE'">
-                                                <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="blue"/>
-                                            </svg>
-                                            <svg height="10" width="10"
-                                                 ng-if="vm.charged_status.ChargingValidity[0].StatusDescription == 'CARREGANDO'">
-                                                <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="grey"/>
-                                            </svg>
-                                            &nbsp;&nbsp;<label
-                                                    ng-if="chargeAndOrder.Charges.descriptionType =='Cartão de crédito'">Final:
-                                                {{vm.cards[0].last_digits}}</label>
-                                        </p>
-                                        <p>Agente:
-                                            <strong>{{chargeAndOrder.Charges.CollectorName }} </strong>
-                                        </p>
-                                        <p>Vigência: {{chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM'}}
-                                        </p>
-                                        
-                                        <p>Status: {{chargeAndOrder.Charges.PaymentStatusDescription == '' ? 'Sem transaction associada' : chargeAndOrder.Charges.PaymentStatusDescription}}
-                                        </p>
+                                <p>Status: {{chargeAndOrder.Charges.PaymentStatusDescription == '' ? 'Sem transaction associada' : chargeAndOrder.Charges.PaymentStatusDescription}}
+                                </p>
 
 
 
-                                        <p ng-if="chargeAndOrder.Charges.boleto_url">
-                                            <a href="{{chargeAndOrder.Charges.boleto_url}}">{{chargeAndOrder.Charges.boleto_url}}</a>
-                                        </p>
-
-                                        <button class="btn separador-botao" 
-                                        ng-show="chargeAndOrder.Charges.boleto_url.length > 0"
-                                        ngclipboard data-clipboard-text="{{chargeAndOrder.Charges.boleto_url}}"> Copiar link Boleto
-                                        </button>
-                                        
-                                    </div>
-                                    <button class="btn btn-info col-xs-12 col-sm-3"
-                                            ng-click="vm.onTapPaymentHistoryDetail(chargeAndOrder.Charges);"> + Info
-                                    </button>
-
-                                </div>
+                                <p ng-if="chargeAndOrder.Charges.boleto_url">
+                                    <a href="{{chargeAndOrder.Charges.boleto_url}}">{{chargeAndOrder.Charges.boleto_url}}</a>
+                                </p>
                                 
-                            </div>
-                        </div>
-                    </div>
+                                <button class="btn separador-botao" 
+                                ng-show="chargeAndOrder.Charges.boleto_url.length > 0"
+                                ngclipboard data-clipboard-text="{{chargeAndOrder.Charges.boleto_url}}"> Copiar link Boleto
+                                </button>
+                                
+                            
+                            <button class="btn btn-info col-xs-12 col-sm-3"
+                                    ng-click="vm.onTapPaymentHistoryDetail(chargeAndOrder.Charges);"> + Info
+                            </button>
+                       
+                    
+                       
+                      </v-pane-content>
+                    
+                    </v-pane>
+                  </v-accordion>  
 
-
-                </uib-accordion> -->
             </div>
 
             <div ng-if="vm.etapaQuantia" class="etapa-quantia">
