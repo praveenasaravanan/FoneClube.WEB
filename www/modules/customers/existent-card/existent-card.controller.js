@@ -269,11 +269,7 @@
         }
 
         function saveHistoryPayment(){
-            debugger;
-            console.log('saveHistoryPayment');
-            console.log(MainUtils.getAgent());
-            console.log(vm.comment);
-           
+            
             var customerCharging = {
                 Id: vm.customer.Id,
                 Charging:{
