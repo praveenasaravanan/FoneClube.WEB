@@ -8,26 +8,25 @@
     ExistentCardPaymentModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainComponents', 'FoneclubeService', 'MainUtils', 'UtilsService', '$scope', 'DialogFactory', '$filter'];
     function ExistentCardPaymentModalController(ViewModelUtilsService, PagarmeService, MainComponents, FoneclubeService, MainUtils, UtilsService, $scope, DialogFactory, $filter) {
 
+        console.log('ExistentCardPaymentModalController');
         var vm = this;
-        vm.etapaDados = true;
-        var customer = ViewModelUtilsService.modalExistentCardPaymentData;
-        var card = ViewModelUtilsService.modalExistentCardData;
-        vm.customer = customer;
-        vm.card = card;
-        console.log(vm.card)
         var newCustomer;
         var cardData;
         var CARTAO = 1;
+        var customer = ViewModelUtilsService.modalExistentCardPaymentData;
+        var card = ViewModelUtilsService.modalExistentCardData;
+
+        vm.etapaDados = true;
+        vm.customer = customer;
+        vm.card = card;
         vm.amount = '';
         vm.comment = '';
         vm.cobrancaRealizada = false;
         vm.chargeDisabled = true;
         vm.checkOne = checkOne;
-        console.log('ExistentCardPaymentModalController');
         vm.onTapPagar = onTapPagar;
         vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
-        // begin for addming comment
-        // listener for changing date time
+
         vm.onDate = onDate;
         vm.onTime = onTime;
         vm.date_selected = false;
@@ -37,15 +36,9 @@
         vm.time = "";
 
         vm.onTapAddComment = onTapAddComment;
-
-        // end for adding comment
-
         vm.onTapCancel = onTapCancel;
         vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
 
-        vm.years = [2018,2017,2016,2015,2014,2013,2012,2011,2010];
-        vm.months = [1,2,3,4,5,6,7,8,9,10,11,12];
-        
         vm.year = new Date().getFullYear().toString();
         vm.month = (new Date().getMonth() + 1).toString();
         vm.date_time = new Date().getFullYear().toString();
@@ -71,6 +64,7 @@
         }
 
         init();
+
         function init() {
           FoneclubeService.getCommision(customer.Id).then(function (result) {
             vm.bonus = parseFloat(result.Ammount / 100).toFixed(2);
@@ -284,8 +278,7 @@
                 }
             }
             FoneclubeService.postHistoryPayment(customerCharging).then(function(result){
-                console.log('FoneclubeService.postHistoryPayment');
-                console.log(result);
+                
                 if(vm.pagar)
                 {   FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
                     //alert('success!!');
