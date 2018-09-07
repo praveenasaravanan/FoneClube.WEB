@@ -110,7 +110,7 @@
         function changeSearch(){
             var search = vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
             var isnum = /^\d+$/.test(search.replace(' ', ''));
-            debugger;
+            
             if(isnum)
                 vm.searchIgnoreAccent = search.replace(' ', '');
             else    
