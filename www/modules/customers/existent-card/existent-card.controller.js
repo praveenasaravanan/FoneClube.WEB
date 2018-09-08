@@ -238,7 +238,8 @@
                                 'email':emailObject,
                                 'pagarmeResponse': result
                             };
-
+                            
+                            debugger
                             FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
                                 console.log(result);
                             })

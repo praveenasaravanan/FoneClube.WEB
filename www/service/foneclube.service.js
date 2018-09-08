@@ -9,13 +9,13 @@
     function FoneclubeService($q, HTTPService) {
 
 
-        // var urlApi = 'http://localhost:57078/api';
+        var urlApi = 'http://localhost:57078/api';
 
         //API tests
         // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API live
-        var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
+        // var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -400,7 +400,7 @@
         function postChargingLog(param, id) {
             debugger
             var q = $q.defer();
-            HTTPService.post(urlApi.concat('/charging/log/person/id/').concat(id), param)
+            HTTPService.post(urlApi.concat('/charging/log/person/id/').concat(id), {'SerializedCharging': param})
                 .then(function (data) {
                     q.resolve(data);
                 })
