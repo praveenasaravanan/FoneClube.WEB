@@ -41,7 +41,8 @@
           vm.expirationDateField = 3;
             vm.year = new Date().getFullYear().toString();
             vm.month = (new Date().getMonth() + 1).toString();
-    
+            
+            var customerId = customer.Id;
             var existentCustomer = {
                         'name' : customer.Name,
                         'document_number' : customer.DocumentNumber,
@@ -223,6 +224,34 @@
                                 if(vm.pagar && vm.bonus != '0.00')
                                 {
                                     emailObject.DiscountPrice = ($filter('currency')(vm.bonus / 100, "")).replace('.',',')
+                                }
+
+                                try{
+                                    var chargingLog = {
+                                        'customer': existentCustomer,
+                                        'ammount': vm.amount,
+                                        'email':emailObject,
+                                        'pagarmeResponse': resultCapture
+                                    };
+                                    
+                                    debugger
+                                    FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
+                                        console.log(result);
+                                    })
+                                    .catch(function(error){
+                                        console.log('catch error');
+                                        console.log(error);
+                                        var teste1 = emailObject;
+                                        var teste2 = existentCustomer;
+                                        var teste3 = vm.amount;
+                                        alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
+                                    });
+                                }
+                                catch(erro){
+                                    var teste1 = emailObject;
+                                    var teste2 = existentCustomer;
+                                    var teste3 = vm.amount;
+                                    alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
                                 }
 
                                 FoneclubeService.postSendEmail(emailObject).then(function(result){

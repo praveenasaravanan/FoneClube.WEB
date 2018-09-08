@@ -137,6 +137,7 @@
 
         console.log('NewCardPaymentModalController');
 
+        var customerId = customer.Id;
         newCustomer = {
                     'name' : customer.Name,
                     'document_number' : customer.DocumentNumber,
@@ -261,6 +262,35 @@
                         if(vm.pagar && vm.bonus != '0.00')
                         {
                             emailObject.DiscountPrice = ($filter('currency')(vm.bonus / 100, "")).replace('.',',')
+                        }
+
+                        
+                        try{
+                            var chargingLog = {
+                                'customer': newCustomer,
+                                'ammount': vm.amount,
+                                'email':emailObject,
+                                'pagarmeResponse': result
+                            };
+                            
+                            debugger
+                            FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
+                                console.log(result);
+                            })
+                            .catch(function(error){
+                                console.log('catch error');
+                                console.log(error);
+                                var teste1 = emailObject;
+                                var teste2 = existentCustomer;
+                                var teste3 = vm.amount;
+                                alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
+                            });
+                        }
+                        catch(erro){
+                            var teste1 = emailObject;
+                            var teste2 = existentCustomer;
+                            var teste3 = vm.amount;
+                            alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
                         }
 
 

@@ -69,6 +69,7 @@
 
         console.log('RepeatCardController');
 
+        var customerId = customer.Id;
         newCustomer = {
                     'name' : customer.Name,
                     'document_number' : customer.DocumentNumber,
@@ -182,6 +183,33 @@
                             'TargetTextBlue' : $filter('currency')(vm.amount / 100, ""),
                             // 'TargetSecondaryText' : vm.commentBoleto,
                             'TemplateType' : 1
+                        }
+
+                        try{
+                            var chargingLog = {
+                                'customer': newCustomer,
+                                'ammount': vm.amount,
+                                'pagarmeResponse': result
+                            };
+                            
+                            debugger
+                            FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
+                                console.log(result);
+                            })
+                            .catch(function(error){
+                                console.log('catch error');
+                                console.log(error);
+                                var teste1 = emailObject;
+                                var teste2 = existentCustomer;
+                                var teste3 = vm.amount;
+                                alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
+                            });
+                        }
+                        catch(erro){
+                            var teste1 = emailObject;
+                            var teste2 = existentCustomer;
+                            var teste3 = vm.amount;
+                            alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
                         }
 
                         FoneclubeService.postSendEmail(emailObject).then(function(result){

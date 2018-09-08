@@ -40,6 +40,8 @@
             vm.amount=vm.payment.txtAmmountPayment/100;
             vm.commentBoleto='cobrando boleto de '+ (vm.payment.txtAmmountPayment/100);
             vm.comment='cobrando boleto de '+ (vm.payment.txtAmmountPayment/100);
+
+            var customerId = customer.Id;
             var existentCustomer = {
                         'name' : customer.Name,
                         'document_number' : customer.DocumentNumber,
@@ -104,6 +106,35 @@
 
                      PagarmeService.postBoletoDirect(vm.amount, vm.commentBoleto, existentCustomer, addExpirationDays(vm.expirationDateField)).then(function(resultCapture){
     
+                            
+                            
+                        try{
+                            var chargingLog = {
+                                'customer': existentCustomer,
+                                'ammount': vm.amount,
+                                'pagarmeResponse': resultCapture
+                            };
+                            
+                            debugger
+                            FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
+                                console.log(result);
+                            })
+                            .catch(function(error){
+                                console.log('catch error');
+                                console.log(error);
+                                var teste1 = emailObject;
+                                var teste2 = existentCustomer;
+                                var teste3 = vm.amount;
+                                alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
+                            });
+                        }
+                        catch(erro){
+                            var teste1 = emailObject;
+                            var teste2 = existentCustomer;
+                            var teste3 = vm.amount;
+                            alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
+                        }
+
                             debugger;
                             if(vm.enviaEmail)
                             {
