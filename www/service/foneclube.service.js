@@ -35,6 +35,7 @@
         this.postUpdateTemplate = postUpdateTemplate;
         this.postSoftDeletePhone = postSoftDeletePhone;
         this.postSoftDeleteCustomer = postSoftDeleteCustomer;
+        this.postChargingLog = postChargingLog;
 
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
@@ -387,6 +388,19 @@
         function postSoftDeleteCustomer(param) {
             var q = $q.defer();
             HTTPService.post(urlApi.concat('/profile/delete/soft/customer'), param)
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+            return q.promise;
+        }
+
+        function postChargingLog(param, id) {
+            debugger
+            var q = $q.defer();
+            HTTPService.post(urlApi.concat('/charging/log/person/id/').concat(id), param)
                 .then(function (data) {
                     q.resolve(data);
                 })
