@@ -201,7 +201,35 @@
 
                      PagarmeService.postBoletoDirect(vm.amount, vm.commentBoleto, existentCustomer, addExpirationDays(vm.expirationDateField)).then(function(resultCapture){
     
-                            // debugger;
+                        
+                        try{
+                            var chargingLog = {
+                                'customer': existentCustomer,
+                                'ammount': vm.amount,
+                                'pagarmeResponse': resultCapture
+                            };
+                            
+                            debugger
+                            FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
+                                console.log(result);
+                            })
+                            .catch(function(error){
+                                console.log('catch error');
+                                console.log(error);
+                                var teste1 = emailObject;
+                                var teste2 = existentCustomer;
+                                var teste3 = vm.amount;
+                                alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
+                            });
+                        }
+                        catch(erro){
+                            var teste1 = emailObject;
+                            var teste2 = existentCustomer;
+                            var teste3 = vm.amount;
+                            alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
+                        }
+
+                        // debugger;
                             if(vm.enviaEmail)
                             {
                                 // debugger;
@@ -226,33 +254,6 @@
                                     emailObject.DiscountPrice = ($filter('currency')(vm.bonus / 100, "")).replace('.',',')
                                 }
 
-                                try{
-                                    var chargingLog = {
-                                        'customer': existentCustomer,
-                                        'ammount': vm.amount,
-                                        'email':emailObject,
-                                        'pagarmeResponse': resultCapture
-                                    };
-                                    
-                                    debugger
-                                    FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
-                                        console.log(result);
-                                    })
-                                    .catch(function(error){
-                                        console.log('catch error');
-                                        console.log(error);
-                                        var teste1 = emailObject;
-                                        var teste2 = existentCustomer;
-                                        var teste3 = vm.amount;
-                                        alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
-                                    });
-                                }
-                                catch(erro){
-                                    var teste1 = emailObject;
-                                    var teste2 = existentCustomer;
-                                    var teste3 = vm.amount;
-                                    alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
-                                }
 
                                 FoneclubeService.postSendEmail(emailObject).then(function(result){
                                     console.log('FoneclubeService.postHistoryPayment');
