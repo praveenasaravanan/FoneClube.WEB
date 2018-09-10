@@ -139,6 +139,23 @@
                     console.log('catch error');
                     console.log(error);
                 });
+
+            FoneclubeService.getChargingLog(customer.Id)
+                .then(function (result) {
+                    console.log('getChargingLog');
+                    debugger;
+                    var history = [];
+                    for(var i in result)
+                    {
+                        history.push(JSON.parse(result[i]));
+                    }
+                    debugger;
+                    
+                })
+                .catch(function (error) {
+                    console.log('catch error');
+                    console.log(error);
+                });      
         }
 
         function onTapUpdatePagarme(){

@@ -9,10 +9,10 @@
     function FoneclubeService($q, HTTPService) {
 
 
-        // var urlApi = 'http://localhost:57078/api';
+        var urlApi = 'http://localhost:57078/api';
 
         //API tests
-        var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+        // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API live
         // var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
@@ -66,7 +66,8 @@
         this.dispatchedCommision = dispatchedCommision;
         this.getUpdatePagarme = getUpdatePagarme;
         this.getTemplates = getTemplates;
-        this.getStatusAPI  = getStatusAPI
+        this.getStatusAPI  = getStatusAPI;
+        this.getChargingLog = getChargingLog;
 
         function getLastPaymentType(customer) {
             
@@ -754,6 +755,20 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/status/database/name'))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
+
+        function getChargingLog(matricula){
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/charging/history/log/person/id/') + matricula)
                 .then(function (result) {
                     q.resolve(result);
                 })
