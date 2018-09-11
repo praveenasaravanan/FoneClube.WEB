@@ -171,6 +171,26 @@
                     </v-pane>
                   </v-accordion>  
 
+                  <v-accordion  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
+
+                    <v-pane  expanded="true" ng-init="status.open = true"
+                    is-open="status.open" ng-repeat="log in vm.historyLog">
+
+    
+                      <v-pane-header >
+                            <p>Cobrança criada: {{ log.pagarmeResponse.date_created | date:'yyyy/MM/dd'}}</p> 
+                      </v-pane-header>
+            
+                      <v-pane-content >
+                            <p>Id pagarme da Cobrança:  {{log.pagarmeResponse.id}}</p>
+                            <p>Método de Pagamento: {{ log.pagarmeResponse.payment_method}}</p>
+                            <p>Valor cobrado: {{log.pagarmeResponse.amount/100}} R$</p>
+
+                      </v-pane-content>
+                    
+                    </v-pane>
+                  </v-accordion>
+
             </div>
 
             <div ng-if="vm.etapaQuantia" class="etapa-quantia">

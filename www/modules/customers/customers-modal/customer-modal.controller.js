@@ -144,10 +144,10 @@
                 .then(function (result) {
                     console.log('getChargingLog');
                     debugger;
-                    var history = [];
+                    vm.historyLog = [];
                     for(var i in result)
                     {
-                        history.push(JSON.parse(result[i]));
+                        vm.historyLog.push(JSON.parse(result[i]));
                     }
                     debugger;
                     
