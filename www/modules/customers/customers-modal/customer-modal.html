@@ -63,34 +63,6 @@
                   </v-accordion>   
                 
 
-                <h4>Ordens de Serviço</h4>
-
-                <v-accordion  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
-
-                    <v-pane  expanded="true" ng-init="status.open = true"
-                    is-open="status.open" ng-repeat="os in vm.osDescArray" ng-if="$index > 0">
-                      <v-pane-header>
-                        {{vm.osArray.length-$index}}ª O.S.
-                                    {{vm.osArray[vm.osArray.length-$index].ServiceOrders.Description}}
-                      </v-pane-header>
-            
-                      <v-pane-content >
-                        <p>Criado em:
-                            <strong>{{vm.osArray[vm.osArray.length-$index].ServiceOrders.RegisterDate |
-                                date: 'yyyy/MM/dd hh:mm:ss a'}}.</strong>
-                        </p>
-                        <p>Comentário:
-                            <strong>{{vm.osArray[vm.osArray.length-$index].ServiceOrders.Description}}.</strong>
-                        </p>
-                        <p>Pendete interação:
-                            <strong>{{vm.osArray[vm.osArray.length-$index].ServiceOrders.PendingInteraction}} </strong>
-                        </p>
-                    
-                        </v-accordion>
-                      </v-pane-content>
-                    </v-pane>
-                  </v-accordion>  
-
                   <h4>Cobranças</h4>
                   <v-accordion  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
 
@@ -192,6 +164,36 @@
                     
                     </v-pane>
                   </v-accordion>
+
+                  
+
+                <h4>Ordens de Serviço</h4>
+
+                <v-accordion  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
+
+                    <v-pane  expanded="true" ng-init="status.open = true"
+                    is-open="status.open" ng-repeat="os in vm.osDescArray" ng-if="$index > 0">
+                      <v-pane-header>
+                        {{vm.osArray.length-$index}}ª O.S.
+                                    {{vm.osArray[vm.osArray.length-$index].ServiceOrders.Description}}
+                      </v-pane-header>
+            
+                      <v-pane-content >
+                        <p>Criado em:
+                            <strong>{{vm.osArray[vm.osArray.length-$index].ServiceOrders.RegisterDate |
+                                date: 'yyyy/MM/dd hh:mm:ss a'}}.</strong>
+                        </p>
+                        <p>Comentário:
+                            <strong>{{vm.osArray[vm.osArray.length-$index].ServiceOrders.Description}}.</strong>
+                        </p>
+                        <p>Pendete interação:
+                            <strong>{{vm.osArray[vm.osArray.length-$index].ServiceOrders.PendingInteraction}} </strong>
+                        </p>
+                    
+                        </v-accordion>
+                      </v-pane-content>
+                    </v-pane>
+                  </v-accordion>  
 
             </div>
 
