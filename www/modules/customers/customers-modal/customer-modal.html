@@ -63,8 +63,8 @@
                   </v-accordion>   
                 
 
-                  <h4>Cobranças</h4>
-                  <v-accordion  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
+                  <h4 ng-show="vm.chargesArray.length > 0">Cobranças</h4>
+                  <v-accordion  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" ng-show="vm.chargesArray.length > 0" >
 
                     <v-pane  expanded="true" ng-init="status.open = true"
                     is-open="status.open" ng-repeat="chargeAndOrder in vm.chargesArray">
@@ -144,8 +144,8 @@
                     </v-pane>
                   </v-accordion>  
 
-                  <h4>Histórico Cobrança registro segundário</h4>
-                  <v-accordion  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
+                  <h4 ng-show="vm.historyLog.length > 0" >Histórico Cobrança registro segundário</h4>
+                  <v-accordion ng-show="vm.historyLog.length > 0"  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
 
                     <v-pane  expanded="true" ng-init="status.open = true"
                     is-open="status.open" ng-repeat="log in vm.historyLog">
@@ -167,9 +167,9 @@
 
                   
 
-                <h4>Ordens de Serviço</h4>
+                <h4 ng-show="vm.osDescArray.length > 0">Ordens de Serviço</h4>
 
-                <v-accordion  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
+                <v-accordion ng-show="vm.osDescArray.length > 0"  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
 
                     <v-pane  expanded="true" ng-init="status.open = true"
                     is-open="status.open" ng-repeat="os in vm.osDescArray" ng-if="$index > 0">
