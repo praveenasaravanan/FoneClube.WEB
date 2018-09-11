@@ -41,7 +41,7 @@
                 <br>
                 
                 <v-accordion id="accordionB" class="vAccordion--default" multiple control="accordionB" >
-
+                    
                     <v-pane  expanded="false" ng-init="vm.cards.length == 1 ? status.open = true : status.open = false"
                     is-open="status.open" ng-repeat="card in vm.cards">
                       <v-pane-header class="fundo-header">
@@ -63,7 +63,7 @@
                   </v-accordion>   
                 
 
-                <h4>Cobranças & Ordens de Serviço</h4>
+                <h4>Ordens de Serviço</h4>
 
                 <v-accordion  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
 
@@ -91,6 +91,7 @@
                     </v-pane>
                   </v-accordion>  
 
+                  <h4>Cobranças</h4>
                   <v-accordion  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
 
                     <v-pane  expanded="true" ng-init="status.open = true"
@@ -171,6 +172,7 @@
                     </v-pane>
                   </v-accordion>  
 
+                  <h4>Histórico Cobrança registro segundário</h4>
                   <v-accordion  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
 
                     <v-pane  expanded="true" ng-init="status.open = true"
