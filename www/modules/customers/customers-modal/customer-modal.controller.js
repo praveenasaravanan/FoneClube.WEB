@@ -36,13 +36,11 @@
 
         function init() {
             
-            debugger;
             if (!customer.IdPagarme) {
 
                 PagarmeService.getCustomer(customer.DocumentNumber)
                     .then(function (result) {
 
-                        debugger;
                         try {
                             var pagarmeID = result[0].id;
                             updatePagarmeId(pagarmeID);
