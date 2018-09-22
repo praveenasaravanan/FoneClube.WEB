@@ -68,6 +68,7 @@
         this.getTemplates = getTemplates;
         this.getStatusAPI  = getStatusAPI;
         this.getChargingLog = getChargingLog;
+        this.getLinhasEstoque = getLinhasEstoque;
 
         function getLastPaymentType(customer) {
             
@@ -769,6 +770,20 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/charging/history/log/person/id/') + matricula)
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
+
+        function getLinhasEstoque(){
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/manager/phones/estoque'))
                 .then(function (result) {
                     q.resolve(result);
                 })

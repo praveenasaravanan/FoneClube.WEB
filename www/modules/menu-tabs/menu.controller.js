@@ -54,6 +54,8 @@
                 FlowManagerService.changeAllPhoneLinesView();
             } else if(screen == 'template-edit'){
                 FlowManagerService.changeTemplateEdit();
+            } else if(screen == 'estoque'){
+                FlowManagerService.changeEstoqueView();
             } else {
                 
             }

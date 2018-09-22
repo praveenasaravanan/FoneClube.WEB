@@ -114,17 +114,22 @@
           }
         }
       })
-      // .state('template-edit', {
-      //   url: '/template-edit',
-      //   templateUrl: 'modules/template-edit/template-edit.html',
-      //   controller: 'TemplateEditController as vm'
-      // })
       .state('tabs.template-edit', {
         url: "/template-edit",
         views: {
           'menu-tab': {
             templateUrl: 'modules/template-edit/template-edit.html',
             controller: 'TemplateEditController as vm'
+          }
+        }
+      })
+
+      .state('tabs.estoque', {
+        url: "/estoque",
+        views: {
+          'menu-tab': {
+            templateUrl: 'modules/estoque/estoque.html',
+            controller: 'EstoqueController as vm'
           }
         }
       })

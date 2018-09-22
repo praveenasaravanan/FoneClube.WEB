@@ -15,11 +15,12 @@
         'ui.router',
         'ui.toggle',
         'autoCompleteModule',
-        'smart-table',
-        'g1b.datetime-inputs'
+        'smart-table'
+        ,'g1b.datetime-inputs'
         ,'ngclipboard'
         ,'ngAnimate'
-        , 'vAccordion'
+        ,'vAccordion'
+        ,'ngTable'
 
     ]);
 
