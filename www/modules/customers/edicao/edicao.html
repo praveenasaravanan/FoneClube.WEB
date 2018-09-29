@@ -1,6 +1,6 @@
 <div class="edicao-container" style="margin-top: 48px;">
     <fone-header title="Editar Cadastro"></fone-header>
-    <img class="loader" ng-if="vm.showLoader">
+    <!-- <img class="loader" ng-if="vm.showLoader"> -->
     <!--<h2 ng-click="vm.openDados = !vm.openDados" class="form-group col-xs-12 display-3">Dados Iniciais-->
         <!--<i class="glyphicon"-->
            <!--ng-class="{'glyphicon-chevron-down': vm.openDados, 'glyphicon-chevron-right': !vm.openDados}"></i>-->
@@ -36,6 +36,14 @@
                             <input id="dataNasc" next-on-enter class="form-control" ng-model="vm.actual_phone"
                                    type="tel" placeholder="(xx) 99999-9999"
                                    mask="(99) 9?9999-9999" restrict="reject">
+                        </div>
+                        <div class="form-group col-sm-3 col-xs-3">
+                            <label for="nome">Cliente ativo:</label>
+
+                            <toggle ng-change="vm.changeCustomerAtivity(vm.customer.Id ,vm.customerAtivo)" on="On" off="Off"
+                                ng-model="vm.customerAtivo"></toggle>
+
+                            <!-- <toggle ng-model="!vm.customer.Desativo" ng-change="vm.changeCustomerAtivity(vm.customer.Id, vm.customer.Desativo)"></toggle> -->
                         </div>
                         <!--<div class="form-group col-sm-6 col-xs-12">-->
                             <!--<label for="selectOperator">Qual sua operadora atual?:</label>-->
@@ -258,9 +266,15 @@
                 <thead>
                 <tr>
 
-                    <th style="width: 40px;">
+                    <!-- <th style="width: 40px;">
                         <div class="s_cls s_lbl">
                             <span for="portabilidadeTelefone">STATUS:</span>
+                        </div>
+                    </th> -->
+
+                    <th style="width: 40px;">
+                        <div class="s_cls s_lbl">
+                            <span for="portabilidadeTelefone">LINHA EM USO:</span>
                         </div>
                     </th>
 
@@ -316,11 +330,22 @@
                 <tbody style="-webkit-user-select: text;  -moz-user-select: text;  -ms-user-select: text;  user-select: text;">
                 <tr ng-repeat="phoneNumber in vm.tempPhones | filter : vm.ignoreAccents ">
 
-                    <!-- <div class="s_cls box-status" ng-style="(phoneNumber.StatusVivo.Ativa == true || phoneNumber.StatusClaro.Ativa == true ) ? {'background-color':'green'} : {'background-color': 'grey'}"> -->
-                    <td style="width: 40px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+                    
+                    <!-- <td style="width: 40px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
 
                         <div class="s_cls box-status" ng-style="(phoneNumber.StatusVivo.Ativa == true || phoneNumber.StatusClaro.Ativa == true ) ? { 'background-color':'green' } : { 'background-color':'grey' }">
                             {{phoneNumber.StatusDescription}}
+                        </div>
+                    </td> -->
+
+                    <td style="width: 40px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+
+                        <div class="s_cls box-status" ng-show="phoneNumber.usoLinha != undefined" ng-style="phoneNumber.usoLinha == 1 ? { 'background-color':'green' } : { 'background-color':'yellow' }">
+                            {{phoneNumber.usoLinha ? 'sim' : 'não'}}
+                        </div>
+
+                        <div class="s_cls box-status" ng-show="phoneNumber.usoLinha == undefined" ng-style="phoneNumber.usoLinha == undefined ? { 'background-color':'grey' } : { 'background-color':'yellow' }">
+                            {{vm.concluiuVerificacaoStatus}}
                         </div>
                     </td>
 
@@ -355,7 +380,6 @@
                     <td ng-if="!vm.hideColunaLinhaAtiva" style="width: 40px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
                         <toggle ng-change="vm.activechanged($index)" on="On" off="Off"
                                 ng-model="phoneNumber.LinhaAtiva"></toggle>
-
                     </td>
 
                     <td style="width: 100px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">

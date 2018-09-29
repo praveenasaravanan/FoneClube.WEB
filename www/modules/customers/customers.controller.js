@@ -5,11 +5,13 @@
         .module('foneClub')
         .controller('CustomersController', CustomersController);
     
-  CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService', 'localStorageService', '$templateCache'];
-  function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService,localStorageService, $templateCache) {
+  CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService', 'localStorageService', '$templateCache', 'NgTableParams'];
+  function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService,localStorageService, $templateCache, NgTableParams) {
 
-        console.log('=== Customers Controller ===');    
+        console.log('=== Customers Controller ===');
+        // debugger;    
         var vm = this;
+        
         var checkvalidate = localStorageService.get("userid");
 
         vm.onTapCustomer = onTapCustomer;
@@ -20,7 +22,8 @@
         vm.onTapNewCardPayment = onTapNewCardPayment;
         vm.onTapExcluir = onTapExcluir;
 
-        vm.data = DataFactory;
+        // vm.data = DataFactory;
+        vm.data = {};
         vm.onDeleteCustomer = onDeleteCustomer;
         vm.showLoader = true;
         vm.changeSearch = changeSearch;
@@ -29,7 +32,7 @@
         // lixo de algum dev vida lok
         $scope.sortType = 'Nome';
         $scope.sortReverse = false;
-        $scope.clientList = vm.data.customers;
+        // $scope.clientList = vm.data.customers;
         
         vm.groups = [
             {
@@ -48,7 +51,30 @@
           FlowManagerService.changeLoginView();
         }
 
+        vm.data = {}
+        FoneclubeService.getCustomers().then(function (result) {
+                vm.data.customers = result.map(function (user) {
+                    user.Phones = user.Phones.map(function (phone) {
+                        phone.phoneFull = phone.DDD.concat(phone.Number);
+                        return phone;
+                    })
+                    return user;
+                })
+                console.log('getCustomers')
+                console.log(result)
+                init()
+                //post realizado com sucesso
+            })
+                .catch(function (error) {
+                    console.log('catch error');
+                    console.log(error);
+                    console.log(error.statusText); // mensagem de erro para tela, caso precise
+                });
+
         function init() {
+            
+
+            // debugger;
             
             for (var i = 0; i < vm.data.customers.length; i++) {
                 var customer = vm.data.customers[i];
@@ -134,17 +160,63 @@
                 }
             }
             $scope.clientList = vm.data.customers;
+            
+            if(vm.data.customers != undefined)
+            {
+                // debugger
+                var customersSemSoftDelete = [];
+                for(var i in vm.data.customers) {
+                   var customer = vm.data.customers[i];
+                   if(!customer.SoftDelete)
+                    customersSemSoftDelete.push(customer);
+               }
+            //    debugger
+
+               vm.tableParams = new NgTableParams({
+                sorting: { name: "asc" } 
+                }, {
+                dataset: customersSemSoftDelete
+                });
+            }
+
+            
+
+                
 
             return $scope.clientList;
+
         }, function (data) {
             if (data && data.length > 0) {
                 getCustomers();
-                if (vm.data.customersCache) {
-                    vm.data.customers = angular.copy(vm.data.customersCache);
-                    $scope.clientList = angular.copy(vm.data.customersCache);
-                }
+                // if (vm.data.customersCache) {
+                //     vm.data.customers = angular.copy(vm.data.customersCache);
+                //     $scope.clientList = angular.copy(vm.data.customersCache);
+
+                //     vm.tableParams = new NgTableParams({
+                //         sorting: { name: "asc" } 
+                //         }, {
+                //         dataset: vm.data.customers
+                //         });
+                // }
             }
         })
+
+
+        $scope.$watch("vm.searchUser", function () {
+
+            var search = vm.searchUser.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
+            var isnum = /^\d+$/.test(search.replace(' ', ''));
+            
+            if(isnum)
+                vm.searchIgnoreAccent = search.replace(' ', '');
+            else    
+                vm.searchIgnoreAccent = search;
+
+            vm.tableParams.filter({ $: vm.searchIgnoreAccent });
+            // vm.tableParams.filter({ DocumentNumber: vm.searchUser });
+            vm.tableParams.reload();
+         });
+        
 
         function onDeleteCustomer(customer){
             

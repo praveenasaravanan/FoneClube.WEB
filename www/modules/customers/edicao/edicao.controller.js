@@ -33,7 +33,7 @@
     vm.validarCEP = validarCEP;
     vm.validarCPF = validarCPF;
     vm.validatePhoneNumber = validatePhoneNumber;
-    // vm.getContactParentName = getContactParentName;
+    vm.changeCustomerAtivity = changeCustomerAtivity;
     vm.showAddNewPhone = showAddNewPhone;
     vm.goBack = goBack;
     vm.cpf = $stateParams.data ? $stateParams.data.DocumentNumber : '';
@@ -98,9 +98,10 @@
       var documentnum = UtilsService.clearDocumentNumber(vm.cpf);
 
       FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
-
+        
         vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
         vm.customer = result;
+        vm.customerAtivo = !vm.customer.Desativo;
         
         if(result.Id == 4158)
         {
@@ -121,143 +122,161 @@
           }
         }
 
-        FoneclubeService.getPlans().then(function (result) {
-
-
-          FoneclubeService.getCustomerWithPhoneStatus(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
-            debugger
-            // se der divergencia fazer foreach
-            // vm.tempPhones = angular.copy(result.Phones);
-            
-          })
-
-
-          vm.plans = result;
+        FoneclubeService.getStatusTelefonesOperadora().then(function (result) {
           
-          var listaPlanosUsados = [];
-
-          for (var number in vm.customer.Phones) {
-            vm.customer.Phones[number].key = Math.random();
-
-            vm.customer.Phones[number].StatusOperator = { 'background-color': 'grey' }
-            vm.customer.Phones[number].StatusDescription = 'C'
-
-            if (vm.customer.Phones[number].Portability) {
-              vm.customer.Phones[number].Portability = 'true';
-            } 
-            else {
-              vm.customer.Phones[number].Portability = 'false';
+          
+          for(var i in vm.customer.Phones)
+          {
+            var telefone = vm.customer.Phones[i].DDD + vm.customer.Phones[i].Number;
+            for(var r in result){
+              if(telefone == result[r].linhaVivoLimpa){
+                vm.customer.Phones[i].usoLinha = result[r].usoLinha;
+              }
             }
+          }
 
-            vm.customer.Phones[number].NovoFormatoNumero = getNumberString(vm.customer.Phones[number]); //popula o novo campo vm.<telefone>
+          vm.concluiuVerificacaoStatus = 'S';
+          debugger;
 
-            for (var plan in vm.plans) {
+          FoneclubeService.getPlans().then(function (result) {
 
-              listaPlanosUsados.push(vm.customer.Phones[number].IdPlanOption);
 
-              if (vm.plans[plan].Id == vm.customer.Phones[number].IdPlanOption) {
-                if (vm.plans[plan].Description.endsWith('VIVO')) {
-                  vm.customer.Phones[number].operadora = '1'; //seta a operadora local
-                } 
-                else {
-                  vm.customer.Phones[number].operadora = '2'; //seta a operadora local
+            FoneclubeService.getCustomerWithPhoneStatus(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
+              
+              // se der divergencia fazer foreach
+              // vm.tempPhones = angular.copy(result.Phones);
+              
+            })
 
-                  FoneclubeService.getStatusLinhaClaro(vm.customer.Phones[number].DDD, vm.customer.Phones[number].Number, number).then(function (result) {
-                    
-                    console.log('-- retorno ' + vm.customer.Phones[result.index].DDD + ' ' + vm.customer.Phones[result.index].Number)
-                    console.log(result)
 
-                    
-                    vm.tempPhones = angular.copy(vm.customer.Phones);
-                    
+            vm.plans = result;
+            
+            var listaPlanosUsados = [];
 
-                  });
+            for (var number in vm.customer.Phones) {
+              vm.customer.Phones[number].key = Math.random();
 
-                }
+              vm.customer.Phones[number].StatusOperator = { 'background-color': 'grey' }
+              vm.customer.Phones[number].StatusDescription = 'C'
+
+              if (vm.customer.Phones[number].Portability) {
+                vm.customer.Phones[number].Portability = 'true';
+              } 
+              else {
+                vm.customer.Phones[number].Portability = 'false';
               }
 
-            }
+              vm.customer.Phones[number].NovoFormatoNumero = getNumberString(vm.customer.Phones[number]); //popula o novo campo vm.<telefone>
 
-          }
+              for (var plan in vm.plans) {
 
-          listaPlanosUsados = listaPlanosUsados.filter(vm.onlyUnique)
-          for (var i in listaPlanosUsados) {
-            var teste = listaPlanosUsados[i];
-          }
+                listaPlanosUsados.push(vm.customer.Phones[number].IdPlanOption);
 
-          console.info(vm.customer);
+                if (vm.plans[plan].Id == vm.customer.Phones[number].IdPlanOption) {
+                  if (vm.plans[plan].Description.endsWith('VIVO')) {
+                    vm.customer.Phones[number].operadora = '1'; //seta a operadora local
+                  } 
+                  else {
+                    vm.customer.Phones[number].operadora = '2'; //seta a operadora local
 
-          populaPai(vm.customer)
-          showDialog.close();
-          // Fix caso não exista numero de telefone -- É necessário manter esse fix por causa de clientes que tenham esse array vazio
-          var dontHaveContact = vm.customer.Phones.filter(function (element, index, array) {
-            return element.IsFoneclube == null || element.IsFoneclube == false;
-          });
-          if (dontHaveContact.length == 0) {
-            vm.actual_phone = '(11) 11111-1111'
-          }
+                    FoneclubeService.getStatusLinhaClaro(vm.customer.Phones[number].DDD, vm.customer.Phones[number].Number, number).then(function (result) {
+                      
+                      console.log('-- retorno ' + vm.customer.Phones[result.index].DDD + ' ' + vm.customer.Phones[result.index].Number)
+                      console.log(result)
 
-          // Fix caso não exista endereço -- É necessário manter esse fix por causa de clientes que tenham esse array vazio
-          if (vm.customer.Adresses.length == 0) {
-            vm.customer.Adresses.push({
-              Cep: '',
-              Street: '',
-              StreetNumber: '',
-              Complement: '',
-              Neighborhood: '',
-              City: '',
-              State: ''
-            });
-          }
+                      
+                      vm.tempPhones = angular.copy(vm.customer.Phones);
+                      
 
-          $timeout(function () {
-            vm.requesting = false;
-          }, 2000)
+                    });
 
-          $timeout(function () {
-            document.getElementById('cpf').focus();
-          }, 200);
-
-          vm.pricelist = [];
-          
-          for (var i = 0; i < vm.customer.Phones.length; i++) {
-            var phoneNumber = vm.customer.Phones[i];
-            
-            if (phoneNumber.IdPlanOption == '') {
-              vm.pricelist.push(0);
-
-            } 
-            else {
-              vm.pricelist.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value);
-              vm.customer.Phones[i]['Price'] = vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value;
-            }
-          }
-             
-          for (var i = 0; i < vm.customer.Phones.length; i++) {
-              var phoneNumber = vm.customer.Phones[i];
-              if(phoneNumber.IdPlanOption == 0){
-                vm.actual_phone = phoneNumber.NovoFormatoNumero;
-                vm.actual_id = i;
-                break
-              }
-
-          }
-          if(!vm.actual_phone){
-              for (var i = 0; i < vm.customer.Phones.length; i++) {
-                  var phoneNumber = vm.customer.Phones[i];
-                  if(phoneNumber.LinhaAtiva == false){
-                      vm.actual_phone = phoneNumber.NovoFormatoNumero;
-                      vm.actual_id = i;
-                      break
                   }
+                }
+
               }
-          }
 
-          vm.tempPhones = angular.copy(vm.customer.Phones);
+            }
 
-          vm.sp = 1;
-          // // 
-          addHistory();
+            listaPlanosUsados = listaPlanosUsados.filter(vm.onlyUnique)
+            for (var i in listaPlanosUsados) {
+              var teste = listaPlanosUsados[i];
+            }
+
+            console.info(vm.customer);
+
+            populaPai(vm.customer)
+            showDialog.close();
+            // Fix caso não exista numero de telefone -- É necessário manter esse fix por causa de clientes que tenham esse array vazio
+            var dontHaveContact = vm.customer.Phones.filter(function (element, index, array) {
+              return element.IsFoneclube == null || element.IsFoneclube == false;
+            });
+            if (dontHaveContact.length == 0) {
+              vm.actual_phone = '(11) 11111-1111'
+            }
+
+            // Fix caso não exista endereço -- É necessário manter esse fix por causa de clientes que tenham esse array vazio
+            if (vm.customer.Adresses.length == 0) {
+              vm.customer.Adresses.push({
+                Cep: '',
+                Street: '',
+                StreetNumber: '',
+                Complement: '',
+                Neighborhood: '',
+                City: '',
+                State: ''
+              });
+            }
+
+            $timeout(function () {
+              vm.requesting = false;
+            }, 2000)
+
+            $timeout(function () {
+              document.getElementById('cpf').focus();
+            }, 200);
+
+            vm.pricelist = [];
+            
+            for (var i = 0; i < vm.customer.Phones.length; i++) {
+              var phoneNumber = vm.customer.Phones[i];
+              
+              if (phoneNumber.IdPlanOption == '') {
+                vm.pricelist.push(0);
+
+              } 
+              else {
+                vm.pricelist.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value);
+                vm.customer.Phones[i]['Price'] = vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value;
+              }
+            }
+              
+            for (var i = 0; i < vm.customer.Phones.length; i++) {
+                var phoneNumber = vm.customer.Phones[i];
+                if(phoneNumber.IdPlanOption == 0){
+                  vm.actual_phone = phoneNumber.NovoFormatoNumero;
+                  vm.actual_id = i;
+                  break
+                }
+
+            }
+            if(!vm.actual_phone){
+                for (var i = 0; i < vm.customer.Phones.length; i++) {
+                    var phoneNumber = vm.customer.Phones[i];
+                    if(phoneNumber.LinhaAtiva == false){
+                        vm.actual_phone = phoneNumber.NovoFormatoNumero;
+                        vm.actual_id = i;
+                        break
+                    }
+                }
+            }
+
+            vm.tempPhones = angular.copy(vm.customer.Phones);
+
+            vm.sp = 1;
+            // // 
+            addHistory();
+          });
+
         });
 
       });
@@ -353,7 +372,7 @@
 
     function onTapSendUser(customer) {
        
-     debugger;
+    //  debugger;
       if (vm.requesting == true)
         return;
 
@@ -365,7 +384,7 @@
 
       if(dontHaveContact.length == 0)
       {
-        debugger;
+        // debugger;
         var contactPhone = {
           "DDD":UtilsService.getPhoneNumberFromStringToJson(vm.actual_phone).DDD,
           "Number":UtilsService.getPhoneNumberFromStringToJson(vm.actual_phone).Number,
@@ -390,7 +409,7 @@
         
       }
       
-      debugger;
+      // debugger;
       var customerSend = {
         "Id": customer.Id,
         "DocumentNumber": UtilsService.clearDocumentNumber(customer.DocumentNumber),
@@ -446,7 +465,7 @@
 
         customerSend.Phones[item].NovoFormatoNumero = customerSend.Phones[item].DDD + customerSend.Phones[item].Number
         if (customerSend.Phones[item].NovoFormatoNumero.length < digitosMinimosTelefone && customerSend.Phones[item].NovoFormatoNumero.length > 0 && customerSend.Phones[item].IsFoneclube) {
-          debugger;
+          // debugger;
           DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'O telefone: '.concat(customerSend.Phones[item].NovoFormatoNumero).concat(', não pode ficar incompleto, mas pode ficar em branco.') });
           vm.requesting = false;
           return;
@@ -1233,6 +1252,7 @@
 
     vm.activechanged = activechanged;
     function activechanged($index) {
+      // debugger
       addHistory();
     }
 
@@ -1276,6 +1296,20 @@
         vm.singlePriceLocal = vm.singlePriceLocal / 100;
         vm.singlePriceLocal = 'R$'+vm.singlePriceLocal.toFixed(2);
       }
+    }
+
+    function changeCustomerAtivity(id, status){
+      console.log(' --- changeCustomerAtivity');
+      // debugger
+
+      var customer = {
+        'Id':id,
+        'Desativo': !status
+      }
+      // debugger;
+      FoneclubeService.postPersonAtivity(customer).then(function(result){
+        // debugger;
+      })
     }
 
 

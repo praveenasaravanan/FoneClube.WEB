@@ -36,6 +36,7 @@
         this.postSoftDeletePhone = postSoftDeletePhone;
         this.postSoftDeleteCustomer = postSoftDeleteCustomer;
         this.postChargingLog = postChargingLog;
+        this.postPersonAtivity = postPersonAtivity;
 
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
@@ -69,6 +70,7 @@
         this.getStatusAPI  = getStatusAPI;
         this.getChargingLog = getChargingLog;
         this.getLinhasEstoque = getLinhasEstoque;
+        this.getStatusTelefonesOperadora = getStatusTelefonesOperadora;
 
         function getLastPaymentType(customer) {
             
@@ -403,6 +405,19 @@
             debugger
             var q = $q.defer();
             HTTPService.post(urlApi.concat('/charging/log/person/id/').concat(id), {'SerializedCharging': param})
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+            return q.promise;
+        }
+
+        
+        function postPersonAtivity(param) {
+            var q = $q.defer();
+            HTTPService.post(urlApi.concat('/profile/customer/ativity'), param)
                 .then(function (data) {
                     q.resolve(data);
                 })
@@ -784,6 +799,20 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/manager/phones/estoque'))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
+
+        function getStatusTelefonesOperadora(){
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/manager/phones/status'))
                 .then(function (result) {
                     q.resolve(result);
                 })
