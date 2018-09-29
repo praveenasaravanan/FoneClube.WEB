@@ -138,6 +138,10 @@
           vm.concluiuVerificacaoStatus = 'S';
           debugger;
 
+          vm.tempPhones = angular.copy(vm.customer.Phones);
+
+          });
+
           FoneclubeService.getPlans().then(function (result) {
 
 
@@ -277,7 +281,7 @@
             addHistory();
           });
 
-        });
+        
 
       });
     };
