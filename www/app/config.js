@@ -9,6 +9,9 @@
 
       configRouteProvider($ionicConfigProvider, $locationProvider)
 
+      var rota = window.location.href;
+      debugger
+
       $stateProvider.state('master', {
         url: '/',
         templateUrl: 'index.html',
@@ -64,6 +67,7 @@
       .state('tabs.customers', {
         cache: false,
         url: "/customers",
+        params : {previous: rota},
         views: {
           'menu-tab': {
             templateUrl: "modules/customers/customers.html",

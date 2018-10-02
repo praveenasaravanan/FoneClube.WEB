@@ -9,11 +9,29 @@
     function UtilsService($q) {
         return {
             clearDocumentNumber: _clearDocumentNumber,
+            clearDocumentNumber: _clearDocumentNumber,
             getContactPhoneFromPhones: _getContactPhoneFromPhones,
+            getRouteData: getRouteData,
+            getPreviousRouteData: getPreviousRouteData,
+            setRouteData:setRouteData,
             getDocumentNumerWithMask: _getDocumentNumerWithMask,
             getPhoneNumberFromStringToJson: _getPhoneNumberFromStringToJson,
             clearPhoneNumber: _clearPhoneNumber,
             sendImageToUpload: _sendImageToUpload
+        }
+
+        
+        function getRouteData(){
+            return this.data
+        }
+
+        function getPreviousRouteData(){
+            return this.previousRoute
+        }
+
+        function setRouteData(param){
+            this.previousRoute = this.data;
+            this.data = param
         }
         
         function _clearDocumentNumber(documentNumber){

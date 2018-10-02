@@ -5,8 +5,8 @@
         .module('foneClub')
         .service('FlowManagerService', FlowManagerService);
 
-    FlowManagerService.inject = ['LocationService', 'FireBaseManagerUtil', '$window', 'localStorageService', '$rootScope'];
-    function FlowManagerService(LocationService, FireBaseManagerUtil, $window, localStorageService, $rootScope) {
+    FlowManagerService.inject = ['LocationService', 'FireBaseManagerUtil', '$window', 'localStorageService', '$rootScope', '$templateCache', 'UtilsService'];
+    function FlowManagerService(LocationService, FireBaseManagerUtil, $window, localStorageService, $rootScope, $templateCache, UtilsService) {
 
         this.changeLoginView = changeLoginView;
         this.changeHomeView = changeHomeView;
@@ -42,8 +42,13 @@
         }
         
         function changeCustomersView(){
+            
+            // $templateCache.put("lib/ng-table/pager.html",'<div class="ng-cloak ng-table-pager" ng-if=params.data.length> <div ng-if=params.settings().counts.length class="ng-table-counts btn-group pull-right"> <button ng-repeat="count in params.settings().counts" type=button ng-class="{\'active\':params.count() == count}" ng-click=params.count(count) class="btn btn-default"> <span ng-bind=count></span> </button> </div> <ul ng-if=pages.length class="pagination ng-table-pagination"> <li ng-class="{\'disabled\': !page.active && !page.current, \'active\': page.current}" ng-repeat="page in pages" ng-switch=page.type> <a ng-switch-when=prev ng-click=params.page(page.number) href="">&laquo;</a> <a ng-switch-when=first ng-click=params.page(page.number) href=""><span ng-bind=page.number></span></a> <a ng-switch-when=page ng-click=params.page(page.number) href=""><span ng-bind=page.number></span></a> <a ng-switch-when=more ng-click=params.page(page.number) href="">&#8230;</a> <a ng-switch-when=last ng-click=params.page(page.number) href=""><span ng-bind=page.number></span></a> <a ng-switch-when=next ng-click=params.page(page.number) href="">&raquo;</a> </li> </ul> </div> ');
+            // $templateCache.put("lib/ng-table/header.html","<ng-table-group-row></ng-table-group-row> <ng-table-sorter-row></ng-table-sorter-row> <ng-table-filter-row></ng-table-filter-row> ");
+            
             LocationService.change('tabs.customers');
             $rootScope.$broadcast('changeMenuItem', 'customers');
+            // $window.location.reload();
         }
         
         function changeOrdemServicoView(param){

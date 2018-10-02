@@ -5,13 +5,17 @@
         .module('foneClub')
         .controller('CustomersController', CustomersController);
     
-  CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService', 'localStorageService', '$templateCache', 'NgTableParams'];
-  function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService,localStorageService, $templateCache, NgTableParams) {
+  CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService', 'localStorageService', '$templateCache', 'NgTableParams', '$state', '$rootScope', '$stateParams', 'UtilsService', 'ngTableDefaults'];
+  function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService,localStorageService, $templateCache, NgTableParams, $state, $rootScope, $stateParams, UtilsService, ngTableDefaults) {
 
-        console.log('=== Customers Controller ===');
-        // debugger;    
+        // $state.reload();   
+        console.log('=== Customers Controller ===' + $stateParams.previous);
+        debugger
+       
+        if(UtilsService.getPreviousRouteData() == "tabs.edicao")
+            window.location.reload(false); 
+
         var vm = this;
-        
         var checkvalidate = localStorageService.get("userid");
 
         vm.onTapCustomer = onTapCustomer;
@@ -21,6 +25,7 @@
         vm.onTapBoletoPayment = onTapBoletoPayment;
         vm.onTapNewCardPayment = onTapNewCardPayment;
         vm.onTapExcluir = onTapExcluir;
+        vm.createUsingFullOptions = createUsingFullOptions;
 
         // vm.data = DataFactory;
         vm.data = {};
@@ -127,10 +132,10 @@
                     }
                     catch(e){}
                 }
-                    
-
-                
             }
+
+            vm.tableInitialized = true;
+
         }
 
         function changeSearch(){
@@ -170,13 +175,18 @@
                    if(!customer.SoftDelete)
                     customersSemSoftDelete.push(customer);
                }
-            //    debugger
+            
 
-               vm.tableParams = new NgTableParams({
-                sorting: { name: "asc" } 
-                }, {
-                dataset: customersSemSoftDelete
-                });
+            //    vm.tableParams = new NgTableParams({
+            //     counts: [100, 200, 300],
+            //     sorting: { name: "asc" } 
+            //     }, {
+            //     dataset: customersSemSoftDelete
+            //     });
+
+            vm.tableParams = createUsingFullOptions(customersSemSoftDelete)
+
+ 
             }
 
             
@@ -204,17 +214,21 @@
 
         $scope.$watch("vm.searchUser", function () {
 
-            var search = vm.searchUser.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
-            var isnum = /^\d+$/.test(search.replace(' ', ''));
+            try{
+                var search = vm.searchUser.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
+                var isnum = /^\d+$/.test(search.replace(' ', ''));
+                
+                if(isnum)
+                    vm.searchIgnoreAccent = search.replace(' ', '');
+                else    
+                    vm.searchIgnoreAccent = search;
+    
+                vm.tableParams.filter({ $: vm.searchIgnoreAccent });
+                // vm.tableParams.filter({ DocumentNumber: vm.searchUser });
+                vm.tableParams.reload();
+            }
+            catch(e){}
             
-            if(isnum)
-                vm.searchIgnoreAccent = search.replace(' ', '');
-            else    
-                vm.searchIgnoreAccent = search;
-
-            vm.tableParams.filter({ $: vm.searchIgnoreAccent });
-            // vm.tableParams.filter({ DocumentNumber: vm.searchUser });
-            vm.tableParams.reload();
          });
         
 
@@ -303,6 +317,22 @@
                     }
                 })
         }
+
+        function createUsingFullOptions(lista) {
+            var initialParams = {
+              count: 50 // initial page size
+            };
+            var initialSettings = {
+              // page size buttons (right set of buttons in demo)
+              counts: [50,100,500],
+              // determines the pager buttons (left set of buttons in demo)
+              paginationMaxBlocks: 10,
+              paginationMinBlocks: 1,
+              dataset: lista
+            };
+            return new NgTableParams(initialParams, initialSettings);
+          }
+
         /////////////////////////////
         /////////////////////////////
 

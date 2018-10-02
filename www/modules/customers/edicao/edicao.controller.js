@@ -1017,6 +1017,7 @@
     vm.base64Verso;
     vm.uploadImg = uploadImg;
     vm.viewImg = viewImg;
+    
     function viewImg(img) {
       ngDialog.open({
         template: '<div class="popup-lista-imagens ngdialog-close"><img ng-src="{{img}}"/></div>',
@@ -1242,16 +1243,20 @@
 
     vm.telephonechanged = telephonechanged;
     function telephonechanged($index, phone) {
-      var ddd = phone.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(0, 2)
-      var phone = phone.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(2, 11)
-
-      vm.customer.Phones[$index].DDD = ddd;
-      vm.customer.Phones[$index].Number = phone;
-      vm.customer.Phones[$index].NovoFormatoNumero = ddd + phone;
-
-      vm.tempPhones[$index].DDD = ddd;
-      vm.tempPhones[$index].Number = phone;
-      vm.tempPhones[$index].NovoFormatoNumero = ddd + phone;
+      try{
+        var ddd = phone.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(0, 2)
+        var phone = phone.replace('(', '').replace(')', '').replace('-', '').replace(' ', '').trim().substring(2, 11)
+  
+        vm.customer.Phones[$index].DDD = ddd;
+        vm.customer.Phones[$index].Number = phone;
+        vm.customer.Phones[$index].NovoFormatoNumero = ddd + phone;
+  
+        vm.tempPhones[$index].DDD = ddd;
+        vm.tempPhones[$index].Number = phone;
+        vm.tempPhones[$index].NovoFormatoNumero = ddd + phone;
+      }
+      catch(e){}
+      
     }
 
     vm.activechanged = activechanged;
