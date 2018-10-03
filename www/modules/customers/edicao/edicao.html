@@ -340,11 +340,15 @@
 
                     <td style="width: 40px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
 
-                        <div class="s_cls box-status" ng-show="phoneNumber.usoLinha != undefined" ng-style="phoneNumber.usoLinha == 1 ? { 'background-color':'green' } : { 'background-color':'yellow' }">
+                        <div title="Verde: sim = linha usada | Amarelo: não = linha não utilizada | Azul = linha não listada | Cinza: carregando " class="s_cls box-status" ng-show="phoneNumber.usoLinha != undefined && phoneNumber.usoLinha != -1" ng-style="phoneNumber.usoLinha == 1 ? { 'background-color':'green' } : { 'background-color':'yellow' }">
                             {{phoneNumber.usoLinha ? 'sim' : 'não'}}
                         </div>
 
-                        <div class="s_cls box-status" ng-show="phoneNumber.usoLinha == undefined" ng-style="phoneNumber.usoLinha == undefined ? { 'background-color':'grey' } : { 'background-color':'yellow' }">
+                        <div title="verde: sim = linha usada; amarelo: não = linha não utilizada; azul = linha não listada | Cinza: carregando" class="s_cls box-status" ng-show="phoneNumber.usoLinha == undefined && phoneNumber.usoLinha != -1" ng-style="phoneNumber.usoLinha == undefined ? { 'background-color':'grey' } : { 'background-color':'yellow' }">
+                            {{vm.concluiuVerificacaoStatus}}
+                        </div>
+
+                        <div title="verde: sim = linha usada; amarelo: não = linha não utilizada; azul = linha não listada | Cinza: carregando" class="s_cls box-status" ng-show="phoneNumber.usoLinha == -1" ng-style="phoneNumber.usoLinha == undefined ? { 'background-color':'blue' } : { 'background-color':'blue' }">
                             {{vm.concluiuVerificacaoStatus}}
                         </div>
                     </td>

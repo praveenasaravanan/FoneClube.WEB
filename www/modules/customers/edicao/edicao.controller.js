@@ -128,6 +128,7 @@
           for(var i in vm.customer.Phones)
           {
             var telefone = vm.customer.Phones[i].DDD + vm.customer.Phones[i].Number;
+            vm.customer.Phones[i].usoLinha = -1;
             for(var r in result){
               if(telefone == result[r].linhaVivoLimpa){
                 vm.customer.Phones[i].usoLinha = result[r].usoLinha;
@@ -135,7 +136,7 @@
             }
           }
 
-          vm.concluiuVerificacaoStatus = 'S';
+          // vm.concluiuVerificacaoStatus = 'S';
           debugger;
 
           vm.tempPhones = angular.copy(vm.customer.Phones);
