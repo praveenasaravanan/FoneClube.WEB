@@ -129,11 +129,22 @@
           {
             var telefone = vm.customer.Phones[i].DDD + vm.customer.Phones[i].Number;
             vm.customer.Phones[i].usoLinha = -1;
+            vm.customer.Phones[i].divergente = -1;
             for(var r in result){
               if(telefone == result[r].linhaVivoLimpa){
+                
                 vm.customer.Phones[i].usoLinha = result[r].usoLinha;
+                if(parseInt(vm.customer.Phones[i].IdOperator) == result[r].operadora)
+                {
+                  vm.customer.Phones[i].divergente = 0
+                }
+                else if(parseInt(vm.customer.Phones[i].IdOperator) != result[r].operadora)
+                {
+                  vm.customer.Phones[i].divergente = 1
+                }
               }
             }
+            debugger;
           }
 
           // vm.concluiuVerificacaoStatus = 'S';

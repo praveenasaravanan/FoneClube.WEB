@@ -278,6 +278,12 @@
                         </div>
                     </th>
 
+                    <th style="width: 40px;">
+                        <div class="s_cls s_lbl">
+                            <span for="portabilidadeTelefone">OPERADORA DIVERGENTE:</span>
+                        </div>
+                    </th>
+
                     <th style="width: 130px;">
                         <div class="s_cls s_lbl">
                             <span for="portabilidadeTelefone">TELEFONE:</span>
@@ -350,6 +356,21 @@
 
                         <div title="verde: sim = linha usada; amarelo: não = linha não utilizada; azul = linha não listada | Cinza: carregando" class="s_cls box-status" ng-show="phoneNumber.usoLinha == -1" ng-style="phoneNumber.usoLinha == undefined ? { 'background-color':'blue' } : { 'background-color':'blue' }">
                             {{vm.concluiuVerificacaoStatus}}
+                        </div>
+                    </td>
+
+                    <td style="width: 40px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+
+                        <div title="Verde: linha correta com operadora | Vermelho: divergente | Azul: operadora não listada" class="s_cls box-status" ng-show="phoneNumber.divergente != -1 && phoneNumber.divergente != undefined" ng-style="phoneNumber.divergente == 1 ? { 'background-color':'red' } : { 'background-color':'green' }">
+                            <!-- {{phoneNumber.usoLinha }} -->
+                        </div>
+
+                        <div title="Verde: linha correta com operadora | Vermelho: divergente | Azul: operadora não listada" class="s_cls box-status" ng-show="phoneNumber.divergente == -1 && phoneNumber.divergente != undefined" ng-style="{ 'background-color':'blue' }">
+                            <!-- {{phoneNumber.usoLinha }} -->
+                        </div>
+
+                        <div title="Verde: linha correta com operadora | Vermelho: divergente | Azul: operadora não listada" class="s_cls box-status" ng-show="phoneNumber.divergente == undefined" ng-style="{ 'background-color':'grey' }">
+                            <!-- {{phoneNumber.usoLinha }} -->
                         </div>
                     </td>
 
