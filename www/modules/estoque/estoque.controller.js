@@ -9,9 +9,10 @@
       function EstoqueController(FlowManagerService, FoneclubeService, PagarmeService, NgTableParams) {
             
         var vm = this;
+        debugger
         // https://codepen.io/cardozo/pen/QVYXeX    
         FoneclubeService.getLinhasEstoque().then(function(result){
-
+            
             for(var i in result){
                 if(result[i].operadora == 1)
                     result[i].operadoraDescription = 'CLARO'
