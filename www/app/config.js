@@ -10,7 +10,7 @@
       configRouteProvider($ionicConfigProvider, $locationProvider)
 
       var rota = window.location.href;
-      debugger
+      // debugger
 
       $stateProvider.state('master', {
         url: '/',
