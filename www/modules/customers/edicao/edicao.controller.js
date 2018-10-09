@@ -125,7 +125,6 @@
         FoneclubeService.getStatusTelefonesOperadora().then(function (result) {
           
           debugger
-
           for(var i in vm.customer.Phones)
           {
             var telefone = vm.customer.Phones[i].DDD + vm.customer.Phones[i].Number;
@@ -134,6 +133,18 @@
             for(var r in result){
               if(telefone == result[r].phone){
                 
+                var operadora; 
+                if(result[r].operadora == 1)
+                {
+                  operadora = 'CLARO'
+                } 
+                else if(result[r].operadora == 2)
+                {
+                  operadora = 'VIVO'
+                }
+                  
+
+                vm.customer.Phones[i].plano = operadora + " " + result[r].plano;
                 vm.customer.Phones[i].usoLinha = result[r].usoLinha ? 1 : 0;
                 if(parseInt(vm.customer.Phones[i].IdOperator) == result[r].operadora)
                 {

@@ -274,13 +274,19 @@
 
                     <th style="width: 40px;">
                         <div class="s_cls s_lbl">
-                            <span for="portabilidadeTelefone">LINHA EM USO:</span>
+                            <span for="portabilidadeTelefone">Linha em Uso:</span>
                         </div>
                     </th>
 
                     <th style="width: 40px;">
                         <div class="s_cls s_lbl">
-                            <span for="portabilidadeTelefone">OPERADORA DIVERGENTE:</span>
+                            <span for="portabilidadeTelefone">Operadora Divergente:</span>
+                        </div>
+                    </th>
+
+                    <th style="width: 130px;">
+                        <div class="s_cls s_lbl">
+                            <span for="portabilidadeTelefone">Plano Operadora:</span>
                         </div>
                     </th>
 
@@ -302,7 +308,7 @@
 
                     <th style="width: 100px;">
                         <div class="s_cls s_lbl">
-                            <span for="portabilidadeTelefone">Operadora + Plano:</span>
+                            <span for="portabilidadeTelefone">Plano FC:</span>
                         </div>
                     </th>
 
@@ -371,6 +377,12 @@
 
                         <div title="Verde: linha correta com operadora | Vermelho: divergente | Azul: operadora não listada" class="s_cls box-status" ng-show="phoneNumber.divergente == undefined" ng-style="{ 'background-color':'grey' }">
                             <!-- {{phoneNumber.usoLinha }} -->
+                        </div>
+                    </td>
+
+                    <td style="width: 130px;text-align: center;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+                        <div class="s_cls plano-operadora" >
+                            {{phoneNumber.plano}}
                         </div>
                     </td>
 
