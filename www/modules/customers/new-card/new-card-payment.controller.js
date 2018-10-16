@@ -53,6 +53,11 @@
             .catch(function (error) {
 
             });
+
+            FoneclubeService.getLastPersonCharging(customer.Id).then(function (result) {
+                debugger
+                vm.comment = result.txtComment;
+            })
         }
 
         function checkOne(val) {
