@@ -12,10 +12,10 @@
         // var urlApi = 'http://localhost:57078/api';
 
         //API tests
-        // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+        var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API live
-        var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
+        // var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -72,6 +72,7 @@
         this.getLinhasEstoque = getLinhasEstoque;
         this.getStatusTelefonesOperadora = getStatusTelefonesOperadora;
         this.getLastPersonCharging = getLastPersonCharging;
+        this.getAllCustomers = getAllCustomers;
 
         function getLastPaymentType(customer) {
             
@@ -837,6 +838,21 @@
 
             return q.promise;
         }
+
+        function getAllCustomers(minimal){
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/profile/all/customers?minimal=') + minimal)
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
+        
 
     }
 })();

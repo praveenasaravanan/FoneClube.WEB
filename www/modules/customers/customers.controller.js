@@ -8,16 +8,12 @@
   CustomersController.inject = ['PagarmeService', 'DialogFactory', '$scope', 'ViewModelUtilsService', 'FoneclubeService', 'MainUtils', 'DataFactory', 'FlowManagerService', 'localStorageService', '$templateCache', 'NgTableParams', '$state', '$rootScope', '$stateParams', 'UtilsService', 'ngTableDefaults'];
   function CustomersController(PagarmeService, DialogFactory, $scope, ViewModelUtilsService, FoneclubeService, MainUtils, DataFactory, FlowManagerService,localStorageService, $templateCache, NgTableParams, $state, $rootScope, $stateParams, UtilsService, ngTableDefaults) {
 
-        // $state.reload();   
-        console.log('=== Customers Controller ===' + $stateParams.previous);
-        debugger
-       
-        if(UtilsService.getPreviousRouteData() == "tabs.edicao")
-            window.location.reload(false); 
+        console.log('=== Customers Controller ===');
 
         var vm = this;
         var checkvalidate = localStorageService.get("userid");
 
+        vm.data = {};
         vm.onTapCustomer = onTapCustomer;
         vm.onTapCustomerEdit = onTapCustomerEdit;
         vm.onTapRepeatLastCharge = onTapRepeatLastCharge;
@@ -25,195 +21,55 @@
         vm.onTapBoletoPayment = onTapBoletoPayment;
         vm.onTapNewCardPayment = onTapNewCardPayment;
         vm.onTapExcluir = onTapExcluir;
-        vm.createUsingFullOptions = createUsingFullOptions;
-
-        // vm.data = DataFactory;
-        vm.data = {};
         vm.onDeleteCustomer = onDeleteCustomer;
-        vm.showLoader = true;
-        vm.changeSearch = changeSearch;
-        vm.dataPgtList = [];
 
-        // lixo de algum dev vida lok
-        $scope.sortType = 'Nome';
-        $scope.sortReverse = false;
-        // $scope.clientList = vm.data.customers;
-        
-        vm.groups = [
-            {
-              title: "Dynamic Group Header - 1",
-              content: "Dynamic Group Body - 1",
-              open: false
-            },
-            {
-              title: "Dynamic Group Header - 2",
-              content: "Dynamic Group Body - 2",
-              open: false
+        initialize();
+
+        function initialize(){
+
+            if (checkvalidate == null) {
+                FlowManagerService.changeLoginView();
             }
-          ];
-
-        if (checkvalidate == null) {
-          FlowManagerService.changeLoginView();
-        }
-
-        vm.data = {}
-        FoneclubeService.getCustomers().then(function (result) {
-                vm.data.customers = result.map(function (user) {
-                    user.Phones = user.Phones.map(function (phone) {
-                        phone.phoneFull = phone.DDD.concat(phone.Number);
-                        return phone;
-                    })
-                    return user;
-                })
-                console.log('getCustomers')
-                console.log(result)
-                init()
-                //post realizado com sucesso
-            })
-                .catch(function (error) {
-                    console.log('catch error');
-                    console.log(error);
-                    console.log(error.statusText); // mensagem de erro para tela, caso precise
-                });
-
-        function init() {
-            
-
-            // debugger;
-            
-            for (var i = 0; i < vm.data.customers.length; i++) {
-                var customer = vm.data.customers[i];
-
+    
+            FoneclubeService.getAllCustomers(true).then(function (result) {
                 
-                if(customer.IdPagarme != undefined)
-                {
-                    FoneclubeService.getDataPgt(customer.IdPagarme).then(function (result) {
-                        vm.dataPgtList.push(result);
-                        if(vm.dataPgtList.length == vm.data.customers.length){
-                            for (var j = 0; j < vm.data.customers.length; j++) {
-                                vm.data.customers[j].dataPgt = vm.dataPgtList[j];
-                            }
-                            vm.clientList = vm.data.customers;
-                            vm.showLoader = false;
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log('catch error');
-                        try{
-
-                            vm.dataPgtList.push(null);
-                            if(vm.dataPgtList.length == vm.data.customers.length){
-
-                                for (var j = 0; j < vm.data.customers.length; j++) {
-                                    vm.data.customers[j].dataPgt = vm.dataPgtList[j];
-                                }
-                                vm.clientList = vm.data.customers;
-                                vm.showLoader = false;
-                            }
-
-                        }
-                        catch(e){}
-                    });
-                
-                }
-                else{
-                    try{
-
-                        vm.dataPgtList.push(null);
-                        if(vm.dataPgtList.length == vm.data.customers.length){
-
-                            for (var j = 0; j < vm.data.customers.length; j++) {
-                                vm.data.customers[j].dataPgt = vm.dataPgtList[j];
-                            }
-                            vm.clientList = vm.data.customers;
-                            vm.showLoader = false;
-                        }
-
-                    }
-                    catch(e){}
-                }
-            }
-
-            vm.tableInitialized = true;
-
-        }
-
-        function changeSearch(){
-            var search = vm.search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
-            var isnum = /^\d+$/.test(search.replace(' ', ''));
-            
-            if(isnum)
-                vm.searchIgnoreAccent = search.replace(' ', '');
-            else    
-                vm.searchIgnoreAccent = search
-        }
-
-        var getCustomers = $scope.$watch(function () {
-            
-            $scope.sortType = 'Nome';
-            $scope.sortReverse = false;
-            vm.showLoader = false;
-            if (vm.data.customers !== undefined && $scope.clientList == undefined) {
-                vm.showLoader = true;
-                init();
-            }
-            if(vm.data.customers !== undefined){
-                if(vm.dataPgtList.length == vm.data.customers.length){
-                    for (var j = 0; j < vm.data.customers.length; j++) {
-                        vm.data.customers[j].dataPgt = vm.dataPgtList[j];
-                    }
-                }
-            }
-            $scope.clientList = vm.data.customers;
-            
-            if(vm.data.customers != undefined)
-            {
-                // debugger
+                vm.data.customers = result;
                 var customersSemSoftDelete = [];
+    
                 for(var i in vm.data.customers) {
-                   var customer = vm.data.customers[i];
-                   if(!customer.SoftDelete)
-                    customersSemSoftDelete.push(customer);
-               }
-            
-
-            //    vm.tableParams = new NgTableParams({
-            //     counts: [100, 200, 300],
-            //     sorting: { name: "asc" } 
-            //     }, {
-            //     dataset: customersSemSoftDelete
-            //     });
-
-            vm.tableParams = createUsingFullOptions(customersSemSoftDelete)
-
- 
-            }
-
-            
-
+                    var customer = vm.data.customers[i];
+                    if(!customer.SoftDelete)
+                        customersSemSoftDelete.push(customer);
+                }
                 
+                vm.tableParams = createUsingFullOptions(customersSemSoftDelete);
+                vm.tableParams.reload();  
+    
+                FoneclubeService.getAllCustomers(false).then(function (result) {
+                    
+                    vm.data.customers = result.map(function (user) {
+                            user.Phones = user.Phones.map(function (phone) {
+                                phone.phoneFull = phone.DDD.concat(phone.Number);
+                                return phone;
+                            })
+                            return user;
+                        })
+    
+                    var customersSemSoftDelete = [];
+                    for(var i in vm.data.customers) {
+                        var customer = vm.data.customers[i];
+                        if(!customer.SoftDelete)
+                            customersSemSoftDelete.push(customer);
+                    }
 
-            return $scope.clientList;
-
-        }, function (data) {
-            if (data && data.length > 0) {
-                getCustomers();
-                // if (vm.data.customersCache) {
-                //     vm.data.customers = angular.copy(vm.data.customersCache);
-                //     $scope.clientList = angular.copy(vm.data.customersCache);
-
-                //     vm.tableParams = new NgTableParams({
-                //         sorting: { name: "asc" } 
-                //         }, {
-                //         dataset: vm.data.customers
-                //         });
-                // }
-            }
-        })
-
-
+                    vm.tableParams = createUsingFullOptions(customersSemSoftDelete);
+                    vm.tableParams.reload();  
+                })
+                
+            })
+        }
+        
         $scope.$watch("vm.searchUser", function () {
-
             try{
                 var search = vm.searchUser.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
                 var isnum = /^\d+$/.test(search.replace(' ', ''));
@@ -224,7 +80,6 @@
                     vm.searchIgnoreAccent = search;
     
                 vm.tableParams.filter({ $: vm.searchIgnoreAccent });
-                // vm.tableParams.filter({ DocumentNumber: vm.searchUser });
                 vm.tableParams.reload();
             }
             catch(e){}
@@ -253,6 +108,22 @@
                         txt = "You pressed Cancel!";
                     }
         }
+
+        function createUsingFullOptions(lista) {
+            var initialParams = {
+              count: 50 // initial page size
+            };
+            var initialSettings = {
+              // page size buttons (right set of buttons in demo)
+              counts: [50,100,500],
+              // determines the pager buttons (left set of buttons in demo)
+              paginationMaxBlocks: 10,
+              paginationMinBlocks: 1,
+              dataset: lista
+            };
+            return new NgTableParams(initialParams, initialSettings);
+
+          }
 
         //////////////////////////////////////////////////
         // Eventos de tap
@@ -317,25 +188,5 @@
                     }
                 })
         }
-
-        function createUsingFullOptions(lista) {
-            var initialParams = {
-              count: 50 // initial page size
-            };
-            var initialSettings = {
-              // page size buttons (right set of buttons in demo)
-              counts: [50,100,500],
-              // determines the pager buttons (left set of buttons in demo)
-              paginationMaxBlocks: 10,
-              paginationMinBlocks: 1,
-              dataset: lista
-            };
-            return new NgTableParams(initialParams, initialSettings);
-          }
-
-        /////////////////////////////
-        /////////////////////////////
-
-
     }
 })();
