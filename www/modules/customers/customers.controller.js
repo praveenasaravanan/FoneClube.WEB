@@ -181,10 +181,10 @@
                             else
                                 DialogFactory.showMessageDialog({ message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber });
                         })
-                            .catch(function (error) {
-                                console.log('catch error');
-                                console.log(error);
-                            });
+                        .catch(function (error) {
+                            console.log('catch error');
+                            console.log(error);
+                        });
                     }
                 })
         }
