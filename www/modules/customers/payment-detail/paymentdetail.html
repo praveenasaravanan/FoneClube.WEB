@@ -12,7 +12,7 @@
                 Hitórico de cobrança<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>                        
             </uib-accordion-heading>
             <div class="accordion-container">
-                <p>Data e hora: <strong>{{vm.history.PaymentDate}}.</strong> </p>
+                <p>Data e hora: <strong>{{vm.history.CreationDate}}.</strong> </p>
                 <p style="text-overflow: clip; white-space: normal;">Comentário: <strong>{{vm.history.Comment}}.</strong> </p>
                 <p>Valor: <strong>{{vm.history.Ammount / 100 }} R$ </strong> </p>
                 <p>Tipo: <strong>{{vm.history.descriptionType}} </strong> </p>

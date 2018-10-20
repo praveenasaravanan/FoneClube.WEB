@@ -105,6 +105,7 @@
                     }
                     
                 }
+                debugger
                 for (var i in vm.osArray) {
                     vm.osDescArray.push(vm.osArray[vm.osArray.length - i]);
                 }

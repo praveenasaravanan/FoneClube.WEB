@@ -274,7 +274,7 @@
                             try{
                                 
                                 // dataCobranca = result[0].Charges.PaymentDate.substring(0,10).replace('-','/').replace('-','/');
-                                dataCobranca = result[0].Charges.PaymentDate;
+                                dataCobranca = result[0].Charges.CreationDate;
                             }
                             catch(erro){
                                 

@@ -72,7 +72,7 @@
     
                       <v-pane-header >
                         {{vm.chargesArray.length-$index}}ª Cob. {{
-                            chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM/dd'}}
+                            chargeAndOrder.Charges.CreationDateFormatted | date:'yyyy/MM/dd'}}
                             R${{chargeAndOrder.Charges.Ammount / 100 }}
                             {{chargeAndOrder.Charges.descriptionType}}
                       </v-pane-header>
@@ -80,7 +80,7 @@
                       <v-pane-content >
 
                             <p>Criado em:
-                                    <strong>{{chargeAndOrder.Charges.PaymentDate | date: 'yyyy/MM/dd hh:mm:ss
+                                    <strong>{{chargeAndOrder.Charges.CreationDate | date: 'yyyy/MM/dd hh:mm:ss
                                         a'}}.</strong>
                                 </p>
                                 <p>Comentário:
@@ -115,7 +115,7 @@
                                 <p>Agente:
                                     <strong>{{chargeAndOrder.Charges.CollectorName }} </strong>
                                 </p>
-                                <p>Vigência: {{chargeAndOrder.Charges.PaymentDateFormatted | date:'yyyy/MM'}}
+                                <p>Vigência: {{chargeAndOrder.Charges.AnoVingencia + '/' + chargeAndOrder.Charges.MesVingencia}}
                                 </p>
                                 
                                 <p>Status: {{chargeAndOrder.Charges.PaymentStatusDescription == '' ? 'Sem transaction associada' : chargeAndOrder.Charges.PaymentStatusDescription}}
