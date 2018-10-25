@@ -323,6 +323,8 @@
                     Id: vm.customer.Id,
                     Charging:{
                         Comment:vm.comment,
+                        // CommentEmail:'teste',
+                        // CommentBoleto:'teste2',
                         Ammount: vm.amount,
                         CollectorName: MainUtils.getAgent(),
                         PaymentType: BOLETO,
@@ -351,6 +353,7 @@
                      
                     })
                     .catch(function(error){
+                        alert('Aviso em verificação secundária - Boleto gerado mas hitórico com problema ao salvar, tire print dessa tela por favor, se possível aperte f12 antes do print, e clique em console')
                         console.log('catch error');
                         console.log(error);
                     });
