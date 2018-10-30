@@ -616,7 +616,7 @@
 
         function getChargeAndServiceOrderHistory(id) {
             var q = $q.defer();
-            HTTPService.get(urlApi.concat('/profile/getChargeAndServiceOrderHistory?personID='.concat(id)))
+            HTTPService.get(urlApi.concat('/charging/history?personID='.concat(id)))
                 .then(function (result) {
                     q.resolve(result);
                 })

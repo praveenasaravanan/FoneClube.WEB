@@ -112,6 +112,12 @@
                                             ng-if="chargeAndOrder.Charges.descriptionType =='Cartão de crédito'">Final:
                                         {{vm.cards[0].last_digits}}</label>
                                 </p>
+                                <p>Comentário boleto:
+                                    <strong>{{chargeAndOrder.Charges.CommentBoleto }} </strong>
+                                </p>
+                                <p>Comentário email:
+                                    <strong>{{chargeAndOrder.Charges.CommentEmail }} </strong>
+                                </p>
                                 <p>Agente:
                                     <strong>{{chargeAndOrder.Charges.CollectorName }} </strong>
                                 </p>

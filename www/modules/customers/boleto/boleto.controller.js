@@ -323,8 +323,8 @@
                     Id: vm.customer.Id,
                     Charging:{
                         Comment:vm.comment,
-                        // CommentEmail:'teste',
-                        // CommentBoleto:'teste2',
+                        CommentEmail:vm.customerComment,
+                        CommentBoleto:vm.commentBoleto,
                         Ammount: vm.amount,
                         CollectorName: MainUtils.getAgent(),
                         PaymentType: BOLETO,

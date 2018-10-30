@@ -307,6 +307,7 @@
                 Id: vm.customer.Id,
                 Charging:{
                     Comment:vm.comment,
+                    CommentEmail:vm.customerComment,
                     Ammount: vm.amount,
                     CollectorName: MainUtils.getAgent(),
                     PaymentType: CARTAO,

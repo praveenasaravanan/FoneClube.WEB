@@ -70,6 +70,7 @@
 
             FoneclubeService.getChargeAndServiceOrderHistory(customer.Id).then(function (result) {
                 
+                debugger;
                 vm.chargesAndOrders = result;
 
                 vm.chargesArray = []  
