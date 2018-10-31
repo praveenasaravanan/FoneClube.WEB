@@ -330,6 +330,22 @@
 
             })
             .catch(function(error){
+                alert('Aviso em verificação secundária, printar tela - ' 
+                        + '_' + customerCharging.Id
+                        + '_' + customerCharging.ChargeStatus
+                        + '_' + customerCharging.TransactionId
+                        + '_' + customerCharging.ComissionConceded
+                        + '_' + customerCharging.Charging.Comment
+                        + '_' + customerCharging.Charging.CommentEmail
+                        + '_' + customerCharging.Charging.CommentBoleto
+                        + '_' + customerCharging.Charging.Ammount
+                        + '_' + customerCharging.Charging.CollectorName
+                        + '_' + customerCharging.Charging.PaymentType
+                        + '_' + customerCharging.Charging.BoletoId
+                        + '_' + customerCharging.Charging.AcquireId
+                        + '_' + customerCharging.Charging.AnoVingencia
+                        + '_' + customerCharging.Charging.MesVingencia
+                        )
                 console.log('catch error');
                 console.log(error);
             });

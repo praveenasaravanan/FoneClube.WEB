@@ -19,10 +19,10 @@
 
             var users = FireBaseManagerUtil.getUsers();
 
-            FoneclubeService.getUpdatePagarme().then(function (result) {
-                debugger
-                console.log('result ' + result);
-            });
+            // FoneclubeService.getUpdatePagarme().then(function (result) {
+            //     debugger
+            //     console.log('result ' + result);
+            // });
 
             for(var i in users){
                 var user = users[i];
