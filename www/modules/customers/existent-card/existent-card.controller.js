@@ -345,6 +345,7 @@
                         + '_' + customerCharging.Charging.AcquireId
                         + '_' + customerCharging.Charging.AnoVingencia
                         + '_' + customerCharging.Charging.MesVingencia
+                        + ' ecc333'
                         )
                 console.log('catch error');
                 console.log(error);

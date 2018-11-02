@@ -439,6 +439,7 @@
                         + '_' + customerCharging.Charging.AcquireId
                         + '_' + customerCharging.Charging.AnoVingencia
                         + '_' + customerCharging.Charging.MesVingencia
+                        + ' ncpc442' 
                         )
                     console.log('catch error');
                     console.log(error);
