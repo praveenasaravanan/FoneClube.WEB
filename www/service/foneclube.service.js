@@ -73,6 +73,7 @@
         this.getStatusTelefonesOperadora = getStatusTelefonesOperadora;
         this.getLastPersonCharging = getLastPersonCharging;
         this.getAllCustomers = getAllCustomers;
+        this.getReintegrateDatePagarme = getReintegrateDatePagarme;
 
         function getLastPaymentType(customer) {
             
@@ -150,6 +151,20 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/pagarme/transacao/update'))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
+
+        function getReintegrateDatePagarme() {
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/pagarme/transacao/reintegrate/date'))
                 .then(function (result) {
                     q.resolve(result);
                 })
