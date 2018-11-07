@@ -71,11 +71,13 @@
         <tr>
 
             <th scope="col"><strong>Última Cob.</strong></th>
+            <th scope="col"><strong>Dias</strong></th>
             <th scope="col" style="text-align: center;"><strong>Status</strong></th>
             <th scope="col"><strong>R$ Cobrado</strong></th>
             <th scope="col"><strong>Tipo</strong></th>
             <th scope="col"><strong>Vencimento</strong></th>
             <th scope="col"><strong>Ultimo pag.</strong></th>
+            <th scope="col"><strong>Dias</strong></th>
             <th scope="col"><strong>R$ Pago</strong></th>
             <!-- <th scope="col"><strong>Valor cobrança</strong></th> -->
             <th scope="col"><strong>Nome</strong></th>
@@ -92,7 +94,11 @@
 
         <tr>
 
-                <td ng-class="{'status-green': customer.dataIgual == true}"><strong>{{customer.chargingDate}}</strong></td>
+            <td ng-class="{'status-green': customer.dataIgual == true}">
+                <strong>{{customer.chargingDate}}</strong>
+            </td>
+            
+            <td><strong>{{vm.diffDays(customer.chargingDate) }}</strong></td>
 
             <td style="text-align: center;">
             <!--<td ng-class="{'status-red': !customer.Charged, 'status-green': customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'INVÁLIDO', 'status-blue': customer.selectedCharge.StatusDescription == 'PENDENTE', 'status-grey': customer.selectedCharge.StatusDescription == 'CARREGANDO' }">-->
@@ -163,6 +169,7 @@
 
             <td><strong></strong>{{customer.selectedCharge.BoletoExpires}}</strong></td>
             <td><strong></strong>{{customer.LastPaidDate}}</strong></td>
+            <td><strong></strong>{{ vm.diffDays(customer.LastPaidDate) }}</strong></td>
             <!-- <td><strong></strong>{{customer.Charging.Ammount / 100}}</strong></td> -->
 
             <td>

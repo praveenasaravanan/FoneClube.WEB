@@ -30,6 +30,7 @@
             var carregandoPagarme = false;
             vm.mensagemPagarme = 'Refresh DB'
             vm.changeSelect = changeSelect
+            vm.diffDays = diffDays;
 
             function changeSelect(param){
                 console.log('Change select' + param)
@@ -115,7 +116,6 @@
 
             function handleData(customers){
                 
-                ;
                 // .toISOString().split('T')[0].replace('-','/').replace('-','/');
 
                 vm.callbackCount = 0;
@@ -310,7 +310,7 @@
 
                 for (var index in vm.customers) {
                     if(vm.customers[index].chargingDate == undefined || vm.customers[index].chargingDate == null){
-                        // debugger;
+                        debugger;
                         vm.customers[index].chargingDate = new Date('2000/01/01').toISOString().split('T')[0].replace('-','/').replace('-','/');
                     }
                 }
@@ -319,6 +319,15 @@
             function formatAmmout(value){
                 return  parseFloat(parseInt(value) / 100).toString().replace('.',',')
             }
+
+            var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds            
+            var secondDate = new Date();
+
+            function diffDays(date)
+            {
+                var firstDate = new Date(date);
+                return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+            } 
             
             
             

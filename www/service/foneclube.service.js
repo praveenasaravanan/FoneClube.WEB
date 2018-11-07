@@ -643,7 +643,7 @@
 
         function getChargeAndServiceOrderHistoryDinamic(id, index) {
             var q = $q.defer();
-            HTTPService.get(urlApi.concat('/profile/getChargeAndServiceOrderHistory?personID='.concat(id)))
+            HTTPService.get(urlApi.concat('/charging/history?personID='.concat(id)))
                 .then(function (result) {
                     result.indexLista = index
                     q.resolve(result);
