@@ -16,7 +16,7 @@
                     param.titulo = 'Confirmação';
                 }
                 if(param.btn1 == undefined || !param.btn1) {
-                    param.btn1 = 'Cancelar';
+                    param.btn1 = 'Não';
                 }
                 if(param.btn2 == undefined || !param.btn2) {
                     param.btn2 = 'Ok';

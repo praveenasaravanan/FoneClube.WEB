@@ -5,12 +5,10 @@
             .module('foneClub')
             .controller('StatusChargingController', StatusChargingController);
     
-        StatusChargingController.inject = ['FlowManagerService', 'MainUtils', 'FoneclubeService', 'PagarmeService', '$interval'];
-        function StatusChargingController(FlowManagerService, MainUtils, FoneclubeService, PagarmeService, $interval) {
-
-            ;
+        StatusChargingController.inject = ['FlowManagerService', 'MainUtils', 'FoneclubeService', 'PagarmeService', '$interval', 'DialogFactory'];
+        function StatusChargingController(FlowManagerService, MainUtils, FoneclubeService, PagarmeService, $interval, DialogFactory) {
+   
             var vm = this;
-            
             console.log('--- StatusChargingController --- ' );
 
             vm.month = new Date().getMonth() + 1;
@@ -20,6 +18,8 @@
             vm.searchStatusCharging = searchStatusCharging;
             vm.formatAmmout = formatAmmout
             vm.onTapUpdatePagarme = onTapUpdatePagarme;
+            vm.onDesativarBoleto = onDesativarBoleto;
+            vm.changeFilter = changeFilter
             
             var totalRecebidoBoleto = 0;
             var interval;
@@ -298,14 +298,9 @@
                                 vm.customers[result.indexLista].dataIgual = true;
                             }
 
-                            vm.customers[result.indexLista].chargingDate = dataConvertida
-                            
-                                
-                             
+                            vm.customers[result.indexLista].chargingDate = dataConvertida;  
                         }
-                        
                     });
-
                 }
 
                 for (var index in vm.customers) {
@@ -328,14 +323,24 @@
                 var firstDate = new Date(date);
                 return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
             } 
-            
-            
-            
-            ////////
-            //MainUtils.setAgent('Cardozo');
-            //FlowManagerService.changeHomeView();
-            ////////
-    
+
+            function onDesativarBoleto(charge){
+                DialogFactory.dialogConfirm({ mensagem: 'Tem certeza que seja cancelar essa cobrança?' })
+                .then(function (value) {
+                    if(value)
+                    {
+                        console.log(charge.Id);
+                        FoneclubeService.postChargingUpdate(charge.Id, true)
+                        .then(function (value) {
+                            console.log(value)
+                        })
+                    }
+                })
+            }
+
+            function changeFilter(){
+                console.log('changeFilter')
+            }
         }
     
     })();
