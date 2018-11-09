@@ -61,11 +61,6 @@
             <label class="form-check-label" for="exampleCheck1">Cobranças ativas</label>
         </div>
 
-        <div class="form-group col-xs-2 col-sm-1 totalizadores massive-selection">
-            <input type="checkbox" class="form-check-input" ng-change="vm.changeFilter()" ng-model="vm.cobrancaInativa">
-            <label class="form-check-label" for="exampleCheck1">Cobranças inativa</label>
-        </div>
-
         <!-- <div class="form-group col-xs-12 col-sm-6">
             <label>Resultado</label>
             <p>R$: 50,00</p>
@@ -74,7 +69,7 @@
     </div>
 
     <!--<table class="table table-hover">-->
-    <table st-table="displayedCollection" st-safe-src="vm.customers"
+    <table st-table="vm.displayedCollection" st-safe-src="vm.customers"
            class="table table-striped table-bordered">
         <div ng-if="vm.loading" class="loading-status">{{vm.loadingMessage}}</div>
         <thead ng-show="!vm.loading">
@@ -101,10 +96,10 @@
 
         </tr>
         </thead>
-        <!-- <tbody ng-repeat="customer in displayedCollection  | orderBy:'-chargingDate' " ng-show="!vm.loading"> 'ChargingValidity[0].StatusDescription', -->
-        <tbody ng-repeat="customer in displayedCollection  | orderBy:['-chargingDate']" ng-show="!vm.loading">
-
-        <tr>
+        <!-- <tbody ng-repeat="customer in vm.displayedCollection  | orderBy:'-chargingDate' " ng-show="!vm.loading"> 'ChargingValidity[0].StatusDescription', -->
+        <tbody ng-repeat="customer in vm.displayedCollection  | orderBy:['-chargingDate']" ng-show="!vm.loading">
+            <!-- ng-if="!customer.selectedCharge.Canceled" -->
+        <tr ng-show="customer.selectedCharge.display">
 
             <td ng-class="{'status-green': customer.dataIgual == true}">
                 <strong>{{customer.chargingDate}}</strong>

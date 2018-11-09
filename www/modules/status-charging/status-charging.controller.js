@@ -74,6 +74,16 @@
                     console.log('getStatusCharging')
                     console.log(result)
                     vm.customers = result;
+
+                    for(var i in vm.customers)
+                    {
+                        vm.customers[i].allChargingsCanceled = false;
+                        for(var o in vm.customers[i].ChargingValidity)
+                        {
+                            vm.customers[i].ChargingValidity[o].display = true;
+                        }
+                    }
+
                     handleData(vm.customers);
                     vm.loading = false;
                     loadPaymentHistory();
@@ -340,6 +350,27 @@
 
             function changeFilter(){
                 console.log('changeFilter')
+                debugger
+                for(var i in vm.displayedCollection)
+                {
+                    console.log(vm.displayedCollection[i])
+                    if(vm.displayedCollection[i].Name == '11 Vera Lúcia Barreto Seixas')
+                        debugger
+
+                    if(vm.cobrancaAtiva)
+                    {
+                        if(vm.displayedCollection[i].selectedCharge.Canceled)
+                            vm.displayedCollection[i].selectedCharge.display = false;
+                        else
+                            vm.displayedCollection[i].selectedCharge.display = true; 
+                    }
+                    else{
+                        vm.displayedCollection[i].selectedCharge.display = true; 
+                    }
+
+                
+                       
+                }
             }
         }
     
