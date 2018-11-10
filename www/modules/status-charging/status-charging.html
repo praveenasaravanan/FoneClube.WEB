@@ -180,15 +180,14 @@
             </td>
 
             <td>
-                
-                <button ng-if="customer.selectedCharge.PaymentType != 1" 
+                <button ng-if="customer.ChargingValidity.length > 0 && !customer.selectedCharge.Canceled" 
                 class="btnb btn-danger action-buttons" 
                 ng-click="vm.onDesativarBoleto(customer.selectedCharge)"
                 ng-disabled="vm.resquenting || vm.loading">
                 C
                 </button>
 
-                <button ng-if="customer.selectedCharge.PaymentType != 1" 
+                <button ng-if="customer.ChargingValidity.length > 0 && customer.selectedCharge.Canceled"  
                 class="btnb btn-info action-buttons" 
                 ng-click="vm.onAtivarBoleto(customer.selectedCharge)"
                 ng-disabled="vm.resquenting || vm.loading">
