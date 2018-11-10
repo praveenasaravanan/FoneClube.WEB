@@ -19,6 +19,7 @@
             vm.formatAmmout = formatAmmout
             vm.onTapUpdatePagarme = onTapUpdatePagarme;
             vm.onDesativarBoleto = onDesativarBoleto;
+            vm.onAtivarBoleto = onAtivarBoleto;
             vm.changeFilter = changeFilter
             
             var totalRecebidoBoleto = 0;
@@ -343,6 +344,28 @@
                         FoneclubeService.postChargingUpdate(charge.Id, true)
                         .then(function (value) {
                             console.log(value)
+                            if(value)
+                            {
+                                charge.Canceled = true;
+                            }
+                        })
+                    }
+                })
+            }
+
+            function onAtivarBoleto(charge){
+                DialogFactory.dialogConfirm({ mensagem: 'Tem certeza que seja ativar essa cobrança?' })
+                .then(function (value) {
+                    if(value)
+                    {
+                        console.log(charge.Id);
+                        FoneclubeService.postChargingUpdate(charge.Id, false)
+                        .then(function (value) {
+                            console.log(value)
+                            if(value)
+                            {
+                                charge.Canceled = false;
+                            }
                         })
                     }
                 })

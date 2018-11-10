@@ -180,12 +180,19 @@
             </td>
 
             <td>
-                <!-- && customer.selectedCharge.BoletoLink.length > 0 -->
+                
                 <button ng-if="customer.selectedCharge.PaymentType != 1" 
-                class="btn btn-primary busca-status" 
+                class="btnb btn-danger action-buttons" 
                 ng-click="vm.onDesativarBoleto(customer.selectedCharge)"
                 ng-disabled="vm.resquenting || vm.loading">
-                Cancelar
+                C
+                </button>
+
+                <button ng-if="customer.selectedCharge.PaymentType != 1" 
+                class="btnb btn-info action-buttons" 
+                ng-click="vm.onAtivarBoleto(customer.selectedCharge)"
+                ng-disabled="vm.resquenting || vm.loading">
+                A
                 </button>
 
             </td>
