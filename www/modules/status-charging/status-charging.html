@@ -99,7 +99,7 @@
         <!-- <tbody ng-repeat="customer in vm.displayedCollection  | orderBy:'-chargingDate' " ng-show="!vm.loading"> 'ChargingValidity[0].StatusDescription', -->
         <tbody ng-repeat="customer in vm.displayedCollection  | orderBy:['-chargingDate']" ng-show="!vm.loading">
             <!-- ng-if="!customer.selectedCharge.Canceled" -->
-        <tr ng-show="customer.selectedCharge.display">
+        <tr ng-show="customer.selectedCharge.display || customer.ChargingValidity.length == 0 || customer.ChargingValidity == undefined || customer.ChargingValidity == null">
 
             <td ng-class="{'status-green': customer.dataIgual == true}">
                 <strong>{{customer.chargingDate}}</strong>
