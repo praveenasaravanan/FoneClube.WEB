@@ -3,12 +3,13 @@
 
  
 
-    <div class="borda-topo-estoque testes"></div>
+    <div class="borda-topo-estoque testes"> </div>
+    <p class="titulo-teste"> ( Total:{{ vm.tableParams.total() }} )</p>
     <!-- https://codepen.io/cardozo/pen/QVYXeX -->
     <table ng-table="vm.tableParams"  class="table table-scroll" show-filter="true">
         <tr ng-repeat="linha in $data">
             
-            <td title="'Linha'" filter="{ linhaLivreOperadora: 'text'}" sortable="'linhaLivreOperadora'">
+            <td title="'Linhas'" filter="{ linhaLivreOperadora: 'text'}" sortable="'linhaLivreOperadora'">
                 {{linha.linhaLivreOperadora}}</td>
 
             <td title="'Plano'" filter="{ plano: 'text'}" sortable="'plano'">

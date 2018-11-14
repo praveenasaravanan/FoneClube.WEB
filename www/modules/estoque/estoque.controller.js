@@ -5,12 +5,12 @@
             .module('foneClub')
             .controller('EstoqueController', EstoqueController);
     
-      EstoqueController.inject = ['FlowManagerService', 'FoneclubeService', 'PagarmeService', 'NgTableParams'];
-      function EstoqueController(FlowManagerService, FoneclubeService, PagarmeService, NgTableParams) {
+      EstoqueController.inject = ['FlowManagerService', 'FoneclubeService', 'PagarmeService', 'NgTableParams', '$scope'];
+      function EstoqueController(FlowManagerService, FoneclubeService, PagarmeService, NgTableParams, $scope) {
             
         var vm = this;
         vm.result;
-        
+
         // https://codepen.io/cardozo/pen/QVYXeX    
         FoneclubeService.getLinhasEstoque().then(function(result){
 
@@ -57,13 +57,26 @@
 
             vm.result = result
 
-            vm.tableParams = new NgTableParams({
-                sorting: { name: "asc" } 
-                }, {
-                dataset: vm.result
-                });
+            vm.initialParams = {
+                count: 50 // initial page size
+              };
+            vm.initialSettings = {
+            // page size buttons (right set of buttons in demo)
+            counts: [50,100,500, 1000],
+            // determines the pager buttons (left set of buttons in demo)
+            paginationMaxBlocks: 10,
+            paginationMinBlocks: 1,
+            dataset: vm.result
+            };
+
+            vm.tableParams = new NgTableParams(vm.initialParams, vm.initialSettings)
         })
 
+        
+        $scope.$watch("vm.tableParams", function () {
+            
+            console.log('Works')
+        });
         
     
       }

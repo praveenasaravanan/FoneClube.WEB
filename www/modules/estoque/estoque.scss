@@ -63,3 +63,12 @@
 .table-scroll td {
     height: 47px; // needed in order to keep rows from collapsing
 }
+
+.titulo-teste{
+    color: grey;
+    position: absolute;
+    z-index: 10000;
+    margin-top: -104px;
+    margin-left: 80px;
+
+}
