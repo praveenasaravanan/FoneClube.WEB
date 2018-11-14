@@ -92,7 +92,7 @@
                                 <p>Tipo:
                                     <strong>{{chargeAndOrder.Charges.descriptionType}} </strong>
 
-                                    <svg height="10" width="10" ng-if="!vm.charged_status.Charged"
+                                    <!-- <svg height="10" width="10" ng-if="!vm.charged_status.Charged"
                                          style="text-align: center">
                                         <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="red"/>
                                     </svg>
@@ -107,7 +107,7 @@
                                     <svg height="10" width="10"
                                          ng-if="vm.charged_status.ChargingValidity[0].StatusDescription == 'CARREGANDO'">
                                         <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="grey"/>
-                                    </svg>
+                                    </svg> -->
                                     &nbsp;&nbsp;<label
                                             ng-if="chargeAndOrder.Charges.descriptionType =='Cartão de crédito'">Final:
                                         {{vm.cards[0].last_digits}}</label>
@@ -165,7 +165,7 @@
                             <p>Id pagarme da Cobrança:  {{log.pagarmeResponse.id}}</p>
                             <p>Método de Pagamento: {{ log.pagarmeResponse.payment_method}}</p>
                             <p>Valor cobrado: {{log.pagarmeResponse.amount/100}} R$</p>
-
+                            <p ng-show="log.pagarmeResponse.boleto_url.length > 0">link boleto: <a href="{{log.pagarmeResponse.boleto_url}}" target="_blank">{{log.pagarmeResponse.boleto_url}}</a></p>
                       </v-pane-content>
                     
                     </v-pane>
