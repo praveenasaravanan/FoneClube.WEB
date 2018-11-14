@@ -189,7 +189,8 @@
                             var chargingLog = {
                                 'customer': newCustomer,
                                 'ammount': vm.amount,
-                                'pagarmeResponse': result
+                                'pagarmeResponse': result,
+                                'foneclubeComment' : vm.comment
                             };
                             
                             debugger

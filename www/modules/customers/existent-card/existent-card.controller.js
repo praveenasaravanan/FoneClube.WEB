@@ -245,7 +245,9 @@
                             var chargingLog = {
                                 'customer': existentCustomer,
                                 'ammount': vm.amount,
-                                'pagarmeResponse': result
+                                'pagarmeResponse': result,
+                                'customerComment':vm.customerComment,
+                                'foneclubeComment' : vm.comment
                             };
 
                             debugger

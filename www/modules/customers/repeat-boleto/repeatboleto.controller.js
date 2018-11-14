@@ -112,7 +112,9 @@
                             var chargingLog = {
                                 'customer': existentCustomer,
                                 'ammount': vm.amount,
-                                'pagarmeResponse': resultCapture
+                                'pagarmeResponse': resultCapture,
+                                'boletoComment':vm.commentBoleto,
+                                'foneclubeComment' : vm.comment
                             };
                             
                             debugger

@@ -275,7 +275,9 @@
                                 'customer': newCustomer,
                                 'ammount': vm.amount,
                                 'email':emailObject,
-                                'pagarmeResponse': result
+                                'pagarmeResponse': result,
+                                'customerComment':vm.customerComment,
+                                'foneclubeComment' : vm.comment
                             };
                             
                             debugger
