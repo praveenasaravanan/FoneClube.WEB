@@ -4,8 +4,14 @@
  
 
     <div class="borda-topo-estoque testes"> </div>
+
+    <div  ng-table-pagination="vm.tableParams" template-url="'lib/ng-table/pager-custom.html'"></div>
+
     <p class="titulo-teste"> ( Total:{{ vm.tableParams.total() }} )</p>
     <!-- https://codepen.io/cardozo/pen/QVYXeX -->
+
+    
+
     <table ng-table="vm.tableParams"  class="table table-scroll" show-filter="true">
         <tr ng-repeat="linha in $data">
             

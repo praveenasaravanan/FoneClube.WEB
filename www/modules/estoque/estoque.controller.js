@@ -58,7 +58,7 @@
             vm.result = result
 
             vm.initialParams = {
-                count: 50 // initial page size
+                count: 1000 // initial page size
               };
             vm.initialSettings = {
             // page size buttons (right set of buttons in demo)
@@ -70,6 +70,7 @@
             };
 
             vm.tableParams = new NgTableParams(vm.initialParams, vm.initialSettings)
+            debugger
         })
 
         
