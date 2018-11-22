@@ -10,6 +10,8 @@
             
         var vm = this;
         vm.result;
+        vm.changeFilterCliente = changeFilterCliente;
+        vm.filtroCliente = false
     
         FoneclubeService.getAllPhonesStatus().then(function(result){
 
@@ -73,13 +75,19 @@
             debugger
         })
 
-        
-        $scope.$watch("vm.tableParams", function () {
-            
+        $scope.$watch("vm.tableParams", function () {            
             console.log('Works')
         });
+
+        function changeFilterCliente(){
+            console.log('changeFilterCliente')
+            vm.filtroCliente = !vm.filtroCliente;
+
+            // remonta lista e atualiza componente
+
+            //filtra direto na tabela
+        }
         
-    
       }
     })();
     

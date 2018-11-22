@@ -1,7 +1,14 @@
 <div class="home" ng-class="{'force-select': vm.selecaoMassiva }">
+    
     <fone-header title="Estoque Foneclube"></fone-header>
 
- 
+    <!-- <div class="filtro-todas-linhas">
+        <input type="checkbox" 
+        class="form-check-input"
+        ng-change="vm.changeFilterCliente()" 
+        ng-model="vm.clienteAtivo">
+        <label class="">Linha com cliente</label>
+    </div> -->
 
     <div class="borda-topo-estoque testes"> </div>
 
@@ -10,12 +17,10 @@
     <p class="titulo-teste"> ( Total:{{ vm.tableParams.total() }} )</p>
     <!-- https://codepen.io/cardozo/pen/QVYXeX -->
 
-    
-
     <table ng-table="vm.tableParams"  class="table table-scroll" show-filter="true">
         <tr ng-repeat="linha in $data">
             
-            <td title="'Linhas'" filter="{ linhaLivreOperadora: 'text'}" sortable="'linhaLivreOperadora'">
+            <td  title="'Linhas'" filter="{ linhaLivreOperadora: 'text'}" sortable="'linhaLivreOperadora'">
                 {{linha.linhaLivreOperadora}}</td>
 
             <td title="'Plano'" filter="{ plano: 'text'}" sortable="'plano'">
@@ -32,6 +37,9 @@
 
             <td title="'Nickname'" filter="{ txtNickname: 'text'}" sortable="'txtNickname'">
                 {{linha.txtNickname}}</td>
+
+            <td title="'Cliente'" filter="{ idPhone: 'text'}" sortable="'idPhone'">
+                {{linha.idPhone == null ? 'Não' : 'Sim'}}</td>
         </tr>
     </table>
 
