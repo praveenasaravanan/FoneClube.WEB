@@ -127,7 +127,15 @@
           }
         }
       })
-
+      .state('tabs.all-phones', {
+        url: "/allPhones",
+        views: {
+          'menu-tab': {
+            templateUrl: 'modules/all-phones/all-phones.html',
+            controller: 'AllPhonesController as vm'
+          }
+        }
+      })
       .state('tabs.estoque', {
         url: "/estoque",
         views: {
@@ -138,6 +146,7 @@
         }
       })
 
+      
       $urlRouterProvider.otherwise('/');
       configErrorHandler($provide);
   }

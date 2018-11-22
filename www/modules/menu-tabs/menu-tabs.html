@@ -63,7 +63,14 @@
                 <img src="./content/img/icon_estoque.png" style="width:20px;height:20px;">         
                 <span> Estoque </span>
             </div>
-        </div>  
+        </div>
+        <div title="All Phones" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'all-phones'}"  ng-click="vm.setMenuItemActive('all-phones')">            
+            <div>
+                <!-- <i class="glyphicon glyphicon-phone" aria-hidden="true"></i>  -->
+                <img src="./content/img/icon_estoque.png" style="width:20px;height:20px;">         
+                <span> All Phones </span>
+            </div>
+        </div>   
         <div title="Templates Email" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'allphone-lines'}"  ng-click="vm.setMenuItemActive('template-edit')">            
             <div>
                 <!-- <i class="glyphicon glyphicon-phone" aria-hidden="true"></i>  -->

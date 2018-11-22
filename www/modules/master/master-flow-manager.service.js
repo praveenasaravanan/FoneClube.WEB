@@ -21,6 +21,7 @@
         this.changeAllPhoneLinesView = changeAllPhoneLinesView;
         this.changeTemplateEdit = changeTemplateEdit;
         this.changeEstoqueView = changeEstoqueView;
+        this.changeAllPhonesView = changeAllPhonesView;
         this.goBack = goBack;
 
         function changeLoginView(){
@@ -89,6 +90,11 @@
         function changeEstoqueView(param){
             LocationService.change('tabs.estoque', param);
             $rootScope.$broadcast('changeMenuItem', 'estoque');
+        }
+
+        function changeAllPhonesView(param){
+            LocationService.change('tabs.all-phones', param);
+            $rootScope.$broadcast('changeMenuItem', 'all-phones'); 
         }
         
         function goBack() {

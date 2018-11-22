@@ -74,6 +74,7 @@
         this.getLastPersonCharging = getLastPersonCharging;
         this.getAllCustomers = getAllCustomers;
         this.getReintegrateDatePagarme = getReintegrateDatePagarme;
+        this.getAllPhonesStatus = getAllPhonesStatus;
 
         function getLastPaymentType(customer) {
             
@@ -870,6 +871,21 @@
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/profile/all/customers?minimal=') + minimal)
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
+
+        function getAllPhonesStatus() {
+
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/manager/phones/all'))
                 .then(function (result) {
                     q.resolve(result);
                 })
