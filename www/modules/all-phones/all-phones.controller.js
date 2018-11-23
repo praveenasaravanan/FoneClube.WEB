@@ -55,6 +55,11 @@
                     result[i].operadoraDescription = 'CLARO'
                 else
                     result[i].operadoraDescription = 'VIVO'
+
+                if(result[i].idPhone == null)
+                    result[i].PhoneText = 'Não'
+                else
+                    result[i].PhoneText = 'Sim'
             }
 
             vm.result = result

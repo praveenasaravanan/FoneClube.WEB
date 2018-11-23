@@ -1,4 +1,4 @@
-<div class="home" ng-class="{'force-select': vm.selecaoMassiva }">
+<div class="home all-phones" ng-class="{'force-select': vm.selecaoMassiva }">
     
     <fone-header title="Estoque Foneclube"></fone-header>
 
@@ -26,7 +26,7 @@
             <td title="'Plano'" filter="{ plano: 'text'}" sortable="'plano'">
                     {{linha.plano}}</td>
 
-            <td title="'Uso Linha (última conta)'" filter="{ usoLinha: 'text'}" sortable="'usoLinha'">
+            <td title="'Uso Linha'" filter="{ usoLinha: 'text'}" sortable="'usoLinha'">
                     {{linha.usoLinha}}</td>        
 
             <td title="'Operadora'" filter="{ operadoraDescription: 'text'}" sortable="'operadoraDescription'">
@@ -38,8 +38,8 @@
             <td title="'Nickname'" filter="{ txtNickname: 'text'}" sortable="'txtNickname'">
                 {{linha.txtNickname}}</td>
 
-            <td title="'Cliente'" filter="{ idPhone: 'text'}" sortable="'idPhone'">
-                {{linha.idPhone == null ? 'Não' : 'Sim'}}</td>
+            <td title="'Cliente'" filter="{ PhoneText: 'text'}" sortable="'PhoneText'">
+                {{linha.PhoneText}}</td>
         </tr>
     </table>
 
