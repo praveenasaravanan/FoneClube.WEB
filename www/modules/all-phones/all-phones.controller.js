@@ -10,16 +10,17 @@
             
         var vm = this;
         vm.result;
+        vm.filtroCliente = false;
+
         vm.changeFilterCliente = changeFilterCliente;
-        vm.filtroCliente = false
-    
+        vm.onClickDesassociar = onClickDesassociar; 
+        
         FoneclubeService.getAllPhonesStatus().then(function(result){
 
             FoneclubeService.getStatusTelefonesOperadora().then(function (result) {
                 
                 for(var i in vm.result)
                 {
-                    debugger;
                     var telefone = vm.result[i].linhaLivreOperadora;
                     vm.result[i].usoLinha = "Sem dados na SP";
                     vm.result[i].plano = "Sem dados na SP";
@@ -45,12 +46,13 @@
                 }
 
                 vm.result
-                debugger;
                 
             })
             
 
             for(var i in result){
+                result[i].desativada = false;
+
                 if(result[i].operadora == 1)
                     result[i].operadoraDescription = 'CLARO'
                 else
@@ -65,6 +67,7 @@
             vm.result = result
 
             vm.initialParams = {
+                filter: { desativada: false },
                 count: 1000 // initial page size
               };
             vm.initialSettings = {
@@ -73,11 +76,13 @@
             // determines the pager buttons (left set of buttons in demo)
             paginationMaxBlocks: 10,
             paginationMinBlocks: 1,
+             
             dataset: vm.result
+            
             };
 
             vm.tableParams = new NgTableParams(vm.initialParams, vm.initialSettings)
-            debugger
+            
         })
 
         $scope.$watch("vm.tableParams", function () {            
@@ -91,6 +96,45 @@
             // remonta lista e atualiza componente
 
             //filtra direto na tabela
+        }
+
+        function onClickDesassociar(linha){
+            
+            
+            debugger
+            
+            
+            
+            
+            var confirmation = confirm("Deseja desativar essa linha?");
+            if (confirmation) {
+                FoneclubeService.postDesassociarLinha(linha.idPhone).then(function(result){
+                    if(result){
+                        alert('Telefone desativado com sucesso')
+
+                        linha.idPhone = null;
+                        linha.txtName = ''
+                        linha.txtNickname = ''
+                        linha.intIdPerson = ''
+                        linha.txtPlanoFoneclube = ''
+                        linha.PhoneText = 'Não'
+                        
+                        // caso seja pra limpar
+                        // linha.desativada = true;
+                        // vm.tableParams.reload();
+                    }
+                    else{
+                        alert('Não foi possível desativar essa linha do cliente')
+                    }
+                })
+                .catch(function (error) {
+                    alert('Não foi possível desativar essa linha do cliente')
+                });
+            }
+            
+            
+            
+            
         }
         
       }

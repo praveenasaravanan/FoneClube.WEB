@@ -20,27 +20,17 @@
     <table ng-table="vm.tableParams"  class="table table-scroll" show-filter="true">
         <tr ng-repeat="linha in $data">
             
-            <td  title="''">
-
-                <label ng-if="true" class="dropdown">
-
-                    <div class="dd-button">
-                      Ações
-                    </div>
-                  
-                    <input type="checkbox" class="dd-input" id="test">
-                  
-                    <ul class="dd-menu">
-                      <li>Desassociar</li>
-                      <li>Another action</li>
-                      <li>Another action</li>
-                      <!-- <li class="divider"></li>
-                      <li>
-                        <a href="http://rane.io">Link to Rane.io</a>
-                      </li> -->
-                    </ul>
-                    
-                  </label>
+            <td title="''">
+                <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" 
+                type="button" data-toggle="dropdown">Ações
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a class="buttom-mode" ng-click="vm.onClickDesassociar(linha)">Desassociar</a></li>
+                    <li><a class="buttom-mode">Associar linha (pendente)</a></li>
+                    <li><a class="buttom-mode">Trocar plano (pendente)</a></li>
+                </ul>
+                </div>
             </td>   
 
             <td  title="'Linhas'" filter="{ linhaLivreOperadora: 'text'}" sortable="'linhaLivreOperadora'">
@@ -65,7 +55,8 @@
                 {{linha.txtNickname}}</td>
 
             <td title="'Cliente'" filter="{ PhoneText: 'text'}" sortable="'PhoneText'">
-                {{linha.PhoneText}}</td>
+                {{linha.PhoneText}}
+            </td>
 
 
              
