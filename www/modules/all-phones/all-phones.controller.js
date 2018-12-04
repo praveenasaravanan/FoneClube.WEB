@@ -9,16 +9,26 @@
       function AllPhonesController(FlowManagerService, FoneclubeService, PagarmeService, NgTableParams, $scope) {
             
         var vm = this;
+        vm.planOptions;
         vm.result;
         vm.filtroCliente = false;
 
         vm.changeFilterCliente = changeFilterCliente;
         vm.onClickDesassociar = onClickDesassociar; 
-        
+        vm.changeSelectPlan = changeSelectPlan;
+        vm.onClickTrocaPlano = onClickTrocaPlano;
+
         FoneclubeService.getAllPhonesStatus().then(function(result){
 
+            FoneclubeService.getPlanOptios().then(function(result){
+
+                vm.planOptions = result;
+                // vm.planOptions.forEach(plan => {
+                //     console.log(plan)
+                // });
+
             FoneclubeService.getStatusTelefonesOperadora().then(function (result) {
-                
+
                 for(var i in vm.result)
                 {
                     var telefone = vm.result[i].linhaLivreOperadora;
@@ -48,6 +58,8 @@
                 vm.result
                 
             })
+
+        })
             
 
             for(var i in result){
@@ -100,12 +112,6 @@
 
         function onClickDesassociar(linha){
             
-            
-            debugger
-            
-            
-            
-            
             var confirmation = confirm("Deseja desativar essa linha?");
             if (confirmation) {
                 FoneclubeService.postDesassociarLinha(linha.idPhone).then(function(result){
@@ -130,11 +136,43 @@
                 .catch(function (error) {
                     alert('Não foi possível desativar essa linha do cliente')
                 });
+            }  
+        }
+
+        function changeSelectPlan(linha){
+            console.log('changeSelectPlan')
+            
+            var confirmation = confirm("Deseja trocar o plano da linha " + linha.linhaLivreOperadora + " para, " +  linha.selectedPlan.Description + ' ?');
+            if (confirmation) {
+                FoneclubeService.postUpdatePhonePlan({Id:linha.idPhone, IdPlanOption:linha.selectedPlan.Id}).then(function(result){
+                    if(result)
+                    {
+                        alert('Plano alterado com sucesso')
+                        linha.txtPlanoFoneclube = linha.selectedPlan.Description;
+                        linha.editPlan = false; 
+                    }
+                    else{
+                        alert('Não foi possível alterar o plano dessa linha')
+                        linha.editPlan = false; 
+                    }
+                    
+                })
+                
             }
-            
-            
-            
-            
+            else{
+                linha.editPlan = false; 
+            }
+        }
+
+        function onClickTrocaPlano(linha){
+            console.log("onClickTrocaPlano")
+            debugger
+            if(linha.txtPlanoFoneclube == null)
+            {
+                alert('Essa linha não tem cliente associado por isso não é possível trocar plano foneclube')
+            }
+            else
+                linha.editPlan = true;
         }
         
       }

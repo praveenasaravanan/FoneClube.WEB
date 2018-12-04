@@ -26,22 +26,31 @@
                 type="button" data-toggle="dropdown">Ações
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu">
+                    <li><a class="buttom-mode" ng-click="vm.onClickTrocaPlano(linha)">Trocar plano</a></li>
                     <li><a class="buttom-mode" ng-click="vm.onClickDesassociar(linha)">Desassociar</a></li>
                     <li><a class="buttom-mode">Associar linha (pendente)</a></li>
-                    <li><a class="buttom-mode">Trocar plano (pendente)</a></li>
                 </ul>
                 </div>
             </td>   
 
             <td  title="'Linhas'" filter="{ linhaLivreOperadora: 'text'}" sortable="'linhaLivreOperadora'">
-                {{linha.linhaLivreOperadora}}</td>
+                {{linha.linhaLivreOperadora}}
+            </td>
 
             <td title="'Plano'" filter="{ plano: 'text'}" sortable="'plano'">
-                    {{linha.plano}}</td>
+                    {{linha.plano}}
+            </td>
 
-            <td title="'Plano'" filter="{ txtPlanoFoneclube: 'text'}" sortable="'txtPlanoFoneclube'">
-                {{linha.txtPlanoFoneclube}}</td>        
+            <td title="'Plano FC'" filter="{ txtPlanoFoneclube: 'text'}" sortable="'txtPlanoFoneclube'">
+                <div ng-if="!linha.editPlan">{{linha.txtPlanoFoneclube}}</div>
 
+                <select 
+                ng-if="linha.editPlan"
+                ng-change="vm.changeSelectPlan(linha)" 
+                ng-model="linha.selectedPlan" 
+                ng-options="y.Description for (x, y) in vm.planOptions"></select>
+            </td> 
+                
             <td title="'Uso Linha'" filter="{ usoLinha: 'text'}" sortable="'usoLinha'">
                     {{linha.usoLinha}}</td>        
 
