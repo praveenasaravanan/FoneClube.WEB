@@ -11,10 +11,10 @@
         // var urlApi = 'http://localhost:57078/api';
 
         //API tests
-        // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+        var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API live
-        var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
+        // var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -38,6 +38,7 @@
         this.postPersonAtivity = postPersonAtivity;
         this.postChargingUpdate = postChargingUpdate;
         this.postDesassociarLinha = postDesassociarLinha;
+        this.postUpdatePhonePlan = postUpdatePhonePlan;
 
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
@@ -60,6 +61,7 @@
         this.getStatusCharging = getStatusCharging;
         this.getStatusDocument = getStatusDocument;
         this.getStatusChargingOfCustomer = getStatusChargingOfCustomer;
+        this.getPlanOptios = getPlanOptios;
         this.SendEmailStatus = SendEmailStatus;
         this.getEmailDetails = getEmailDetails;
         this.saveemail = saveemail;
@@ -470,6 +472,18 @@
             return q.promise;
         }
 
+        function postUpdatePhonePlan(phone){
+            var q = $q.defer();
+            HTTPService.post(urlApi.concat('/manager/phones/plan/update'), phone)
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+            return q.promise;
+        }
+
         function getPlans() {
             var q = $q.defer();
 
@@ -483,6 +497,21 @@
 
             return q.promise;
         }
+
+        function getPlanOptios(){
+            var q = $q.defer();
+
+            HTTPService.get(urlApi.concat('/manager/phones/plans'))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+
+            return q.promise;
+        }
+
 
       function getCommision(customerId) {
         var q = $q.defer();
