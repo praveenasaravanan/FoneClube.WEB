@@ -31,7 +31,7 @@
             vm.checkOne = checkOne;
           vm.enviaEmail = true;
           vm.calculate = calculate;
-            vm.years = [2018,2017,2016,2015,2014,2013,2012,2011,2010];
+            vm.years = [2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010];
           vm.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
           vm.amount = 0;
