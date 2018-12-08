@@ -150,7 +150,7 @@
                     </v-pane>
                   </v-accordion>  
 
-                  <h4 ng-show="vm.historyLog.length > 0" >Histórico Cobrança registro segundário</h4>
+                  <h4 ng-show="vm.historyLog.length > 0" >Histórico Cobrança registro secundário</h4>
                   <v-accordion ng-show="vm.historyLog.length > 0"  id="accordionB"  class="col-sm-6 vAccordion--default" multiple control="accordionB" >
 
                     <v-pane  expanded="true" ng-init="status.open = true"
@@ -162,9 +162,13 @@
                       </v-pane-header>
             
                       <v-pane-content >
+                            <p>Data da Cobrança:  {{log.pagarmeResponse.date_created | date: 'yyyy/MM/dd'}}</p>
                             <p>Id pagarme da Cobrança:  {{log.pagarmeResponse.id}}</p>
                             <p>Método de Pagamento: {{ log.pagarmeResponse.payment_method}}</p>
                             <p>Valor cobrado: {{log.pagarmeResponse.amount/100}} R$</p>
+                            <p>Comentário Boleto: {{log.boletoComment}}</p>
+                            <p>Comentário cliente: {{log.customerComment}}</p>
+                            <p>Comentário fonclube: {{log.foneclubeComment}}</p>
                             <p ng-show="log.pagarmeResponse.boleto_url.length > 0">link boleto: <a href="{{log.pagarmeResponse.boleto_url}}" target="_blank">{{log.pagarmeResponse.boleto_url}}</a></p>
                       </v-pane-content>
                     
