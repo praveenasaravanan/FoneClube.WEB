@@ -500,11 +500,11 @@
                 });
 
                 var initialParams = {
-                  count: 50 // initial page size
+                  count: 500 // initial page size
                 };
                 var initialSettings = {
                   // page size buttons (right set of buttons in demo)
-                  counts: [50,100,500],
+                  counts: [50,100,500, 1000],
                   // determines the pager buttons (left set of buttons in demo)
                   paginationMaxBlocks: 10,
                   paginationMinBlocks: 1,
