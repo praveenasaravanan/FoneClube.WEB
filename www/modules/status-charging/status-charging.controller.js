@@ -5,8 +5,8 @@
             .module('foneClub')
             .controller('StatusChargingController', StatusChargingController);
     
-        StatusChargingController.inject = ['FlowManagerService', 'MainUtils', 'FoneclubeService', 'PagarmeService', '$interval', 'DialogFactory'];
-        function StatusChargingController(FlowManagerService, MainUtils, FoneclubeService, PagarmeService, $interval, DialogFactory) {
+        StatusChargingController.inject = ['FlowManagerService', 'MainUtils', 'FoneclubeService', 'PagarmeService', '$interval', 'DialogFactory', 'NgTableParams', 'ngTableDefaults'];
+        function StatusChargingController(FlowManagerService, MainUtils, FoneclubeService, PagarmeService, $interval, DialogFactory, NgTableParams, ngTableDefaults) {
    
             var vm = this;
             console.log('--- StatusChargingController --- ' );
@@ -24,6 +24,7 @@
             
             var totalRecebidoBoleto = 0;
             var interval;
+            var hasUpdate = false;
 
             vm.loading = false;
             vm.loadingMessage = 'Carregando...';
@@ -32,6 +33,48 @@
             vm.mensagemPagarme = 'Refresh DB'
             vm.changeSelect = changeSelect
             vm.diffDays = diffDays;
+            vm.customers = [];
+
+            vm.statusType = {
+                NAO_COBRADO: 1,
+                PAGO: 2,
+                COBRADO: 3,
+                CARREGANDO: 4,
+                VENCIDO: 5,
+                REFUNDED: 6
+            };
+
+            vm.PagamentosType = {
+                CARTAO: 1,
+                BOLETO: 2
+            };
+
+            vm.AtivoType = {
+                ATIVA: 1,
+                CANCELADA: 2
+            }
+
+            vm.tiposStatus = [
+                {id: "", title: ""},
+                {id: 1, title: 'NÃO COBRADO'},
+                {id: 2, title: 'PAGO'},
+                {id: 3, title: 'COBRADO'},
+                {id: 4, title: 'CARREGANDO'},
+                {id: 5, title: 'VENCIDO'},
+                {id: 6, title: 'COBRADO'},
+            ];
+
+            vm.tiposPagamento = [
+                {id: "", title: ""},
+                {id: 1, title: 'CARTÃO'},
+                {id: 2, title: 'BOLETO'}
+            ];
+
+            vm.tipoAtiva = [
+                {id: "", title: ""},
+                {id: 1, title: 'Ativa'},
+                {id: 2, title: 'Cancelada'}
+            ]
 
             function changeSelect(param){
                 console.log('Change select' + param)
@@ -65,20 +108,22 @@
             function searchStatusCharging(){
                 // console.log('searchStatusCharging')
                 // console.log( vm.month + ' ' + vm.year);
-                ;
                 vm.loading = true;
                 vm.totalReceivedReady = false;
+                hasUpdate = false;
+                interval = $interval(checkFullLoad, 5000);
 
-                interval = $interval(checkFullLoad, 500);
+                var ativos = vm.somenteAtivos ? 1 : 0;
 
-                FoneclubeService.getStatusCharging(vm.month,vm.year).then(function (result) {
+                FoneclubeService.getStatusCharging(vm.month,vm.year, ativos).then(function (result) {
                     console.log('getStatusCharging')
                     console.log(result)
                     vm.customers = result;
-
+                    changeFilter(false);
                     for(var i in vm.customers)
                     {
                         vm.customers[i].allChargingsCanceled = false;
+
                         for(var o in vm.customers[i].ChargingValidity)
                         {
                             vm.customers[i].ChargingValidity[o].display = true;
@@ -86,13 +131,18 @@
                     }
 
                     handleData(vm.customers);
-                    vm.loading = false;
                     loadPaymentHistory();
                 })
             }
 
             function checkFullLoad(){
                 // console.log('------------------------ ' + allStatusLoaded())
+                if(!hasUpdate) {
+                    updateTable();
+                    vm.loading = false;
+                    hasUpdate = true;
+                }
+
                 if(allStatusLoaded())
                 {
                     $interval.cancel(interval);
@@ -104,6 +154,11 @@
                     }
                 }
                 
+            }
+
+            function updateTable() {
+                vm.tableParams = createUsingFullOptions(vm.customers);
+                vm.tableParams.reload();
             }
 
             function allStatusLoaded(){
@@ -157,9 +212,7 @@
 
                     if(customer.Charged)
                     {
-                        
-
-                        
+                        customer.statusType = vm.statusType.CARREGANDO;
                             customer.registerPayd = false;
                             for(var i in customer.ChargingValidity)
                             {
@@ -168,12 +221,14 @@
                                 try
                                 {
                                     customer.ChargingValidity[i].BoletoExpires = new Date(customer.ChargingValidity[i].BoletoExpires).toISOString().split('T')[0].replace('-','/').replace('-','/');
+                                    customer.BoletoExpires = customer.ChargingValidity[i].BoletoExpires;
                                 }
                                 catch(erro){}
 
                                 if(charge.PaymentType == 1 && charge.StatusDescription != 'Refunded')
                                 {
-                                    customer.ChargingValidity[i].StatusDescription = 'PAGO'
+                                    customer.ChargingValidity[i].StatusDescription = 'PAGO';
+                                    customer.statusType = vm.statusType.PAGO;
                                 }
 
                                 if(charge.PaymentType == 2 && charge.BoletoId != 0)
@@ -182,13 +237,14 @@
                                         
                                         // if(result[0].vm.customers[result[0].indexCustomer].Name == 'Antonia Maria da Silva Barboza')
                                         //     debugger
-                                        
                                         result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'INVÁLIDO'
+
+                                        
 
                                         if(result[0].status == "waiting_payment")
                                         {
                                             result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'PENDENTE'
-
+                                            customer.statusType = vm.statusType.COBRADO;
                                             
                                             if(!result[0].elemento.registerPayd){
                                                 result[0].elemento.status = result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription;
@@ -197,7 +253,8 @@
                                         else if(result[0].status == "paid" ){
                                             
                                             // charge.StatusDescription = 'PAGO';
-                                            result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'PAGO'
+                                            result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'PAGO';
+                                            customer.statusType = vm.statusType.PAGO;
                                             try{
                                                 
                                             }
@@ -214,7 +271,6 @@
                                         }
                                         else{
                                             // ;
-                                            
                                         }
 
                                         result[0].vm.callbackCount++;
@@ -231,13 +287,14 @@
 
                                 if(charge.PaymentType == 1 && charge.StatusDescription == 'Refunded')
                                 {
-                                    customer.ChargingValidity[i].StatusDescription = 'REFUNDED'
+                                    customer.ChargingValidity[i].StatusDescription = 'REFUNDED';
+                                    customer.statusType = vm.statusType.REFUNDED;
                                 }
                                 
                                 if(charge.BoletoId == 0 && charge.PaymentType == 2){
                                     if(vm.customers[index].ChargingValidity[i].StatusDescription == 'CARREGANDO')
                                     {
-                                        vm.customers[index].ChargingValidity[i].StatusDescription = 'INVÁLIDO'
+                                        vm.customers[index].ChargingValidity[i].StatusDescription = 'INVÁLIDO';
                                     }
                                     
                                 }
@@ -252,13 +309,36 @@
 
                         customer.ammout = parseFloat(parseInt(customer.ChargingValidity[0].Ammount) / 100).toString().replace('.',',')
                         
+                        if(customer.ChargingValidity[0].PaymentType == 1)
+                        {
+                            customer.statusPayment = vm.PagamentosType.CARTAO;
+                        }
+                        else
+                        {
+                            customer.statusPayment = vm.PagamentosType.BOLETO;
+                        }
+
+                        if(!customer.ChargingValidity[0].Canceled)
+                        {
+                            customer.statusAtiva = vm.AtivoType.ATIVA;
+                        } 
+                        else
+                        {
+                            customer.statusAtiva = vm.AtivoType.CANCELADA;
+                        }
+
+                        if(customer.ChargingValidity[0].Expired && customer.ChargingValidity[0].PaymentType == 2)
+                        {
+                            customer.statusType = vm.statusType.VENCIDO;
+                        }
                     }    
                     else  
                     {
                         customer.status = 'NÃO COBRADO'; 
-                    }
-                         
+                        customer.statusType = vm.statusType.NAO_COBRADO;
+                    }     
                 }
+
                 
                 vm.totalCharged = parseFloat(vm.totalCharged / 100).toString().replace('.',',');
                 // vm.totalReceived = parseFloat(vm.totalReceived / 100).toString().replace('.',',');
@@ -266,13 +346,11 @@
             }
 
             function loadPaymentHistory(){
-                ;
                 for (var index in vm.customers) {
                    
                     FoneclubeService.getChargeAndServiceOrderHistoryDinamic(vm.customers[index].Id, index).then(function (result) {
                         console.log('FoneclubeService.getChargeAndServiceOrderHistoryDinamic');
                         // console.log(result);
-
                         if(result.length == 0){
                             //zerado
                             
@@ -309,17 +387,19 @@
                                 vm.customers[result.indexLista].dataIgual = true;
                             }
 
-                            vm.customers[result.indexLista].chargingDate = dataConvertida;  
+                            vm.customers[result.indexLista].chargingDate = dataConvertida; 
+                            vm.customers[result.indexLista].chargingDateDiffDays = diffDays(dataConvertida);
+                            vm.customers[result.indexLista].LastPaidDateDiffDays = diffDays(vm.customers[result.indexLista].LastPaidDate);
                         }
                     });
                 }
-
                 for (var index in vm.customers) {
                     if(vm.customers[index].chargingDate == undefined || vm.customers[index].chargingDate == null){
-                        debugger;
                         vm.customers[index].chargingDate = new Date('2000/01/01').toISOString().split('T')[0].replace('-','/').replace('-','/');
+                        vm.customers[index].chargingDateDiffDays = diffDays(vm.customers[index].chargingDate);
                     }
                 }
+
             }
 
             function formatAmmout(value){
@@ -371,29 +451,67 @@
                 })
             }
 
-            function changeFilter(){
-                console.log('changeFilter')
-                debugger
-                for(var i in vm.displayedCollection)
+            function changeFilter(reload){
+                var elmnt = document.getElementById("table");
+                elmnt.scrollTop = 0;
+                for(var i in vm.customers)
                 {
-                    console.log(vm.displayedCollection[i])
-                    if(vm.displayedCollection[i].Name == '11 Vera Lúcia Barreto Seixas')
-                        debugger
+                    //console.log(vm.customers[i])
+                    // if(vm.customers[i].Name == '11 Vera Lúcia Barreto Seixas')
+                    vm.customers[i].display = true; 
 
                     if(vm.cobrancaAtiva)
                     {
-                        if(vm.displayedCollection[i].selectedCharge.Canceled)
-                            vm.displayedCollection[i].selectedCharge.display = false;
+                        if(vm.customers[i].statusAtiva == 2)
+                            vm.customers[i].display = false;
                         else
-                            vm.displayedCollection[i].selectedCharge.display = true; 
+                            vm.customers[i].display = true; 
                     }
-                    else{
-                        vm.displayedCollection[i].selectedCharge.display = true; 
+                    if(vm.clienteAtivo)
+                    {
+                        if(vm.customers[i].Desativo)
+                            vm.customers[i].display = false;
+                        else
+                            vm.customers[i].display = true; 
                     }
-
-                
-                       
                 }
+
+                if(reload)
+                {
+                    vm.tableParams = createUsingFullOptions(vm.customers);
+                    vm.tableParams.reload();
+                }
+            }
+
+            function createUsingFullOptions(lista) {
+                // var data = angular.copy(lista);
+                // for(var i in data) {
+                //     if(vm.customers[i].Name == 'Marco Aurélio Bento Ribeiro'){
+                //         debugger;
+                //     }
+                //     if(!data[i].display) {
+                //         data.splice(i, 1);
+                //     }
+                // }
+
+                debugger;
+                var filtered = lista.filter(function (item) {
+                    return item.display;
+                });
+
+                var initialParams = {
+                  count: 50 // initial page size
+                };
+                var initialSettings = {
+                  // page size buttons (right set of buttons in demo)
+                  counts: [50,100,500],
+                  // determines the pager buttons (left set of buttons in demo)
+                  paginationMaxBlocks: 10,
+                  paginationMinBlocks: 1,
+                  dataset: filtered
+                };
+                return new NgTableParams(initialParams, initialSettings);
+    
             }
         }
     

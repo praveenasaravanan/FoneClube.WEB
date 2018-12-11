@@ -14,7 +14,7 @@
         var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API live
-        // var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
+        //var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -137,10 +137,11 @@
             return q.promise;
         }
 
-        function getStatusCharging(month, year) {
+        function getStatusCharging(month, year, ativos) {
             var q = $q.defer();
 
             HTTPService.get(urlApi.concat('/charging/cobranca/status/vingencia/mes/' + month + '/ano/' + year))
+            //HTTPService.get(urlApi.concat('/charging/cobranca/status/vingencia/mes/' + month + '/ano/' + year + '/ativos/' + ativos))
                 .then(function (result) {
                     q.resolve(result);
                 })
