@@ -78,6 +78,7 @@
         this.getAllCustomers = getAllCustomers;
         this.getReintegrateDatePagarme = getReintegrateDatePagarme;
         this.getAllPhonesStatus = getAllPhonesStatus;
+        this.getMassChargingData = getMassChargingData;
 
         function getLastPaymentType(customer) {
             
@@ -936,6 +937,18 @@
                     q.reject(error);
                 });
 
+            return q.promise;
+        }
+
+        function getMassChargingData(mes, ano) {
+            var q = $q.defer();
+            HTTPService.get(urlApi.concat('/charging/mass?mes='.concat(mes).concat('&ano=2018').concat(ano)))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
             return q.promise;
         }
         
