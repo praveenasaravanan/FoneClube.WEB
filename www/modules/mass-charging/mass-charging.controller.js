@@ -54,6 +54,7 @@
 
         function onClickCobrar(customer){
 
+            alert('Em desenvolvimento')
             var valorTotalCobrar = customer.chargingAmmount;
             valorTotalCobrar = parseInt(valorTotalCobrar.replace('.','').replace(prefixoMoetario, ''))
             
