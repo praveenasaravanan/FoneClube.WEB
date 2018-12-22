@@ -942,7 +942,7 @@
 
         function getMassChargingData(mes, ano) {
             var q = $q.defer();
-            HTTPService.get(urlApi.concat('/charging/mass?mes='.concat(mes).concat('&ano=2018').concat(ano)))
+            HTTPService.get(urlApi.concat('/charging/mass?mes='.concat(mes).concat('&ano=').concat(ano)))
                 .then(function (result) {
                     q.resolve(result);
                 })

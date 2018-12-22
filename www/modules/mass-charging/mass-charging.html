@@ -4,85 +4,137 @@
         <p>{{vm.toastMsg}}</p>
     </div>
     <div class="col-xs-12" style="margin-top: 48px;">
-        <h1 class="form-group col-xs-12 display-4">Cobrança em Massa</h1>
+        <!-- <h1 class="form-group col-xs-12 display-4">Cobrança em Massa</h1> -->
         <div class="form-container">
             <div class="row">
-                <div class="form-group col-xs-6 col-sm-3">
+                <div class="form-group col-xs-6 col-sm-3 form-group-mass">
                     <label for="mes">Mês:</label>
-                    <input type="number" class="form-control" placeholder="Mês" ng-model="vm.month" aria-describedby="sizing-addon2" id="mes">
+                    <input type="number" class="form-control-mass" placeholder="Mês" ng-model="vm.month" aria-describedby="sizing-addon2" id="mes">
                 </div>
-                <div class="form-group col-xs-6 col-sm-3">
+                <div class="form-group col-xs-6 col-sm-3 form-group-mass-">
                     <label for="ano">Ano:</label>
-                    <input type="number" class="form-control" placeholder="Ano" ng-model="vm.year" aria-describedby="sizing-addon2" id="ano">
+                    <input type="number" class="form-control-mass" placeholder="Ano" ng-model="vm.year" aria-describedby="sizing-addon2" id="ano">
                 </div>
-            </div>
-            <div class="row">
-                <button class="btn btn-primary col-sm-2 col-xs-12 btn-buscar" ng-click="vm.searchMassCharging()" ng-disabled="vm.resquenting || vm.loading">Buscar</button>
+
+                <div class="row">
+                    <button class="btn btn-primary col-sm-2 col-xs-12 btn-buscar" 
+                    ng-click="vm.onSearchMassCharging()" 
+                    ng-disabled="vm.resquenting || vm.loading">Buscar</button>
+                </div>
             </div>
             
-            <div class="loader" ng-if="vm.loading"></div>
+            
+            <div class="loader-mass" ng-if="vm.loading">Carregando...</div>
+
             <div ng-if="!vm.loading && vm.lista.length == 0" class="no-data">Não há itens para exibir</div>
 
             <div class="form-group shadow-z-1 col-xs-12 margin-top" ng-show="!vm.loading && vm.lista.length > 0">
-                <div>
-                    <div class="check-all" ng-click="vm.checkAllCustomers()">Marcar/Desmarcar Todos</div>
-                </div>
-                <div ng-repeat="customer in vm.lista" class="cliente">
-                    <div class="row-cliente">
-                        <div class="cliente">
-                            <input id="checkbox{{customer.Id}}" type="checkbox" ng-model="customer.checked" ng-disabled="vm.resquenting || customer.Charging.Charged || customer.statusOnCharging == 3 || customer.statusOnCharging == 2" class="no-outline">
-                            <label for="checkbox{{customer.Id}}">{{customer.Name}}</label>
+               <!-- inicio da tabela -->
+               
+               <div class="list-group" ng-repeat="customer in vm.lista">
+                <!-- active -->
+                <div  class="list-group-item list-group-item-action flex-column align-items-start container-mass">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h4 class="mb-1">{{customer.Name}}</h4>
+                    <h6 class="mb-1 customer-desc">Email: {{customer.Email}}  | Documento: {{customer.DocumentNumber}}</h6>
+                    <h6 class="mb-1 single-price-mass-desc" ng-if="customer.SinglePrice > 0">Descrição Preço único: {{ customer.DescriptionSinglePrice }}</h6>
+                    <div class="mb-1 single-price-mass" ng-if="customer.SinglePrice > 0">Preço Único: R{{ customer.SinglePrice / 100 | currency}}</div>
+                  </div>
+
+                  <button ng-click="vm.onClickCobrar(customer)" ng-disable="customer.requesting" class="btn botao-cobrar-cliente btn-primary ng-binding">
+                        Realizar Cobrança
+                  </button> 
+                  
+                  
+                  <div class="payment-set">
+                        <div class="column-payment type-payment">
+                            <label class="titulo">Forma Pagamento:</label>
+                            <select id="selectPaymentMethod" class="form-control ng-pristine ng-valid ng-empty ng-touched select-mass" ng-options="payment.id as payment.description for payment in vm.paymentMethod" ng-model="customer.typeCharging" ng-disabled="customer.Charging.Charged || customer.statusOnCharging == 3 || customer.statusOnCharging == 2" style="">
+                                <option value="" selected="selected">Selecione</option>
+                            </select>
                         </div>
 
-                        <div class="linhas">
-                            <div ng-repeat="phone in customer.Phones" class="linha">
-                                <div class="linha-number">{{'(' + phone.DDD + ') ' + phone.Number}}</div>
-                                <div class="linha-nickname">{{phone.NickName}}</div>
-                                <div class="linha-valor">{{phone.IdOperator == 1 ? 'CLARO' : 'VIVO'}}</div>
-                                <div class="linha-valor">{{phone.Ammount | currency:"R$": 2}}</div>
-                            </div>
+                        <div class="column-payment">
+                            <label class="titulo">Comentário Foneclube (interno):</label>
+                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched input-mass" type="text" ng-disabled="false" ng-model="customer.foneclubeComment" style="">
                         </div>
 
-                        <div class="payment-set">
-                            <div class="column-payment">
-                                <label>Forma Pagamento:</label>
-                                <select id="selectPaymentMethod" class="form-control" ng-options="payment.id as payment.description for payment in vm.paymentMethod" ng-model="customer.typeCharging" ng-disabled="customer.Charging.Charged || customer.statusOnCharging == 3 || customer.statusOnCharging == 2">
-                                    <option value="">Selecione</option>
-                                </select>
-                            </div>
-    
-                            <div class="column-payment">
-                                <label>Comentário Interno:</label>
-                                <input class="form-control" type="text" ng-disabled="vm.resquenting || customer.Charging.Charged || customer.statusOnCharging == 3 || customer.statusOnCharging == 2" ng-model="customer.Charging.ChargingComment">
+                        <div class="column-payment">
+                                <label class="titulo">Comentário Email:</label>
+                                <input class="form-control ng-pristine ng-valid ng-empty ng-touched input-mass" type="text" ng-disabled="false" ng-model="customer.emailComment" style="">
                             </div>
 
-                            <div class="column-payment">
-                                <label>Comentário Boleto:</label>
-                                <input class="form-control" type="text" ng-disabled="customer.typeCharging == 'cartao' || vm.resquenting || customer.Charging.Charged || customer.statusOnCharging == 3 || customer.statusOnCharging == 2" ng-model="customer.commentBoleto">
-                            </div>
-
-                            <div class="column-payment">
-                                <label>Valor Total:</label>
-                                <input class="form-control" money-input ng-model="customer.Charging.Ammount" ng-disabled="vm.resquenting || customer.Charging.Charged || customer.statusOnCharging == 3 || customer.statusOnCharging == 2">
-                            </div>
+                        <div class="column-payment">
+                            <label class="titulo">Comentário Boleto:</label>
+                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched input-mass" type="text" ng-disabled="customer.typeCharging == 'cartao'" ng-model="customer.boletoComment" style="">
                         </div>
 
-                        <div class="button-box">
-                            <button class="btn botao-cobrar-cliente btn-primary" ng-click="vm.chargeCustomer(customer)" ng-disabled="vm.resquenting || customer.Charging.Charged || customer.statusOnCharging == 3 || customer.statusOnCharging == 2" ng-class="{'btn-primary' : !customer.statusOnCharging, 'btn-warning' : customer.statusOnCharging == 1, 'btn-info' : customer.statusOnCharging == 2, 'btn-success' : customer.statusOnCharging == 3, 'btn-danger' : customer.statusOnCharging == 4}">
-                                    {{  customer.statusOnCharging == 4 ? 'Erro na Cobrança' :
-                                        customer.statusOnCharging == 3 ? 'Sucesso' : 
-                                        customer.statusOnCharging == 2 ? 'Processando...' :
-                                        customer.statusOnCharging == 1 ? 'Confirmar Cobrança?' :
-                                        customer.Charging.Charged ? 'Já Cobrado' : 'Realizar Cobrança'
-                                    }}
-                            </button> 
+                        <div class="column-payment amount-payment">
+                            <label class="titulo">Valor Total:</label>
+                            <input class="form-control ng-pristine ng-untouched ng-valid ng-not-empty input-mass" 
+                            money-input="" 
+                            ng-model="customer.chargingAmmount">
                         </div>
                     </div>
-                </div>
 
-                <button class="btn btn-primary btn-cobranca-massa" ng-click="vm.doMassCharge()" ng-disabled="vm.resquenting" ng-class="{'floating-button': vm.hasOneChecked()}">
-                    {{ vm.resquenting ? 'Processando...' : 'Realizar Cobrança em Massa' }}
-                </button> 
+                    <div class="container-boxes">
+                            <div class="form-check check-mass">
+                                <input ng-change="vm.onChangeCheckboxSoma(customer)" ng-model="customer.soma" class="form-check-input" type="checkbox">
+                                <label class="form-check-label label-check" for="exampleRadios2">
+                                Sugerir Soma relatório
+                                </label>
+                            </div>
+                            <div class="form-check check-mass">
+                                <input ng-change="vm.onChangeCheckboxLastPayment(customer)" ng-model="customer.lastPayment" class="form-check-input" type="checkbox">
+                                <label class="form-check-label label-check" for="exampleRadios3">
+                                Sugerir Última Cobrança
+                                </label>
+                            </div>
+                            <div class="form-check check-mass">
+                                <input ng-model="customer.defaultCharging" class="form-check-input" type="checkbox">
+                                <label class="form-check-label label-check" for="exampleRadios3">
+                                Cobrança padrão
+                                </label>
+                            </div>
+                         </div>
+                  
+                  <table >
+                        <tr>
+                          <th>Telefone</th>
+                          <th>NickName</th>
+                          <th>Operadora</th>
+                          <th>Preço VIP</th>
+                          <th>Total Cobrança</th>
+                          <th>Resultado</th>
+                        </tr>
+                        <tr ng-repeat="phone in customer.Phones">
+                          <td>{{phone.DDD + phone.Number}}</td>
+                          <td>{{phone.NickName | limitTo : 20}}</td>
+                          <td>{{phone.OperatorDescription}}</td>
+                          <td>
+                              <div ng-show="phone.AmmountPrecoVip > 0">
+                                  R{{phone.AmmountPrecoVip/ 100 | currency}}
+                              </div>
+                              <div ng-show="phone.AmmountPrecoVip == 0 || phone.AmmountPrecoVip == undefined || phone.AmmountPrecoVip == null"></div>
+                          </td>
+                          <td>R{{phone.ChargeAmount/ 100 | currency}}</td>
+                          <td>R{{phone.ResultAmount / 100 | currency}}</td>
+                        </tr>
+                      </table>
+
+                    
+                  <div ng-if="customer.Charged" class="list-group-item list-group-item-action list-group-item-success message-mass">
+                      Cliente Cobrado no mês vingente definido.
+                    </div>
+                  <div ng-if="false" class="list-group-item list-group-item-action list-group-item-warning message-mass">
+                      This is a warning list group item</div>
+                  <div ng-if="!customer.Charged" class="list-group-item list-group-item-action list-group-item-info message-mass">
+                        {{customer.infoMessage}}
+                    </div>
+                </div>
+                
+              </div>
+               <!-- fim  -->
             </div>
         </div>
     </div>

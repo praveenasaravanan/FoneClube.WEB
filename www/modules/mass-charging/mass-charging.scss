@@ -129,13 +129,20 @@
     }
 
     .botao-cobrar-cliente {
-        width: 180px;
         outline: none;
-        margin-right: 6px;
+        position: absolute;
+        float: right;
+        right: 0;
+        top: 0;
+        margin-right: 20px;
+        margin-top: 20px;
+        z-index: 1;
     }
 
     .btn-buscar {
         margin-left: 15px;
+        margin-top: 37px;
+        width: 100px;
     }
 
     .no-data {
@@ -158,4 +165,175 @@
         outline: none;
     }
 
+    .list-group {
+        padding-left: 0;
+        margin-bottom: 0px;
+        border-bottom: 3px solid #32404e;
+    }
+
+    .list-group-item:last-child {
+        margin-bottom: 0;
+         border-bottom-right-radius: 0px; 
+         border-bottom-left-radius: 0px; 
+    }
+    .list-group-item:first-child {
+         border-top-left-radius: 0px; 
+         border-top-right-radius: 0px; 
+    }
+    
+    table {
+        max-width: 100%;
+        margin-top: 20px;
+        margin-bottom: 8%;
+    }
+
+    tr {
+        display: table-row;
+        vertical-align: inherit;
+        border-color: inherit;
+        margin-top: 50px;
+    }
+
+    td, th {
+        padding: 0;
+        padding-left: 15px;
+        padding-bottom: 2px;
+        // left: 0;
+        // margin-left: 50px;
+    }
+
+    h6{
+        margin-top: 2px;
+    }
+
+
+    .payment-set{
+        // width: 550px;
+        width: 40%;
+        position: absolute;
+        /* float: right; */
+        right: 0;
+        top: 0;
+        margin-right: 20px;
+        margin-top: 10px;
+
+        .titulo {
+            font-size: small;
+            margin-bottom: 0px;
+        }
+
+        .input-mass{
+            height: 25px;
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .select-mass{
+           
+                height: 28px;
+                padding-left: 5px;
+                padding-right: 5px;
+                font-size: 12px;
+            
+        }
+    }
+
+    .type-payment {
+        width: 150px;
+    }
+
+    .amount-payment {
+        width: 150px;
+    }
+
+    .container-mass {
+        min-height: 310px;
+    }
+
+    .message-mass {
+        position: absolute;
+        width: 95%;
+        left: 2.5%;
+        bottom: 10px;
+        height: 35px;
+        padding-top: 6px;
+    }
+
+    .single-price-mass {
+        /* font-style: oblique; */
+        /* font-weight: 500; */
+        font-weight: bold;
+    }
+
+    .single-price-mass-desc{
+
+    }
+
+    .customer-desc{
+        font-style: italic;
+        font-weight: bold;
+    }
+    .container-boxes{
+        position: absolute;
+        float: right;
+        right: 0;
+        top: 3px;
+        margin-right: 190px;
+        font-size: small;
+    }
+
+    .label-check{
+        padding-top: 10px;
+    }
+
+    .check-mass {
+        height: 20px;
+    }
+
+    .loader-mass{
+        position: relative;
+        left: 40%;
+        font-size: x-large;
+        margin-bottom: 100px;
+        margin-top: 100px;
+    }
+
+    .form-control-mass {
+        display: block;
+        width: 100%;
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    }
+
+    .form-group-mass {
+            /* margin-right: 0; */
+    margin-left: 20px;
+    position: relative;
+    float: left;
+    /* margin: 0; */
+    margin-top: 12px;
+    width: 120px;
+    }
+
+    .form-group-mass- {
+                /* margin-right: 0; */
+        margin-left: 0px;
+        position: relative;
+        float: left;
+        /* margin: 0; */
+        margin-top: 12px;
+        width: 120px;
+        }
 }
