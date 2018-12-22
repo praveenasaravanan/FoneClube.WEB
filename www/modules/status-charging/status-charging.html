@@ -71,53 +71,53 @@
 
     <!--<table class="table table-hover">-->
     <div ng-if="vm.loading" style="margin-top: 358px; position: fixed" class="loading-status">{{vm.loadingMessage}}</div>
-    <div id="table" ng-show="!vm.loading" style="margin-top: 300px;">
-        <table ng-table="vm.tableParams" show-filter="true" class="table table-scroll">
-            <tr ng-repeat="customer in $data  | orderBy:['-chargingDate']">
-                <td title="'Última Cob.'" filter="{ chargingDate: 'text'}" ng-class="{'status-green': customer.dataIgual == true}" sortable="'chargingDate'"> 
-                    <span style="font-weight: bold;">{{customer.chargingDate}}</span> 
-                </td>
-                <td title="'Dias'" sortable="'chargingDateDiffDays'" filter="{ chargingDateDiffDays: 'text'}"> 
-                    <span>{{customer.chargingDateDiffDays }}</span> 
-                </td>
-                <td title="'Status'" sortable="'statusType'" filter="{statusType: 'select'}" filter-data="vm.tiposStatus">
+    <div id="table" ng-show="!vm.loading" style="margin-top: 355px;">
+        <table ng-table="vm.tableParams" show-filter="true" class="table table-scroll-charging">
+            <tr ng-repeat="customer in $data">
+
+                    <td sortable="'chargingDate'" filter="{ chargingDate: 'text'}" title="'Última Cob.'" ng-class="{'status-green': customer.dataIgual == true}">
+                        <strong>{{customer.chargingDate}}</strong>
+                    </td>
+                    
+                    <td sortable="'chargingDate'" filter="{ chargingDateDiffDays: 'text'}" title="'Dias'"><strong>{{vm.diffDays(customer.chargingDate) }}</strong></td>
+        
+                    <td sortable="'descricaoStatus'" filter="{descricaoStatus: 'select'}" filter-data="vm.tiposStatus" title="'Status'" style="text-align: center;">
                     <!--<td ng-class="{'status-red': !customer.Charged, 'status-green': customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'INVÁLIDO', 'status-blue': customer.selectedCharge.StatusDescription == 'PENDENTE', 'status-grey': customer.selectedCharge.StatusDescription == 'CARREGANDO' }">-->
                         <!--<strong>{{customer.selectedCharge.StatusDescription}}</strong>-->
                         <!--<strong ng-if="customer.selectedCharge.StatusDescription == undefined || customer.selectedCharge.StatusDescription == null">-->
                             <!--NÃO COBRADO</strong>-->
-        
-                        <div ng-if="customer.statusType == vm.statusType.NAO_COBRADO">
-                            <strong><p>NÃO COBRADO</p></strong>
-                        </div>
-        
-                        <div  ng-if="customer.statusType == vm.statusType.PAGO">
-                            <strong><p style="color: green;">PAGO</p></strong>
-                        </div>
-                        
-                        <div  ng-if="customer.statusType == vm.statusType.COBRADO">
-                            <strong><p style="color: blue;">COBRADO</p></strong>
-                        </div>
-        
-          
-                        <svg height="10" width="10" ng-if="customer.statusType == vm.statusType.CARREGANDO">
-                            <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="grey" />
-                        </svg>
-        
-                        <div  ng-if="customer.statusType == vm.statusType.VENCIDO">
-                            <strong><p style="color: red;">VENCIDO</p></strong>
-                        </div>
-        
-                        <div  ng-if="customer.statusType == vm.statusType.REFUNDED">
-                            <strong><p style="color: purple;">REFUNDED</p></strong>
-                        </div>
-        
-                        <!-- customer.selectedCharge.Expired -->
-        
-                        <!-- <svg height="10" width="10" ng-if="customer.selectedCharge.Expired == true">
-                            <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="yellow" />
-                        </svg> -->
+                            <div ng-if="customer.descricaoStatus == 2">
+                                <strong><p>NÃO COBRADO</p></strong>
+                            </div>
+            
+                            <div  ng-if="customer.descricaoStatus == 3">
+                                <strong><p style="color: green;">PAGO</p></strong>
+                            </div>
+                            
+                            <div  ng-if="customer.descricaoStatus == 1">
+                                <strong><p style="color: blue;">COBRADO</p></strong>
+                            </div>
+            
+                            <div  ng-if="customer.descricaoStatus == 5">
+                                <strong><p style="color: red;">VENCIDO</p></strong>
+                            </div>
+            
+                            <div  ng-if="customer.descricaoStatus == 4">
+                                <strong><p style="color: purple;">REFUNDED</p></strong>
+                            </div>
+            
+                            <!-- customer.selectedCharge.Expired -->
+            
+                            <!-- <svg height="10" width="10" ng-if="customer.selectedCharge.Expired == true">
+                                <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="yellow" />
+                            </svg> -->
+            
+            
                     </td>
-                    <td title="'R$ Cobrado'" sortable="'ammout'" filter="{ammout: 'text'}">
+        
+                    
+        
+                    <td sortable="'ammoutInt'" filter="{ammoutInt: 'text'}" title="'R$ Cobrado'">
                         <select
                                 ng-if="customer.ChargingValidity.length > 0"
                                 ng-show="customer.ChargingValidity.length > 1"
@@ -126,9 +126,14 @@
                                 ng-init="customer.selectedCharge = customer.ChargingValidity[0]"
                                 ng-change="vm.changeSelect(customer.selectedCharge)">
                         </select>
-                        <div ng-if="customer.ChargingValidity.length == 1">{{ customer.ammout}}</div>
+        
+        
+                        <div ng-if="customer.ChargingValidity.length == 1">{{ customer.ammoutIntFormat }}</div>
+        
+        
                     </td>
-                    <td title="'Tipo'" sortable="'customer.statusPayment'" filter="{statusPayment: 'select'}" filter-data="vm.tiposPagamento">
+        
+                    <td sortable="'descricaoTipo'" title="'Tipo'" filter="{descricaoTipo: 'select'}" filter-data="vm.tiposPagamento">
                         <div ng-if="customer.ChargingValidity[0].Charged">
                             <!-- {{ customer.ChargingValidity[0].PaymentType == 1 ? 'CARTÃO' : 'BOLETO' }} -->
         
@@ -136,31 +141,36 @@
                             
                             <p ng-if="customer.selectedCharge.PaymentType == 1">CARTÃO</p>
                         </div>
-                    </td>
-                    <td title="'Status'" sortable="'customer.statusAtiva'" filter="{statusAtiva: 'select'}" filter-data="vm.tipoAtiva">
-                        {{customer.selectedCharge.Canceled ? 'Cancelada' : 'Ativa'}}
         
                     </td>
-                    <td title="'Ação'" sortable="'customer.statusAtiva'">
-                        <button ng-if="customer.statusAtiva == vm.AtivoType.ATIVA" 
-                        class="btnb btn-danger" 
+        
+                    <td sortable="'descricaoCharge'" title="'Status'" filter="{descricaoCharge: 'select'}" filter-data="vm.tipoAtiva">
+                        {{customer.selectedCharge.Canceled ? 'Cancelada' : 'Ativa'}}   
+                    </td>
+        
+                    <td sortable="'descricaoAcao'" filter="{descricaoAcao: 'select'}" filter-data="vm.tipoAcao" title="'Ação'" >
+                        <button ng-if="customer.ChargingValidity.length > 0 && !customer.selectedCharge.Canceled" 
+                        class="btnb btn-danger action-buttons" 
                         ng-click="vm.onDesativarBoleto(customer.selectedCharge)"
                         ng-disabled="vm.resquenting || vm.loading">
                         C
                         </button>
         
-                        <button ng-if="customer.statusAtiva == vm.AtivoType.CANCELADA"  
-                        class="btnb btn-info" 
+                        <button ng-if="customer.ChargingValidity.length > 0 && customer.selectedCharge.Canceled"  
+                        class="btnb btn-info action-buttons" 
                         ng-click="vm.onAtivarBoleto(customer.selectedCharge)"
                         ng-disabled="vm.resquenting || vm.loading">
                         A
                         </button>
         
                     </td>
-                    <td title="'Vencimento'" filter="{BoletoExpires: 'text'}" sortable="'selectedCharge.BoletoExpires'">{{customer.selectedCharge.BoletoExpires}}</td>
-                    <td title="'Ultimo pag.'" sortable="'LastPaidDate'" filter="{ LastPaidDate: 'text'}">{{customer.LastPaidDate}}</td>
-                    <td title="'Dias'" sortable="'LastPaidDateDiffDays'" filter="{ LastPaidDateDiffDays: 'text'}">{{ customer.LastPaidDateDiffDays }}</td>
-                    <td title="'R$ Pago'" sortable="'ammout'" filter="{ ammout: 'text'}">
+        
+                    <td sortable="'boletoExpires'" filter="{boletoExpires: 'text'}" title="'Vencimento'"><strong></strong>{{customer.boletoExpires}}</strong></td>
+                    <td sortable="'LastPaidDate'" filter="{ LastPaidDate: 'text'}" title="'Ultimo pag.'"><strong></strong>{{customer.LastPaidDate}}</strong></td>
+                    <td sortable="'LastPaidDate'" filter="{ LastPaidDateDiffDays: 'text'}" title="'Dias'"><strong></strong>{{ vm.diffDays(customer.LastPaidDate) }}</strong></td>
+                    <!-- <td><strong></strong>{{customer.Charging.Ammount / 100}}</strong></td> -->
+        
+                    <td sortable="'ammoutIntPaid'" title="'R$ Pago'" filter="{ ammoutIntPaid: 'text'}">
                         <select
                                 ng-if="customer.ChargingValidity.length > 0"
                                 ng-show="customer.ChargingValidity.length > 1"
@@ -170,14 +180,12 @@
                                 ng-change="vm.changeSelect(customer.selectedCharge)">
                         </select>
         
-                        <div ng-if="customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'PENDENTE'">
-                            <div ng-if="customer.ChargingValidity.length == 1">{{ customer.ammout}}</div>
-                        </div>
-                        
-        
-        
+                        <div ng-if="!customer.pending && customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'PENDENTE'">
+                            <div ng-if="customer.ChargingValidity.length == 1 && customer.ammoutIntPaid > 0">{{ customer.ammoutPaidFormat }}</div>
+                        </div>   
                     </td>
-                    <td title="'Nome'" sortable="'Name'" filter="{ Name: 'text'}">{{customer.Name}}</td>
+        
+                    <td sortable="'Name'" title="'Nome'" filter="{ Name: 'text'}">{{customer.Name}}</td>
             </tr>
         </table>
     </div>

@@ -36,44 +36,49 @@
             vm.customers = [];
 
             vm.statusType = {
-                NAO_COBRADO: 1,
-                PAGO: 2,
-                COBRADO: 3,
-                CARREGANDO: 4,
-                VENCIDO: 5,
-                REFUNDED: 6
+                COBRADO: 1,
+                NAO_COBRADO: 2,
+                PAGO: 3,
+                REFUNDED: 4,
+                VENCIDO: 5
             };
 
             vm.PagamentosType = {
-                CARTAO: 1,
-                BOLETO: 2
+                BOLETO: 1,
+                CARTAO: 2
             };
 
             vm.AtivoType = {
-                ATIVA: 1,
-                CANCELADA: 2
+                ATIVA: 2,
+                CANCELADA: 1
             }
+
 
             vm.tiposStatus = [
                 {id: "", title: ""},
-                {id: 1, title: 'NÃO COBRADO'},
-                {id: 2, title: 'PAGO'},
-                {id: 3, title: 'COBRADO'},
-                {id: 4, title: 'CARREGANDO'},
-                {id: 5, title: 'VENCIDO'},
-                {id: 6, title: 'COBRADO'},
+                {id: 1, title: 'COBRADO'},
+                {id: 2, title: 'NÃO COBRADO'},
+                {id: 3, title: 'PAGO'},
+                {id: 4, title: 'REFUNDED'},
+                {id: 5, title: 'VENCIDO'}
             ];
 
             vm.tiposPagamento = [
                 {id: "", title: ""},
-                {id: 1, title: 'CARTÃO'},
-                {id: 2, title: 'BOLETO'}
+                {id: 1, title: 'BOLETO'},
+                {id: 2, title: 'CARTÃO'}
             ];
 
             vm.tipoAtiva = [
                 {id: "", title: ""},
-                {id: 1, title: 'Ativa'},
-                {id: 2, title: 'Cancelada'}
+                {id: 1, title: 'CANCELADA'},
+                {id: 2, title: 'ATIVA'}
+            ]
+
+            vm.tipoAcao = [
+                {id: "", title: ""},
+                {id: 1, title: 'A'},
+                {id: 2, title: 'C'}
             ]
 
             function changeSelect(param){
@@ -105,21 +110,27 @@
                 
             }
 
+            var date_sort_desc = function (item1, item2) {
+                if (item1.chargingDate > item2.chargingDate) return -1;
+                if (item1.chargingDate < item2.chargingDate) return 1;
+                return 0;
+            };
+
             function searchStatusCharging(){
                 // console.log('searchStatusCharging')
                 // console.log( vm.month + ' ' + vm.year);
                 vm.loading = true;
                 vm.totalReceivedReady = false;
                 hasUpdate = false;
-                interval = $interval(checkFullLoad, 5000);
+                interval = $interval(checkFullLoad, 8000);
 
                 var ativos = vm.somenteAtivos ? 1 : 0;
 
                 FoneclubeService.getStatusCharging(vm.month,vm.year, ativos).then(function (result) {
                     console.log('getStatusCharging')
-                    console.log(result)
+                    console.log(result);
                     vm.customers = result;
-                    changeFilter(false);
+                    
                     for(var i in vm.customers)
                     {
                         vm.customers[i].allChargingsCanceled = false;
@@ -132,6 +143,7 @@
 
                     handleData(vm.customers);
                     loadPaymentHistory();
+                    changeFilter(false);
                 })
             }
 
@@ -201,8 +213,12 @@
                 }
 
                 for (var index in customers) {
+
                     var customer = customers[index];
-                        
+                    if(customer.Name == '1 Antonia Maria da Silva Barboza')
+                    {
+                        debugger;
+                    }
                     try{
                         customer.phone = customer.Phones[0].DDD  + customer.Phones[0].Number;
                         var operadora = customer.Phones[0].IdOperator == 1 ? 'Claro': 'Vivo'
@@ -217,84 +233,92 @@
                             for(var i in customer.ChargingValidity)
                             {
                                 var charge = customer.ChargingValidity[i];
-
                                 try
                                 {
                                     customer.ChargingValidity[i].BoletoExpires = new Date(customer.ChargingValidity[i].BoletoExpires).toISOString().split('T')[0].replace('-','/').replace('-','/');
-                                    customer.BoletoExpires = customer.ChargingValidity[i].BoletoExpires;
+                                    customer.boletoExpires = customer.ChargingValidity[i].BoletoExpires; 
                                 }
                                 catch(erro){}
 
                                 if(charge.PaymentType == 1 && charge.StatusDescription != 'Refunded')
                                 {
                                     customer.ChargingValidity[i].StatusDescription = 'PAGO';
-                                    customer.statusType = vm.statusType.PAGO;
+                                    customer.descricaoStatus = vm.statusType.PAGO;
+                                    customer.descricaoTipo = vm.PagamentosType.CARTAO;  
+                                    customer.ammoutIntPaid = parseFloat(customer.ChargingValidity[i].Ammount / 100);
+                                    customer.ammoutPaidFormat = customer.ammoutIntPaid.toString().replace('.',',');
                                 }
 
                                 if(charge.PaymentType == 2 && charge.BoletoId != 0)
                                 {
+                                    customer.descricaoTipo = vm.PagamentosType.BOLETO;
                                     PagarmeService.getStatusBoletoRecursivo(charge.BoletoId, customer, vm, index, i).then(function (result) {
-                                        
-                                        // if(result[0].vm.customers[result[0].indexCustomer].Name == 'Antonia Maria da Silva Barboza')
-                                        //     debugger
+
+                                        //result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].descricaoTipo = vm.PagamentosType.BOLETO;
                                         result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'INVÁLIDO'
 
                                         
 
                                         if(result[0].status == "waiting_payment")
                                         {
+                                            result[0].vm.customers[result[0].indexCustomer].ammoutIntPaid = 0;
+                                            result[0].vm.customers[result[0].indexCustomer].descricaoStatus = 'PENDENTE';
                                             result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'PENDENTE'
-                                            customer.statusType = vm.statusType.COBRADO;
-                                            
                                             if(!result[0].elemento.registerPayd){
                                                 result[0].elemento.status = result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription;
                                             }
+
+                                            if(!result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Expired)
+                                            {
+                                                result[0].vm.customers[result[0].indexCustomer].descricaoStatus = vm.statusType.COBRADO;
+                                            } else {
+                                                result[0].vm.customers[result[0].indexCustomer].descricaoStatus = vm.statusType.VENCIDO;
+                                            }
                                         }
                                         else if(result[0].status == "paid" ){
-                                            
-                                            // charge.StatusDescription = 'PAGO';
-                                            result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'PAGO';
-                                            customer.statusType = vm.statusType.PAGO;
+                                            result[0].vm.customers[result[0].indexCustomer].ammoutIntPaid = parseFloat(result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Ammount / 100);
+                                            result[0].vm.customers[result[0].indexCustomer].descricaoStatus = vm.statusType.PAGO;
+                                            result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'PAGO'
                                             try{
                                                 
                                             }
                                             catch(erro){}
                                             
-
                                             result[0].elemento.registerPayd = true;
                                             result[0].elemento.status = charge.StatusDescription;
                                             // 
-                                            console.log('Adicionando ' + parseInt(result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Ammount,10))
-                                            console.log('Adicionando ' + totalRecebidoBoleto)
+                                            //console.log('Adicionando ' + parseInt(result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Ammount,10))
+                                            //console.log('Adicionando ' + totalRecebidoBoleto)
                                             totalRecebidoBoleto += parseInt(result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Ammount,10)
                                             result[0].vm.totalReceived += parseInt(result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Ammount,10)
                                         }
                                         else{
                                             // ;
                                         }
+                                        charge.StatusDescription = result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription;
 
                                         result[0].vm.callbackCount++;
 
                                         if(result[0].vm.callbackCount == result[0].vm.totalBoletoCharges)
                                         {
-                                            console.log('Completou todos boletos');
+                                            //console.log('Completou todos boletos');
                                             result[0].vm.totalReceived = parseFloat(result[0].vm.totalReceived / 100).toString().replace('.',',');
                                             vm.totalReceivedReady = true;
-                                        }
-        
+                                        }  
                                     })
                                 }
 
                                 if(charge.PaymentType == 1 && charge.StatusDescription == 'Refunded')
                                 {
-                                    customer.ChargingValidity[i].StatusDescription = 'REFUNDED';
-                                    customer.statusType = vm.statusType.REFUNDED;
+                                    customer.descricaoStatus = vm.statusType.REFUNDED;
+                                    customer.ChargingValidity[i].StatusDescription = 'REFUNDED'
                                 }
                                 
                                 if(charge.BoletoId == 0 && charge.PaymentType == 2){
                                     if(vm.customers[index].ChargingValidity[i].StatusDescription == 'CARREGANDO')
                                     {
                                         vm.customers[index].ChargingValidity[i].StatusDescription = 'INVÁLIDO';
+                                        customer.descricaoStatus = 'INVÁLIDO';
                                     }
                                     
                                 }
@@ -307,39 +331,24 @@
                             vm.totalReceived += parseInt(customer.ChargingValidity[0].Ammount)
                         }
 
-                        customer.ammout = parseFloat(parseInt(customer.ChargingValidity[0].Ammount) / 100).toString().replace('.',',')
-                        
-                        if(customer.ChargingValidity[0].PaymentType == 1)
-                        {
-                            customer.statusPayment = vm.PagamentosType.CARTAO;
-                        }
-                        else
-                        {
-                            customer.statusPayment = vm.PagamentosType.BOLETO;
-                        }
-
-                        if(!customer.ChargingValidity[0].Canceled)
-                        {
-                            customer.statusAtiva = vm.AtivoType.ATIVA;
-                        } 
-                        else
-                        {
-                            customer.statusAtiva = vm.AtivoType.CANCELADA;
-                        }
-
-                        if(customer.ChargingValidity[0].Expired && customer.ChargingValidity[0].PaymentType == 2)
-                        {
-                            customer.statusType = vm.statusType.VENCIDO;
-                        }
+                        customer.ammout = parseFloat(parseInt(customer.ChargingValidity[0].Ammount) / 100);
+                        customer.ammoutFormat = customer.ammout.toString().replace('.',',');
+                        customer.descricaoCharge = charge.Canceled ? vm.AtivoType.CANCELADA : vm.AtivoType.ATIVA;
+                        customer.descricaoAcao = charge.Canceled ? vm.AtivoType.CANCELADA : vm.AtivoType.ATIVA;
+                        customer.ammoutInt = parseFloat(customer.ammout); 
+                        customer.ammoutIntFormat = customer.ammoutInt.toString().replace('.',',');
                     }    
                     else  
                     {
                         customer.status = 'NÃO COBRADO'; 
-                        customer.statusType = vm.statusType.NAO_COBRADO;
-                    }     
-                }
+                        customer.descricaoStatus = vm.statusType.NAO_COBRADO;
+                        customer.ammoutInt = 0;
+                        customer.ammoutIntPaid = 0;
+                    }
+ 
+                    
 
-                
+                }
                 vm.totalCharged = parseFloat(vm.totalCharged / 100).toString().replace('.',',');
                 // vm.totalReceived = parseFloat(vm.totalReceived / 100).toString().replace('.',',');
 
@@ -452,6 +461,7 @@
             }
 
             function changeFilter(reload){
+                debugger;
                 var elmnt = document.getElementById("table");
                 elmnt.scrollTop = 0;
                 for(var i in vm.customers)
@@ -462,7 +472,7 @@
 
                     if(vm.cobrancaAtiva)
                     {
-                        if(vm.customers[i].statusAtiva == 2)
+                        if(vm.customers[i].descricaoCharge == 1)
                             vm.customers[i].display = false;
                         else
                             vm.customers[i].display = true; 
@@ -484,27 +494,23 @@
             }
 
             function createUsingFullOptions(lista) {
-                // var data = angular.copy(lista);
-                // for(var i in data) {
-                //     if(vm.customers[i].Name == 'Marco Aurélio Bento Ribeiro'){
-                //         debugger;
-                //     }
-                //     if(!data[i].display) {
-                //         data.splice(i, 1);
-                //     }
-                // }
+                var data = angular.copy(lista);
+                for(var i in data) {
+                    if(!data[i].display) {
+                        data.splice(i, 1);
+                    }
+                }
 
-                debugger;
                 var filtered = lista.filter(function (item) {
                     return item.display;
                 });
 
                 var initialParams = {
-                  count: 500 // initial page size
+                  count: 50 // initial page size
                 };
                 var initialSettings = {
                   // page size buttons (right set of buttons in demo)
-                  counts: [50,100,500, 1000],
+                  counts: [50,100,500],
                   // determines the pager buttons (left set of buttons in demo)
                   paginationMaxBlocks: 10,
                   paginationMinBlocks: 1,
