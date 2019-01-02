@@ -11,10 +11,10 @@
         // var urlApi = 'http://localhost:57078/api';
 
         //API tests
-        var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+        // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API live
-        //var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
+        var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -39,6 +39,7 @@
         this.postChargingUpdate = postChargingUpdate;
         this.postDesassociarLinha = postDesassociarLinha;
         this.postUpdatePhonePlan = postUpdatePhonePlan;
+        this.postGeraCobrancaIntegrada = postGeraCobrancaIntegrada;
 
         this.getPlans = getPlans;
         this.getCustomerPlans = getCustomerPlans;
@@ -378,6 +379,18 @@
         function postGeraBoleto() {
             var q = $q.defer();
             HTTPService.post(urlApi.concat('/pagarme/boleto'), param)
+                .then(function (data) {
+                    q.resolve(data);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+            return q.promise;
+        }
+
+        function postGeraCobrancaIntegrada(param) {
+            var q = $q.defer();
+            HTTPService.post(urlApi.concat('/pagarme/integrada'), param)
                 .then(function (data) {
                     q.resolve(data);
                 })
