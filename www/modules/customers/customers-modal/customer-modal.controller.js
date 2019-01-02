@@ -31,6 +31,7 @@
         vm.customer = customer;
         vm.mensagemPagarme = 'Refresh DB';
         vm.onTapUpdatePagarme = onTapUpdatePagarme;
+        vm.onResentEmail = onResentEmail;
 
         init();
 
@@ -105,7 +106,7 @@
                     }
                     
                 }
-                debugger
+                // debugger
                 for (var i in vm.osArray) {
                     vm.osDescArray.push(vm.osArray[vm.osArray.length - i]);
                 }
@@ -145,13 +146,13 @@
             FoneclubeService.getChargingLog(customer.Id)
                 .then(function (result) {
                     console.log('getChargingLog');
-                    debugger;
+                    // debugger;
                     vm.historyLog = [];
                     for(var i in result)
                     {
                         vm.historyLog.push(JSON.parse(result[i]));
                     }
-                    debugger;
+                    // debugger;
                     
                 })
                 .catch(function (error) {
@@ -332,6 +333,66 @@
 
         function onTapOrdemServico() {
             FlowManagerService.changeOrdemServicoView(customer);
+        }
+
+        function onResentEmail(charge){
+            debugger;
+            
+
+            DialogFactory.dialogConfirm({mensagem: 'Tem certeza que deseja reenviar o email dessa cobrança?'})
+                .then(function (value) {
+                    if (value) {            
+                        
+                        console.log(vm.customer)
+                        if(charge.PaymentType == BOLETO){
+                            var boletoUrl = '';
+                            if(charge.boleto_url)
+                                boletoUrl = charge.boleto_url;
+
+                            var emailObject = {
+                                'To': vm.customer.Email, 
+                                'TargetName' : vm.customer.Name,
+                                'TargetTextBlue': boletoUrl,
+                                'TargetSecondaryText' : charge.CommentEmail,
+                                'TemplateType' : BOLETO,
+                                'DiscountPrice': ( charge.Ammount / 100 ).toFixed(2).replace('.',',')
+                            }
+                            
+                            // emailObject.DiscountPrice = ($filter('currency')(vm.bonus / 100, "")).replace('.',',');
+
+                            FoneclubeService.postSendEmail(emailObject).then(function(result){
+                                console.log(result);
+                                DialogFactory.showMessageDialog({mensagem: 'Email reenviado com sucesso', titulo:'Informação'});
+                            })
+                            .catch(function(error){
+                                console.log('catch error');
+                                console.log(error);
+                                DialogFactory.showMessageDialog({mensagem: 'Email não reenviado ' + error.message, titulo:'Informação'});
+                            });
+                            
+                        }
+
+                        if(charge.PaymentType == CARTAO){
+                            var emailObject = {
+                                'To': vm.customer.Email, 
+                                'TargetName' : vm.customer.Name,
+                                'TargetTextBlue' : ( charge.Ammount / 100 ).toFixed(2).replace('.',','),
+                                'TargetSecondaryText' : charge.CommentEmail,
+                                'TemplateType' : CARTAO
+                            }
+
+                            FoneclubeService.postSendEmail(emailObject).then(function(result){
+                                console.log(result);
+                                DialogFactory.showMessageDialog({mensagem: 'Email reenviado com sucesso', titulo:'Informação'});
+                            })
+                            .catch(function(error){
+                                console.log('catch error');
+                                console.log(error);
+                                DialogFactory.showMessageDialog({mensagem: 'Email não reenviado ' + error.message, titulo:'Informação'});
+                            });
+                        }
+                    }
+                })
         }
 
     }
