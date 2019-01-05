@@ -11,10 +11,10 @@
         // var urlApi = 'http://localhost:57078/api';
 
         //API tests
-        // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+        var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
         //API live
-        var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
+        // var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
 
         this.postBasePerson = postBasePerson;
         this.postUpdatePerson = postUpdatePerson;
@@ -80,6 +80,7 @@
         this.getReintegrateDatePagarme = getReintegrateDatePagarme;
         this.getAllPhonesStatus = getAllPhonesStatus;
         this.getMassChargingData = getMassChargingData;
+        this.getStatusDivergencia = getStatusDivergencia;
 
         function getLastPaymentType(customer) {
             
@@ -956,6 +957,18 @@
         function getMassChargingData(mes, ano) {
             var q = $q.defer();
             HTTPService.get(urlApi.concat('/charging/mass?mes='.concat(mes).concat('&ano=').concat(ano)))
+                .then(function (result) {
+                    q.resolve(result);
+                })
+                .catch(function (error) {
+                    q.reject(error);
+                });
+            return q.promise;
+        }
+
+        function getStatusDivergencia() {
+            var q = $q.defer();
+            HTTPService.get(urlApi.concat('/manager/phones/divergencia'))
                 .then(function (result) {
                     q.resolve(result);
                 })

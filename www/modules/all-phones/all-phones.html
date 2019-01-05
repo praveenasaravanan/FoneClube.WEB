@@ -49,6 +49,13 @@
                 ng-change="vm.changeSelectPlan(linha)" 
                 ng-model="linha.selectedPlan" 
                 ng-options="y.Description for (x, y) in vm.planOptions"></select>
+            </td>
+            
+            <td title="'Plano Divergente'" filter="{ divergente: 'text'}" sortable="'divergente'">
+                <!-- {{linha.divergente}} -->
+                <div ng-if="linha.divergente == 'Sim'" class="divergente">Sim</div>
+                <div ng-if="linha.divergente != 'Sim' && linha.divergente != 'Sem dados na SP'" class="nao-divergente">Não</div>
+                <div ng-if="linha.divergente == 'Sem dados na SP'" class="inconclusivo">Sem dados na SP</div>
             </td> 
                 
             <td title="'Uso Linha'" filter="{ usoLinha: 'text'}" sortable="'usoLinha'">

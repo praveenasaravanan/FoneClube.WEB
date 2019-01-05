@@ -29,6 +29,8 @@
 
             FoneclubeService.getStatusTelefonesOperadora().then(function (result) {
 
+                
+
                 for(var i in vm.result)
                 {
                     var telefone = vm.result[i].linhaLivreOperadora;
@@ -51,10 +53,43 @@
 
                             vm.result[i].plano = operadora + " " + result[r].plano;
                             vm.result[i].usoLinha = result[r].usoLinha ? "Sim" : "Não";
+
+                            // console.log('telefone')
+                            // console.log(vm.result[i])
+                            
+                            // var phoneLine = vm.result[i];
+                            // var planoFoneclube = phoneLine.txtPlanoFoneclube;
+                            // var planoOperadora = phoneLine.plano;                            
                         }
                     }
                 }
 
+                // console.log('tentando getStatusDivergencia')
+                FoneclubeService.getStatusDivergencia().then(function (result) {
+                    
+                    // console.log('getStatusDivergencia')
+                    for(var l in vm.result){
+                        
+                        debugger;
+                        vm.result[l].divergente = 'Não';
+                        for(var i in result){
+                            if(vm.result[l].linhaLivreOperadora == result[i].phone){
+                                
+                                if((result[i].bitOperatorDivergent || result[i].bitPlanDivergent)) {
+                                    vm.result[l].divergente = 'Sim';
+                                    vm.result[l].operatorDivergent = result[i].bitOperatorDivergent
+                                    vm.result[l].planDivergent = result[i].bitOperatorDivergent
+                                }
+                            }
+                        }
+
+                        if(vm.result[l].plano == 'Sem dados na SP' || vm.result[l].plano == 'VIVO Sem Plano deinido na SP'){
+                            vm.result[l].divergente = 'Sem dados na SP';  
+                        }
+                    }
+
+                })
+                
                 vm.result
                 
             })
@@ -74,6 +109,7 @@
                     result[i].PhoneText = 'Não'
                 else
                     result[i].PhoneText = 'Sim'
+
             }
 
             vm.result = result
@@ -98,11 +134,11 @@
         })
 
         $scope.$watch("vm.tableParams", function () {            
-            console.log('Works')
+            // console.log('Works')
         });
 
         function changeFilterCliente(){
-            console.log('changeFilterCliente')
+            // console.log('changeFilterCliente')
             vm.filtroCliente = !vm.filtroCliente;
 
             // remonta lista e atualiza componente
@@ -140,7 +176,7 @@
         }
 
         function changeSelectPlan(linha){
-            console.log('changeSelectPlan')
+            // console.log('changeSelectPlan')
             
             var confirmation = confirm("Deseja trocar o plano da linha " + linha.linhaLivreOperadora + " para, " +  linha.selectedPlan.Description + ' ?');
             if (confirmation) {
@@ -165,7 +201,7 @@
         }
 
         function onClickTrocaPlano(linha){
-            console.log("onClickTrocaPlano")
+            // console.log("onClickTrocaPlano")
             debugger
             if(linha.txtPlanoFoneclube == null)
             {

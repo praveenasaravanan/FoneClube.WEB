@@ -22,6 +22,7 @@
         width: 100%;
         table-layout: fixed;
         min-height: 300px;
+        margin-top: 40px
     }
     
     .table-scroll tr {
@@ -74,6 +75,17 @@
         // max-width: 100px;
         display: block;
         width: 100%;
+    }
+    .divergente{
+        color: red;
+    }
+
+    .nao-divergente{
+        color: green;
+    }
+
+    .inconclusivo{
+        color: rgba(252, 206, 0, 0.623);
     }
 
 }
