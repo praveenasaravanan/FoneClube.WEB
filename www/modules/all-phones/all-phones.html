@@ -54,8 +54,9 @@
             <td title="'Plano Divergente'" filter="{ divergente: 'text'}" sortable="'divergente'">
                 <!-- {{linha.divergente}} -->
                 <div ng-if="linha.divergente == 'Sim'" class="divergente">Sim</div>
-                <div ng-if="linha.divergente != 'Sim' && linha.divergente != 'Sem dados na SP'" class="nao-divergente">Não</div>
-                <div ng-if="linha.divergente == 'Sem dados na SP'" class="inconclusivo">Sem dados na SP</div>
+                <div ng-if="linha.divergente != 'Sim' && linha.divergente != 'Sem dados na SP' && linha.divergente != 'Pendente Refresh'" class="nao-divergente">Não</div>
+                <div ng-if="linha.divergente == 'Sem dados na SP' && linha.divergente != 'Pendente Refresh'" class="inconclusivo">Sem dados na SP</div>
+                <div ng-if="linha.divergente == 'Pendente Refresh'" class="inconclusivo">Pendente</div>
             </td> 
                 
             <td title="'Uso Linha'" filter="{ usoLinha: 'text'}" sortable="'usoLinha'">

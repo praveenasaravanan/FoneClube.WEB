@@ -70,7 +70,7 @@
                     // console.log('getStatusDivergencia')
                     for(var l in vm.result){
                         
-                        debugger;
+                        // debugger;
                         vm.result[l].divergente = 'Não';
                         for(var i in result){
                             if(vm.result[l].linhaLivreOperadora == result[i].phone){
@@ -186,6 +186,25 @@
                         alert('Plano alterado com sucesso')
                         linha.txtPlanoFoneclube = linha.selectedPlan.Description;
                         linha.editPlan = false; 
+                        linha.divergente = 'Pendente Refresh';
+                        FoneclubeService.getStatusDivergencia().then(function (result) {
+                            
+                            for(var i in result){
+                                if(result[i].phone == linha.linhaLivreOperadora){
+                                    debugger;
+                                    if(result[i].bitOperatorDivergent || result[i].bitPlanDivergent) {
+                                        linha.divergente = 'Sim';
+                                        linha.operatorDivergent = result[i].bitOperatorDivergent
+                                        linha.planDivergent = result[i].bitOperatorDivergent
+                                    }
+                                    else{
+                                        linha.divergente = 'Não';
+                                        linha.operatorDivergent = result[i].bitOperatorDivergent
+                                        linha.planDivergent = result[i].bitOperatorDivergent
+                                    }
+                                }
+                            }
+                        })
                     }
                     else{
                         alert('Não foi possível alterar o plano dessa linha')
@@ -202,7 +221,7 @@
 
         function onClickTrocaPlano(linha){
             // console.log("onClickTrocaPlano")
-            debugger
+            // debugger
             if(linha.txtPlanoFoneclube == null)
             {
                 alert('Essa linha não tem cliente associado por isso não é possível trocar plano foneclube')
