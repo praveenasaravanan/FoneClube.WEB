@@ -191,7 +191,7 @@
                             
                             for(var i in result){
                                 if(result[i].phone == linha.linhaLivreOperadora){
-                                    debugger;
+                                    // debugger;
                                     if(result[i].bitOperatorDivergent || result[i].bitPlanDivergent) {
                                         linha.divergente = 'Sim';
                                         linha.operatorDivergent = result[i].bitOperatorDivergent
@@ -229,6 +229,24 @@
             else
                 linha.editPlan = true;
         }
+
+        $scope.$watch("vm.searchUser", function () {
+            try{
+                var search = vm.searchUser.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
+                var isnum = /^\d+$/.test(search.replace(' ', ''));
+                
+                if(isnum)
+                    vm.searchIgnoreAccent = search.replace(' ', '');
+                else    
+                    vm.searchIgnoreAccent = search;
+    
+                vm.tableParams.filter({ $: vm.searchIgnoreAccent });
+                vm.tableParams.reload();
+            }
+            catch(e){}
+            
+         });
+        
         
       }
     })();
