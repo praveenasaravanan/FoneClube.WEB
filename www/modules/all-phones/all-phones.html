@@ -18,9 +18,14 @@
     <!-- https://codepen.io/cardozo/pen/QVYXeX -->
 
     <table ng-table="vm.tableParams"  class="table table-scroll" show-filter="true">
-            <input placeholder="BUSCA" class="form-control" type="text" ng-model="vm.searchUser" />
+        
+            
             
         <tr ng-repeat="linha in $data">
+
+                <div class="container-search">
+                        <input placeholder="BUSCA GERAL" class="form-control busca-all" type="text" ng-model="vm.searchUser" />
+                </div>
             
             <td title="''">
                 <div class="dropdown">

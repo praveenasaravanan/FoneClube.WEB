@@ -1,5 +1,5 @@
 <div class="menu-container">
-    <div style="margin-top: 44px;" ng-class="{'menu-open': vm.compress && !vm.mobile, 'menu-close': (!vm.compress && !vm.mobile) || (vm.mobile && vm.compressMobile), 'menu-close-mobile': vm.mobile && !vm.compressMobile}">
+    <div style="margin-top: 44px; position: relative; z-index: 9999;" ng-class="{'menu-open': vm.compress && !vm.mobile, 'menu-close': (!vm.compress && !vm.mobile) || (vm.mobile && vm.compressMobile), 'menu-close-mobile': vm.mobile && !vm.compressMobile}">
         <div class="menu-item logo" ng-click="vm.menuCompress()">            
             <div>
                 <img src="./content/img/pi-logo.png" >
