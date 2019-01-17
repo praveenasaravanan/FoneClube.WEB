@@ -38,8 +38,12 @@
     
                 for(var i in vm.data.customers) {
                     var customer = vm.data.customers[i];
+                    customer.PhoneDDDParent = null
+                    customer.PhoneNumberParent = null
                     if(!customer.SoftDelete)
                         customersSemSoftDelete.push(customer);
+
+                      
                 }
                 
                 vm.tableParams = createUsingFullOptions(customersSemSoftDelete);
@@ -59,9 +63,23 @@
                     for(var i in vm.data.customers) {
                         var customer = vm.data.customers[i];
                         if(!customer.SoftDelete)
+                        {
+                            customer.PhoneDDDParent = null
+                            customer.PhoneNumberParent = null
+                            for(var i in customer.Phones){
+                                if(!customer.Phones[i].IsFoneclube){
+                                    customer.Phones.splice(i, 1);
+                                }
+                            }
+
                             customersSemSoftDelete.push(customer);
+                        }
+
+                            
                     }
 
+
+                    debugger
                     vm.tableParams = createUsingFullOptions(customersSemSoftDelete);
                     vm.tableParams.reload();  
                 })
@@ -78,7 +96,8 @@
                     vm.searchIgnoreAccent = search.replace(' ', '');
                 else    
                     vm.searchIgnoreAccent = search;
-    
+
+                debugger
                 vm.tableParams.filter({ $: vm.searchIgnoreAccent });
                 vm.tableParams.reload();
             }
