@@ -80,11 +80,22 @@
                 vm.chargesArray = []  
                 vm.osArray = [];
                 vm.osDescArray = [];
+                debugger;
 
                 for (var i in vm.chargesAndOrders) {
+
+                    if(parseInt(i) >= 203)
+                        debugger
+
                     var data = vm.chargesAndOrders[i];
-                    vm.chargesAndOrders[i].Charges.resentMessage = "Reenviar email"
+                    
                     if (data.IsCharge) {
+
+                        try{
+                            vm.chargesAndOrders[i].Charges.resentMessage = "Reenviar email"
+                        }
+                        catch(e){}
+
                         data.Charges.descriptionType = (data.Charges.PaymentType == CARTAO) ? 'Cartão de crédito' : 'Boleto';
 
                         if (data.Charges.PaymentType == BOLETO) {
@@ -106,9 +117,9 @@
                         vm.chargesArray.push(data) // na moral ning merece
                     }
                     if (data.IsServiceOrder) {
+                        debugger
                         vm.osArray.push(data);
                     }
-                    
                 }
                 // debugger
                 for (var i in vm.osArray) {
