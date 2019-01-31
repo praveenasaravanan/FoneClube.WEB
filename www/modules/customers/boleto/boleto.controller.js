@@ -381,8 +381,24 @@
         
                 }
                 function getContactPhone(customer){
+
+                    try{
+                        return {
+                            'ddd' : customer.Phones[0].DDD.toString(),
+                            'number' : customer.Phones[0].Number.toString()
+                        }
+                    }
+                    catch(e){
+                        return {
+                            'ddd' : '21',
+                            'number' : '997865645'
+                        }
+                    }
+                    
+
                 var contacts = UtilsService.getContactPhoneFromPhones(customer.Phones);
                 if (!contacts || contacts.length == 0  || contacts[0].DDD == '' || contacts[0].Number == '') {
+                    debugger
                     DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'É necessário cadastrar Telefone de Contato para este cliente.'});
                     return null;
                 } else {
