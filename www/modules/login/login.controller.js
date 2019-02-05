@@ -9,13 +9,7 @@
   function LoginController(FlowManagerService, $scope, FireBaseManagerUtil, MainUtils, DialogFactory, localStorageService, FoneclubeService) {
         var vm = this;
         vm.login = login;
-
-        FoneclubeService.getUpdatePagarme().then(function (result) {
-            debugger
-            console.log('result ' + result);
-        }).catch(function(error){
-            alert('Aviso: o watcher pegou uma exceção, por favor, tire um print para companhamento: lc17')
-        })
+        vm.refresh = refresh;
 
         FoneclubeService.getReintegrateDatePagarme().then(function (result) {
             debugger
@@ -78,7 +72,17 @@
             var year = date.getFullYear();
           
             return day + ' ' + monthNames[monthIndex] + ' ' + year;
-          }
+        }
+
+        function refresh(){
+            debugger
+            FoneclubeService.getUpdatePagarme().then(function (result) {
+                debugger
+                console.log('result ' + result);
+            }).catch(function(error){
+                alert('Aviso: o watcher pegou uma exceção, por favor, tire um print para companhamento: lc17')
+            })
+        }
 
 
     }
