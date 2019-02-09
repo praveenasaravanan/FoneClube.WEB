@@ -18,8 +18,9 @@
     // '$state',
     // '$rootScope',
     // '$stateParams',
-    'UtilsService'
+    'UtilsService',
     // 'ngTableDefaults'
+    '$filter'
   ];
   function CustomersController(
     // PagarmeService,
@@ -36,13 +37,25 @@
     // $state,
     // $rootScope,
     // $stateParams,
-    UtilsService
+    UtilsService,
     // ngTableDefaults
+    $filter
   ) {
     console.log('=== Customers Controller ===');
 
     var vm = this;
     var checkvalidate = localStorageService.get('userid');
+
+    var customerPerPage = 50;
+
+    vm.filters = {
+      active: false,
+      inactive: false,
+      regerror: false,
+      search: ''
+    };
+
+    vm.totalDisplayedCustomers = 1;
 
     vm.data = {};
     vm.onTapSwitchActivate = onTapSwitchActivate;
@@ -108,6 +121,7 @@
       });
     }
 
+    /* Deprecated since 09-02-2019 | Ariê Furtado 
     $scope.$watch('vm.searchUser', function() {
       try {
         var search = vm.searchUser.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
@@ -120,39 +134,81 @@
         vm.tableParams.filter({ $: vm.searchIgnoreAccent });
         vm.tableParams.reload();
       } catch (e) {}
-    });
+    }); */
 
     function onDeleteCustomer(customer) {
       var r = confirm('Deseja fazer um soft delete nesse cliente?');
       if (r == true) {
-        FoneclubeService.postSoftDeleteCustomer(customer)
-          .then(function(result) {
-            if (result) {
-              alert('Cliente deletado');
-              customer.SoftDelete = true;
-            }
-          })
-          .catch(function(error) {
+        FoneclubeService.postSoftDeleteCustomer(customer).then(function(result) {
+          if (result) {
+            alert('Cliente deletado');
+            customer.SoftDelete = true;
+          }
+        });
+        /* .catch(function(error) {
             console.log(error);
-          });
+          }); */
       } else {
         txt = 'You pressed Cancel!';
       }
     }
 
-    function createUsingFullOptions(lista) {
-      var initialParams = {
-        count: 50 // initial page size
-      };
-      var initialSettings = {
-        // page size buttons (right set of buttons in demo)
-        counts: [50, 100, 500],
-        // determines the pager buttons (left set of buttons in demo)
-        paginationMaxBlocks: 10,
-        paginationMinBlocks: 1,
-        dataset: lista
-      };
-      return new NgTableParams(initialParams, initialSettings);
+    function createUsingFullOptions(customers) {
+      return new NgTableParams(
+        {
+          count: customerPerPage, // initial page size
+          filter: vm.filters
+        },
+        {
+          // determines the pager buttons (left set of buttons in demo)
+          paginationMaxBlocks: 10,
+          paginationMinBlocks: 1,
+          dataset: customers,
+          getData: function(params) {
+            var search = vm.filters.search;
+            var filtered = getFilteredCustomers(customers, params);
+
+            if (search && search !== '') {
+              var value = search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
+              var isnum = /^\d+$/.test(value.replace(' ', ''));
+
+              filtered = $filter('filter')(customers, {
+                Name: isnum ? value.replace(' ', '') : value
+              });
+            }
+
+            params.settings({
+              counts: filtered.length > customerPerPage ? [50, 100, 500] : [],
+              total: filtered.length
+            });
+
+            filtered = filtered.slice(
+              (params.page() - 1) * params.count(),
+              params.page() * params.count()
+            );
+
+            vm.totalDisplayedCustomers = filtered.length;
+
+            return filtered;
+          }
+        }
+      );
+    }
+
+    function getFilteredCustomers(customers) {
+      if (vm.filters.active) {
+        customers = $filter('customerBy')(customers, 'active');
+      }
+
+      if (vm.filters.inactive) {
+        customers = $filter('customerBy')(customers, 'inactive');
+      }
+
+      if (vm.filters.regerror) {
+        customers = $filter('customerBy')(customers, 'regerror');
+      }
+
+      return customers;
     }
 
     //////////////////////////////////////////////////
@@ -202,16 +258,15 @@
     }
 
     function onTapRepeatLastCharge(customer) {
-      FoneclubeService.getLastPaymentType(customer)
-        .then(function(result) {
-          if (result['intIdPaymentType'] == 1) {
-            ViewModelUtilsService.showModalRepeatCard(result, customer);
-          }
-        })
+      FoneclubeService.getLastPaymentType(customer).then(function(result) {
+        if (result['intIdPaymentType'] == 1) {
+          ViewModelUtilsService.showModalRepeatCard(result, customer);
+        }
+      }); /* 
         .catch(function(error) {
           console.log('catch error');
           console.log(error);
-        });
+        }); */
     }
 
     function onTapExcluir(customer) {
@@ -223,20 +278,19 @@
           'Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?'
       }).then(function(value) {
         if (value) {
-          FoneclubeService.postDeletePerson(personCheckout)
-            .then(function(result) {
-              if (result) {
-                DialogFactory.showMessageDialog({
-                  message:
-                    'Usuário foi removido com sucesso, no próximo carregamento da lista ele não será mais exibido'
-                });
-                closeThisDialog(0);
-              } else DialogFactory.showMessageDialog({ message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber });
-            })
+          FoneclubeService.postDeletePerson(personCheckout).then(function(result) {
+            if (result) {
+              DialogFactory.showMessageDialog({
+                message:
+                  'Usuário foi removido com sucesso, no próximo carregamento da lista ele não será mais exibido'
+              });
+              closeThisDialog(0);
+            } else DialogFactory.showMessageDialog({ message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber });
+          }); /* 
             .catch(function(error) {
               console.log('catch error');
               console.log(error);
-            });
+            }); */
         }
       });
     }

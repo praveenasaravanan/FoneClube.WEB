@@ -2,15 +2,64 @@
   <fone-header title="Clientes"></fone-header>
   <div class="loading" ng-show="vm.data.customers == undefined">Carregando...</div>
   <div class="col-xs-12">
-    <div class="form-container" style="margin-top: 50px;">
-      <table ng-table="vm.tableParams" class="table customers-table" show-filter="true">
+    <div class="filters-container d-flex align-center">
+      <div class="dropdown">
+        <button
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <i class="fa fa-filter"></i> FILTROS
+        </button>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <div class="tfilter tcheckbox">
+            <label for="tcheckbox-active">
+              Somente ativos
+              <input id="tcheckbox-active" type="checkbox" ng-model="vm.filters.active" />
+            </label>
+          </div>
+
+          <div class="tfilter tcheckbox">
+            <label for="tcheckbox-inactive">
+              Somente inativos
+              <input
+                id="tcheckbox-inactive"
+                type="checkbox"
+                ng-model="vm.filters.inactive"
+              />
+            </label>
+          </div>
+
+          <div class="tfilter tcheckbox">
+            <label for="tcheckbox-error">
+              Problema no cadastro
+              <input
+                id="tcheckbox-error"
+                type="checkbox"
+                ng-model="vm.filters.regerror"
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="tfilter tsearch d-flex">
         <input
           placeholder="BUSCA"
           class="form-control"
           type="text"
-          ng-model="vm.searchUser"
+          ng-model="vm.filters.search"
+          ng-model-options="{ debounce: 667 }"
         />
+      </div>
+    </div>
 
+    <div class="form-container">
+      <table ng-table="vm.tableParams" class="table customers-table" show-filter="true">
         <tr ng-repeat="customer in $data">
           <td>
             <button class="btn btn-primary" ng-click="vm.onTapCustomer(customer, $index)">
@@ -68,6 +117,16 @@
           </td>
         </tr>
       </table>
+
+      <div
+        ng-if="vm.totalDisplayedCustomers === 0"
+        class="text-center"
+        style="margin-bottom: 30px"
+      >
+        <small class="text-warning">
+          Não foram encontrados registros para sua pesquisa.
+        </small>
+      </div>
     </div>
   </div>
 </div>
