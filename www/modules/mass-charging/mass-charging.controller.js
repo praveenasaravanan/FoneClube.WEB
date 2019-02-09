@@ -58,7 +58,7 @@
 
         function onClickCobrar(customer){
 
-            debugger
+            // debugger
             setMessageInfo(customer, "Iniciando cobrança, validando campos preenchidos")
             var valorTotalCobrar = customer.chargingAmmount;
             valorTotalCobrar = parseInt(valorTotalCobrar.replace('.','').replace(prefixoMoetario, ''))
@@ -103,14 +103,14 @@
                         return
                     }
                     
-                    debugger
+                    // debugger
                     if(customer.typeCharging == "boleto")
                     {
                         if(customer.enviarEmail)
                         {
                             if(result.StatusPaid){
 
-                                debugger
+                                // debugger
                                 var emailObject = {
                                     To: customer.Email,
                                     TargetName : customer.Name,
@@ -166,7 +166,7 @@
                         FoneclubeService.postSendEmail(emailObject).then(function(result){
                             console.log('FoneclubeService.postHistoryPayment');
                             console.log(result);
-                            debugger
+                            // debugger
                             customer.requesting = false;
 
                             if(result){

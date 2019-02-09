@@ -305,7 +305,7 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
-  <component name="XDebuggerManager">
+  <component name="X// debuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>

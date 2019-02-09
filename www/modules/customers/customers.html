@@ -1,66 +1,73 @@
 <div class="customers-container">
-    <fone-header title="Clientes"></fone-header>
-    <div class="loading" ng-show="vm.data.customers == undefined">Carregando...</div>
-    <div class="col-xs-12">
-        <div  class="form-container" style="margin-top: 50px;">
+  <fone-header title="Clientes"></fone-header>
+  <div class="loading" ng-show="vm.data.customers == undefined">Carregando...</div>
+  <div class="col-xs-12">
+    <div class="form-container" style="margin-top: 50px;">
+      <table ng-table="vm.tableParams" class="table customers-table" show-filter="true">
+        <input
+          placeholder="BUSCA"
+          class="form-control"
+          type="text"
+          ng-model="vm.searchUser"
+        />
 
-                 <table   ng-table="vm.tableParams" class="table customers-table" show-filter="true">
+        <tr ng-repeat="customer in $data">
+          <td>
+            <button class="btn btn-primary" ng-click="vm.onTapCustomer(customer, $index)">
+              <i class="glyphicon glyphicon-edit"></i>
+            </button>
+          </td>
 
-                    
-                    <input placeholder="BUSCA" class="form-control" type="text" ng-model="vm.searchUser" />
-                    
-                    <tr ng-repeat="customer in $data">
-                        
-                        <td>
-                            <button class="btn btn-primary" ng-click="vm.onTapCustomer(customer, $index)">
-                                <i class="glyphicon glyphicon-edit"></i></button>
-                        <td>
-                                
-                        <td 
-                        ng-click="vm.onTapCustomerEdit(customer, $index)" 
-                        style="cursor: pointer;" 
-                        title="'Clientes'" 
-                        sortable="'Name'"> 
-                            <span style="font-weight: bold;">{{customer.Name}}</span> 
-                        </td>
+          <td></td>
 
-                        <td title="'Ações'">
+          <td
+            ng-click="vm.onTapCustomerEdit(customer, $index)"
+            style="cursor: pointer;"
+            title="'Clientes'"
+            sortable="'Name'"
+          >
+            <span style="font-weight: bold;">{{ customer.Name }}</span>
+          </td>
 
-                            <button ng-if="!customer.Desativo" class="btn btn-info" ng-click="vm.onTapCustomerEdit(customer, $index)" >
-                                on
-                            </button>
+          <td title="'Ações'">
+            <button
+              ng-if="!customer.Desativo"
+              class="btn btn-info"
+              ng-click="vm.onTapSwitchActivate(customer)"
+            >
+              on
+            </button>
 
-                            <button ng-if="customer.Desativo" class="btn btn" ng-click="vm.onTapCustomerEdit(customer, $index)" >
-                                off
-                            </button>
+            <button
+              ng-if="customer.Desativo"
+              class="btn btn"
+              ng-click="vm.onTapSwitchActivate(customer, $index)"
+            >
+              off
+            </button>
 
-                            <button ng-show="customer.Orphan"  class="btn btn-warning">
-                                <i class="glyphicon glyphicon-exclamation-sign"></i>
-                            </button>
+            <button ng-show="customer.Orphan" class="btn btn-warning">
+              <i class="glyphicon glyphicon-exclamation-sign"></i>
+            </button>
 
-                            <button class="btn btn-primary" ng-click="vm.onTapBoletoPayment(customer)">
-                                <i class="glyphicon glyphicon-retweet"></i>
-                            </button>
+            <button class="btn btn-primary" ng-click="vm.onTapBoletoPayment(customer)">
+              <i class="glyphicon glyphicon-retweet"></i>
+            </button>
 
-                            <button class="btn btn-primary" ng-click="vm.onTapNewCardPayment(customer)">
-                                <i class="glyphicon glyphicon-credit-card"></i>
-                            </button>
+            <button class="btn btn-primary" ng-click="vm.onTapNewCardPayment(customer)">
+              <i class="glyphicon glyphicon-credit-card"></i>
+            </button>
 
-                            <button class="btn btn-primary" ng-click="vm.onTapBoleto(customer)">
-                                <img src="./content/img/Boleto.png" width="25px" height="15px"/>
-                            </button>
+            <button class="btn btn-primary" ng-click="vm.onTapBoleto(customer)">
+              <img src="./content/img/Boleto.png" width="25px" height="15px" />
+            </button>
 
-                            <button class="btn btn-primary" ng-click="vm.onDeleteCustomer(customer)">
-                                <i class="glyphicon glyphicon-remove-circle uncheckcircle"></i>
-                            </button>
-                        </td>    
-                        
-                    </tr>
-                </table> 
-            
-            </div>
-        </div>
+            <button class="btn btn-primary" ng-click="vm.onDeleteCustomer(customer)">
+              <i class="glyphicon glyphicon-remove-circle uncheckcircle"></i>
+            </button>
+          </td>
+        </tr>
+      </table>
     </div>
-
-
-
+  </div>
+</div>

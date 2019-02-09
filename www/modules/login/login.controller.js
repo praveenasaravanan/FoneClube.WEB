@@ -12,7 +12,7 @@
         vm.refresh = refresh;
 
         FoneclubeService.getReintegrateDatePagarme().then(function (result) {
-            debugger
+            // debugger
             var registro = new Date(result);
             vm.dataClonePagarme = registro.toString().split('GMT')[0];
         }).catch(function(error){
@@ -75,9 +75,9 @@
         }
 
         function refresh(){
-            debugger
+            // debugger
             FoneclubeService.getUpdatePagarme().then(function (result) {
-                debugger
+                // debugger
                 console.log('result ' + result);
             }).catch(function(error){
                 alert('Aviso: o watcher pegou uma exceção, por favor, tire um print para companhamento: lc17')

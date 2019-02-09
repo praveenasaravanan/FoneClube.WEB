@@ -80,12 +80,12 @@
                 vm.chargesArray = []  
                 vm.osArray = [];
                 vm.osDescArray = [];
-                debugger;
+                // debugger;
 
                 for (var i in vm.chargesAndOrders) {
 
                     if(parseInt(i) >= 203)
-                        debugger
+                        // debugger
 
                     var data = vm.chargesAndOrders[i];
                     
@@ -117,7 +117,7 @@
                         vm.chargesArray.push(data) // na moral ning merece
                     }
                     if (data.IsServiceOrder) {
-                        debugger
+                        // debugger
                         vm.osArray.push(data);
                     }
                 }
@@ -351,7 +351,7 @@
         }
 
         function onResentEmail(charge){
-            debugger;
+            // debugger;
             
 
             DialogFactory.dialogConfirm({mensagem: 'Tem certeza que deseja reenviar o email dessa cobrança?'})

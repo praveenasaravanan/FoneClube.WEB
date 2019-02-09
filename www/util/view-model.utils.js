@@ -89,14 +89,14 @@
         DialogFactory.showTemplate('modules/customers/boleto/boletopayment.html');
       }
         function showModalRepeatBoleto(payment,data){
-            debugger;
+            // debugger;
             this.modalBoletoData = data;
             this.modalRepeatBoletoData = payment;
             var service = this;
             DialogFactory.showTemplate('modules/customers/repeat-boleto/repeat-boleto.html');
         }
         function showModalRepeatCard(payment,data){
-            debugger;
+            // debugger;
             this.modalCardData = data;
             this.modalRepeatCardData = payment;
             var service = this;

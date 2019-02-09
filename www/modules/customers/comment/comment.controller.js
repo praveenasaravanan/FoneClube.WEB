@@ -8,17 +8,17 @@
     function CommentController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService) {
 
         var vm = this;
-        debugger;
+        // debugger;
         vm.onTapAddComment = onTapAddComment;
           var customer = ViewModelUtilsService.modalCommentData;
        
         
         function onTapAddComment(data){        
-            debugger;
+            // debugger;
             data.intIdPerson=customer.Id;
             
             FoneclubeService.postCustomerComment(data).then(function(result){
-                debugger;
+                // debugger;
                 console.log(result);    
                 if(result){
                             DialogFactory.showAlertDialog({message: 'Inserido com sucesso'});
