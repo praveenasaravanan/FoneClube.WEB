@@ -173,7 +173,7 @@
               var value = search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
               var isnum = /^\d+$/.test(value.replace(' ', ''));
 
-              filtered = $filter('filter')(customers, {
+              filtered = $filter('filter')(filtered, {
                 Name: isnum ? value.replace(' ', '') : value
               });
             }
