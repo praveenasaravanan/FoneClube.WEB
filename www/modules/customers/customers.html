@@ -75,7 +75,9 @@
             title="'Clientes'"
             sortable="'Name'"
           >
-            <span style="font-weight: bold;">{{ customer.Name }}</span>
+            <span title="{{ customer.Name }}" style="font-weight: bold;">{{
+              customer.Name
+            }}</span>
           </td>
 
           <td title="'Ações'">
@@ -97,6 +99,14 @@
 
             <button ng-show="customer.Orphan" class="btn btn-warning">
               <i class="glyphicon glyphicon-exclamation-sign"></i>
+            </button>
+
+            <button
+              title="Criar ordem de serviço"
+              ng-click="vm.onTapComment(customer)"
+              class="btn btn-primary"
+            >
+              <i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
             </button>
 
             <button class="btn btn-primary" ng-click="vm.onTapBoletoPayment(customer)">

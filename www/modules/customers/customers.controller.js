@@ -67,6 +67,7 @@
     vm.onTapNewCardPayment = onTapNewCardPayment;
     vm.onTapExcluir = onTapExcluir;
     vm.onDeleteCustomer = onDeleteCustomer;
+    vm.onTapComment = onTapComment;
 
     initialize();
 
@@ -223,11 +224,24 @@
         Desativo: !c.Desativo
       };
 
-      c.Desativo = customer.Desativo;
+      var confirmMessage = `
+        <span class="text-center">
+          Tem certeza que deseja ${c.Desativo ? 'ativar' : 'desativar'} esse cliente?
+        </span>
+      `;
 
-      FoneclubeService.postPersonAtivity(customer).then(function(result) {
-        if (!result) {
-          customer.Desativo = oldValue;
+      // TODO: confirm dialog
+      ViewModelUtilsService.showConfirmDialog('Atenção!', confirmMessage).then(function(
+        confirm
+      ) {
+        if (confirm) {
+          c.Desativo = customer.Desativo;
+
+          FoneclubeService.postPersonAtivity(customer).then(function(result) {
+            if (!result) {
+              customer.Desativo = oldValue;
+            }
+          });
         }
       });
     }
@@ -238,6 +252,10 @@
 
     function onTapCustomer(customer, index) {
       ViewModelUtilsService.showModalCustomer(customer, index);
+    }
+
+    function onTapComment(customer) {
+      ViewModelUtilsService.showModalComment(customer);
     }
 
     /* Not used! | Ariê Furtado
