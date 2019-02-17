@@ -14,7 +14,7 @@
     // >>>>>>> release-branch
     
             var vm = this;
-            debugger;
+            // debugger;
             var customer = ViewModelUtilsService.modalBoletoData;
             var payment = ViewModelUtilsService.modalRepeatBoletoData;
            
@@ -51,7 +51,7 @@
     
                  }
             /*function RepeatBoletoModalController($scope) {
-                debugger;
+                // debugger;
                 $scope.vm.amount = 121;
                 $scope.vm.commentBoleto="0123";
                 $scope.vm.comment="123";
@@ -76,7 +76,7 @@
             }
             
             function onTapPagar(){
-    debugger;
+    // debugger;
                 console.log('tap pagar boleto')
                 console.log(parseInt(vm.amount))
                 if(parseInt(vm.amount) < 100)
@@ -88,7 +88,7 @@
                 vm.disableTapPay = true;
                 vm.message = 'Iniciando transação';
                 vm.instructions = 'FoneClub - 2017'
-                debugger;
+                // debugger;
                 // PagarmeService.postBoleto(vm.amount, vm.commentBoleto, existentCustomer)
                 //  .then(function(result){
                 //     console.log(result);
@@ -117,7 +117,7 @@
                                 'foneclubeComment' : vm.comment
                             };
                             
-                            debugger
+                            // debugger
                             FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
                                 console.log(result);
                             })
@@ -137,10 +137,10 @@
                             alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
                         }
 
-                            debugger;
+                            // debugger;
                             if(vm.enviaEmail)
                             {
-                                debugger;
+                                // debugger;
                                 var emailObject = {
                                     'To': existentCustomer.email, //existentCustomer.email
                                     'TargetName' : existentCustomer.name,

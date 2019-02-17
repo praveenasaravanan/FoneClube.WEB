@@ -36,7 +36,7 @@
         
 
         function onTapConfirmarPagamento() {
-            debugger
+            // debugger
             if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
                 return;
             }
@@ -93,7 +93,7 @@
         }
 
         function onTapPagar(){
-            debugger
+            // debugger
             cardData = getCardData();
 
              console.log("-----------------------")
@@ -154,22 +154,22 @@
 
         function paymentNewCustomer(){
 
-            debugger;
+            // debugger;
             vm.disableTapPay = true;
 
             PagarmeService.generateCardHash(cardData).then(function(cardHash){
 
                 vm.statusTransaction = 'Criptografando dados cartão';
-                debugger;
+                // debugger;
                 PagarmeService.postTransactionCard(vm.amount, cardHash, newCustomer)
                 .then(function(result){
 
-                    debugger;
+                    // debugger;
                     vm.statusTransaction = 'Transação em andamento';
 
 
                     PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function(result){
-                      debugger;
+                      // debugger;
                       vm.TransactionId = result.tid;
 
                         var customCustomer = {
@@ -193,7 +193,7 @@
                                 'foneclubeComment' : vm.comment
                             };
                             
-                            debugger
+                            // debugger
                             FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
                                 console.log(result);
                             })

@@ -43,7 +43,7 @@
                 }
 
                 vm.result
-                debugger;
+                // debugger;
                 
             })
             
@@ -70,7 +70,7 @@
             };
 
             vm.tableParams = new NgTableParams(vm.initialParams, vm.initialSettings)
-            debugger
+            // debugger
         })
 
         

@@ -238,7 +238,7 @@
                 ]
                 };
 
-                debugger;
+                // debugger;
             FoneclubeService.postCheckout(personCheckout).then(function(result){
                 console.log(result);
                 //post realizado com sucesso

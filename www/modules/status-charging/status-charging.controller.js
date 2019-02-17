@@ -217,7 +217,7 @@
                     var customer = customers[index];
                     if(customer.Name == '1 Antonia Maria da Silva Barboza')
                     {
-                        debugger;
+                        // debugger;
                     }
                     try{
                         customer.phone = customer.Phones[0].DDD  + customer.Phones[0].Number;
@@ -461,7 +461,7 @@
             }
 
             function changeFilter(reload){
-                debugger;
+                // debugger;
                 var elmnt = document.getElementById("table");
                 elmnt.scrollTop = 0;
                 for(var i in vm.customers)
