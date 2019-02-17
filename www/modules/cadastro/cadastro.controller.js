@@ -765,7 +765,7 @@
 
                 FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function(result){
                     
-                    debugger
+                    // debugger
                     try{
                         var parentDDD = vm.phoneContactParent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim().substring(0,2);
                         var parentNumber = vm.phoneContactParent.replace('(', '').replace(')','').replace('-', '').replace(' ', '').trim().substring(2,11);
@@ -775,7 +775,7 @@
                         var parentNumber = '';
                     }
                     
-                    debugger;
+                    // debugger;
                     var customerObj = {
                         'NameParent':vm.whoinvite,
                         'Id': result.Id,

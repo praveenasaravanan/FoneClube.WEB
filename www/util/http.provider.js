@@ -60,7 +60,7 @@
       }
     }
     function postFile(path, params) {
-      debugger;
+      // debugger;
       return $http.post(path, params, {
         headers: { 'Content-Type': undefined }
       })

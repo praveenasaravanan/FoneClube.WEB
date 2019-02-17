@@ -20,7 +20,7 @@
 
   EmailDetailController.inject = ['ViewModelUtilsService', 'MainUtils', '$scope', 'FoneclubeService'];
   function EmailDetailController(ViewModelUtilsService, MainUtils, $scope, FoneclubeService) {
-    debugger;
+    // debugger;
     var vm = this;
     vm.sendemail = sendemail;
     vm.saveemail = saveemail;
@@ -38,7 +38,7 @@
     var formdata = new FormData();
 
     $scope.getTheFiles = function ($files) {
-      debugger;
+      // debugger;
       //formData.append("model", angular.toJson(vm));
       angular.forEach($files, function (value, key) {
         //formData.append("file" + key, value);
