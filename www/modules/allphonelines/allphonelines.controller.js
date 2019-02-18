@@ -226,7 +226,7 @@
 
         vm.changedFilterAll = changedFilterAll;
         function changedFilterAll() {
-            debugger
+            // debugger
             if (vm.showall) {
                 vm.search = "";
                 vm.linhaAtiva = false;

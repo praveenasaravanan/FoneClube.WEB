@@ -212,7 +212,7 @@
                                 'foneclubeComment' : vm.comment
                             };
                             
-                            debugger
+                            // debugger
                             FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
                                 console.log(result);
                             })
@@ -250,7 +250,7 @@
                                 
                                 vm.boleto_url = resultCapture.boleto_url;
 
-                                debugger;
+                                // debugger;
 
                                 if(vm.pagar && vm.bonus != '0.00')
                                 {
@@ -356,7 +356,7 @@
                      
                     })
                     .catch(function(error){
-                        debugger
+                        // debugger
                         alert('Aviso em verificação secundária, printar tela -  ' 
                         + '_' + customerCharging.Id
                         + '_' + customerCharging.ChargeStatus
@@ -398,7 +398,7 @@
 
                 var contacts = UtilsService.getContactPhoneFromPhones(customer.Phones);
                 if (!contacts || contacts.length == 0  || contacts[0].DDD == '' || contacts[0].Number == '') {
-                    debugger
+                    // debugger
                     DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'É necessário cadastrar Telefone de Contato para este cliente.'});
                     return null;
                 } else {

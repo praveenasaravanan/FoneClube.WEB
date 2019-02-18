@@ -61,7 +61,7 @@
             }
 
             function _showAlertDialog(param) {
-                debugger;
+                // debugger;
                 var defer = $q.defer();
                 if(param.titulo == undefined || !param.titulo) {
                     param.titulo = 'Aviso';

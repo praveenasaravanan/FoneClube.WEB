@@ -4363,7 +4363,7 @@ PagarMe.Validator = {
 		return "unknown";
 	},
 	isValidCardNumber: function(cardNumber) {
-		debugger;
+		// debugger;
         if (!cardNumber) {
 			return false;
 		}

@@ -59,7 +59,7 @@
           vm.amountTemp1 = vm.amount.toFixed(2);
         }
         
-        debugger;
+        // debugger;
         var customerId = customer.Id;
         var existentCustomer = {
             'name' : customer.Name,
@@ -82,7 +82,7 @@
 
             
             FoneclubeService.getLastPersonCharging(customer.Id).then(function (result) {
-                debugger
+                // debugger
                 vm.comment = result.txtComment;
             })
         }
@@ -93,7 +93,7 @@
 
         // listener when clicking Schedule button
         function onTapAddComment(data){
-            debugger;
+            // debugger;
             data.intIdPerson=customer.Id;
             data.txtDescription = "Cartao nao passou R$" + data.amount +" on " + vm.date.toString();
             // data.dteRegister = ""
@@ -102,7 +102,7 @@
             // alert(data.txtDescription)
 
             FoneclubeService.postCustomerComment(data).then(function(result){
-                debugger;
+                // debugger;
                 console.log(result);
                 if(result){
                     DialogFactory.showAlertDialog({message: 'Inserido com sucesso'});
@@ -118,7 +118,7 @@
         }
         // listener when selecting date for scheduling
         function onDate(date) {
-            debugger
+            // debugger
             if(date){
                 vm.date_selected = true;
                 vm.date = date;
@@ -127,7 +127,7 @@
 
         // listener when selecting time for scheduling
         function onTime(time) {
-            debugger
+            // debugger
             if(time){
                 vm.time_selected = true;
                 vm.time = time;
@@ -150,7 +150,7 @@
         }
 
         function calculate() {
-            debugger
+            // debugger
           var amount = vm.amountTemp.toString().indexOf('.') > -1 ? parseFloat(vm.amountTemp) : parseFloat(vm.amountTemp) / 100;
           var bonus = vm.bonus.toString().indexOf('.') > -1 ? parseFloat(vm.bonus) : parseFloat(vm.bonus) / 100;
           vm.amountTemp1 = vm.pagar ? parseFloat(amount - bonus) : amount;
@@ -169,7 +169,7 @@
         }
 
         function onTapConfirmarPagamento() {
-            debugger;
+            // debugger;
             if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
                 return;
             }
@@ -191,7 +191,7 @@
         }
         
         function onTapCancel(number){
-            debugger;
+            // debugger;
             vm.etapaDados = true;
             vm.etapaConfirmacao = false;
             vm.chargeStatusDiv = false;
@@ -203,7 +203,7 @@
         }
 
         function onTapPagar(){
-            debugger;
+            // debugger;
             console.log('tap pagar existente')
             console.log(parseInt(vm.amount))
             console.log(card.id)
@@ -217,7 +217,7 @@
             vm.message = 'Iniciando transação';
             PagarmeService.postTransactionExistentCard(vm.amount, card.id, existentCustomer).then(function(result){
                 vm.message = 'Transação efetuada';
-                debugger;
+                // debugger;
                 PagarmeService.postCaptureTransaction(result.token, vm.amount).then(function(result){
                         
                         vm.message = 'Transação concluída';
@@ -250,7 +250,7 @@
                                 'foneclubeComment' : vm.comment
                             };
 
-                            debugger
+                            // debugger
                             FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
                                 console.log(result);
                             })
@@ -356,7 +356,7 @@
         }
 
         function getContactPhone(customer){
-            debugger;
+            // debugger;
             try{
                 return {
                     'ddd' : customer.Phones[0].DDD.toString(),
@@ -383,7 +383,7 @@
         }
         
         function getAddress(customer) {
-            debugger;
+            // debugger;
             var address = customer.Adresses;
             if (!address || address.length == 0) {
                 DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'É necessário cadastrar um Endereço para este cliente.'});
