@@ -1,25 +1,85 @@
-<ion-tabs class="tabs-icon-top tabs-positive">
+<div class="menu-container">
+    <div style="margin-top: 44px; position: relative; z-index: 9999;" ng-class="{'menu-open': vm.compress && !vm.mobile, 'menu-close': (!vm.compress && !vm.mobile) || (vm.mobile && vm.compressMobile), 'menu-close-mobile': vm.mobile && !vm.compressMobile}">
+        <div class="menu-item logo" ng-click="vm.menuCompress()">            
+            <div>
+                <img src="./content/img/pi-logo.png" >
+                <span> FoneClube </span>                              
+            </div>
+        </div> 
+        <div title="Home" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'home'}" ng-click="vm.setMenuItemActive('home')">            
+            <div>
+                <i class="glyphicon glyphicon-home" aria-hidden="true"></i>            
+                <span> Home </span>
+            </div>
+        </div>
+        <div title="Cadastro" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'cadastro'}"  ng-click="vm.setMenuItemActive('cadastro')">  
+            <div>
+                <i class="fa fa-user-plus" aria-hidden="true"></i>            
+                <span> Cadastro </span>
+            </div>
+            <div style="display:none"></div>
+<!-------------------------------------->
 
-    <ion-tab title="Home" icon="ion-ios-home" href="#/tab/home">
-        <ion-nav-view name="home-tab"></ion-nav-view>
-    </ion-tab>
 
-    <!--<ion-tab title="Cadastro Old" icon="ion-card" href="#/tab/checkout-view">
-        <ion-nav-view name="checkout-view-tab"></ion-nav-view>
-    </ion-tab>-->
+        </div>  
+        <div title="Pagar.me" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'list-customer'}" ng-click="vm.setMenuItemActive('list-customer')">     
+            <div>       
+                <i class="fa fa-rub" aria-hidden="true"></i><i class="fa fa-maxcdn" aria-hidden="true"></i>           
+                <span> Pagar.me </span>
+            </div>
+        </div>  
+        <div title="Clientes" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'customers'}"  ng-click="vm.setMenuItemActive('customers')">            
+            <div>
+                <!-- <i class="glyphicon glyphicon-edit" aria-hidden="true"></i>             -->
+                <img src="./content/img/client.png" style="width:20px;height:20px;">
+                <span> Clientes </span>
+            </div>
+        </div>   
+        <div title="Cobrança Massiva" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'mass-charging'}"  ng-click="vm.setMenuItemActive('mass-charging')">            
+            <div>
+                <!-- <i class="glyphicon glyphicon-credit-card" aria-hidden="true"></i>             -->
+                <img src="./content/img/payment.png" style="width:20px;height:20px;">
+                <span> Cobrança Massiva </span>
+            </div>
+        </div>     
 
-    <ion-tab title="Cadastro" icon="ion-card" ui-sref="tabs.cadastro">
-        <ion-nav-view name="cadastro-tab"></ion-nav-view>
-    </ion-tab>
-
-    <ion-tab title="Pagarme" icon="ion-person-stalker" ui-sref="tabs.list-customer">
-        <ion-nav-view name="list-customer-tab"></ion-nav-view>
-    </ion-tab>
-
-    <ion-tab title="Customers" icon="ion-person-stalker" ui-sref="tabs.customers">
-        <ion-nav-view name="customers-tab"></ion-nav-view>
-    </ion-tab>
-
-
-
-</ion-tabs>
+         <div title="Status Pagamentos" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'status-charging'}"  ng-click="vm.setMenuItemActive('status-charging')">            
+            <div>
+                <!-- <i class="fa fa-bar-chart" aria-hidden="true"></i>    -->
+                <img src="./content/img/paystatus.png" style="width:20px;height:20px;">         
+                <span> Status Pagamentos </span>
+            </div>
+        </div>  
+        <!-- <div title="All Phone Lines" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'allphone-lines'}"  ng-click="vm.setMenuItemActive('allphone-lines')">            
+                <div>
+                    
+                    <img src="./content/img/phonelines.png" style="width:20px;height:20px;">         
+                    <span> All Phones </span>
+                </div>
+            </div>  -->
+        <div title="Estoque" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'estoque'}"  ng-click="vm.setMenuItemActive('estoque')">            
+            <div>
+                <!-- <i class="glyphicon glyphicon-phone" aria-hidden="true"></i>  -->
+                <img src="./content/img/icon_estoque.png" style="width:20px;height:20px;">         
+                <span> Estoque </span>
+            </div>
+        </div>
+        <div title="All Phones" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'all-phones'}"  ng-click="vm.setMenuItemActive('all-phones')">            
+            <div>
+                <!-- <i class="glyphicon glyphicon-phone" aria-hidden="true"></i>  -->
+                <img src="./content/img/icon_estoque.png" style="width:20px;height:20px;">         
+                <span> All Phones </span>
+            </div>
+        </div>   
+        <div title="Templates Email" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'allphone-lines'}"  ng-click="vm.setMenuItemActive('template-edit')">            
+            <div>
+                <!-- <i class="glyphicon glyphicon-phone" aria-hidden="true"></i>  -->
+                <img src="./content/img/template.png" style="width:20px;height:20px;">         
+                <span> Edição conteúdo </span>
+            </div>
+        </div>   
+    </div>  
+     
+    <div class="menu-views" ui-view name="menu-tab">                            
+    </div>
+</div>

@@ -1,24 +1,32 @@
-<ion-view view-title="Customers">
-    <div class="bar bar-header bar-light">
-      <h1 class="title">Clientes</h1>
+<div class="lista-customer-container animate-bottom">
+    <fone-header title="Clientes"></fone-header> 
+    <div class="loader" ng-if="vm.showLoader"></div>   
+    <div class="col-xs-12" ng-show="!vm.showLoader">
+        <div class="form-container" style="margin-top: 48px;">
+            <div class="form-group col-xs-12 col-sm-3">            
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Buscar" ng-model="vm.search" aria-describedby="sizing-addon2" autofocus>
+                </div>   
+            </div>
+            <div class="form-group  table-responsive-vertical shadow-z-1 col-xs-12">                    
+                <table id="table" class="table table-hover table-condensed table-striped table-bordered">
+                    <thead>
+                        <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Documento</th>                        
+                        </tr>
+                    </thead>
+                    <tbody> 
+                        <tr ng-click="vm.onTapCustomer(customer)" ng-repeat="customer in vm.customers | orderBy : 'name' | filter: vm.search">
+                            <td data-title="Nome"> {{customer.name}} </td>
+                            <td data-title="Email"> {{customer.email}}</td>
+                            <td data-title="Documento"> {{customer.document_number}} </td>                
+                        </tr>                          
+                    </tbody>
+                </table>           
+            </div>
+        </div>
     </div>
-
-    <ion-content class="posicao-inicial">
-        <label class="item item-input">
-            <i class="icon ion-search placeholder-icon"></i>
-            <input type="text" placeholder="Buscar" ng-model="vm.search">
-        </label>
-        <ion-spinner icon="android" ng-if="vm.showLoader"></ion-spinner>
-      
-        <ul class="list">
-            <a class="item" ng-repeat="customer in vm.customers | orderBy : 'name' | filter: vm.search">
-                <div on-tap="vm.onTapCustomer(customer)">
-                    <h2>{{customer.name}}</h2>
-                    <p>{{customer.email}}</p>
-                    <p>Documento: {{customer.document_number}}</p>
-                </div>
-            </a>
-        </ul>
-
-    </ion-content>
-</ion-view>
+</div>

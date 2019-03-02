@@ -10,14 +10,14 @@
         var vm = this;
         vm.onTapCustomer = onTapCustomer;
         vm.showLoader = true;
-
-        console.log('=== CustomerListController Controller ===');
+        
+        console.log('=== CustomerListController Controller ===');    
 
         PagarmeService.getCustomers()
         .then(function(result){
             console.log(result);
-            vm.customers = result;
             vm.showLoader = false;
+            vm.customers = result;            
         })
         .catch(function(error){
             console.log(error);

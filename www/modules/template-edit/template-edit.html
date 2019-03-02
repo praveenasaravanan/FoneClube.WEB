@@ -1,0 +1,29 @@
+<div class="home" ng-class="{'force-select': vm.selecaoMassiva }">
+    <fone-header title="Edição de Conteúdo"></fone-header>
+
+ 
+
+    <div class="borda-topo"></div>
+
+    <div class="list-group container-button" ng-repeat="template in vm.templates">
+            <button type="button" class="list-group-item" ng-click="vm.onClickTemplate(template)">{{ template.Tipo }}</button>
+    </div>
+
+    
+
+    <div class="container-texto" ng-show="vm.currentTemplate != undefined">
+            <p ><h3 ng-show="vm.currentTemplate.Subject.length > 0">Assunto</h3></p>
+            <textarea ng-show="vm.currentTemplate.Subject.length > 0" class="largura-area-texto" ng-model="vm.currentTemplate.Subject"></textarea>
+    
+            <p><h3>Descrição</h3></p>
+            <textarea class="largura-area-texto altura-area-texto" ng-model="vm.currentTemplate.Description"></textarea>
+    
+            <button type="button" class="btn btn-success" ng-disabled="vm.confirmButton" ng-click="vm.onClickConfirmChange()">Confirmar</button>
+
+            <!-- <div class="preview" ng-bind-html="vm.currentTemplate.Description"></div> -->
+    </div>
+
+    
+
+</div>
+      

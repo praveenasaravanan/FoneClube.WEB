@@ -11,8 +11,7 @@
         var customer = ViewModelUtilsService.modalData;
         vm.onTapCard = onTapCard;
         vm.onTapPagar = onTapPagar;
-        vm.customer = customer;
-
+        vm.cancelarPagamento = etapaEscolhaCartao;        
         initCardList();
         etapaEscolhaCartao();
 
@@ -98,12 +97,12 @@
         function etapaEscolhaCartao(){
             vm.etapaEscolhaCartao = true;
             vm.etapaQuantia = false;
+            vm.amount = '';
         }
 
         function etapaQuantia(){
             vm.etapaEscolhaCartao = false;
             vm.etapaQuantia = true;
         }
-
     }
 })();

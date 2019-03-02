@@ -1,23 +1,156 @@
-<ion-view view-title="Customers Foneclube">
-    <div class="bar bar-header bar-light">
-      <h1 class="title">Clientes</h1>
+<div class="customers-container">
+  <fone-header title="Clientes"></fone-header>
+  <div class="loading" ng-show="vm.data.customers == undefined">Carregando...</div>
+  <div class="col-xs-12">
+    <div class="filters-container d-flex align-center">
+      <div class="dropdown">
+        <button
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <i class="fa fa-filter"></i> FILTROS
+        </button>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <div class="tfilter tcheckbox">
+            <label for="tcheckbox-active">
+              Somente ativos
+              <input id="tcheckbox-active" type="checkbox" ng-model="vm.filters.active" />
+            </label>
+          </div>
+
+          <div class="tfilter tcheckbox">
+            <label for="tcheckbox-inactive">
+              Somente inativos
+              <input
+                id="tcheckbox-inactive"
+                type="checkbox"
+                ng-model="vm.filters.inactive"
+              />
+            </label>
+          </div>
+
+          <div class="tfilter tcheckbox">
+            <label for="tcheckbox-error">
+              Problema no cadastro
+              <input
+                id="tcheckbox-error"
+                type="checkbox"
+                ng-model="vm.filters.regerror"
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="tfilter tsearch d-flex">
+        <input
+          placeholder="BUSCA"
+          class="form-control"
+          type="text"
+          ng-model="vm.filters.search"
+          ng-model-options="{ debounce: 667 }"
+        />
+      </div>
     </div>
 
-    <ion-content class="posicao-inicial">
-        <label class="item item-input">
-            <i class="icon ion-search placeholder-icon"></i>
-            <input type="text" placeholder="Buscar" ng-model="vm.search">
-        </label>
-        <ion-spinner icon="android" ng-if="vm.showLoader"></ion-spinner>       
-        <ul class="list">
-            <a class="item" ng-repeat="customer in vm.customers | orderBy : 'name' | filter: vm.search">
-                <div on-tap="vm.onTapCustomer(customer)">
-                    <h2>{{customer.Name}}</h2>
-                    <p>{{customer.Email}}</p>
-                    <p>Documento: {{customer.DocumentNumber}}</p>
-                </div>
-            </a>
-        </ul>
+    <div class="form-container">
+      <table ng-table="vm.tableParams" class="table customers-table" show-filter="true">
+        <tr ng-repeat="customer in $data">
+          <td>
+            <button class="btn btn-primary" ng-click="vm.onTapCustomer(customer, $index)">
+              <i class="glyphicon glyphicon-edit"></i>
+            </button>
+          </td>
 
-    </ion-content>
-</ion-view>
+          <td></td>
+
+          <td
+            ng-click="vm.onTapCustomerEdit(customer, $index)"
+            style="cursor: pointer;"
+            title="'Clientes'"
+            sortable="'Name'"
+          >
+            <span title="{{ customer.Name }}" style="font-weight: bold;">{{
+              customer.Name
+            }}</span>
+          </td>
+
+          <td title="'Ações'">
+            <button
+              title="Desativar cliente"
+              ng-if="!customer.Desativo"
+              class="btn btn-info"
+              ng-click="vm.onTapSwitchActivate(customer)"
+            >
+              on
+            </button>
+
+            <button
+              title="Ativar cliente"
+              ng-if="customer.Desativo"
+              class="btn btn"
+              ng-click="vm.onTapSwitchActivate(customer, $index)"
+            >
+              off
+            </button>
+
+            <button
+              title="Cliente com problema no cadastro!"
+              ng-show="customer.Orphan"
+              class="btn btn-warning"
+            >
+              <i class="glyphicon glyphicon-exclamation-sign"></i>
+            </button>
+
+            <button
+              title="Criar ordem de serviço"
+              ng-click="vm.onTapComment(customer)"
+              class="btn btn-primary"
+            >
+              <i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
+            </button>
+
+            <button class="btn btn-primary" ng-click="vm.onTapBoletoPayment(customer)">
+              <i class="glyphicon glyphicon-retweet"></i>
+            </button>
+
+            <button
+              title="Cartões cadastrados"
+              class="btn btn-primary"
+              ng-click="vm.onTapCustomer(customer, $index)"
+            >
+              <i class="glyphicon glyphicon-credit-card"></i>
+            </button>
+
+            <button class="btn btn-primary" ng-click="vm.onTapBoleto(customer)">
+              <img src="./content/img/Boleto.png" width="25px" height="15px" />
+            </button>
+
+            <button
+              title="Soft delete"
+              class="btn btn-primary"
+              ng-click="vm.onDeleteCustomer(customer)"
+            >
+              <i class="glyphicon glyphicon-remove-circle uncheckcircle"></i>
+            </button>
+          </td>
+        </tr>
+      </table>
+
+      <div
+        ng-if="vm.totalDisplayedCustomers === 0"
+        class="text-center"
+        style="margin-bottom: 30px"
+      >
+        <small class="text-warning">
+          Não foram encontrados registros para sua pesquisa.
+        </small>
+      </div>
+    </div>
+  </div>
+</div>

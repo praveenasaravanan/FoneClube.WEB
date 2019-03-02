@@ -30,7 +30,8 @@ angular
             });
             $timeout(function(){
                 $element.val($filter('currency')($element.val().replace(/[^0-9]/g, '')/100, "R$", 2));    
-            },10);
+                $browser.defer(listener)
+            },500);
             
         }
 

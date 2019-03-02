@@ -5,9 +5,12 @@
   angular.module('foneClub')
     .config(masterConfiguration);
 
-  function masterConfiguration($urlRouterProvider,$ionicConfigProvider,$provide, $stateProvider){
+  function masterConfiguration($urlRouterProvider,$ionicConfigProvider,$provide, $stateProvider, $locationProvider){
 
-      configRouteProvider($ionicConfigProvider)
+      configRouteProvider($ionicConfigProvider, $locationProvider)
+
+      var rota = window.location.href;
+      // debugger
 
       $stateProvider.state('master', {
         url: '/',
@@ -22,12 +25,13 @@
       .state('tabs', {
         url: "/tab",
         abstract: true,
-        templateUrl: "modules/menu-tabs/menu-tabs.html"
+        templateUrl: "modules/menu-tabs/menu-tabs.html",
+        controller:"MenuController as vm"
       })
       .state('tabs.checkout-view', {
         url: "/checkout-view",
         views: {
-          'checkout-view-tab': {
+          'menu-tab': {
             templateUrl: "modules/checkout/checkout.html",
             controller: 'CheckoutController as vm'
           }
@@ -36,7 +40,7 @@
       .state('tabs.home', {
         url: "/home",
         views: {
-          'home-tab': {
+          'menu-tab': {
             templateUrl: "modules/home/home.html",
             controller: 'HomeController as vm'
           }
@@ -45,7 +49,7 @@
       .state('tabs.cadastro', {
         url: "/cadastro",
         views: {
-          'cadastro-tab': {
+          'menu-tab': {
             templateUrl: "modules/cadastro/cadastro.html",
             controller: 'CadastroController as vm'
           }
@@ -54,31 +58,109 @@
       .state('tabs.list-customer', {
         url: "/list-customer",
         views: {
-          'list-customer-tab': {
+          'menu-tab': {
             templateUrl: "modules/lista-customer/lista-customer.html",
             controller: 'CustomerListController as vm'
           }
         }
       })
       .state('tabs.customers', {
+        cache: false,
         url: "/customers",
+        params : {previous: rota},
         views: {
-          'customers-tab': {
+          'menu-tab': {
             templateUrl: "modules/customers/customers.html",
             controller: 'CustomersController as vm'
           }
         }
       })
+      .state('tabs.status-charging', {
+        url: "/status-charging",
+        views: {
+          'menu-tab': {
+            templateUrl: "modules/status-charging/status-charging.html",
+            controller: 'StatusChargingController as vm'
+          }
+        }
+      })
+      .state('tabs.edicao', {
+        url: "/edicao", 
+        views: {      
+          'menu-tab': {
+            templateUrl: "modules/customers/edicao/edicao.html",
+            controller: 'EdicaoController as vm'
+          }
+        },
+        params: {data: null}
+      })
+      .state('tabs.ordemservico', {
+        url: "/ordemservico",       
+        templateUrl: "modules/customers/ordem-servico/ordemservico.html",
+        controller: 'OrdemServico as vm',
+        params: { data: null }      
+      })
+      .state('tabs.mass-charging', {
+        url: "/mass-charging",
+        views: {
+          'menu-tab': {
+            templateUrl: "modules/mass-charging/mass-charging.html",
+            controller: 'MassChargingController as vm'
+          }
+        }
+      })
+      .state('tabs.allphone-lines',{
+        url: "/allphone-lines",
+        views: {
+          'menu-tab': {
+            templateUrl: "modules/allphonelines/allphonelines.html",
+            controller: 'AllPhoneLinesController as vm'
+          }
+        }
+      })
+      .state('tabs.template-edit', {
+        url: "/template-edit",
+        views: {
+          'menu-tab': {
+            templateUrl: 'modules/template-edit/template-edit.html',
+            controller: 'TemplateEditController as vm'
+          }
+        }
+      })
+      .state('tabs.all-phones', {
+        url: "/allPhones",
+        views: {
+          'menu-tab': {
+            templateUrl: 'modules/all-phones/all-phones.html',
+            controller: 'AllPhonesController as vm'
+          }
+        }
+      })
+      .state('tabs.estoque', {
+        url: "/estoque",
+        views: {
+          'menu-tab': {
+            templateUrl: 'modules/estoque/estoque.html',
+            controller: 'EstoqueController as vm'
+          }
+        }
+      })
 
-
+      
       $urlRouterProvider.otherwise('/');
       configErrorHandler($provide);
   }
 
-  function configRouteProvider($ionicConfigProvider){
+  function configRouteProvider($ionicConfigProvider, $locationProvider){
       $ionicConfigProvider.views.maxCache(0);
       $ionicConfigProvider.tabs.position('bottom');
-      //$ionicConfigProvider.views.transition('android');
+
+      // $locationProvider.html5Mode(true).hashPrefix('!');
+
+      // $locationProvider.html5Mode({
+      //   enabled: true,
+      //   requireBase: false
+      // });
   }
 
   function configErrorHandler($provide){

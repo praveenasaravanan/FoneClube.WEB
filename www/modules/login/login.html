@@ -1,17 +1,25 @@
-<ion-view view-title="FoneClube" name="login-view">
-  <ion-content class="padding">
-      <div class="list list-inset">
-          <label class="item item-input">
-              <input type="text" placeholder="Usuário" ng-model="vm.user">
-          </label>
-          <label class="item item-input">
-              <input type="password" placeholder="Senha" ng-model="vm.password">
-          </label>
-      </div>
-      <button class="button button-block button-calm" on-tap="vm.login()">Login</button>
 
-  </ion-content>
-  <div class="bar bar-footer">
-    <div class="title">[ v.0.2.3 ]</div>
-  </div>
-</ion-view>
+<div class="login-container">
+    <div class="box">
+    <div id="header">
+        <div class="icon-header"><img src="./content/img/pi-logo.png" > FONECLUBE</div>
+        <div id="bottom-head-teste">[ v.0.8.7 ] {{ vm.statusBase }} - <a ng-click="vm.refresh()" style="cursor:pointer">Refresh</a></div>
+
+        <div id="bottom-head-teste">Data último clone pagarme: {{ vm.dataClonePagarme }}</div>
+        
+    </div>
+        <form novalidate name="vm.formLogin">
+            <div class="form-group">
+                <label for="usr">Nome:</label>
+                <input type="text" next-on-enter class="form-control" id="usr" ng-model="vm.user">
+            </div>
+            <div class="form-group">
+                <label for="usr">Senha:</label>
+                <input type="password" ng-enter="vm.login()" class="form-control" id="password" ng-model="vm.password">
+            </div>
+
+            <button class="btn btn-success col-md-3" ng-enter="vm.login()" ng-click="vm.login()"  ng-disabled="!vm.formLogin.$valid">Login</button>
+        </form>
+    <div id="footer-box"></div>
+    </div>
+</div>

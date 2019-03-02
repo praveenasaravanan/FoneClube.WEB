@@ -11,6 +11,7 @@
         console.log('--- Master controller --- ' + FlowManagerService);
         FlowManagerService.changeLoginView();
 
+        // vm.viewName = 'Cadastro Foneclube';
         ////////
         //MainUtils.setAgent('Cardozo');
         //FlowManagerService.changeHomeView();

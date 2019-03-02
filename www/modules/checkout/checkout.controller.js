@@ -5,8 +5,8 @@
         .module('foneClub')
         .controller('CheckoutController', CheckoutController);
 
-    CheckoutController.inject = ['$scope','PagarmeService', '$ionicPopup', 'HubDevService', 'FoneclubeService', '$ionicLoading', 'FileListUtil', 'MainUtils', '$q', '$cordovaCamera', '$cordovaFile', '$timeout', 'MainComponents'];
-    function CheckoutController($scope,PagarmeService, $ionicPopup, HubDevService, FoneclubeService, $ionicLoading, FileListUtil, MainUtils, $q, $cordovaCamera, $cordovaFile, $timeout, MainComponents) {
+    CheckoutController.inject = ['$scope','PagarmeService', 'HubDevService', 'FoneclubeService', 'FileListUtil', 'MainUtils', '$q', '$cordovaCamera', '$cordovaFile', '$timeout', 'DialogFactory'];
+    function CheckoutController($scope,PagarmeService, HubDevService, FoneclubeService, FileListUtil, MainUtils, $q, $cordovaCamera, $cordovaFile, $timeout, DialogFactory) {
         var vm = this;
         var personCheckout = {};
         personCheckout.Images = [];
@@ -24,8 +24,7 @@
         vm.uploadIdentidadeCamera = uploadIdentidadeCamera;
         vm.OperatorsSelecteds = [];
         vm.addCheckout = addCheckout;
-        vm.onRegisterTap = onRegisterTap;
-        vm.ionicAlert = ionicAlert;
+        vm.onRegisterTap = onRegisterTap;        
 
         init();
 
@@ -50,7 +49,7 @@
                 console.log('catch error');
                 console.log(error);
                 console.log(error.statusText); // mensagem de erro para tela, caso precise
-                MainComponents.alert({mensagem:error.statusText})
+                DialogFactory.showMessageDialog({mensagem:error.statusText})                
             });
         }
 
@@ -63,7 +62,7 @@
                     var cellNumber = vm.UserCellphone.replace('-', '').replace(' ', '');
                 }
                 catch(e){
-                    MainComponents.alert({mensagem:'Informações pendentes'});
+                    DialogFactory.showMessageDialog({mensagem:'Informações pendentes'})                       
                 }
 
                 var personCheckout = {
@@ -101,7 +100,7 @@
             FoneclubeService.postCheckout(personCheckout).then(function(result){
                 console.log(result);
                 //post realizado com sucesso
-                MainComponents.alert({mensagem:'Cadastro realizado'});
+                DialogFactory.showMessageDialog({mensagem:'Cadastro realizado'})                    
 
                 if(result)
                     fasePagamento();
@@ -110,7 +109,7 @@
                 console.log('catch error');
                 console.log(error);
                 console.log(error.statusText); // mensagem de erro para tela, caso precise
-                MainComponents.alert({mensagem:error.statusText});
+                DialogFactory.showMessageDialog({mensagem:error.statusText})                    
             });
 
         }
@@ -239,7 +238,7 @@
                 ]
                 };
 
-                debugger;
+                // debugger;
             FoneclubeService.postCheckout(personCheckout).then(function(result){
                 console.log(result);
                 //post realizado com sucesso
@@ -257,7 +256,7 @@
             var cep = cepInput.replace(/[-.]/g , '');
             if(cep.length < 8)
                 return;
-            MainComponents.showLoader('Tentando preencher dados...');
+            var showLoader = DialogFactory.showLoader('Tentando preencher dados...');            
 
             HubDevService.validaCEP(cep)
             .then(function(result){
@@ -265,12 +264,12 @@
              vm.neighborhood = result.info.bairro;
              vm.city = result.info.cidade;
              vm.uf = result.info.uf;
-             MainComponents.hideLoader();
+            showLoader.close();
              console.log(result);
 
             },
             function(error){
-            MainComponents.hideLoader()
+                showLoader.close();
             });
         }
 
@@ -283,13 +282,12 @@
 
                 var patternValidaData =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
                 if(!patternValidaData.test(birthdate)){
-                    MainComponents.alert({mensagem:'Data Inválida'});
+                    DialogFactory.showMessageDialog({mensagem: 'Data Inválida'});                    
                     return;
                 }
 
 
-
-                MainComponents.showLoader('Tentando preencher dados...');
+                var showLoader = DialogFactory.showLoader('Tentando preencher dados...');                
 
                 var cpf = cpfInput.replace(/[-.,]/g , '');
                 HubDevService.validaCPF(cpf,birthdate)
@@ -297,10 +295,10 @@
                    if(result.status){
                        vm.name = result.result.nome_da_pf;
                    }
-                     MainComponents.hideLoader()
+                     showLoader.close();
                 },
             function(error){
-            MainComponents.hideLoader()
+            showLoader.close();
             });
         }
 
@@ -331,8 +329,7 @@
                 }
             }
             catch(erro){
-
-                MainComponents.alert({mensagem:'Existe campo vazio'});
+                DialogFactory.showMessageDialog({mensagem: 'Existe campo vazio'});                
                 return;
             }
 
@@ -385,7 +382,7 @@
 
                 var patternValidaData =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
                 if(!patternValidaData.test(customer.birthdate)){
-                    MainComponents.alert({mensagem:'Data Inválida'});
+                    DialogFactory.showMessageDialog({mensagem: 'Data inválida'});                        
                     return;
                 }
 
@@ -399,7 +396,7 @@
                             msg: 'Cpf válido'
                         }
                     }else{
-                       MainComponents.alert({mensagem:'CPF Inválido'});
+                        DialogFactory.showMessageDialog({mensagem: 'CPF inválido'});                                       
                        return;
                     }
                 });
@@ -408,7 +405,7 @@
             }
             catch(erro){
                 console.log(erro)
-                MainComponents.alert({mensagem:'Existe campo vazio'});
+                DialogFactory.showMessageDialog({mensagem: 'Existe campo vazio'});                        
 
                 return;
             }
@@ -430,10 +427,10 @@
                     })
                     .catch(function(error){
                         try{
-                            MainComponents.alert({mensagem:'Erro na captura da transação' + error.status});
+                            DialogFactory.showMessageDialog({mensagem: 'Erro na captura da transação' + error.status});                                
                         }
                         catch(erro){
-                            MainComponents.alert({mensagem:'Erro na captura da transação'});
+                            DialogFactory.showMessageDialog({mensagem: 'Erro na captura da transação'});                              
                         }
                         console.log(error);
 
@@ -443,16 +440,16 @@
                 })
                 .catch(function(error){
                     try{
-                        MainComponents.alert({mensagem:'Erro na transação'});
+                        DialogFactory.showMessageDialog({mensagem: 'Erro na transação'});                            
                         console.log(error.data.errors)
 
                         error.data.errors.forEach(function(erro) {
-                            MainComponents.alert({mensagem:'Erro na transação: ' + erro.message});
+                            DialogFactory.showMessageDialog({mensagem: 'Erro na transação: ' + erro.message});                                
                         }, this);
 
                     }
                     catch(erro){
-                        MainComponents.alert({mensagem:'Erro na transação'});
+                        DialogFactory.showMessageDialog({mensagem: 'Erro na transação'});                                
                     }
 
                     console.log(error);
@@ -467,7 +464,7 @@
 
                     erro = error[i];
                 }
-                MainComponents.alert({mensagem:'Erro na transação ' + erro});
+                DialogFactory.showMessageDialog({mensagem: 'Erro na transação: ' + erro});      
 
             });
 
@@ -477,21 +474,20 @@
              console.log('-- uploadFile')
             var q = $q.defer();
             console.log(file)
-
-            MainComponents.showLoader('Enviando...');
+            var showLoader = DialogFactory.showLoader('Enviando...');            
 
             var imageUploader = new ImageUploader();
             imageUploader.push(file)
             .then((data) => {
                 console.debug('Upload complete. Data:', data);
-                MainComponents.alert({mensagem:'Imagem enviada com sucesso'});
-                MainComponents.hideLoader();
+                DialogFactory.showMessageDialog({mensagem: 'Imagem enviada com sucesso.'});                      
+                showLoader.close();
                  q.resolve(data);
             })
             .catch((err) => {
                 console.error(err);
-                MainComponents.alert({mensagem:'Não foi possível enviar imagens'});
-                MainComponents.hideLoader();
+                DialogFactory.showMessageDialog({mensagem: 'Não foi possivel enviar imagens'});                
+                showLoader.close();
                 q.reject(error);
             });
             return q.promise;
@@ -590,7 +586,7 @@
 
         function startListUpload(photos){
 
-            MainComponents.showLoader('Enviando...');
+            var showLoader = DialogFactory.showLoader('Enviando...');            
 
             if(photos.length > 0)
             {
@@ -603,8 +599,9 @@
             }
             else
             {
-                MainComponents.hideLoader();
-                MainComponents.alert({mensagem:'Imagem enviada com sucesso'});
+
+                showLoader.close();
+                DialogFactory.showMessageDialog({mensagem: 'Imagem enviada com sucesso'});                
             }
         }
 
@@ -633,18 +630,7 @@
             });
 
             return q.promise;
-        }
-
-        //remover daqui
-        function ionicAlert(message){
-            console.log('alerta')
-            $scope.showAlert = function() {
-                var alertPopup = $ionicPopup.alert({
-                    title: 'Aviso',
-                    template: message
-                });
-            };
-        }
+        }       
 
 
     }
