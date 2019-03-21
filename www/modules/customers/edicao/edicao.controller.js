@@ -163,6 +163,15 @@
           // debugger;
 
           vm.tempPhones = angular.copy(vm.customer.Phones);
+          for (var number in vm.customer.Phones) {
+            
+            var contactPhone = !vm.customer.Phones[number].IsFoneclube;
+
+            if(contactPhone){
+              vm.actual_phone = vm.customer.Phones[number].DDD + vm.customer.Phones[number].Number;
+            }
+
+          }
 
           });
 
@@ -400,7 +409,8 @@
 
     function onTapSendUser(customer) {
        
-    //  // debugger;
+      debugger;
+
       if (vm.requesting == true)
         return;
 
