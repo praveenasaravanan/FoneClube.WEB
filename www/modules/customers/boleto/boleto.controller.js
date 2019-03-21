@@ -5,13 +5,9 @@
             .module('foneClub')
             .controller('BoletoModalController', BoletoModalController);
     
-    // <<<<<<< HEAD
+  
         BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService', '$filter'];
         function BoletoModalController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService, $filter) {
-    // =======
-    //     BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainComponents', 'MainUtils', 'FoneclubeService', 'UtilsService'];
-    //     function BoletoModalController(ViewModelUtilsService, PagarmeService, MainComponents, MainUtils, FoneclubeService, UtilsService) {
-    // >>>>>>> release-branch
     
             var vm = this;
             vm.date = new Date();

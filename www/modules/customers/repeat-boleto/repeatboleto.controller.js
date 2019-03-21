@@ -5,13 +5,10 @@
             .module('foneClub')
             .controller('RepeatBoletoModalController', RepeatBoletoModalController);
     
-    // <<<<<<< HEAD
+    
         RepeatBoletoModalController.inject = ['ViewModelUtilsService', '$scope','PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService'];
         function RepeatBoletoModalController(ViewModelUtilsService, $scope,PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService) {
-    // =======
-    //     BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainComponents', 'MainUtils', 'FoneclubeService', 'UtilsService'];
-    //     function BoletoModalController(ViewModelUtilsService, PagarmeService, MainComponents, MainUtils, FoneclubeService, UtilsService) {
-    // >>>>>>> release-branch
+
     
             var vm = this;
             // debugger;

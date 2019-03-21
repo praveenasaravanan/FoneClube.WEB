@@ -5,13 +5,8 @@
         .module('foneClub')
         .controller('RepeatCardController', RepeatCardController);
 
-// <<<<<<< HEAD
     RepeatCardController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService', '$filter'];
     function RepeatCardController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService, $filter) {
-// =======
-//     NewCardPaymentModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainComponents', 'MainUtils', 'FoneclubeService', 'UtilsService'];
-//     function NewCardPaymentModalController(ViewModelUtilsService, PagarmeService, MainComponents, MainUtils, FoneclubeService, UtilsService) {
-// >>>>>>> release-branch        
         
         var vm = this;
         var customer = ViewModelUtilsService.modalCardData;  
