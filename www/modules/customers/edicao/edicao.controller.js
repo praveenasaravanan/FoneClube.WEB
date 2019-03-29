@@ -611,7 +611,7 @@
             if (result)
               FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
             else {
-              DialogFactory.dialogConfirm({ title: 'Andamento editar', mensagem: 'Não foi possível atualizar dados do pai da linha, deseja salvaro restante ( reomendável que sim ):', btn1: 'sim', btn2: 'não' })
+              DialogFactory.dialogConfirm({ title: 'Andamento editar', mensagem: '1 Não foi possível atualizar dados do pai da linha, deseja salvaro restante ( reomendável que sim ):', btn1: 'sim', btn2: 'não' })
                 .then(function (result) {
                   if (result) {
                     FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
@@ -622,7 +622,7 @@
             }
           }).catch(function (erro) {
 
-            DialogFactory.dialogConfirm({ title: 'Andamento editar', mensagem: 'Não foi possível atualizar dados do pai da linha, deseja salvaro restante ( reomendável que sim ):', btn1: 'sim', btn2: 'não' })
+            DialogFactory.dialogConfirm({ title: 'Andamento editar', mensagem: '2 Não foi possível atualizar dados do pai da linha, deseja salvaro restante ( reomendável que sim ):', btn1: 'sim', btn2: 'não' })
               .then(function (result) {
                 if (result) {
                   FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucess).catch(postUpdateCustomerError);
@@ -677,6 +677,8 @@
         vm.customer.Phones[i] = angular.copy(vm.tempPhones[i]);
 
       }
+
+      // customer.Photos = vm.customer.Phones;
 
       //TODO
       //colocar breakpoint nos metodos localhost API, validar se novos atributos chegam--Putting breakpoint the methods localhost API, validate the new assets come.
@@ -818,13 +820,13 @@
             'PhoneDDDParent': parentDDD,
             'PhoneNumberParent': parentNumber
           }
-          // // ;
+
           FoneclubeService.postCustomerParent(customerObj).then(function (result) {
-            // // ;
+            
             if (result)
               FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucesscheck).catch(postUpdateCustomerError);
             else {
-              DialogFactory.dialogConfirm({ title: 'Andamento editar', mensagem: 'Não foi possível atualizar dados do pai da linha, deseja salvaro restante ( reomendável que sim ):', btn1: 'sim', btn2: 'não' })
+              DialogFactory.dialogConfirm({ title: 'Andamento editar', mensagem: '3 Não foi possível atualizar dados do pai da linha, deseja salvaro restante ( reomendável que sim ):', btn1: 'sim', btn2: 'não' })
                 .then(function (result) {
                   if (result) {
                     return;
@@ -836,15 +838,8 @@
             }
           }).catch(function (erro) {
 
-            DialogFactory.dialogConfirm({ title: 'Andamento editar', mensagem: 'Não foi possível atualizar dados do pai da linha, deseja salvaro restante ( reomendável que sim ):', btn1: 'sim', btn2: 'não' })
-              .then(function (result) {
-                if (result) {
-                  return;
-                  ///FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucesscheck).catch(postUpdateCustomerError);
-                } else {
-                  return;
-                }
-              })
+            debugger
+            FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucesscheck).catch(postUpdateCustomerError);
 
           });
 
