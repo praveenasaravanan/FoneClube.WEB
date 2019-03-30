@@ -69,8 +69,34 @@
                 <label for="dataNasc">Data de Nascimento:</label>
                 <input id="dataNasc" class="form-control" ng-model="vm.customer.Born" type="text"  name="date" mask="39/19/9999" restrict="reject" placeholder="dd/mm/aaaa">
             </div>                                                                            -->
-
             <div class="row">
+                    
+                <div class="form-group col-sm-6 col-xs-6">
+                    <label for="nomeQuemConvidou">Nome de quem te convidou para o Foneclube: {{vm.nomePai}}</label>
+                </div> 
+                <div class="form-group col-sm-6 col-xs-6">
+                        <label for="quemConvidou">Telefone de quem convidou: {{vm.telefonePai}}</label>
+                    </div> 
+
+                <div class="form-group col-sm-6 col-xs-12">
+                        <label for="quemConvidou">Atualize o Pai:</label>
+                        <td  title="'Lista Pais'">
+                                <select
+                                        ng-model="vm.selectedPai"
+                                        ng-options="item.Name for item in vm.testeResult"
+                                        >
+                                </select>
+                
+                                <div ng-if="customer.ChargingValidity.length == 1">{{ customer.ammoutIntFormat }}</div>
+                            </td>
+                        </div>
+
+                        <button class="btn btn-primary" ng-disabled="vm.requesting"  ng-click="vm.onTapAtualizaPai(vm.selectedPai)">
+                            <!-- <i class="glyphicon glyphicon-arrow-right"></i> -->
+                            Atualiza Pai
+                        </button>
+            </div> 
+            <!-- <div class="row">
                 <div class="form-group col-sm-6 col-xs-12">
                     <label for="quemConvidou">Telefone de quem convidou:</label>
                     <input id="quemConvidou" next-on-enter class="form-control" ng-model="vm.contactParent"
@@ -82,7 +108,7 @@
                     <input id="nomeQuemConvidou" next-on-enter class="form-control"
                            ng-model="vm.customer.NameContactParent" type="text" auto-complete="vm.autoCompleteOptions">
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
     <h2 ng-click="vm.openEndereco = !vm.openEndereco" class="form-group col-xs-12 display-3">Endereço

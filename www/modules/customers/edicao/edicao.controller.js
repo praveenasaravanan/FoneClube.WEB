@@ -45,6 +45,7 @@
     vm.CNPJField = false;
     vm.CPFField = true;
     vm.opemEmailpopup = opemEmailpopup;
+    vm.onTapAtualizaPai = onTapAtualizaPai;
 
     vm.search = "";
     vm.showall = false;
@@ -54,10 +55,71 @@
     vm.history = [];
     vm.sp = 1;
 
+    
+    // vm.testeResult = [ { "Id": 1, "DocumentNumber": "90616693753", "Register": "0001-01-01T00:00:00", "Name": "Marcio Guimaraes Franco", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": null }, { "Id": 2, "DocumentNumber": "10667103767", "Register": "0001-01-01T00:00:00", "Name": "Rodrigo Cardozo Pinto", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": { "Id": 1, "Name": "Marcio Guimaraes Franco" } }, { "Id": 5, "DocumentNumber": "90647491753", "Register": "0001-01-01T00:00:00", "Name": "1 Vera Lúcia Barreto Seixas", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": { "Id": 4168, "Name": "Marinete da Costa Barreto (PAI)" } } ];
+
     function opemEmailpopup(emailstatus, phone, email, operator) {
       if (emailstatus != "") {
         ViewModelUtilsService.showModalEmailDetail(emailstatus, phone, email, operator);
       }
+    }
+
+    function onTapAtualizaPai(selectedPai){
+      
+      debugger;
+      if(selectedPai == undefined)
+      {
+        alert('Sem nenhum pai selecionado.');
+        return;
+      }
+
+      if(vm.customer.Id == selectedPai.Id){
+        alert('Cliente não pode ser pai dele mesmo.');
+        return;
+      }
+     
+      var customObj = {
+        Id:vm.customer.Id,
+        Pai:{
+          Id:selectedPai.Id,
+          Name:selectedPai.Name
+        }
+      }
+
+      
+
+      FoneclubeService.postCustomerUpdateParent(customObj).then(function (result) {
+        if(result){
+          alert('Pai alterado com sucesso')
+
+          vm.nomePai = selectedPai.Name;
+          vm.telefonePai = '';
+
+          FoneclubeService.getCustomerById(selectedPai.Id).then(function (result) {
+            
+            vm.nomePai = selectedPai.Name;
+            debugger;
+
+            for(var i in result.Phones){
+              if(result.Phones[i].IsFoneclube != true){
+                vm.telefonePai = result.Phones[i].DDD + result.Phones[i].Number;
+              }
+            }
+
+          })
+          
+        }
+        else{
+          alert('Não foi possível alterar o Pai nesse cliente')
+        }
+      })
+      //postCustomerUpdateParent
+
+      //faz o post
+      //vc não pode selecionar um pai como o próprio cliente
+      //no sucesso atualiza
+      //vm.telefonePai = "2187554657"
+      //vm.nomePai = "Nome do pai"
     }
 
     function onCheckCNPJ() {
@@ -97,12 +159,21 @@
 
       var documentnum = UtilsService.clearDocumentNumber(vm.cpf);
 
+      FoneclubeService.getActiveCustomers().then(function (result) {
+        vm.testeResult = result;
+        debugger
+      })
+
       FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
         
         vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
         vm.customer = result;
         vm.customerAtivo = !vm.customer.Desativo;
         
+        vm.telefonePai = vm.customer.Pai.ContatoPai;
+        vm.nomePai = vm.customer.Pai.Name;
+
+
         if(result.Id == 4158)
         {
           vm.hideColunaLinhaAtiva = true;
@@ -112,7 +183,7 @@
           vm.hideColunaApelido = true;
         }
           
-
+        //desusar
         getPersonParent(vm.customer.IdParent);
 
         vm.singlePriceLocal = result.SinglePrice > 0  ? 'R$'+ (vm.customer.SinglePrice / 100).toFixed(2) : 0; //single place formatado;
@@ -386,8 +457,14 @@
     }
 
     function getPersonParent(id) {
+      debugger
       if (id) {
         FoneclubeService.getCustomerById(id).then(function (result) {
+
+          vm.customerPai = result;
+          console.log('parent - ')
+          console.log(result)
+
           if (result.Phones.length > 0) {
             vm.contactParent = result.Phones[0].DDD.concat(result.Phones[0].Number);
           }

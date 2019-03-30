@@ -34,6 +34,7 @@
     this.postDesassociarLinha = postDesassociarLinha;
     this.postUpdatePhonePlan = postUpdatePhonePlan;
     this.postGeraCobrancaIntegrada = postGeraCobrancaIntegrada;
+    this.postCustomerUpdateParent = postCustomerUpdateParent;
 
     this.getPlans = getPlans;
     this.getCustomerPlans = getCustomerPlans;
@@ -75,6 +76,7 @@
     this.getAllPhonesStatus = getAllPhonesStatus;
     this.getMassChargingData = getMassChargingData;
     this.getStatusDivergencia = getStatusDivergencia;
+    this.getActiveCustomers = getActiveCustomers;
 
     function getLastPaymentType(customer) {
       var q = $q.defer();
@@ -517,6 +519,18 @@
     function postUpdatePhonePlan(phone) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/manager/phones/plan/update'), phone)
+        .then(function(data) {
+          q.resolve(data);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
+
+    function postCustomerUpdateParent(phone) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/profile/customer/parent/id/insert'), phone)
         .then(function(data) {
           q.resolve(data);
         })
@@ -1026,6 +1040,18 @@
     function getStatusDivergencia() {
       var q = $q.defer();
       HTTPService.get(urlApi.concat('/manager/phones/divergencia'))
+        .then(function(result) {
+          q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
+
+    function getActiveCustomers() {
+      var q = $q.defer();
+      HTTPService.get(urlApi.concat('/profile/active/customers/parents'))
         .then(function(result) {
           q.resolve(result);
         })
