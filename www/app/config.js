@@ -14,8 +14,8 @@
 
       $stateProvider.state('master', {
         url: '/',
-        templateUrl: 'index.html',
-        controller: 'MasterController as vm'
+        templateUrl: 'modules/login/login.html',
+        controller: 'LoginController as vm'
       })
       .state('login', {
         url: '/login',
@@ -79,8 +79,9 @@
         url: "/status-charging",
         views: {
           'menu-tab': {
-            templateUrl: "modules/status-charging/status-charging.html",
-            controller: 'StatusChargingController as vm'
+            
+            templateUrl: 'modules/StatusChange/statuscharging.html',
+            controller: 'statusChangingController2 as vm'
           }
         }
       })

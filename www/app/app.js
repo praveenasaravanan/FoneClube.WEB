@@ -20,7 +20,8 @@
         ,'ngclipboard'
         ,'ngAnimate'
         ,'vAccordion'
-        ,'ngTable'
+      , 'ngTable'
+      , 'kendo.directives'
 
     ]);
 
