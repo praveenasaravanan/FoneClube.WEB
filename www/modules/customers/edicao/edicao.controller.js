@@ -170,8 +170,12 @@
         vm.customer = result;
         vm.customerAtivo = !vm.customer.Desativo;
         
-        vm.telefonePai = vm.customer.Pai.ContatoPai;
-        vm.nomePai = vm.customer.Pai.Name;
+        if(vm.customer.Pai != null)
+        {
+          vm.telefonePai = vm.customer.Pai.ContatoPai;
+          vm.nomePai = vm.customer.Pai.Name;
+        }
+        
 
 
         if(result.Id == 4158)
