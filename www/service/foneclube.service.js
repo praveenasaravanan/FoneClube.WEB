@@ -35,6 +35,8 @@
     this.postUpdatePhonePlan = postUpdatePhonePlan;
     this.postGeraCobrancaIntegrada = postGeraCobrancaIntegrada;
     this.postCustomerUpdateParent = postCustomerUpdateParent;
+    this.postIsertServiceDeactive = postIsertServiceDeactive;
+    this.postIsertServiceActive = postIsertServiceActive;
 
     this.getPlans = getPlans;
     this.getCustomerPlans = getCustomerPlans;
@@ -77,6 +79,8 @@
     this.getMassChargingData = getMassChargingData;
     this.getStatusDivergencia = getStatusDivergencia;
     this.getActiveCustomers = getActiveCustomers;
+    this.getPhoneServices = getPhoneServices;
+    this.getServices = getServices;
 
     function getLastPaymentType(customer) {
       var q = $q.defer();
@@ -531,6 +535,30 @@
     function postCustomerUpdateParent(phone) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/profile/customer/parent/id/insert'), phone)
+        .then(function(data) {
+          q.resolve(data);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
+
+    function postIsertServiceActive(phone) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/manager/phones/extra/service/insert'), phone)
+        .then(function(data) {
+          q.resolve(data);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
+
+    function postIsertServiceDeactive(phone) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/manager/phones/extra/service/insert/deactive'), phone)
         .then(function(data) {
           q.resolve(data);
         })
@@ -1058,6 +1086,34 @@
         .catch(function(error) {
           q.reject(error);
         });
+      return q.promise;
+    }
+
+    function getPhoneServices(phoneId) {
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/manager/phones/') + phoneId + '/extra/services')
+        .then(function(result) {
+          q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    function getServices(phoneId) {
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/manager/phones/extra/services'))
+        .then(function(result) {
+          q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+
       return q.promise;
     }
   }
