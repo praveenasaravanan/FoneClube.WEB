@@ -325,6 +325,10 @@
                         <div class="s_cls s_lbl"><span for="portabilidadeTelefone">Email Action:</span></div>
                     </th>
 
+                    <th style="width: 40px;">
+                        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">Adicionar serviço:</span></div>
+                    </th>
+
                     <th style="width: 40px;" ng-if="!vm.hideColunaLinhaAtiva">
                         <div class="s_cls s_lbl">
                             <span for="portabilidadeTelefone">ATIVA:</span>
@@ -434,6 +438,39 @@
                                 <option name="7" value="7">DESBLOQUEIO (Universal Unblock)</option>
                                 <option name="8" value="8"> Troca de Plano (upgrade/downgrade)</option>
 
+                            </select>
+
+
+                        </div>
+                    </td>
+
+                    <!-- <td style="width: 100px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+                        <div class="s_cls">
+                            <select next-on-enter class="form-control"
+                                    ng-change="vm.opemEmailpopup(EmailstatusID,phoneNumber.NovoFormatoNumero,vm.customer.Email,phoneNumber.IdPlanOption)"
+                                    ng-model="EmailstatusID" style="width: 160px;">
+                                <option value="">Selecione</option>
+                                <option name="3" value="3">Block-Perda(lost)</option>
+                                <option name="4" value="4">Block-Roube(theft)</option>
+                                <option name="5" value="5">Block-Gestor (admin – Crawler – robot)</option>
+                                <option name="6" value="6">Block-Anatel (4 month block)</option>
+                                <option name="7" value="7">DESBLOQUEIO (Universal Unblock)</option>
+                                <option name="8" value="8"> Troca de Plano (upgrade/downgrade)</option>
+
+                            </select>
+
+
+                        </div>
+                    </td> -->
+
+                    <td style="width: 100px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+                        <div class="s_cls">
+                            <select id="qualServicoContratar" next-on-enter class="form-control"
+                                    ng-options="service.Id as service.Descricao for service in vm.extraServices"
+                                    ng-model="service.Id"
+                                    ng-change="vm.changeExtraService($index,service.Id)"
+                                    style="width: 160px;">
+                                <option value="">Adicione Serviço</option>
                             </select>
 
 

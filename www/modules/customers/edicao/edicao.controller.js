@@ -46,6 +46,7 @@
     vm.CPFField = true;
     vm.opemEmailpopup = opemEmailpopup;
     vm.onTapAtualizaPai = onTapAtualizaPai;
+    vm.changeExtraService = changeExtraService;
 
     vm.search = "";
     vm.showall = false;
@@ -57,6 +58,21 @@
 
     
     // vm.testeResult = [ { "Id": 1, "DocumentNumber": "90616693753", "Register": "0001-01-01T00:00:00", "Name": "Marcio Guimaraes Franco", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": null }, { "Id": 2, "DocumentNumber": "10667103767", "Register": "0001-01-01T00:00:00", "Name": "Rodrigo Cardozo Pinto", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": { "Id": 1, "Name": "Marcio Guimaraes Franco" } }, { "Id": 5, "DocumentNumber": "90647491753", "Register": "0001-01-01T00:00:00", "Name": "1 Vera Lúcia Barreto Seixas", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": { "Id": 4168, "Name": "Marinete da Costa Barreto (PAI)" } } ];
+    function changeExtraService(index, serviceId){
+      debugger;
+
+      
+
+      DialogFactory.dialogConfirm({ title: 'Adicionar serviço', mensagem: 'Tem certeza que deseja adicionar o serviço '+ vm.extraServices[index].Descricao +' ?:', btn1: 'não', btn2: 'sim' })
+      .then(function (result) {
+        debugger
+        if (result == 1) {
+          console.log('clicou em sim')
+        } else {
+          console.log('clicou em não')
+        }
+      })
+    }
 
     function opemEmailpopup(emailstatus, phone, email, operator) {
       if (emailstatus != "") {
@@ -98,7 +114,6 @@
           FoneclubeService.getCustomerById(selectedPai.Id).then(function (result) {
             
             vm.nomePai = selectedPai.Name;
-            debugger;
 
             for(var i in result.Phones){
               if(result.Phones[i].IsFoneclube != true){
@@ -149,6 +164,12 @@
 
     function init() {
 
+      debugger
+      FoneclubeService.getServices().then(function (result) {
+        debugger
+        vm.extraServices = result;
+      })
+
       $templateCache.removeAll();
 
       if (!vm.cpf) {
@@ -161,8 +182,12 @@
 
       FoneclubeService.getActiveCustomers().then(function (result) {
         vm.testeResult = result;
-        debugger
+        
       })
+
+      
+
+
 
       FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
         
@@ -461,7 +486,7 @@
     }
 
     function getPersonParent(id) {
-      debugger
+      // debugger
       if (id) {
         FoneclubeService.getCustomerById(id).then(function (result) {
 
@@ -490,7 +515,7 @@
 
     function onTapSendUser(customer) {
        
-      debugger;
+      // debugger;
 
       if (vm.requesting == true)
         return;
@@ -932,6 +957,8 @@
         })
 
       }
+
+      
 
       function postUpdateCustomerSucess(result) {
         if (result) {
