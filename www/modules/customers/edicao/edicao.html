@@ -468,7 +468,7 @@
                             <select id="qualServicoContratar" next-on-enter class="form-control"
                                     ng-options="service.Id as service.Descricao for service in vm.extraServices"
                                     ng-model="service.Id"
-                                    ng-change="vm.changeExtraService($index,service.Id)"
+                                    ng-change="vm.changeExtraService($index,service.Id, phoneNumber)"
                                     style="width: 160px;">
                                 <option value="">Adicione Serviço</option>
                             </select>

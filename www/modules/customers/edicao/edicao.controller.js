@@ -58,16 +58,32 @@
 
     
     // vm.testeResult = [ { "Id": 1, "DocumentNumber": "90616693753", "Register": "0001-01-01T00:00:00", "Name": "Marcio Guimaraes Franco", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": null }, { "Id": 2, "DocumentNumber": "10667103767", "Register": "0001-01-01T00:00:00", "Name": "Rodrigo Cardozo Pinto", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": { "Id": 1, "Name": "Marcio Guimaraes Franco" } }, { "Id": 5, "DocumentNumber": "90647491753", "Register": "0001-01-01T00:00:00", "Name": "1 Vera Lúcia Barreto Seixas", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": { "Id": 4168, "Name": "Marinete da Costa Barreto (PAI)" } } ];
-    function changeExtraService(index, serviceId){
+    function changeExtraService(index, serviceId, phoneNumber){
       debugger;
+      var descricao = ''
+      for(var i in vm.extraServices)
+      {
+        if(vm.extraServices[i].Id == serviceId){
+          descricao = vm.extraServices[i].Descricao;
+        }
+      }
 
-      
 
-      DialogFactory.dialogConfirm({ title: 'Adicionar serviço', mensagem: 'Tem certeza que deseja adicionar o serviço '+ vm.extraServices[index].Descricao +' ?:', btn1: 'não', btn2: 'sim' })
+      DialogFactory.dialogConfirm({ title: 'Adicionar serviço', mensagem: 'Tem certeza que deseja adicionar o serviço '+ descricao +' ?:', btn1: 'não', btn2: 'sim' })
       .then(function (result) {
         debugger
         if (result == 1) {
           console.log('clicou em sim')
+          //todo validar falta de id de phone ou de serivço
+          var servico = {
+            Id:phoneNumber.Id,
+            Servicos:[{
+              Id: serviceId
+            }]
+          }
+          FoneclubeService.postIsertServiceActive(servico).then(function (result) {
+            debugger
+          })
         } else {
           console.log('clicou em não')
         }
