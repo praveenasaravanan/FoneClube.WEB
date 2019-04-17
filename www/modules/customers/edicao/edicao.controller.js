@@ -47,6 +47,7 @@
     vm.opemEmailpopup = opemEmailpopup;
     vm.onTapAtualizaPai = onTapAtualizaPai;
     vm.changeExtraService = changeExtraService;
+    vm.changeSelectedService = changeSelectedService
 
     vm.search = "";
     vm.showall = false;
@@ -59,16 +60,18 @@
     
     // vm.testeResult = [ { "Id": 1, "DocumentNumber": "90616693753", "Register": "0001-01-01T00:00:00", "Name": "Marcio Guimaraes Franco", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": null }, { "Id": 2, "DocumentNumber": "10667103767", "Register": "0001-01-01T00:00:00", "Name": "Rodrigo Cardozo Pinto", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": { "Id": 1, "Name": "Marcio Guimaraes Franco" } }, { "Id": 5, "DocumentNumber": "90647491753", "Register": "0001-01-01T00:00:00", "Name": "1 Vera Lúcia Barreto Seixas", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": { "Id": 4168, "Name": "Marinete da Costa Barreto (PAI)" } } ];
     function changeExtraService(index, serviceId, phoneNumber){
-      debugger;
+      
+      var selectedService;
       var descricao = ''
       for(var i in vm.extraServices)
       {
         if(vm.extraServices[i].Id == serviceId){
+          selectedService = vm.extraServices[i];
           descricao = vm.extraServices[i].Descricao;
         }
       }
 
-
+      debugger;
       DialogFactory.dialogConfirm({ title: 'Adicionar serviço', mensagem: 'Tem certeza que deseja adicionar o serviço '+ descricao +' ?:', btn1: 'não', btn2: 'sim' })
       .then(function (result) {
         debugger
@@ -82,12 +85,75 @@
             }]
           }
           FoneclubeService.postIsertServiceActive(servico).then(function (result) {
-            debugger
+            if(result)
+            {
+              DialogFactory.showMessageDialog({ mensagem: 'Serviço adicionado' });
+              phoneNumber.Servicos.push(selectedService)
+            }
+            else{
+              DialogFactory.showMessageDialog({ mensagem: 'Serviço não pôde ser adicionado' });
+            }
           })
         } else {
           console.log('clicou em não')
         }
       })
+    }
+
+    var changingSelectedService = false;
+    function changeSelectedService(index,serviceId, phoneNumber, fromUser){
+      debugger;
+      if(!changingSelectedService)
+      {
+
+        changingSelectedService = true;
+        var descricao = ''
+        for(var i in vm.extraServices)
+        {
+          if(vm.extraServices[i].Id == serviceId){
+            descricao = vm.extraServices[i].Descricao;
+          }
+        }
+
+        DialogFactory.dialogConfirm({ title: 'Remover serviço', mensagem: 'Tem certeza que deseja remover o serviço '+ descricao +' ?:', btn1: 'não', btn2: 'sim' })
+        .then(function (result) {
+          if (result == 1) {
+            console.log('clicou em sim')
+            //todo validar falta de id de phone ou de serivço
+            var servico = {
+              Id:phoneNumber.Id,
+              Servicos:[{
+                Id: serviceId
+              }]
+            }
+
+            FoneclubeService.postIsertServiceDeactive(servico).then(function (result) {
+              if(result)
+              {
+                for(var i in phoneNumber.Servicos){
+                  if(phoneNumber.Servicos[i].Id == serviceId){
+                    phoneNumber.Servicos.splice(i,1)
+                  }
+                }
+                DialogFactory.showMessageDialog({ mensagem: 'Serviço removido' });
+                
+                $timeout(function () {
+                  changingSelectedService = false;
+                }, 1000)
+                
+              }
+              else{
+                DialogFactory.showMessageDialog({ mensagem: 'Serviço não pôde ser removido' });
+                changingSelectedService = false;
+              }
+            })
+            
+          } else {
+            console.log('clicou em não');
+            changingSelectedService = false;
+          }
+        })
+      }
     }
 
     function opemEmailpopup(emailstatus, phone, email, operator) {
@@ -280,7 +346,11 @@
 
           vm.tempPhones = angular.copy(vm.customer.Phones);
           for (var number in vm.customer.Phones) {
-            
+            // debugger
+            // FoneclubeService.getPhoneServices(vm.customer.Phones[number].Id, index).then(function (result) {
+            //   debugger
+            //   vm.customer.Phones[result.index].Servicos = result.Servicos;
+            // })
             var contactPhone = !vm.customer.Phones[number].IsFoneclube;
 
             if(contactPhone){

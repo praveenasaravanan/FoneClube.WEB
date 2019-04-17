@@ -329,6 +329,10 @@
                         <div class="s_cls s_lbl"><span for="portabilidadeTelefone">Adicionar serviço:</span></div>
                     </th>
 
+                    <th style="width: 40px;">
+                        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">Serviços da linha:</span></div>
+                    </th>
+
                     <th style="width: 40px;" ng-if="!vm.hideColunaLinhaAtiva">
                         <div class="s_cls s_lbl">
                             <span for="portabilidadeTelefone">ATIVA:</span>
@@ -352,11 +356,11 @@
                             <span for="portabilidadeTelefone">PrecoVIP:</span>
                         </div>
                     </th>
-                    <th ng-if='!vm.hideColunaPerfil' style="width: 100px;">
+                    <!-- <th ng-if='!vm.hideColunaPerfil' style="width: 100px;">
                         <div class="s_cls s_lbl">
                             <span for="portabilidadeTelefone">Perfil:</span>
                         </div>
-                    </th>
+                    </th> -->
 
                     <th ng-if='!vm.hideColunaApelido' style="width: 150px;">
                         <div class="s_cls s_lbl">
@@ -477,6 +481,20 @@
                         </div>
                     </td>
 
+                    <td style="width: 100px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+                        <div class="s_cls">
+                            <select id="qualServicoContratar" next-on-enter class="form-control"
+                                    ng-options="servico.Id as servico.Descricao for servico in phoneNumber.Servicos"
+                                    ng-model="servico.Id"
+                                    ng-change="vm.changeSelectedService($index,servico.Id, phoneNumber, true)"
+                                    style="width: 160px;">
+                                <option value="">Serviços da linha</option>
+                            </select>
+
+
+                        </div>
+                    </td>
+
                     <td ng-if="!vm.hideColunaLinhaAtiva" style="width: 40px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
                         <toggle ng-change="vm.activechanged($index)" on="On" off="Off"
                                 ng-model="phoneNumber.LinhaAtiva"></toggle>
@@ -509,12 +527,12 @@
                                    restrict="reject" style="width: 120px;">
                         </div>
                     </td>
-                    <td ng-if='!vm.hideColunaPerfil' style="width: 130px;text-align: center;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+                    <!-- <td ng-if='!vm.hideColunaPerfil' style="width: 130px;text-align: center;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
                         <div class="s_cls">
                             <input id="perfill" next-on-enter class="form-control" restrict="reject"
                                    style="width: 120px;">
                         </div>
-                    </td>
+                    </td> -->
 
                     <td ng-if='!vm.hideColunaApelido' ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
                         <div class="s_cls">
