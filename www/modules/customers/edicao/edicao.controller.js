@@ -61,62 +61,22 @@
     // vm.testeResult = [ { "Id": 1, "DocumentNumber": "90616693753", "Register": "0001-01-01T00:00:00", "Name": "Marcio Guimaraes Franco", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": null }, { "Id": 2, "DocumentNumber": "10667103767", "Register": "0001-01-01T00:00:00", "Name": "Rodrigo Cardozo Pinto", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": { "Id": 1, "Name": "Marcio Guimaraes Franco" } }, { "Id": 5, "DocumentNumber": "90647491753", "Register": "0001-01-01T00:00:00", "Name": "1 Vera Lúcia Barreto Seixas", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": { "Id": 4168, "Name": "Marinete da Costa Barreto (PAI)" } } ];
     function changeExtraService(index, serviceId, phoneNumber){
       
-      var selectedService;
-      var descricao = ''
-      for(var i in vm.extraServices)
+      if(serviceId != null)
       {
-        if(vm.extraServices[i].Id == serviceId){
-          selectedService = vm.extraServices[i];
-          descricao = vm.extraServices[i].Descricao;
-        }
-      }
-
-      debugger;
-      DialogFactory.dialogConfirm({ title: 'Adicionar serviço', mensagem: 'Tem certeza que deseja adicionar o serviço '+ descricao +' ?:', btn1: 'não', btn2: 'sim' })
-      .then(function (result) {
-        debugger
-        if (result == 1) {
-          console.log('clicou em sim')
-          //todo validar falta de id de phone ou de serivço
-          var servico = {
-            Id:phoneNumber.Id,
-            Servicos:[{
-              Id: serviceId
-            }]
-          }
-          FoneclubeService.postIsertServiceActive(servico).then(function (result) {
-            if(result)
-            {
-              DialogFactory.showMessageDialog({ mensagem: 'Serviço adicionado' });
-              phoneNumber.Servicos.push(selectedService)
-            }
-            else{
-              DialogFactory.showMessageDialog({ mensagem: 'Serviço não pôde ser adicionado' });
-            }
-          })
-        } else {
-          console.log('clicou em não')
-        }
-      })
-    }
-
-    var changingSelectedService = false;
-    function changeSelectedService(index,serviceId, phoneNumber, fromUser){
-      debugger;
-      if(!changingSelectedService)
-      {
-
-        changingSelectedService = true;
+        var selectedService;
         var descricao = ''
         for(var i in vm.extraServices)
         {
           if(vm.extraServices[i].Id == serviceId){
+            selectedService = vm.extraServices[i];
             descricao = vm.extraServices[i].Descricao;
           }
         }
 
-        DialogFactory.dialogConfirm({ title: 'Remover serviço', mensagem: 'Tem certeza que deseja remover o serviço '+ descricao +' ?:', btn1: 'não', btn2: 'sim' })
+        debugger;
+        DialogFactory.dialogConfirm({ title: 'Adicionar serviço', mensagem: 'Tem certeza que deseja adicionar o serviço '+ descricao +' ?:', btn1: 'não', btn2: 'sim' })
         .then(function (result) {
+          debugger
           if (result == 1) {
             console.log('clicou em sim')
             //todo validar falta de id de phone ou de serivço
@@ -126,33 +86,80 @@
                 Id: serviceId
               }]
             }
-
-            FoneclubeService.postIsertServiceDeactive(servico).then(function (result) {
+            FoneclubeService.postIsertServiceActive(servico).then(function (result) {
               if(result)
               {
-                for(var i in phoneNumber.Servicos){
-                  if(phoneNumber.Servicos[i].Id == serviceId){
-                    phoneNumber.Servicos.splice(i,1)
-                  }
-                }
-                DialogFactory.showMessageDialog({ mensagem: 'Serviço removido' });
-                
-                $timeout(function () {
-                  changingSelectedService = false;
-                }, 1000)
-                
+                DialogFactory.showMessageDialog({ mensagem: 'Serviço adicionado' });
+                phoneNumber.Servicos.push(selectedService)
               }
               else{
-                DialogFactory.showMessageDialog({ mensagem: 'Serviço não pôde ser removido' });
-                changingSelectedService = false;
+                DialogFactory.showMessageDialog({ mensagem: 'Serviço não pôde ser adicionado' });
               }
             })
-            
           } else {
-            console.log('clicou em não');
-            changingSelectedService = false;
+            console.log('clicou em não')
           }
         })
+      }
+
+    }
+
+    var changingSelectedService = false;
+    function changeSelectedService(index,serviceId, phoneNumber, fromUser){
+      debugger;
+      if(serviceId != null)
+      {
+        if(!changingSelectedService)
+        {
+
+          changingSelectedService = true;
+          var descricao = ''
+          for(var i in vm.extraServices)
+          {
+            if(vm.extraServices[i].Id == serviceId){
+              descricao = vm.extraServices[i].Descricao;
+            }
+          }
+
+          DialogFactory.dialogConfirm({ title: 'Remover serviço', mensagem: 'Tem certeza que deseja remover o serviço '+ descricao +' ?:', btn1: 'não', btn2: 'sim' })
+          .then(function (result) {
+            if (result == 1) {
+              console.log('clicou em sim')
+              //todo validar falta de id de phone ou de serivço
+              var servico = {
+                Id:phoneNumber.Id,
+                Servicos:[{
+                  Id: serviceId
+                }]
+              }
+
+              FoneclubeService.postIsertServiceDeactive(servico).then(function (result) {
+                if(result)
+                {
+                  for(var i in phoneNumber.Servicos){
+                    if(phoneNumber.Servicos[i].Id == serviceId){
+                      phoneNumber.Servicos.splice(i,1)
+                    }
+                  }
+                  DialogFactory.showMessageDialog({ mensagem: 'Serviço removido' });
+                  
+                  $timeout(function () {
+                    changingSelectedService = false;
+                  }, 1000)
+                  
+                }
+                else{
+                  DialogFactory.showMessageDialog({ mensagem: 'Serviço não pôde ser removido' });
+                  changingSelectedService = false;
+                }
+              })
+              
+            } else {
+              console.log('clicou em não');
+              changingSelectedService = false;
+            }
+          })
+        }
       }
     }
 
@@ -461,15 +468,25 @@
             vm.pricelist = [];
             
             for (var i = 0; i < vm.customer.Phones.length; i++) {
+
               var phoneNumber = vm.customer.Phones[i];
+              var totalServicos = 0;
+
+              if(phoneNumber.Servicos.length > 0 ){
+                for(var o in phoneNumber.Servicos){
+                  totalServicos += phoneNumber.Servicos[o].AmountFoneclube;
+                }
+              }
               
+
+              debugger;
               if (phoneNumber.IdPlanOption == '') {
                 vm.pricelist.push(0);
-
               } 
               else {
-                vm.pricelist.push(vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value);
-                vm.customer.Phones[i]['Price'] = vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value;
+                var valorPlano = vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value;
+                vm.pricelist.push(valorPlano + totalServicos);
+                vm.customer.Phones[i]['Price'] = valorPlano + totalServicos;
               }
             }
               
