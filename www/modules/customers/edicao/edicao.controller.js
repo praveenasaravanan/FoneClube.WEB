@@ -63,6 +63,13 @@
       
       if(serviceId != null)
       {
+        
+        
+        for(var i in vm.customer.Phones){
+          var currentPhone = vm.customer.Phones[i];
+          debugger;
+        }
+        
         var selectedService;
         var descricao = ''
         for(var i in vm.extraServices)
@@ -478,15 +485,17 @@
                 }
               }
               
-
               debugger;
+
               if (phoneNumber.IdPlanOption == '') {
                 vm.pricelist.push(0);
+                // customer.Phones[i].PriceFoneclube = 0;
               } 
               else {
                 var valorPlano = vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value;
                 vm.pricelist.push(valorPlano + totalServicos);
                 vm.customer.Phones[i]['Price'] = valorPlano + totalServicos;
+                // customer.Phones[i].PriceFoneclube = valorPlano + totalServicos;
               }
             }
               
