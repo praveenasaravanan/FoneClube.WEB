@@ -57,31 +57,28 @@
     vm.history = [];
     vm.sp = 1;
 
-    
-    // vm.testeResult = [ { "Id": 1, "DocumentNumber": "90616693753", "Register": "0001-01-01T00:00:00", "Name": "Marcio Guimaraes Franco", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": null }, { "Id": 2, "DocumentNumber": "10667103767", "Register": "0001-01-01T00:00:00", "Name": "Rodrigo Cardozo Pinto", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": { "Id": 1, "Name": "Marcio Guimaraes Franco" } }, { "Id": 5, "DocumentNumber": "90647491753", "Register": "0001-01-01T00:00:00", "Name": "1 Vera Lúcia Barreto Seixas", "SinglePrice": 0, "Charged": false, "TotalBoletoCharges": 0, "HasSinglePrice": false, "TotalAmountCustomer": 0, "Pai": { "Id": 4168, "Name": "Marinete da Costa Barreto (PAI)" } } ];
-    function changeExtraService(index, serviceId, phoneNumber){
+    function changeExtraService(index, serviceId, phoneNumber, service){
       
       if(serviceId != null)
       {
-        
-        
-        for(var i in vm.customer.Phones){
-          var currentPhone = vm.customer.Phones[i];
-          debugger;
+        for(var i in phoneNumber.Servicos){
+          if(phoneNumber.Servicos[i].Id == serviceId){
+            DialogFactory.showMessageDialog({ mensagem: 'Serviço não pôde ser adicionado pois já faz parte da linha' });
+            service.Id = 1;
+            return;
+          }
         }
-        
+
         var selectedService;
-        var descricao = ''
         for(var i in vm.extraServices)
         {
           if(vm.extraServices[i].Id == serviceId){
             selectedService = vm.extraServices[i];
-            descricao = vm.extraServices[i].Descricao;
           }
         }
 
         debugger;
-        DialogFactory.dialogConfirm({ title: 'Adicionar serviço', mensagem: 'Tem certeza que deseja adicionar o serviço '+ descricao +' ?:', btn1: 'não', btn2: 'sim' })
+        DialogFactory.dialogConfirm({ title: 'Adicionar serviço', mensagem: 'Tem certeza que deseja adicionar o serviço '+ selectedService.Descricao +' ?:', btn1: 'não', btn2: 'sim' })
         .then(function (result) {
           debugger
           if (result == 1) {
@@ -97,14 +94,27 @@
               if(result)
               {
                 DialogFactory.showMessageDialog({ mensagem: 'Serviço adicionado' });
+                for(var i in vm.customer.Phones){
+          
+                  var currentPhone = vm.customer.Phones[i];
+        
+                  if(currentPhone.Id == phoneNumber.Id){
+                      vm.customer.Phones[i].Price += selectedService.AmountFoneclube;
+                      vm.pricelist[i] = 'R$'+ (vm.customer.Phones[i].Price / 100).toFixed(2);
+                  }
+                }
+
+                service.Id = 1;
                 phoneNumber.Servicos.push(selectedService)
               }
               else{
                 DialogFactory.showMessageDialog({ mensagem: 'Serviço não pôde ser adicionado' });
+                service.Id = 1;
               }
             })
           } else {
             console.log('clicou em não')
+            service.Id = 1;
           }
         })
       }
@@ -112,23 +122,23 @@
     }
 
     var changingSelectedService = false;
-    function changeSelectedService(index,serviceId, phoneNumber, fromUser){
+    function changeSelectedService(index,serviceId, phoneNumber, fromUser, service){
       debugger;
       if(serviceId != null)
       {
         if(!changingSelectedService)
         {
-
           changingSelectedService = true;
-          var descricao = ''
+          var currentService;
           for(var i in vm.extraServices)
           {
             if(vm.extraServices[i].Id == serviceId){
-              descricao = vm.extraServices[i].Descricao;
+              currentService = vm.extraServices[i];
             }
           }
 
-          DialogFactory.dialogConfirm({ title: 'Remover serviço', mensagem: 'Tem certeza que deseja remover o serviço '+ descricao +' ?:', btn1: 'não', btn2: 'sim' })
+
+          DialogFactory.dialogConfirm({ title: 'Remover serviço', mensagem: 'Tem certeza que deseja remover o serviço '+ currentService.Descricao +' ?:', btn1: 'não', btn2: 'sim' })
           .then(function (result) {
             if (result == 1) {
               console.log('clicou em sim')
@@ -149,13 +159,25 @@
                     }
                   }
                   DialogFactory.showMessageDialog({ mensagem: 'Serviço removido' });
-                  
+
+                  for(var i in vm.customer.Phones){
+          
+                    var currentPhone = vm.customer.Phones[i];
+          
+                    if(currentPhone.Id == phoneNumber.Id){
+                        vm.customer.Phones[i].Price -= currentService.AmountFoneclube;
+                        vm.pricelist[i] = 'R$'+ (vm.customer.Phones[i].Price / 100).toFixed(2);
+                    }
+                  }
+
+                  service.Id = 1;
                   $timeout(function () {
                     changingSelectedService = false;
                   }, 1000)
                   
                 }
                 else{
+                  service.Id = 1;
                   DialogFactory.showMessageDialog({ mensagem: 'Serviço não pôde ser removido' });
                   changingSelectedService = false;
                 }
@@ -163,6 +185,7 @@
               
             } else {
               console.log('clicou em não');
+              service.Id = 1;
               changingSelectedService = false;
             }
           })
