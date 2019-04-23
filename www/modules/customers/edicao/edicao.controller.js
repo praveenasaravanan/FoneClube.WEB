@@ -69,6 +69,11 @@
           }
         }
 
+        if(phoneNumber.Servicos.length > 0){
+          DialogFactory.showMessageDialog({ mensagem: 'Linha já tem serviço' });
+          return;
+        }
+
         var selectedService;
         for(var i in vm.extraServices)
         {
