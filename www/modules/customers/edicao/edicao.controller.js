@@ -501,7 +501,7 @@
             }, 200);
 
             vm.pricelist = [];
-            
+            debugger;
             for (var i = 0; i < vm.customer.Phones.length; i++) {
 
               var phoneNumber = vm.customer.Phones[i];
@@ -520,11 +520,17 @@
                 // customer.Phones[i].PriceFoneclube = 0;
               } 
               else {
-                var valorPlano = vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value;
+                var valorPlano = 0;
+                try{
+                  valorPlano = vm.plans.find(x => x.Id == phoneNumber.IdPlanOption).Value;
+                }
+                catch(e){}
+                
                 vm.pricelist.push(valorPlano + totalServicos);
                 vm.customer.Phones[i]['Price'] = valorPlano + totalServicos;
                 // customer.Phones[i].PriceFoneclube = valorPlano + totalServicos;
               }
+
             }
               
             for (var i = 0; i < vm.customer.Phones.length; i++) {
