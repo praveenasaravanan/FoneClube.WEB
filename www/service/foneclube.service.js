@@ -568,6 +568,54 @@
       return q.promise;
     }
 
+    function postIsertServiceFoneclube(service) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/manager/phones/service/insert'), service)
+        .then(function(data) {
+          q.resolve(data);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
+
+    function postUpdateServiceFoneclube(service) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/manager/phones/service/update'), service)
+        .then(function(data) {
+          q.resolve(data);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
+
+    function postInsertPlanFoneclube(plan) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/manager/phones/plan/insert'), plan)
+        .then(function(data) {
+          q.resolve(data);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
+
+    function postUpdatePlanFoneclube(plan) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/manager/phones/plan/update'), plan)
+        .then(function(data) {
+          q.resolve(data);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
+
     function getPlans() {
       var q = $q.defer();
 
