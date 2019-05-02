@@ -22,6 +22,7 @@
         this.changeTemplateEdit = changeTemplateEdit;
         this.changeEstoqueView = changeEstoqueView;
         this.changeAllPhonesView = changeAllPhonesView;
+        this.changePlanEditView = changePlanEditView;
         this.goBack = goBack;
 
         function changeLoginView(){
@@ -90,6 +91,11 @@
         function changeEstoqueView(param){
             LocationService.change('tabs.estoque', param);
             $rootScope.$broadcast('changeMenuItem', 'estoque');
+        }
+
+        function changePlanEditView(param){
+            LocationService.change('tabs.plan-edition', param);
+            $rootScope.$broadcast('changeMenuItem', 'plan-edition');
         }
 
         function changeAllPhonesView(param){

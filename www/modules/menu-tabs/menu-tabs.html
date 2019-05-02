@@ -78,6 +78,15 @@
                 <span> Edição conteúdo </span>
             </div>
         </div>   
+
+        <div title="Planos e Serviços" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'allphone-lines'}"  ng-click="vm.setMenuItemActive('plan-edition')">            
+            <div>
+                <!-- <i class="glyphicon glyphicon-phone" aria-hidden="true"></i>  -->
+                <img src="./content/img/plans.png" style="width:20px;height:20px;">         
+                <span> Edição Planos </span>
+            </div>
+        </div>   
+
     </div>  
      
     <div class="menu-views" ui-view name="menu-tab">                            

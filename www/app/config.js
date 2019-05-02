@@ -146,6 +146,15 @@
           }
         }
       })
+      .state('tabs.plan-edition', {
+        url: "/plan-edition",
+        views: {
+          'menu-tab': {
+            templateUrl: 'modules/plan-edition/plan-edition.html',
+            controller: 'PlanEditionController as vm'
+          }
+        }
+      })
 
       
       $urlRouterProvider.otherwise('/');
