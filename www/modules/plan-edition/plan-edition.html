@@ -4,14 +4,51 @@
     <div class="container-plan-edition">
         <table>
             <tr>
-              <th>Company</th>
-              <th>Contact</th>
-              <th>Country</th>
-              <th>field</th>
-              <th>field2</th>
-              <th>field3</th>
+              <th>Operadora</th>
+              <th>Descrição</th>
+              <th>Valor</th>
+              <th>Ativo</th>
+              <th>Teste</th>
             </tr>
-            <tr>
+
+            <tr ng-repeat="plan in vm.allPlans">
+                <!-- <td>Título</td> -->
+                <td>{{plan.IdOperator == 1 ? 'CLARO' : 'VIVO'}}</td>
+                <td><input ng-model="plan.Description" type="text" class="form-control" /></td>
+                <td><input ng-model="plan.Value" type="text" class="form-control" /></td>
+                <td><input ng-model="plan.Active" type="text" class="form-control" /></td>
+
+                <td>                
+                    <select name="example">
+                    <option value="A">A</option>
+                    <option value="B">A</option>
+                    <option value="-">Other</option>
+                    </select>
+                </td>
+
+                <td>
+                        <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
+                <select  next-on-enter class="form-control"
+                    ng-options="operator.id as operador.operator for operador in plan.currentPlan"
+                    ng-model="operator.id"
+                    
+                    style="width: 160px;">
+                <option value="">Adicione Serviço</option>
+                </select>
+                </td>
+
+                
+               
+                <!-- $$hashKey: "object:40"
+                Active: null
+                Cost: 0
+                Description: "C- 100GB Angra"
+                Id: 25
+                IdOperator: 1
+                Value: 19999 -->
+
+            </tr>
+            <!-- <tr>
                 <td>Título</td>
                 <td><input type="text" class="form-control" /></td>
                 <td><input type="text" class="form-control" /></td>
@@ -27,7 +64,7 @@
                 <td><input type="text" class="form-control" /></td>
                 <td><input type="text" class="form-control" /></td>
                 <td><input type="text" class="form-control" /></td>
-            </tr>
+            </tr> -->
 
           </table>
     </div>
