@@ -60,6 +60,7 @@
     this.getStatusDocument = getStatusDocument;
     this.getStatusChargingOfCustomer = getStatusChargingOfCustomer;
     this.getPlanOptios = getPlanOptios;
+    this.getAllPlanOptios = getAllPlanOptios;
     this.SendEmailStatus = SendEmailStatus;
     this.getEmailDetails = getEmailDetails;
     this.saveemail = saveemail;
@@ -634,6 +635,20 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/plans'))
+        .then(function(result) {
+          q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    function getAllPlanOptios() {
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/manager/phones/all/plans'))
         .then(function(result) {
           q.resolve(result);
         })

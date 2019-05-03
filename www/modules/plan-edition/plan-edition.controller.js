@@ -10,7 +10,11 @@
             var vm = this;
             console.log('-- Plan Edition --')
 
-    
+            FoneclubeService.getAllPlanOptios().then(function (result) {
+                console.log('result')
+                console.log(result)
+            })
+
         }
     })();
     
