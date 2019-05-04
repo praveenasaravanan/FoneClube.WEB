@@ -1,72 +1,112 @@
     
     <fone-header title="Edição Plano Fonclube"></fone-header>
 
+    
     <div class="container-plan-edition">
-        <table>
-            <tr>
-              <th>Operadora</th>
-              <th>Descrição</th>
-              <th>Valor</th>
-              <th>Ativo</th>
-              <th>Teste</th>
-            </tr>
 
-            <tr ng-repeat="plan in vm.allPlans">
-                <!-- <td>Título</td> -->
-                <td>{{plan.IdOperator == 1 ? 'CLARO' : 'VIVO'}}</td>
-                <td><input ng-model="plan.Description" type="text" class="form-control" /></td>
-                <td><input ng-model="plan.Value" type="text" class="form-control" /></td>
-                <td><input ng-model="plan.Active" type="text" class="form-control" /></td>
 
-                <td>                
-                    <select name="example">
-                    <option value="A">A</option>
-                    <option value="B">A</option>
-                    <option value="-">Other</option>
-                    </select>
-                </td>
-
-                <td>
-                        <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
-                <select  next-on-enter class="form-control"
-                    ng-options="operator.id as operador.operator for operador in plan.currentPlan"
-                    ng-model="operator.id"
-                    
-                    style="width: 160px;">
-                <option value="">Adicione Serviço</option>
-                </select>
-                </td>
-
+        
+        <button class="btn btn-light btn-edicao-foneclube-plan" 
+        type="button" 
+        data-toggle="collapse" 
+        data-target="#collapseExample" 
+        aria-expanded="true" 
+        aria-controls="collapseExample">
+            Editar Planos Foneclube
+        </button>
+        <hr class="my-4">
+        <div class="collapse" id="collapseExample">
+        <div class="card card-body">
                 
-               
-                <!-- $$hashKey: "object:40"
-                Active: null
-                Cost: 0
-                Description: "C- 100GB Angra"
-                Id: 25
-                IdOperator: 1
-                Value: 19999 -->
+            <table>
+                    <tr>
+                    <th>Operadora</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Ativo</th>
+                    </tr>
+        
+                    <tr ng-repeat="plan in vm.allPlans">
+                        <!-- <td>Título</td> -->
+                        <!-- <td>{{plan.IdOperator == 1 ? 'CLARO' : 'VIVO'}}</td> -->
+                        <td>
+                            <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
+                            <select  next-on-enter class="form-control"
+                                ng-options="operator.id as operador.operator for operador in plan.currentPlan"
+                                ng-model="operator.id"
+                                style="width: 160px;">
+                            <option value="">Adicione Serviço</option>
+                            </select>
+                        </td>
+                        <td><input ng-model="plan.Description" type="text" class="form-control" /></td>
+                        <td><input ng-model="plan.Value" type="text" class="form-control" /></td>
+                        
+                        <td>
+                                <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
+                                <select next-on-enter class="form-control"
+                                ng-model="selected" 
+                                ng-options="opt as opt for opt in vm.ativacao" 
+                                ng-init="selected=plan.Active"></select>
+                            </td>
+        
+                    </tr>
+        
+                </table>
+            </div>
+            </div>
 
-            </tr>
-            <!-- <tr>
-                <td>Título</td>
-                <td><input type="text" class="form-control" /></td>
-                <td><input type="text" class="form-control" /></td>
-                <td><input type="text" class="form-control" /></td>
-                <td><input type="text" class="form-control" /></td>
-                <td><input type="text" class="form-control" /></td>
-            </tr>
+            
+            <button class="btn btn-light btn-edicao-foneclube-plan" 
+            type="button" 
+            data-toggle="collapse" 
+            data-target="#collapseService" 
+            aria-expanded="true" 
+            aria-controls="collapseService">
+                Editar Serviços Foneclube
+            </button>
+            <hr class="my-4">
+            <div class="collapse" id="collapseService">
+            <div class="card card-body">
+                    
+                <table>
+                        <tr>
+                        <th>Operadora</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Ativo</th>
+                        </tr>
+            
+                        <tr ng-repeat="plan in vm.allPlans">
+                            <!-- <td>Título</td> -->
+                            <!-- <td>{{plan.IdOperator == 1 ? 'CLARO' : 'VIVO'}}</td> -->
+                            <td>
+                                <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
+                                <select  next-on-enter class="form-control"
+                                    ng-options="operator.id as operador.operator for operador in plan.currentPlan"
+                                    ng-model="operator.id"
+                                    style="width: 160px;">
+                                <option value="">Adicione Serviço</option>
+                                </select>
+                            </td>
+                            <td><input ng-model="plan.Description" type="text" class="form-control" /></td>
+                            <td><input ng-model="plan.Value" type="text" class="form-control" /></td>
+                            
+                            <td>
+                                    <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
+                                    <select next-on-enter class="form-control"
+                                    ng-model="selected" 
+                                    ng-options="opt as opt for opt in vm.ativacao" 
+                                    ng-init="selected=plan.Active"></select>
+                                </td>
+            
+                        </tr>
+            
+                    </table>
+                </div>
+                </div>
+                  
 
-            <tr>
-                <td>Título</td>
-                <td><input type="text" class="form-control" /></td>
-                <td><input type="text" class="form-control" /></td>
-                <td><input type="text" class="form-control" /></td>
-                <td><input type="text" class="form-control" /></td>
-                <td><input type="text" class="form-control" /></td>
-            </tr> -->
 
-          </table>
     </div>
 
 

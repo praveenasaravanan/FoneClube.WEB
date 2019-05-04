@@ -8,7 +8,8 @@
       PlanEditionController.inject = ['FlowManagerService', 'FoneclubeService', 'PagarmeService'];
       function PlanEditionController(FlowManagerService, FoneclubeService, PagarmeService) {
             var vm = this;
-            vm.operator = [{id:1, operator:'CLARO'},{id:2, operator:'VIVO'}]
+            vm.ativacao = [true,false];
+            // vm.operator = [{id:1, operator:'CLARO'},{id:2, operator:'VIVO'}]
             
             console.log('-- Plan Edition --')
 
@@ -24,6 +25,14 @@
                     
                 }
 
+                console.log(result)
+            })
+
+            
+
+            FoneclubeService.getServices().then(function (result) {
+                console.log('result services')
+                
                 console.log(result)
             })
 

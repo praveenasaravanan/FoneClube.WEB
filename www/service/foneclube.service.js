@@ -1166,7 +1166,7 @@
       return q.promise;
     }
 
-    function getServices(phoneId) {
+    function getServices() {
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/extra/services'))
