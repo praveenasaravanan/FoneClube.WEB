@@ -20,16 +20,16 @@
                 
             <table>
                     <tr>
-                    <th>Operadora</th>
-                    <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Ativo</th>
+                    <th style="padding:0 4px 0 4px;">Operadora</th>
+                    <th style="padding:0 4px 0 4px;">Descrição</th>
+                    <th style="padding:0 4px 0 4px;">Valor</th>
+                    <th style="padding:0 4px 0 4px;">Ativo</th>
                     </tr>
         
                     <tr ng-repeat="plan in vm.allPlans">
                         <!-- <td>Título</td> -->
                         <!-- <td>{{plan.IdOperator == 1 ? 'CLARO' : 'VIVO'}}</td> -->
-                        <td>
+                        <td style="padding:0 4px 0 4px;">
                             <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
                             <select  next-on-enter class="form-control"
                                 ng-options="operator.id as operador.operator for operador in plan.currentPlan"
@@ -38,20 +38,23 @@
                             <option value="">Adicione Serviço</option>
                             </select>
                         </td>
-                        <td><input ng-model="plan.Description" type="text" class="form-control" /></td>
-                        <td><input ng-model="plan.Value" type="text" class="form-control" /></td>
+                        <td style="padding:0 4px 0 4px;"><input ng-model="plan.Description" type="text" class="form-control" /></td>
+                        <td style="padding:0 4px 0 4px;"><input ng-model="plan.Value" type="text" class="form-control" /></td>
                         
-                        <td>
+                        <td style="padding:0 4px 0 4px;">
                                 <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
+                                <div class=""></div>
                                 <select next-on-enter class="form-control"
                                 ng-model="plan.selectedActive" 
                                 ng-options="opt as opt for opt in vm.ativacao" 
                                 ng-init="plan.selectedActive=plan.Active"></select>
                         </td>
 
-                        <td><button type="button" class="btn btn-info" ng-click="vm.onClickEditPlan(plan)">
+                        <td style="padding:0 4px 0 4px;">
+                            <button type="button" class="btn btn-info" ng-click="vm.onClickEditPlan(plan)">
                             <i class="glyphicon glyphicon-pencil"></i>
-                        </button></td>
+                            </button>
+                        </td>
         
                     </tr>
         
@@ -75,20 +78,20 @@
                 <table>
                         <tr>
                         
-                        <th>Descrição</th>
-                        <th>Editável</th>
-                        <th>Assinatura</th>
-                        <th>Opção Extra</th>
-                        <th>Valor Operadora</th>
-                        <th>Valor Foneclube</th>
+                        <th style="padding:0 4px 0 4px;">Descrição</th>
+                        <th style="padding:0 4px 0 4px;">Editável</th>
+                        <th style="padding:0 4px 0 4px;">Assinatura</th>
+                        <th style="padding:0 4px 0 4px;">Opção Extra</th>
+                        <th style="padding:0 4px 0 4px;">Valor Operadora</th>
+                        <th style="padding:0 4px 0 4px;">Valor Foneclube</th>
                         
                         </tr>
             
                         <tr ng-repeat="service in vm.services">
 
-                            <td><input ng-model="service.Descricao" type="text" class="form-control" /></td>
+                            <td style="padding:0 4px 0 4px;"><input ng-model="service.Descricao" type="text" class="form-control" /></td>
                             
-                            <td>
+                            <td style="padding:0 4px 0 4px;">
                                 <select next-on-enter class="form-control"
                                 ng-model="service.selectedEditavel" 
                                 ng-options="opt as opt for opt in vm.ativacao" 
@@ -96,27 +99,29 @@
                             </td>
 
 
-                            <td>
+                            <td style="padding:0 4px 0 4px;">
                                 <select next-on-enter class="form-control"
                                 ng-model="service.selectedAssinatura" 
                                 ng-options="opt as opt for opt in vm.ativacao" 
                                 ng-init="service.selectedAssinatura = service.Assinatura"></select>
-                            </td>
+                            </td style="padding:0 4px 0 4px;">
 
-                            <td>
+                            <td style="padding:0 4px 0 4px;">
                                 <select next-on-enter class="form-control"
                                 ng-model="service.selectedExtraOption" 
                                 ng-options="opt as opt for opt in vm.ativacao" 
                                 ng-init="service.selectedExtraOption = service.ExtraOption"></select>
                             </td>
 
-                            <td><input ng-model="service.AmountOperadora" type="text" class="form-control" /></td>
+                            <td style="padding:0 4px 0 4px;"><input ng-model="service.AmountOperadora" type="text" class="form-control" /></td>
 
-                            <td><input ng-model="service.AmountFoneclube" type="text" class="form-control" /></td>
+                            <td style="padding:0 4px 0 4px;"><input ng-model="service.AmountFoneclube" type="text" class="form-control" /></td>
                             
-                            <td><button type="button" class="btn btn-info" ng-click="vm.onClickEditService(service)">
-                                <i class="glyphicon glyphicon-pencil"></i>
-                            </button></td>
+                            <td style="padding:0 4px 0 4px;">
+                                <button type="button" class="btn btn-info" ng-click="vm.onClickEditService(service)">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </button>
+                            </td>
 
                         </tr>
             
