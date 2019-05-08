@@ -44,10 +44,14 @@
                         <td>
                                 <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
                                 <select next-on-enter class="form-control"
-                                ng-model="selected" 
+                                ng-model="plan.selectedActive" 
                                 ng-options="opt as opt for opt in vm.ativacao" 
-                                ng-init="selected=plan.Active"></select>
-                            </td>
+                                ng-init="plan.selectedActive=plan.Active"></select>
+                        </td>
+
+                        <td><button type="button" class="btn btn-info" ng-click="vm.onClickEditPlan(plan)">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                        </button></td>
         
                     </tr>
         
@@ -70,35 +74,50 @@
                     
                 <table>
                         <tr>
-                        <th>Operadora</th>
+                        
                         <th>Descrição</th>
-                        <th>Valor</th>
-                        <th>Ativo</th>
+                        <th>Editável</th>
+                        <th>Assinatura</th>
+                        <th>Opção Extra</th>
+                        <th>Valor Operadora</th>
+                        <th>Valor Foneclube</th>
+                        
                         </tr>
             
-                        <tr ng-repeat="plan in vm.allPlans">
-                            <!-- <td>Título</td> -->
-                            <!-- <td>{{plan.IdOperator == 1 ? 'CLARO' : 'VIVO'}}</td> -->
-                            <td>
-                                <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
-                                <select  next-on-enter class="form-control"
-                                    ng-options="operator.id as operador.operator for operador in plan.currentPlan"
-                                    ng-model="operator.id"
-                                    style="width: 160px;">
-                                <option value="">Adicione Serviço</option>
-                                </select>
-                            </td>
-                            <td><input ng-model="plan.Description" type="text" class="form-control" /></td>
-                            <td><input ng-model="plan.Value" type="text" class="form-control" /></td>
+                        <tr ng-repeat="service in vm.services">
+
+                            <td><input ng-model="service.Descricao" type="text" class="form-control" /></td>
                             
                             <td>
-                                    <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
-                                    <select next-on-enter class="form-control"
-                                    ng-model="selected" 
-                                    ng-options="opt as opt for opt in vm.ativacao" 
-                                    ng-init="selected=plan.Active"></select>
-                                </td>
-            
+                                <select next-on-enter class="form-control"
+                                ng-model="service.selectedEditavel" 
+                                ng-options="opt as opt for opt in vm.ativacao" 
+                                ng-init="service.selectedEditavel = service.Editavel"></select>
+                            </td>
+
+
+                            <td>
+                                <select next-on-enter class="form-control"
+                                ng-model="service.selectedAssinatura" 
+                                ng-options="opt as opt for opt in vm.ativacao" 
+                                ng-init="service.selectedAssinatura = service.Assinatura"></select>
+                            </td>
+
+                            <td>
+                                <select next-on-enter class="form-control"
+                                ng-model="service.selectedExtraOption" 
+                                ng-options="opt as opt for opt in vm.ativacao" 
+                                ng-init="service.selectedExtraOption = service.ExtraOption"></select>
+                            </td>
+
+                            <td><input ng-model="service.AmountOperadora" type="text" class="form-control" /></td>
+
+                            <td><input ng-model="service.AmountFoneclube" type="text" class="form-control" /></td>
+                            
+                            <td><button type="button" class="btn btn-info" ng-click="vm.onClickEditService(service)">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                            </button></td>
+
                         </tr>
             
                     </table>

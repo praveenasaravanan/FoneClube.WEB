@@ -82,6 +82,7 @@
     this.getActiveCustomers = getActiveCustomers;
     this.getPhoneServices = getPhoneServices;
     this.getServices = getServices;
+    this.getAllServices = getAllServices;
 
     function getLastPaymentType(customer) {
       var q = $q.defer();
@@ -1179,5 +1180,20 @@
 
       return q.promise;
     }
+
+    function getAllServices() {
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/manager/phones/extra/all/services'))
+        .then(function(result) {
+          q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
   }
 })();

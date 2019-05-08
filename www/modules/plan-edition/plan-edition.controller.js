@@ -9,6 +9,8 @@
       function PlanEditionController(FlowManagerService, FoneclubeService, PagarmeService) {
             var vm = this;
             vm.ativacao = [true,false];
+            vm.onClickEditPlan = onClickEditPlan;
+            vm.onClickEditService = onClickEditService;
             // vm.operator = [{id:1, operator:'CLARO'},{id:2, operator:'VIVO'}]
             
             console.log('-- Plan Edition --')
@@ -30,11 +32,29 @@
 
             
 
-            FoneclubeService.getServices().then(function (result) {
+            FoneclubeService.getAllServices().then(function (result) {
                 console.log('result services')
-                
                 console.log(result)
+                
+
+                for(var i in result){
+                    if(result[i].Editavel == null){
+                        result[i].Editavel = false;
+                    }  
+                }
+
+                vm.services = result;
             })
+
+            function onClickEditService(service){
+                console.log('edit service:')
+                console.log(service)
+            }
+
+            function onClickEditPlan(plan){
+                console.log('edit plan:')
+                console.log(plan)
+            }
 
         }
     })();
