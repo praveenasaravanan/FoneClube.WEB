@@ -37,6 +37,7 @@
     this.postCustomerUpdateParent = postCustomerUpdateParent;
     this.postIsertServiceDeactive = postIsertServiceDeactive;
     this.postIsertServiceActive = postIsertServiceActive;
+    this.postUpdateServiceFoneclube = postUpdateServiceFoneclube;
 
     this.getPlans = getPlans;
     this.getCustomerPlans = getCustomerPlans;
@@ -522,9 +523,9 @@
       return q.promise;
     }
 
-    function postUpdatePhonePlan(phone) {
+    function postUpdatePhonePlan(plan) {
       var q = $q.defer();
-      HTTPService.post(urlApi.concat('/manager/phones/plan/update'), phone)
+      HTTPService.post(urlApi.concat('/manager/phones/plan/foneclube/update'), plan)
         .then(function(data) {
           q.resolve(data);
         })

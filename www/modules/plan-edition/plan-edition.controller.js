@@ -49,11 +49,24 @@
             function onClickEditService(service){
                 console.log('edit service:')
                 console.log(service)
+
+                FoneclubeService.postUpdateServiceFoneclube(service).then(function (result) {
+                    console.log('result services postUpdateServiceFoneclube')
+                    console.log(result)
+                    
+                })
             }
 
             function onClickEditPlan(plan){
                 console.log('edit plan:')
                 console.log(plan)
+
+                debugger
+                FoneclubeService.postUpdatePhonePlan(plan).then(function (result) {
+                    console.log('result services postUpdatePhonePlan')
+                    console.log(result)
+                    
+                })
             }
 
         }
