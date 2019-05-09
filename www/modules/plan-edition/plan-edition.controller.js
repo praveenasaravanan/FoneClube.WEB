@@ -50,6 +50,10 @@
             function onClickEditService(service){
                 console.log('edit service:')
                 console.log(service)
+                debugger
+                service.Assinatura = service.selectedAssinatura
+                service.Editavel = service.selectedEditavel
+                service.ExtraOption = service.selectedExtraOption
 
                 FoneclubeService.postUpdateServiceFoneclube(service).then(function (result) {
                     console.log('result services postUpdateServiceFoneclube')
