@@ -32,8 +32,9 @@
                         <td style="padding:3px 4px 0 4px;">
                             <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
                             <select  next-on-enter class="form-control"
-                                ng-options="operator.id as operador.operator for operador in plan.currentPlan"
-                                ng-model="operator.id"
+                                ng-options="opt as opt for opt in vm.planOperator"
+                                ng-model="plan.selectedPlan"
+                                ng-init="plan.selectedPlan=plan.currentPlan"
                                 style="width: 160px;">
                             <option value="">Adicione Serviço</option>
                             </select>
