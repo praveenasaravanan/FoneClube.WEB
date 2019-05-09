@@ -63,11 +63,15 @@
             }
 
             function onClickEditPlan(plan){
-                console.log('edit plan:')
-                console.log(plan)
+                
                 plan.Active = plan.selectedActive;
-                console.log(vm.selectedOperatorId)
-                debugger
+                
+                if(plan.selectedPlan == 'CLARO')
+                    plan.IdOperator = 1
+                else
+                    plan.IdOperator = 2
+
+                
                 FoneclubeService.postUpdatePhonePlan(plan).then(function (result) {
                     console.log('result services postUpdatePhonePlan')
                     console.log(result)
