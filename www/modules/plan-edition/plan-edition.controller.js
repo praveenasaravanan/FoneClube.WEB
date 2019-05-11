@@ -12,6 +12,8 @@
             vm.planOperator = ['CLARO','VIVO']
             vm.onClickEditPlan = onClickEditPlan;
             vm.onClickEditService = onClickEditService;
+            vm.onClickAddService = onClickAddService;
+            vm.onClickAddPlan = onClickAddPlan;
             // vm.operator = [{id:1, operator:'CLARO'},{id:2, operator:'VIVO'}]
             
             console.log('-- Plan Edition --')
@@ -20,6 +22,17 @@
                 console.log('result')
                 
                 vm.allPlans = result;
+                debugger;
+
+                // vm.allPlans.push({
+                //     'Active': true,
+                //     'Cost': 0,
+                //     'Description': "",
+                //     'Id': -1,
+                //     'IdOperator': 1,
+                //     'Value': 0
+                // })
+                
                 for(var i in vm.allPlans){
                     if(vm.allPlans[i].IdOperator == 1)
                         vm.allPlans[i].currentPlan = 'CLARO'
@@ -37,7 +50,7 @@
                 console.log('result services')
                 console.log(result)
                 
-
+                debugger
                 for(var i in result){
                     if(result[i].Editavel == null){
                         result[i].Editavel = false;
@@ -45,6 +58,16 @@
                 }
 
                 vm.services = result;
+
+                // vm.services.push({
+                //     'AmountFoneclube': '',
+                //     'AmountOperadora': '',
+                //     'Assinatura': false,
+                //     'Descricao': '',
+                //     'Editavel': false,
+                //     'ExtraOption': false,
+                //     'Id': -1
+                // })
             })
 
             function onClickEditService(service){
@@ -86,6 +109,14 @@
                     } 
                     
                 })
+            }
+
+            function onClickAddService(service){
+                debugger
+            }
+
+            function onClickAddPlan(plan){
+                debugger
             }
 
         }

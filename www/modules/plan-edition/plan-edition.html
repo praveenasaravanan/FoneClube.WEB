@@ -14,6 +14,7 @@
         aria-controls="collapseExample">
             Editar Planos Foneclube
         </button>
+        
         <hr class="my-4">
         <div class="collapse" id="collapseExample">
         <div class="card card-body">
@@ -52,8 +53,12 @@
                         </td>
 
                         <td style="padding:3px 4px 0 4px;">
-                            <button type="button" class="btn btn-info" ng-click="vm.onClickEditPlan(plan)">
+                            <button ng-if="plan.Id > 0" type="button" class="btn btn-info" ng-click="vm.onClickEditPlan(plan)">
                             <i class="glyphicon glyphicon-pencil"></i>
+                            </button>
+
+                            <button ng-if="plan.Id == -1" type="button" class="btn btn-info" ng-click="vm.onClickAddPlan(plan)">
+                                <i class="glyphicon glyphicon-plus"></i>
                             </button>
                         </td>
         
@@ -73,6 +78,7 @@
             aria-controls="collapseService">
                 Editar Serviços Foneclube
             </button>
+
             <hr class="my-4">
             <div class="collapse" id="collapseService">
             <div class="card card-body">
@@ -120,8 +126,12 @@
                             <td style="padding:3px 4px 0 4px;"><input ng-model="service.AmountFoneclube" type="text" class="form-control" /></td>
                             
                             <td style="padding:3px 4px 0 4px;">
-                                <button type="button" class="btn btn-info" ng-click="vm.onClickEditService(service)">
+                                <button ng-if='service.Id > 0' type="button" class="btn btn-info" ng-click="vm.onClickEditService(service)">
                                     <i class="glyphicon glyphicon-pencil"></i>
+                                </button>
+
+                                <button ng-if='service.Id == -1' type="button" class="btn btn-info" ng-click="vm.onClickAddService(service)">
+                                    <i class="glyphicon glyphicon-plus"></i>
                                 </button>
                             </td>
 
