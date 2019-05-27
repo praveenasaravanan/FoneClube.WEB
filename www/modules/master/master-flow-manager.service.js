@@ -23,6 +23,7 @@
         this.changeEstoqueView = changeEstoqueView;
         this.changeAllPhonesView = changeAllPhonesView;
         this.changePlanEditView = changePlanEditView;
+        this.changeReportComissionsView = changeReportComissionsView;
         this.goBack = goBack;
 
         function changeLoginView(){
@@ -101,6 +102,11 @@
         function changeAllPhonesView(param){
             LocationService.change('tabs.all-phones', param);
             $rootScope.$broadcast('changeMenuItem', 'all-phones'); 
+        }
+
+        function changeReportComissionsView(param){
+            LocationService.change('tabs.report-comissions', param);
+            $rootScope.$broadcast('changeMenuItem', 'report-comissions'); 
         }
         
         function goBack() {

@@ -62,7 +62,11 @@
             }
             else if(screen == 'all-phones'){
                 FlowManagerService.changeAllPhonesView();
-            } else {
+            }
+            else if(screen == 'report-comissions'){
+                FlowManagerService.changeReportComissionsView();
+            } 
+            else {
                
                 
             }

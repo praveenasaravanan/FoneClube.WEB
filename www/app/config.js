@@ -155,6 +155,15 @@
           }
         }
       })
+      .state('tabs.report-comissions', {
+        url: "/report-comissions",
+        views: {
+          'menu-tab': {
+            templateUrl: 'modules/report-comissions/report-comissions.html',
+            controller: 'ReportComissionController as vm'
+          }
+        }
+      })
 
       
       $urlRouterProvider.otherwise('/');
