@@ -84,6 +84,9 @@
     this.getPhoneServices = getPhoneServices;
     this.getServices = getServices;
     this.getAllServices = getAllServices;
+    this.getBonusLog = getBonusLog;
+    this.getBonusOrderHistory = getBonusOrderHistory;
+    this.getComissionsOrderHistory = getComissionsOrderHistory;
 
     function getLastPaymentType(customer) {
       var q = $q.defer();
@@ -191,6 +194,48 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/pagarme/transacao/reintegrate/date'))
+        .then(function(result) {
+          q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    function getBonusLog(){
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/comission/bonus/lista/log'))
+        .then(function(result) {
+          q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    function getBonusOrderHistory(total){
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/comission/bonus/order/history?total=' + total))
+        .then(function(result) {
+          q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    function getComissionsOrderHistory(total){
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/comission/comission/order/history?total=' + total))
         .then(function(result) {
           q.resolve(result);
         })
