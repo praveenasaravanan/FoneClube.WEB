@@ -63,7 +63,7 @@
                       <td>{{comission.Liberador.Name}}</td>
                       <td>{{comission.Liberador.Charging.Id}}</td>
                       <td>{{comission.Order.intAmount}}</td>
-                      <td>{{comission.Order.dteCreated}}</td>
+                      <td>{{comission.Order.dteCreated | date: 'yyyy/MM/dd hh:mm'}}</td>
                       
                     </tr>
                   </table>
@@ -91,13 +91,13 @@
               <td>{{bonus.Liberador.Charging.Id}}</td>
               <td>{{bonus.Order.intIdPhonePlan}}</td>
               <td>{{bonus.Order.intPercentBonus}}</td>
-              <td>{{bonus.Order.dteCreated}}</td>
+              <td>{{bonus.Order.dteCreated | date: 'yyyy/MM/dd hh:mm'}}</td>
               
             </tr>
         </table>
 </div>
 
-
+<p ng-if="vm.resultBonusLog.LinhasAptasBonus.length > 0">Data do setup de bônus: {{vm.resultBonusLog.DataRegistroLog | date: 'yyyy/MM/dd hh:mm'}}</p>
 <div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasAptasBonus.length > 0">
   <p>Linhas Aptas Bonus</p>
   <table ng-if="vm.resultBonusLog.LinhasAptasBonus.length > 0">
