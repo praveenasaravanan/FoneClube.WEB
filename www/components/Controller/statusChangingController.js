@@ -176,6 +176,7 @@ function statusChangingController2($scope, $interval, FoneclubeService, PagarmeS
 
 
   $scope.exportToExcel = function () {
+    debugger
     $('.k-grid-excel').trigger("click")
   }
 

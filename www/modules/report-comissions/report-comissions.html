@@ -8,7 +8,7 @@
 			<label>	Total</label>
 			<input type="number" class="form-control" placeholder="Total" ng-model="vm.total"
 				   aria-describedby="sizing-addon2" id="mes">
-		</div>
+    </div>
 
 		<div class="form-group col-xs-6  col-sm-8 otherOptions">
 			<label>&nbsp;</label>
@@ -26,14 +26,49 @@
 					<label>Log Bonus</label>
 				</li>
         <li>
-          <button class="btn btn-primary busca-status " style="margin-top:0px"
-          ng-click="vm.onSearchHistory()" >
+          <button class="btn btn-primary busca-status " 
+          style="margin-top:0px"
+          ng-click="vm.onSearchHistory()">
             Buscar
           </button>
         </li>
+        <!-- <li>
+          <button class="btn btn-primary busca-status " style="margin-top:0px"
+                  data-ng-click="vm.exportToExcel()">
+            Export To Excel
+          </button>
+        </li> -->
 			</ul> 
 		</div>
   </div>
+
+  <div class="col-xs-12" style="margin-top: 48px;">
+    <!-- <h1 class="form-group col-xs-12 display-4">Cobrança em Massa</h1> -->
+    
+              
+              <table ng-if="vm.resultComission.length > 0">
+                    <tr>
+                      <th>CPF Recebedor</th>
+                      <th>Nome Recebedor</th>
+                      <th>CPF Liberador</th>
+                      <th>Nome Liberador</th>
+                      <th>Cobrança Id</th>
+                      <th>Valor da ordem</th>
+                      <th>Data</th>
+                    </tr>
+                    <tr ng-repeat="comission in vm.resultComission">
+                      <td>{{comission.Recebedor.DocumentNumber}}</td>
+                      <td>{{comission.Recebedor.Name}}</td>
+                      <td>{{comission.Liberador.DocumentNumber}}</td>
+                      <td>{{comission.Liberador.Name}}</td>
+                      <td>{{comission.Liberador.Charging.Id}}</td>
+                      <td>{{comission.Order.intAmount}}</td>
+                      <td>{{comission.Order.dteCreated}}</td>
+                      
+                    </tr>
+                  </table>
+
+        </div>
 
   <div class="loader-mass" ng-if="vm.loading">Carregando...</div>
 

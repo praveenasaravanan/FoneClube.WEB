@@ -7,38 +7,63 @@
     
       ReportComissionController.inject = ['FlowManagerService', 'FoneclubeService', 'PagarmeService'];
       function ReportComissionController(FlowManagerService, FoneclubeService, PagarmeService) {
+
             var vm = this;            
             vm.onSearchHistory = onSearchHistory;
             vm.changeFilterComissionHistory = changeFilterComissionHistory;
             vm.changeFilterBonusHistory = changeFilterBonusHistory;
             vm.changeFilterLogBonus = changeFilterLogBonus;
-
+            vm.exportToExcel = exportToExcel;
+            vm.comissionHistory = true;
+            
             console.log('-- report comission Edition --');
 
-
-            FoneclubeService.getBonusLog().then(function (result) {
-                console.log('getBonusLog result')
-                console.log(result)  
-            })
-
-            FoneclubeService.getBonusOrderHistory(10).then(function (result) {
-                console.log('getBonusOrderHistory result')
-                console.log(result)
-            })
-
-            FoneclubeService.getComissionsOrderHistory(10).then(function (result) {
-                console.log('getComissionsOrderHistory result')
-                console.log(result)
-            })
-
             function onSearchHistory(){
-                console.log('search')
-                console.log(vm.comissionHistory)
-                console.log(vm.bonusHistory)
-                console.log(vm.logBonus)
-                console.log(vm.total)
 
+                vm.resultBonus = []
+                vm.resultComission = []
+                vm.resultBonusLog = []
+
+                console.log('onSearchHistory');
+                
                 vm.loading = true;
+
+                if(vm.total == undefined || vm.total == null){
+                    vm.total = 1000;
+                }
+
+                debugger;
+                if(vm.comissionHistory){
+                    FoneclubeService.getComissionsOrderHistory(vm.total).then(function (result) {
+                        console.log('getComissionsOrderHistory result');
+                        console.log(result);
+
+                        vm.resultComission = result;
+                        vm.loading = false;
+                    })
+                }
+
+                if(vm.bonusHistory){
+                    FoneclubeService.getBonusOrderHistory(vm.total).then(function (result) {
+                        console.log('getBonusOrderHistory result');
+                        console.log(result);
+
+                        vm.resultBonus = result;
+                        vm.loading = false;
+                    })
+                }
+
+                if(vm.logBonus){
+
+                    FoneclubeService.getBonusLog().then(function (result) {
+                        console.log('getBonusLog result');
+                        console.log(result);
+
+                        vm.resultBonusLog = result;
+                        vm.loading = false;  
+                    })
+
+                }
             }
 
             function changeFilterComissionHistory(){
@@ -59,6 +84,9 @@
                 vm.logBonus = true
             }
 
+            function exportToExcel(){
+                $('.k-grid-excel').trigger("click")
+            }
         }
     })();
     
