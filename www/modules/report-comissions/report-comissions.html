@@ -68,9 +68,163 @@
                     </tr>
                   </table>
 
-        </div>
+    </div>
 
-  <div class="loader-mass" ng-if="vm.loading">Carregando...</div>
+
+    <div class="col-xs-12" style="margin-top: 48px;">
+      <table ng-if="vm.resultBonus.length > 0">
+            <tr>
+              <th>CPF Recebedor</th>
+              <th>Nome Recebedor</th>
+              <th>CPF Liberador</th>
+              <th>Nome Liberador</th>
+              <th>Cobrança Id</th>
+              <th>Id Plano</th>
+              <th>Porcentagem</th>
+              <th>Data</th>
+            </tr>
+            <tr ng-repeat="bonus in vm.resultBonus">
+              <td>{{bonus.Recebedor.DocumentNumber}}</td>
+              <td>{{bonus.Recebedor.Name}}</td>
+              <td>{{bonus.Liberador.DocumentNumber}}</td>
+              <td>{{bonus.Liberador.Name}}</td>
+              <td>{{bonus.Liberador.Charging.Id}}</td>
+              <td>{{bonus.Order.intIdPhonePlan}}</td>
+              <td>{{bonus.Order.intPercentBonus}}</td>
+              <td>{{bonus.Order.dteCreated}}</td>
+              
+            </tr>
+        </table>
+</div>
+
+
+<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasAptasBonus.length > 0">
+  <p>Linhas Aptas Bonus</p>
+  <table ng-if="vm.resultBonusLog.LinhasAptasBonus.length > 0">
+        <tr>
+          <th>Ordem Id</th>
+          <th>Id cliente</th>
+          <th>Nome</th>
+          <th>CPF</th>
+        </tr>
+        <tr ng-repeat="log in vm.resultBonusLog.LinhasAptasBonus">
+          <td>{{log.Id}}</td>
+          <td>{{log.Owner}}</td>
+          <td>{{log.OwnerName}}</td>
+          <td>{{log.OwnerDocument}}</td>
+        </tr>
+    </table>
+</div>
+
+<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasMalComportamento.length > 0">
+    <p>Linhas Mal Comportamento</p>
+    <table ng-if="vm.resultBonusLog.LinhasMalComportamento.length > 0">
+          <tr>
+            <th>Ordem Id</th>
+            <th>Id cliente</th>
+            <th>Nome</th>
+            <th>CPF</th>
+          </tr>
+          <tr ng-repeat="log in vm.resultBonusLog.LinhasMalComportamento">
+            <td>{{log.Id}}</td>
+            <td>{{log.Owner}}</td>
+            <td>{{log.OwnerName}}</td>
+            <td>{{log.OwnerDocument}}</td>
+          </tr>
+      </table>
+</div>
+
+<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasPendentePagamento.length > 0">
+    <p>Linhas Pendente Pagamento</p>
+    <table ng-if="vm.resultBonusLog.LinhasPendentePagamento.length > 0">
+          <tr>
+            <th>Ordem Id</th>
+            <th>Id cliente</th>
+            <th>Nome</th>
+            <th>CPF</th>
+          </tr>
+          <tr ng-repeat="log in vm.resultBonusLog.LinhasPendentePagamento">
+            <td>{{log.Id}}</td>
+            <td>{{log.Owner}}</td>
+            <td>{{log.OwnerName}}</td>
+            <td>{{log.OwnerDocument}}</td>
+          </tr>
+      </table>
+</div>
+
+<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasSemPaiQueNaoRecebemBonus.length > 0">
+    <p>Linhas Sem Pai Que Não Recebem Bonus</p>
+    <table ng-if="vm.resultBonusLog.LinhasSemPaiQueNaoRecebemBonus.length > 0">
+          <tr>
+            <th>Ordem Id</th>
+            <th>Id cliente</th>
+            <th>Nome</th>
+            <th>CPF</th>
+          </tr>
+          <tr ng-repeat="log in vm.resultBonusLog.LinhasSemPaiQueNaoRecebemBonus">
+            <td>{{log.Id}}</td>
+            <td>{{log.Owner}}</td>
+            <td>{{log.OwnerName}}</td>
+            <td>{{log.OwnerDocument}}</td>
+          </tr>
+      </table>
+</div>
+
+<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasOrdemBonusLiberada.length > 0">
+    <p>Linhas Ordem Bonus Liberada</p>
+    <table ng-if="vm.resultBonusLog.LinhasOrdemBonusLiberada.length > 0">
+          <tr>
+            <th>Ordem Id</th>
+            <th>Id cliente</th>
+            <th>Nome</th>
+            <th>CPF</th>
+          </tr>
+          <tr ng-repeat="log in vm.resultBonusLog.LinhasOrdemBonusLiberada">
+            <td>{{log.Id}}</td>
+            <td>{{log.Owner}}</td>
+            <td>{{log.OwnerName}}</td>
+            <td>{{log.OwnerDocument}}</td>
+          </tr>
+      </table>
+</div>
+
+<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasSemEvento.length > 0">
+    <p>Linhas Sem Evento</p>
+    <table ng-if="vm.resultBonusLog.LinhasSemEvento.length > 0">
+          <tr>
+            <th>Ordem Id</th>
+            <th>Id cliente</th>
+            <th>Nome</th>
+            <th>CPF</th>
+          </tr>
+          <tr ng-repeat="log in vm.resultBonusLog.LinhasSemEvento">
+            <td>{{log.Id}}</td>
+            <td>{{log.Owner}}</td>
+            <td>{{log.OwnerName}}</td>
+            <td>{{log.OwnerDocument}}</td>
+          </tr>
+      </table>
+</div>
+
+<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasComErroAoSalvar.length > 0">
+    <p>Linhas Com Erro Ao Salvar</p>
+    <table ng-if="vm.resultBonusLog.LinhasComErroAoSalvar.length > 0">
+          <tr>
+            <th>Ordem Id</th>
+            <th>Id cliente</th>
+            <th>Nome</th>
+            <th>CPF</th>
+          </tr>
+          <tr ng-repeat="log in vm.resultBonusLog.LinhasComErroAoSalvar">
+            <td>{{log.Id}}</td>
+            <td>{{log.Owner}}</td>
+            <td>{{log.OwnerName}}</td>
+            <td>{{log.OwnerDocument}}</td>
+          </tr>
+      </table>
+</div>
+
+<div class="loader-mass" ng-if="vm.loading">Carregando...</div>
 
 
 </div>
