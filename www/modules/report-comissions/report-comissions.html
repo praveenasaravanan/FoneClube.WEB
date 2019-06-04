@@ -52,9 +52,10 @@
                       <th>Nome Recebedor</th>
                       <th>CPF Liberador</th>
                       <th>Nome Liberador</th>
-                      <th>Cobrança Id</th>
-                      <th>Valor da ordem</th>
+                      <th>Id </th>
+                      <th>Valor</th>
                       <th>Data</th>
+                      <th>Concedida</th>
                     </tr>
                     <tr ng-repeat="comission in vm.resultComission">
                       <td>{{comission.Recebedor.DocumentNumber}}</td>
@@ -62,8 +63,9 @@
                       <td>{{comission.Liberador.DocumentNumber}}</td>
                       <td>{{comission.Liberador.Name}}</td>
                       <td>{{comission.Liberador.Charging.Id}}</td>
-                      <td>{{comission.Order.intAmount}}</td>
+                      <td>{{'R$:' + comission.Order.intAmount / 100.00}}</td>
                       <td>{{comission.Order.dteCreated | date: 'yyyy/MM/dd hh:mm'}}</td>
+                      <td>{{comission.Order.bitComissionConceded ? 'sim' : 'não'}}</td>
                       
                     </tr>
                   </table>
@@ -71,17 +73,19 @@
     </div>
 
 
-    <div class="col-xs-12" style="margin-top: 48px;">
+    <div class="col-xs-12 tela-report" style="margin-top: 48px;">
       <table ng-if="vm.resultBonus.length > 0">
             <tr>
               <th>CPF Recebedor</th>
               <th>Nome Recebedor</th>
               <th>CPF Liberador</th>
               <th>Nome Liberador</th>
-              <th>Cobrança Id</th>
-              <th>Id Plano</th>
+              <th>Id </th>
+              <th>Plano</th>
               <th>Porcentagem</th>
               <th>Data</th>
+              <th>Valor</th>
+              <th>Concedido</th>
             </tr>
             <tr ng-repeat="bonus in vm.resultBonus">
               <td>{{bonus.Recebedor.DocumentNumber}}</td>
@@ -89,16 +93,18 @@
               <td>{{bonus.Liberador.DocumentNumber}}</td>
               <td>{{bonus.Liberador.Name}}</td>
               <td>{{bonus.Liberador.Charging.Id}}</td>
-              <td>{{bonus.Order.intIdPhonePlan}}</td>
+              <td>{{'R$:' + bonus.Order.intPlanValue / 100.00}}</td>
               <td>{{bonus.Order.intPercentBonus}}</td>
               <td>{{bonus.Order.dteCreated | date: 'yyyy/MM/dd hh:mm'}}</td>
+              <td>{{'R$:' + bonus.Order.intBonusValue / 100.00}}</td>
+              <td>{{bonus.Order.bitComissionConceded ? 'sim' : 'não'}}</td>
               
             </tr>
         </table>
 </div>
 
 <p ng-if="vm.resultBonusLog.LinhasAptasBonus.length > 0">Data do último setup de bônus: {{vm.resultBonusLog.DataRegistroLog | date: 'yyyy/MM/dd hh:mm'}}</p>
-<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasAptasBonus.length > 0">
+<div class="col-xs-12 tela-report" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasAptasBonus.length > 0">
   <p>Linhas Aptas Bonus</p>
   <table ng-if="vm.resultBonusLog.LinhasAptasBonus.length > 0">
         <tr>
@@ -116,7 +122,7 @@
     </table>
 </div>
 
-<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasMalComportamento.length > 0">
+<div class="col-xs-12 tela-report" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasMalComportamento.length > 0">
     <p>Linhas Mal Comportamento</p>
     <table ng-if="vm.resultBonusLog.LinhasMalComportamento.length > 0">
           <tr>
@@ -134,7 +140,7 @@
       </table>
 </div>
 
-<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasPendentePagamento.length > 0">
+<div class="col-xs-12 tela-report" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasPendentePagamento.length > 0">
     <p>Linhas Pendente Pagamento</p>
     <table ng-if="vm.resultBonusLog.LinhasPendentePagamento.length > 0">
           <tr>
@@ -152,7 +158,7 @@
       </table>
 </div>
 
-<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasSemPaiQueNaoRecebemBonus.length > 0">
+<!-- <div class="col-xs-12 tela-report" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasSemPaiQueNaoRecebemBonus.length > 0">
     <p>Linhas Sem Pai Que Não Recebem Bonus</p>
     <table ng-if="vm.resultBonusLog.LinhasSemPaiQueNaoRecebemBonus.length > 0">
           <tr>
@@ -168,9 +174,9 @@
             <td>{{log.OwnerDocument}}</td>
           </tr>
       </table>
-</div>
+</div> -->
 
-<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasOrdemBonusLiberada.length > 0">
+<div class="col-xs-12 tela-report" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasOrdemBonusLiberada.length > 0">
     <p>Linhas Ordem Bonus Liberada</p>
     <table ng-if="vm.resultBonusLog.LinhasOrdemBonusLiberada.length > 0">
           <tr>
@@ -188,7 +194,7 @@
       </table>
 </div>
 
-<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasSemEvento.length > 0">
+<div class="col-xs-12 tela-report" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasSemEvento.length > 0">
     <p>Linhas Sem Evento</p>
     <table ng-if="vm.resultBonusLog.LinhasSemEvento.length > 0">
           <tr>
@@ -206,7 +212,7 @@
       </table>
 </div>
 
-<div class="col-xs-12" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasComErroAoSalvar.length > 0">
+<div class="col-xs-12 tela-report" style="margin-top: 48px;" ng-if="vm.resultBonusLog.LinhasComErroAoSalvar.length > 0">
     <p>Linhas Com Erro Ao Salvar</p>
     <table ng-if="vm.resultBonusLog.LinhasComErroAoSalvar.length > 0">
           <tr>
