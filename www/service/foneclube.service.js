@@ -68,6 +68,7 @@
     this.getDataPgt = getDataPgt;
     this.getCommision = getCommision;
     this.dispatchedCommision = dispatchedCommision;
+    this.dispatchedBonus = dispatchedBonus;
     this.getUpdatePagarme = getUpdatePagarme;
     this.getTemplates = getTemplates;
     this.getStatusAPI = getStatusAPI;
@@ -87,6 +88,7 @@
     this.getBonusLog = getBonusLog;
     this.getBonusOrderHistory = getBonusOrderHistory;
     this.getComissionsOrderHistory = getComissionsOrderHistory;
+    this.getTotaisComissoes = getTotaisComissoes;
 
     function getLastPaymentType(customer) {
       var q = $q.defer();
@@ -236,6 +238,20 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/comission/comission/order/history?total=' + total))
+        .then(function(result) {
+          q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    function getTotaisComissoes(customerId){
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/comission/comission/totais/' + customerId))
         .then(function(result) {
           q.resolve(result);
         })
@@ -727,6 +743,24 @@
           .concat('/comission/customer/')
           .concat(customerId)
           .concat('/dispatched')
+      )
+        .then(function(result) {
+          q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    function dispatchedBonus(customerId){
+      var q = $q.defer();
+      HTTPService.post(
+        urlApi
+          .concat('/comission/customer/')
+          .concat(customerId)
+          .concat('/bonus/dispatched')
       )
         .then(function(result) {
           q.resolve(result);

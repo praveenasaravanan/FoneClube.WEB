@@ -8,7 +8,9 @@
   
         BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService', '$filter'];
         function BoletoModalController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService, $filter) {
-    
+
+
+            console.log('--- BoletoModalController ---');
             var vm = this;
             vm.date = new Date();
             var customer = ViewModelUtilsService.modalBoletoData;
@@ -17,24 +19,25 @@
             vm.etapaDados = true;
             vm.chargeDisabled = true;
             vm.cobrancaRealizada = false;
-          vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
+            vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
             vm.comment = '';
-            console.log('BoletoModalController');
             vm.onTapPagar = onTapPagar;
             vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
             vm.onTapCancel = onTapCancel;
             vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
             vm.checkOne = checkOne;
-          vm.enviaEmail = true;
-          vm.calculate = calculate;
+            vm.enviaEmail = true;
+            vm.calculate = calculate;
             vm.years = [2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010];
-          vm.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+            vm.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-          vm.amount = 0;
-          vm.amountTemp = 0;
-          vm.amountTemp1 = 0;
-          vm.bonus = 0;
-          vm.expirationDateField = 3;
+            vm.amount = 0;
+            vm.amountTemp = 0;
+            vm.amountTemp1 = 0;
+            vm.bonus = 0;
+            vm.totaisComissoes = {};
+            vm.totaisComissoes.ValorTotalLiberadoParaPagarCliente = 0;
+            vm.expirationDateField = 3;
             vm.year = new Date().getFullYear().toString();
             vm.month = (new Date().getMonth() + 1).toString();
             
@@ -48,13 +51,15 @@
     
             }
 
-          vm.Padrão = false;
-          vm.Excepcional = false;
+            vm.Padrão = false;
+            vm.Excepcional = false;
 
-          var CARTAO = 1;
-          var BOLETO = 2;
-          init();
-          calculate();
+            var CARTAO = 1;
+            var BOLETO = 2;
+
+            init();
+            calculate();
+
           function init() {
             FoneclubeService.getHistoryPayment(customer.Id).then(function (result) {
               vm.histories = result;
@@ -79,9 +84,16 @@
               }
               customer.histories = vm.histories;
             })
-              .catch(function (error) {
+            .catch(function (error) {
 
-              });
+            });
+
+            FoneclubeService.getTotaisComissoes(customer.Id).then(function (result) {
+              console.log('FoneclubeService.getTotaisComissoes')
+              console.log(result)
+              vm.totaisComissoes = result;
+
+            })
             
 
             FoneclubeService.getCommision(customer.Id).then(function (result) {
@@ -112,7 +124,7 @@
 
           function calculate() {
             var amount = vm.amountTemp.toString().indexOf('.') > -1 ? parseFloat(vm.amountTemp) : parseFloat(vm.amountTemp) / 100;
-            var bonus = vm.bonus.toString().indexOf('.') > -1 ? parseFloat(vm.bonus) : parseFloat(vm.bonus) / 100;
+            var bonus = vm.totaisComissoes.ValorTotalLiberadoParaPagarCliente.toString().indexOf('.') > -1 ? parseFloat(vm.totaisComissoes.ValorTotalLiberadoParaPagarCliente) : parseFloat(vm.totaisComissoes.ValorTotalLiberadoParaPagarCliente) / 100;
             vm.amountTemp1 = vm.pagar ? parseFloat(amount - bonus) : amount;
             if (vm.pagar) {
               vm.amount = parseFloat(vm.amountTemp1).toFixed(2);
@@ -248,9 +260,9 @@
 
                                 // debugger;
 
-                                if(vm.pagar && vm.bonus != '0.00')
+                                if(vm.pagar && vm.totaisComissoes.ValorTotalLiberadoParaPagarCliente != '0.00')
                                 {
-                                    emailObject.DiscountPrice = ($filter('currency')(vm.bonus / 100, "")).replace('.',',')
+                                    emailObject.DiscountPrice = ($filter('currency')(vm.totaisComissoes.ValorTotalLiberadoParaPagarCliente / 100, "")).replace('.',',')
                                 }
 
 
@@ -342,11 +354,24 @@
                     if(vm.pagar)
                     {
                         FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
-                            //alert('success!!');
-                          })
-                            .catch(function (error) {
-          
+
+                          if(!result)
+                            alert('Não foi possível dar baixa em comissão');
+
+                            FoneclubeService.dispatchedBonus(vm.customer.Id).then(function (result) {
+                              //alert('success!!');
+                              if(!result)
+                                alert('Não foi possível dar baixa em comissão');
+
                             })
+                            .catch(function (error) {
+                              alert('Não foi possível dar baixa em comissão');
+                            })
+
+                        })
+                        .catch(function (error) {
+                          alert('Não foi possível dar baixa em comissão');
+                        })
                     }
                    
                      
