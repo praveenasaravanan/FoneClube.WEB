@@ -5,6 +5,8 @@
 
   FoneclubeService.inject = ['$q', 'HTTPService'];
   function FoneclubeService($q, HTTPService) {
+
+    
     // var urlApi = 'http://localhost:57078/api';
 
     //API tests

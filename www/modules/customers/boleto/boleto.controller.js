@@ -355,18 +355,21 @@
                     {
                         FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
 
+                          debugger
                           if(!result)
                             alert('Não foi possível dar baixa em comissão');
+                            
 
-                            FoneclubeService.dispatchedBonus(vm.customer.Id).then(function (result) {
-                              //alert('success!!');
-                              if(!result)
-                                alert('Não foi possível dar baixa em comissão');
+                            // FoneclubeService.dispatchedBonus(vm.customer.Id).then(function (result) {
+                              
+                            //   debugger
+                            //   if(!result)
+                            //     alert('Não foi possível dar baixa em comissão');
 
-                            })
-                            .catch(function (error) {
-                              alert('Não foi possível dar baixa em comissão');
-                            })
+                            // })
+                            // .catch(function (error) {
+                            //   alert('Não foi possível dar baixa em comissão');
+                            // })
 
                         })
                         .catch(function (error) {
