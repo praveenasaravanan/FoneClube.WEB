@@ -68,11 +68,12 @@
 
         <div class="form-group col-xs-12">
             <label for="observacao">Observação cliente (email):</label>
-            <input id="observacao"  class="form-control" ng-model="vm.customerComment" type="text">
+            <textarea id="observacao"  class="form-control" ng-model="vm.customerComment" type="text"></textarea>
         </div>  
         <div class="form-group col-xs-12">
           <label for="observacao">Observação:</label>
-          <input id="observacao" ng-enter="vm.onTapConfirmarPagamento()" class="form-control" ng-model="vm.comment" type="text">
+          <textarea id="observacao" ng-enter="vm.onTapConfirmarPagamento()" class="form-control" ng-model="vm.comment" type="text">
+          </textarea>
         </div>
           <div class="row">
               <div class="col-sm-3">
