@@ -51,7 +51,7 @@
         </div>
         <div class="form-group col-xs-12">
           <label for="observacao">Observação Foneclube:</label>
-          <input maxlength="250" id="observacao" ng-enter="vm.onTapConfirmarPagamento()" class="form-control" ng-model="vm.comment" type="text">
+          <input id="observacao" ng-enter="vm.onTapConfirmarPagamento()" class="form-control" ng-model="vm.comment" type="text">
         </div>
         <button ng-click="vm.onTapConfirmarPagamento()" ng-disabled="vm.comment.length == 0 || vm.amount.length == 0 || vm.disableTapPay" class="btn btn-success col-xs-12">
           Cobrar
