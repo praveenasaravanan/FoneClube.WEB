@@ -67,7 +67,8 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><input id="quantia2" money-input type="tel" next-on-enter class="form-control"
+                                <!-- next-on-enter -->
+                            <td><input id="quantia2" money-input type="tel"  class="form-control"
                                        ng-change="vm.calculate()" ng-model="vm.amountTemp"></td>
                             <td><input id="quantia1" money-input type="tel" next-on-enter class="form-control"
                                        ng-model="vm.totaisComissoes.ValorTotalLiberadoParaPagarCliente" ng-change="vm.calculate()"></td>
@@ -85,7 +86,8 @@
 
                 <div class="form-group col-xs-12">
                     <label for="observacao">Observação cliente (email):</label>
-                    <input  id="observacao"  class="form-control" ng-model="vm.customerComment" type="text">
+                    <textarea  id="observacao"  class="form-control" ng-model="vm.customerComment" type="text">
+                    </textarea>
                 </div>  
 
                 <div class="form-group col-xs-12">
@@ -104,7 +106,8 @@
                         <tbody>
                         <tr>
                             <td colspan="2">
-                                <input maxlength="250" class="form-control" ng-model="vm.commentBoleto" type="text">
+                                <textarea maxlength="250" class="form-control" ng-model="vm.commentBoleto" type="text">
+                                </textarea>
                             </td>
                         </tr>
                         </tbody>
@@ -114,8 +117,8 @@
                 </div>
                 <div class="form-group col-xs-12">
                     <label for="observacao">Observação Foneclube:</label>
-                    <input id="observacao" ng-enter="vm.onTapConfirmarPagamento()" class="form-control"
-                           ng-model="vm.comment" type="text">
+                    <textarea id="observacao" ng-enter="vm.onTapConfirmarPagamento()" class="form-control" ng-model="vm.comment" type="text">
+                    </textarea>
                 </div>
                 <button ng-click="vm.onTapConfirmarPagamento()"
                         ng-disabled="vm.comment.length == 0 || vm.amount.length == 0 || vm.disableTapPay"
