@@ -28,7 +28,7 @@
 
             var users = FireBaseManagerUtil.getUsers();
 
-            
+            debugger;
 
           
             for(var i in users){

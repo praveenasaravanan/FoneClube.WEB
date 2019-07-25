@@ -32,6 +32,7 @@
     this.showModalRepeatBoleto = showModalRepeatBoleto;
     this.showModalRepeatCard = showModalRepeatCard;
     this.showModalEmailDetail = showModalEmailDetail;
+    this.showModalWhatsapp = showModalWhatsapp;
 
     function showModal(data) {
       this.modalData = data;
@@ -109,6 +110,13 @@
       this.modalEmailDetailoperator = operator;
       var service = this;
       DialogFactory.showTemplate('modules/customers/edicao/EmailTemplate.html');
+    }
+
+    function showModalWhatsapp(data) {
+      //this.modalBoletoData = data;
+      var service = this;
+
+      DialogFactory.showTemplate('modules/whatsapp/whatsapp.html');
     }
 
     this.showConfirmDialog = function(title, content) {

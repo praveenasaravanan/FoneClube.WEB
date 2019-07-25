@@ -68,6 +68,7 @@
     vm.onTapExcluir = onTapExcluir;
     vm.onDeleteCustomer = onDeleteCustomer;
     vm.onTapComment = onTapComment;
+    vm.onTapMessage = onTapMessage;
 
     initialize();
 
@@ -76,7 +77,7 @@
         FlowManagerService.changeLoginView();
       }
 
-      FoneclubeService.getAllCustomers(true).then(function(result) {
+      FoneclubeService.getAllCustomers(true).then(function(result) {debugger;
         vm.data.customers = result;
         var customersSemSoftDelete = [];
 
@@ -311,6 +312,11 @@
             }); */
         }
       });
+    }
+
+    //open whatsapp messages box
+    function onTapMessage(customer) {
+      ViewModelUtilsService.showModalWhatsapp(customer);
     }
   }
 })();
