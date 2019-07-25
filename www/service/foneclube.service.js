@@ -7,10 +7,10 @@
   function FoneclubeService($q, HTTPService) {
 
     
-    // var urlApi = 'http://localhost:57078/api';
+    var urlApi = 'http://localhost:57078/api';
 
     //API tests
-    var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+    //var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
     this.postBasePerson = postBasePerson;
     this.postUpdatePerson = postUpdatePerson;
@@ -91,6 +91,7 @@
     this.getBonusOrderHistory = getBonusOrderHistory;
     this.getComissionsOrderHistory = getComissionsOrderHistory;
     this.getTotaisComissoes = getTotaisComissoes;
+    this.postSendChargeMessage = postSendChargeMessage;
 
     function getLastPaymentType(customer) {
       var q = $q.defer();
@@ -1274,6 +1275,18 @@
           q.reject(error);
         });
 
+      return q.promise;
+    }
+
+    function postSendChargeMessage(param) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/message/send'), param)
+        .then(function(data) {
+          q.resolve(data);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
       return q.promise;
     }
 

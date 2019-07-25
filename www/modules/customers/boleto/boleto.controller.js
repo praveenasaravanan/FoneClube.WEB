@@ -27,6 +27,7 @@
             vm.onTapPaymentHistoryDetail = onTapPaymentHistoryDetail;
             vm.checkOne = checkOne;
             vm.enviaEmail = true;
+            vm.enviaWhatsapp = true;
             vm.calculate = calculate;
             vm.years = [2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010];
             vm.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -141,7 +142,6 @@
           }
 
           function onTapConfirmarPagamento() {
-            // debugger;
             //alert(vm.Excepcional);
             //if (!vm.claro) {
             //  vm.Excepcional
@@ -185,7 +185,6 @@
               console.log(em[0]);
               if (em[1] != undefined) {
                 vm.amount = vm.amount.toString().replace(".", "")
-
               }
     
                 vm.disableTapPay = true;
@@ -275,6 +274,35 @@
                                     console.log(error);
                                 });
                             }
+
+                            if(vm.enviaWhatsapp){
+                                debugger;
+                              //Send message to whatsapp
+                              if(vm.customerComment == undefined)
+                                    vm.customerComment = ''
+
+                                var messageObject = {
+                                    'ClientId': vm.customer.Id, //existentCustomer.email
+                                    'ClientName' : vm.customer.Name,
+                                    'CurrentYear': vm.year,
+                                    'CurrentMonth' : vm.month,
+                                    'CurrentDate' : vm.expirationDateField,
+                                    'AmountTemp':vm.amountTemp,
+                                    'ValorTotalLiberadoParaPagarCliente':vm.totaisComissoes.ValorTotalLiberadoParaPagarCliente,
+                                    'AmountTemp1':vm.amountTemp1,
+                                    'CustomerComment':vm.customerComment,
+                                    'CommentBoleto':vm.commentBoleto,
+                                    'Comment':vm.comment
+                                }
+                                FoneclubeService.postSendChargeMessage(messageObject).then(function(result){
+                                    console.log('Whatsapp Message sent');
+                                    console.log(result);
+                                })
+                                .catch(function(error){
+                                    console.log('Whats app message could not sent. See error log bellow:');
+                                    console.log(error);
+                                });
+                            }
                             
     
                             try{
@@ -355,7 +383,6 @@
                     {
                         FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
 
-                          debugger
                           if(!result)
                             alert('Não foi possível dar baixa em comissão');
                             
