@@ -3,37 +3,27 @@
   
     angular.module('foneClub').controller('WhatsappController', WhatsappController);
   
-    WhatsappController.inject = [
-      'ViewModelUtilsService',
-      'PagarmeService',
-      'MainUtils',
-      'FoneclubeService',
-      'DialogFactory',
-      'UtilsService'
-    ];
+    WhatsappController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService', '$filter'];
   
-    function WhatsappController(
-      ViewModelUtilsService,
-      PagarmeService,
-      MainUtils,
-      FoneclubeService,
-      DialogFactory,
-      UtilsService
-    ) {
+    function WhatsappController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService, $filter) {
       var vm = this;
       // debugger;
-      vm.onTapAddComment = onTapAddComment;
-      vm.name="Marcio";
+	  vm.send=send;
       
-      var customer = ViewModelUtilsService.modalCommentData;
-  
+      
+      var customer = ViewModelUtilsService.modalData;
+  debugger;
       vm.customer = customer;
+	  vm.name=vm.customer.Name;
+	  vm.text='';
   
-      function onTapAddComment(data) {
+      function send() {
         // debugger;
-        data.intIdPerson = customer.Id;
-  
-        FoneclubeService.postCustomerComment(data).then(function(result) {
+         var data={
+			 ClientId:vm.customer.WClient.ClientId,
+			 Text:vm.text
+		 };
+        FoneclubeService.postSendWhatsappMessage(data).then(function(result) {
           // debugger;
           console.log(result);
           if (result) {

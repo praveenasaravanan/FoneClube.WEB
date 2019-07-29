@@ -92,6 +92,7 @@
     this.getComissionsOrderHistory = getComissionsOrderHistory;
     this.getTotaisComissoes = getTotaisComissoes;
     this.postSendChargeMessage = postSendChargeMessage;
+	this.postSendWhatsappMessage=postSendWhatsappMessage;
 
     function getLastPaymentType(customer) {
       var q = $q.defer();
@@ -1279,6 +1280,18 @@
     }
 
     function postSendChargeMessage(param) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/message/send-invoice'), param)
+        .then(function(data) {
+          q.resolve(data);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
+	
+	function postSendWhatsappMessage(param) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/message/send'), param)
         .then(function(data) {
