@@ -113,7 +113,7 @@
     }
 
     function showModalWhatsapp(data) {
-      //this.modalBoletoData = data;
+      this.modalData = data;
       var service = this;
 
       DialogFactory.showTemplate('modules/whatsapp/whatsapp.html');

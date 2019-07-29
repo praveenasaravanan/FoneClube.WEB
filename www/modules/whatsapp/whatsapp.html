@@ -17,6 +17,7 @@
                      color: #262626;">How are you?</span>
                     </div>
                 </div>
+				</div>
                 <div class="form-group col-md-12">
                         <div class="message-in pull-right"
                             style="background-color: #dcf8c6;border-radius: 7.5px; box-shadow: 0 1px 0.5px rgba(0,0,0,.13);max-width: 65%;">
@@ -26,7 +27,17 @@
                         </div>
                     </div>
             </div>
-
+			 <div id="divSendMessage" class="form-group col-md-12">
+			 <div class="row">
+			 <div class="col-md-11">
+                        <input type="text" class="form-control" placeholder="Type a message"/>
+						</div>
+						<div class="col-md-1">
+						<button class="btn btn-primary" ng-click="vm.send()">Send</button>
+						</div>
+						</div>
+             </div>
         </div>
     </div>
+</div>
 </div>
