@@ -93,6 +93,7 @@
     this.getTotaisComissoes = getTotaisComissoes;
     this.postSendChargeMessage = postSendChargeMessage;
 	this.postSendWhatsappMessage=postSendWhatsappMessage;
+	this.getClientMessages=getClientMessages;
 
     function getLastPaymentType(customer) {
       var q = $q.defer();
@@ -1302,6 +1303,20 @@
         });
       return q.promise;
     }
+	
+	function getClientMessages(param){
+		var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/message/client/')+ param)
+        .then(function(result) {
+          q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+	}
 
   }
 })();
