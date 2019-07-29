@@ -9,35 +9,24 @@
                 style="background-image: url('../content/img/whatsapp-background.png'); opacity: .06; position: absolute; top: 0; height: 100%; width: 100%;">
             </div>
             <div class="panel-body">
-                <div class="form-group col-md-12">
-                    <div class="message-in pull-left"
-                        style="background-color: #fff;border-radius: 7.5px; box-shadow: 0 1px 0.5px rgba(0,0,0,.13);max-width: 65%;">
-                     <div style="padding:5px 10px 5px 10px;font-size: 14.2px;
-                     line-height: 19px;
-                     color: #262626;">How are you?</span>
-                    </div>
-                </div>
-				</div>
-                <div class="form-group col-md-12">
-                        <div class="message-in pull-right"
-                            style="background-color: #dcf8c6;border-radius: 7.5px; box-shadow: 0 1px 0.5px rgba(0,0,0,.13);max-width: 65%;">
-                         <div style="padding:5px 10px 5px 10px;font-size: 14.2px;
-                         line-height: 19px;
-                         color: #262626;">I am fine. What about the yesterday update? Did you get any answers?</span>
+                <div class="form-group col-md-12" ng-repeat="message in vm.messages">
+                    <div ng-class="message.Type=='to_client'?'message-out pull-right':'message-in pull-left'">
+                        <div>{{message.Text}}</span>
                         </div>
                     </div>
+                </div>
+
+                <div id="divSendMessage" class="form-group col-md-12">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <input type="text" class="form-control" placeholder="Type a message" ng-model="vm.text" />
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-primary" ng-click="vm.onSend()">{{vm.sendButtonText}}</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-			 <div id="divSendMessage" class="form-group col-md-12">
-			 <div class="row">
-			 <div class="col-md-11">
-                        <input type="text" class="form-control" placeholder="Type a message"/>
-						</div>
-						<div class="col-md-1">
-						<button class="btn btn-primary" ng-click="vm.send()">Send</button>
-						</div>
-						</div>
-             </div>
         </div>
     </div>
-</div>
 </div>

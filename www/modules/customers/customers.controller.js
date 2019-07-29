@@ -77,7 +77,7 @@
         FlowManagerService.changeLoginView();
       }
 
-      FoneclubeService.getAllCustomers(true).then(function(result) {debugger;
+      FoneclubeService.getAllCustomers(true).then(function(result) {
         vm.data.customers = result;
         var customersSemSoftDelete = [];
 
