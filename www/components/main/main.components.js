@@ -12,12 +12,17 @@
 
     /* fields */
     var vm = this;
+    vm.getVersion = getVersion;
     vm.alert = alert;
     vm.show = show;
     vm.showSimpleToast = showSimpleToast;
     vm.infoAlert = infoAlert;
     vm.showLoader = showLoader;
     vm.hideLoader = hideLoader;
+
+    function getVersion(){
+      return '1.0.6';
+    }
 
     function alert(params){
 

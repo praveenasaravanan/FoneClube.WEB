@@ -3,14 +3,16 @@
     angular.module('foneClub')
     .controller('MenuController', menuController);
 
-    menuController.$inject = ['$scope', '$window', '$state', 'localStorageService', 'FlowManagerService', '$rootScope'];
+    menuController.$inject = ['$scope', 'MainComponents', '$window', '$state', 'localStorageService', 'FlowManagerService', '$rootScope'];
 
-    function menuController($scope, $window, $state, localStorageService, FlowManagerService, $rootScope) {
+    function menuController($scope, MainComponents, $window, $state, localStorageService, FlowManagerService, $rootScope) {
         var vm = this;     
         vm.compress = false; 
         vm.compressMobile = false; 
         vm.mobile = false;              
-        vm.menuItemActive = localStorageService.get('menuItemActive');        
+        vm.menuItemActive = localStorageService.get('menuItemActive');
+        vm.version = MainComponents.getVersion();
+                
         function init() {
             vm.mobile = $window.innerWidth <= 767;
         }

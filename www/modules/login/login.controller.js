@@ -5,11 +5,12 @@
         .module('foneClub')
         .controller('LoginController', LoginController);
 
-  LoginController.inject = ['FlowManagerService', '$scope', 'FireBaseManagerUtil', 'MainUtils', 'DialogFactory','localStorageService', 'FoneclubeService'];
-  function LoginController(FlowManagerService, $scope, FireBaseManagerUtil, MainUtils, DialogFactory, localStorageService, FoneclubeService) {
+  LoginController.inject = ['FlowManagerService', 'MainComponents', '$scope', 'FireBaseManagerUtil', 'MainUtils', 'DialogFactory','localStorageService', 'FoneclubeService'];
+  function LoginController(FlowManagerService, MainComponents, $scope, FireBaseManagerUtil, MainUtils, DialogFactory, localStorageService, FoneclubeService) {
         var vm = this;
         vm.login = login;
         vm.refresh = refresh;
+        vm.version = MainComponents.getVersion();
 
         FoneclubeService.getReintegrateDatePagarme().then(function (result) {
             // debugger

@@ -3,7 +3,7 @@
         <div class="menu-item logo" ng-click="vm.menuCompress()">            
             <div>
                 <img src="./content/img/pi-logo.png" >
-                <span> FoneClube </span>                              
+                <span> FoneClube {{vm.version}} </span>                              
             </div>
         </div> 
         <div title="Home" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'home'}" ng-click="vm.setMenuItemActive('home')">            
