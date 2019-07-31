@@ -4,17 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 
-  <!-- <link href='https://fonts.googleapis.com/css?family=Lato:300,700,300italic' rel='stylesheet' type='text/css'> -->
   <meta http-equiv="cache-control" content="max-age=0" />
   <meta http-equiv="cache-control" content="no-cache" />
   <meta http-equiv="expires" content="0" />
   <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
   <meta http-equiv="pragma" content="no-cache" />
-  <title></title>
+  <title>Foneclube Web</title>
+
   <link rel="manifest" href="manifest.json">
   <link href="content/css/style.css" rel="stylesheet">
-
   <link href="content/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="shortcut icon" type="image/png" href="content/favicon/favicon-32x32.png"/>
+
   <!-- --------------------------------------------------------------------------->
   <link href="content/fonts/font-awesome/css/font-awesome.css" rel="stylesheet">
   <link href="lib/ngDialog/ngDialog.min.css" rel="stylesheet">
@@ -24,32 +26,29 @@
   <link href="lib/angular-auto-complete/angular-auto-complete.css" rel="stylesheet" />
   <link href="content/css/main.min.css" rel="stylesheet">
   <link href="lib/angularjs-bootstrap-datetimepicker/src/css/datetimepicker.css" rel="stylesheet" />
+
   <!-- CSS for date time input-->
   <link href="lib/angular-datetime-inputs/dist/datetime-inputs.min.css" rel="stylesheet" />
-  <link href="https://lukaszwatroba.github.io/valitycss/dist/vality.min.css" rel="stylesheet" />
+  <link href="content/css/vality.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="lib/ng-table/ng-table.min.css">
-
-
 
   <script src="lib/pagarme/checkout.js"></script>
   <script src="lib/pagarme/pagarme.min.js"></script>
 
-  <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="lib/jquery/jquery.min.js"></script>
 
   <script src="lib/ionic/js/ionic.bundle.js"></script>
 
-  <script src="https://kendo.cdn.telerik.com/2016.1.112/js/angular.min.js"></script>
-  <script src="https://kendo.cdn.telerik.com/2016.1.112/js/kendo.all.min.js"></script>
+  <script src="lib/angular/angular.min.js"></script>
+  <script src="lib/kendo/kendo.all.min.js"></script>
 
   <script src="lib/ngDialog/ngDialog.min.js"></script>
   <script src="lib/angular-local-storage/angular-local-storage.js"></script>
   <script src="lib/angular-ui-router/angular-ui-router.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.min.js"></script>
-  <script src="https://lukaszwatroba.github.io/v-accordion/dist/v-accordion.js"></script>
+  <script src="lib/angular-animate/angular-animate.min.js"></script>
+  <script src="lib/v-accordion/v-accordion.js"></script>
   <script src="lib/angular-ui-bootstrap/ui-bootstrap-custom-2.5.0.min.js"></script>
   <script src="lib/angular-ui-bootstrap/ui-bootstrap-custom-tpls-2.5.0.min.js"></script>
-
-
 
   <script src="lib/angular-ios9-uiwebview.patch.js"></script>
   <script src="lib/toggle-angular/angular-bootstrap-toggle.min.js"></script>
@@ -62,22 +61,15 @@
   <script src="lib/angular-auto-complete/angular-auto-complete.js"></script>
   <script src="lib/angular-auto-complete/angular-auto-complete.js"></script>
   <script src="lib/moment/moment.js"></script>
-
-
-  <!--<script src="lib/angular/angular.js"></script>-->
-
-
-
-
   <script src="lib/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
   <script src="lib/angularjs-bootstrap-datetimepicker/src/js/datetimepicker.templates.js"></script>
   <script src="lib/angular-date-time-input/src/dateTimeInput.js"></script>
   <script src="lib/ng-table/ng-table.min.js"></script>
   <script src="lib/clipboard/clipboard.min.js"></script>
   <script src="lib/clipboard/ngclipboard.js"></script>
-  <!-- cordova script (this will be a 404 during development) -->
+  
   <script src="content/js/main.min.js"></script>
-  <!-- <script src="modules/mass-charging/mass-charging.controller.js"></script> -->
+  
   <script src="lib/firebase/firebase.js"></script>
   <script src="lib/firebase/angularfire.min.js"></script>
   <script src="lib/firebase/firebase.config.js"></script>
@@ -85,7 +77,6 @@
   <script src="lib/angular-smart-table/dist/smart-table.js"></script>
   <script src="lib/angular-smart-table/dist/smart-table.min.js"></script>
   <script src="lib/angular-smart-table/dist/smart-table.min.js.map"></script>
-
 
   <!-- Controllers -->
   <script src="modules/checkout/checkout.controller.js"></script>
@@ -109,12 +100,14 @@
   <script src="modules/login/login.controller.js"></script>
   <script src="modules/customers/edicao/edicao.controller.js"></script>
   <script src="modules/customers/edicao/emaildetail.controller.js"></script>
+
   <script src="modules/status-charging/status-charging.controller.js"></script>
   <script src="modules/status-charging/status-charging.controller.js"></script>
   <script src="modules/allphonelines/allphonelines.controller.js"></script>
   <script src="modules/plan-edition/plan-edition.controller.js"></script>
   <script src="modules/whatsapp/whatsapp.controller.js"></script>
 
+  <script src="modules/all-phones-new/all-phones-new.controller.js"></script>
 
   <script src="modules/master/master-flow-manager.service.js"></script>
   <script src="service/pagarme.service.js"></script>
@@ -131,16 +124,9 @@
   <!-- JS for date time input tag-->
   <script src="lib/scroll-events/scroll-events.min.js" charset="utf-8"></script>
   <script src="lib/angular-datetime-inputs/dist/datetime-inputs.min.js"></script>
-  <!-- Important please do not use jquery for anything, it is here just because boostrap -->
-
-
   <script src="lib/bootstrap.min.js"></script>
+  <script src="lib/jszip/jszip.min.js"></script>   
 
-
-  <script src="components/Controller/statusChangingController.js"></script>
-
-  <script src="https://kendo.cdn.telerik.com/2016.1.112/js/jszip.min.js"></script>
-   
   <link href="content/Kendo/kendo.common.min.css" rel="stylesheet" />
   <link href="content/Kendo/kendo.metro.min.css" rel="stylesheet" />
 

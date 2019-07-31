@@ -7,10 +7,10 @@
   function FoneclubeService($q, HTTPService) {
 
     
-    var urlApi = 'http://localhost:57078/api';
+    // var urlApi = 'http://localhost:57078/api';
 
     //API tests
-    //var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+    var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
     this.postBasePerson = postBasePerson;
     this.postUpdatePerson = postUpdatePerson;
@@ -94,7 +94,14 @@
     this.postSendChargeMessage = postSendChargeMessage;
 	this.postSendWhatsappMessage=postSendWhatsappMessage;
 	this.getClientMessages=getClientMessages;
+    this.getAPIUrl = getAPIUrl;
 
+
+
+
+    function getAPIUrl() {
+      return urlApi;
+    }
     function getLastPaymentType(customer) {
       var q = $q.defer();
       HTTPService.get(

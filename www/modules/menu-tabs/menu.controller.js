@@ -59,17 +59,13 @@
             } else if(screen == 'estoque'){
                 FlowManagerService.changeEstoqueView();
             }
-            else if(screen == 'plan-edition'){
-                FlowManagerService.changePlanEditView();
-            }
             else if(screen == 'all-phones'){
                 FlowManagerService.changeAllPhonesView();
             }
-            else if(screen == 'report-comissions'){
-                FlowManagerService.changeReportComissionsView();
-            } 
+            else if (screen == 'all-phones-new') { 
+              FlowManagerService.changeAllPhoneNewView();
+            }
             else {
-               
                 
             }
         }

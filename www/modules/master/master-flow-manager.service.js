@@ -21,9 +21,9 @@
         this.changeAllPhoneLinesView = changeAllPhoneLinesView;
         this.changeTemplateEdit = changeTemplateEdit;
         this.changeEstoqueView = changeEstoqueView;
-        this.changeAllPhonesView = changeAllPhonesView;
-        this.changePlanEditView = changePlanEditView;
-        this.changeReportComissionsView = changeReportComissionsView;
+      this.changeAllPhonesView = changeAllPhonesView;
+      this.changePlanEditView = changePlanEditView;
+      this.changeAllPhoneNewView = changeAllPhoneNewView;
         this.goBack = goBack;
 
         function changeLoginView(){
@@ -94,9 +94,9 @@
             $rootScope.$broadcast('changeMenuItem', 'estoque');
         }
 
-        function changePlanEditView(param){
-            LocationService.change('tabs.plan-edition', param);
-            $rootScope.$broadcast('changeMenuItem', 'plan-edition');
+        function changePlanEditView(param) {
+          LocationService.change('tabs.plan-edition', param);
+          $rootScope.$broadcast('changeMenuItem', 'plan-edition');
         }
 
         function changeAllPhonesView(param){
@@ -104,9 +104,14 @@
             $rootScope.$broadcast('changeMenuItem', 'all-phones'); 
         }
 
-        function changeReportComissionsView(param){
-            LocationService.change('tabs.report-comissions', param);
-            $rootScope.$broadcast('changeMenuItem', 'report-comissions'); 
+        function changeReportComissionsView(param) {
+          LocationService.change('tabs.report-comissions', param);
+          $rootScope.$broadcast('changeMenuItem', 'report-comissions');
+        }
+
+        function changeAllPhoneNewView(param) {
+          LocationService.change('tabs.all-phones-new', param);
+          $rootScope.$broadcast('changeMenuItem', 'all-phones-new');
         }
         
         function goBack() {

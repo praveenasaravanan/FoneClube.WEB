@@ -79,9 +79,8 @@
         url: "/status-charging",
         views: {
           'menu-tab': {
-            
-            templateUrl: 'modules/StatusChange/statuscharging.html',
-            controller: 'statusChangingController2 as vm'
+            templateUrl: "modules/status-charging/status-charging.html",
+            controller: 'StatusChargingController as vm' 
           }
         }
       })
@@ -136,34 +135,52 @@
             controller: 'AllPhonesController as vm'
           }
         }
-      })
-      .state('tabs.estoque', {
-        url: "/estoque",
-        views: {
-          'menu-tab': {
-            templateUrl: 'modules/estoque/estoque.html',
-            controller: 'EstoqueController as vm'
+        })
+        .state('tabs.estoque', {
+          url: "/estoque",
+          views: {
+            'menu-tab': {
+              templateUrl: 'modules/estoque/estoque.html',
+              controller: 'EstoqueController as vm'
+            }
           }
-        }
-      })
-      .state('tabs.plan-edition', {
-        url: "/plan-edition",
-        views: {
-          'menu-tab': {
-            templateUrl: 'modules/plan-edition/plan-edition.html',
-            controller: 'PlanEditionController as vm'
+        })
+        .state('tabs.plan-edition', {
+          url: "/plan-edition",
+          views: {
+            'menu-tab': {
+              templateUrl: 'modules/plan-edition/plan-edition.html',
+              controller: 'PlanEditionController as vm'
+            }
           }
-        }
-      })
-      .state('tabs.report-comissions', {
-        url: "/report-comissions",
-        views: {
-          'menu-tab': {
-            templateUrl: 'modules/report-comissions/report-comissions.html',
-            controller: 'ReportComissionController as vm'
+        })
+        .state('tabs.report-comissions', {
+          url: "/report-comissions",
+          views: {
+            'menu-tab': {
+              templateUrl: 'modules/report-comissions/report-comissions.html',
+              controller: 'ReportComissionController as vm'
+            }
           }
-        }
-      })
+        })
+        .state('tabs.all-phones-new', {
+          url: "/allPhoneNew",
+          views: {
+            'menu-tab': {
+              templateUrl: 'modules/all-phones-new/all-phones-new.html',
+              controller: 'AllPhoneNewController as vm'
+            }
+          }
+        })
+      // .state('tabs.estoque', {
+      //   url: "/estoque",
+      //   views: {
+      //     'menu-tab': {
+      //       templateUrl: 'modules/estoque/estoque.html',
+      //       controller: 'EstoqueController as vm'
+      //     }
+      //   }
+      // })
 
       
       $urlRouterProvider.otherwise('/');

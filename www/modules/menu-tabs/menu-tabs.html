@@ -21,87 +21,65 @@
 <!-------------------------------------->
 
 
-        </div>  
-        <div title="Pagar.me" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'list-customer'}" ng-click="vm.setMenuItemActive('list-customer')">     
-            <div>       
-                <i class="fa fa-rub" aria-hidden="true"></i><i class="fa fa-maxcdn" aria-hidden="true"></i>           
-                <span> Pagar.me </span>
-            </div>
-        </div>  
-        <div title="Clientes" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'customers'}"  ng-click="vm.setMenuItemActive('customers')">            
-            <div>
-                <!-- <i class="glyphicon glyphicon-edit" aria-hidden="true"></i>             -->
-                <img src="./content/img/client.png" style="width:20px;height:20px;">
-                <span> Clientes </span>
-            </div>
-        </div>   
-        <div title="Cobrança Massiva" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'mass-charging'}"  ng-click="vm.setMenuItemActive('mass-charging')">            
-            <div>
-                <!-- <i class="glyphicon glyphicon-credit-card" aria-hidden="true"></i>             -->
-                <img src="./content/img/payment.png" style="width:20px;height:20px;">
-                <span> Cobrança Massiva </span>
-            </div>
-        </div>     
-
-         <div title="Status Pagamentos" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'status-charging'}"  ng-click="vm.setMenuItemActive('status-charging')">            
-            <div>
-                <!-- <i class="fa fa-bar-chart" aria-hidden="true"></i>    -->
-                <img src="./content/img/paystatus.png" style="width:20px;height:20px;">         
-                <span> Status Pagamentos </span>
-            </div>
-        </div>  
-        <!-- <div title="All Phone Lines" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'allphone-lines'}"  ng-click="vm.setMenuItemActive('allphone-lines')">            
-                <div>
-                    
-                    <img src="./content/img/phonelines.png" style="width:20px;height:20px;">         
-                    <span> All Phones </span>
-                </div>
-            </div>  -->
-        <div title="Estoque" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'estoque'}"  ng-click="vm.setMenuItemActive('estoque')">            
-            <div>
-                <!-- <i class="glyphicon glyphicon-phone" aria-hidden="true"></i>  -->
-                <img src="./content/img/icon_estoque.png" style="width:20px;height:20px;">         
-                <span> Estoque </span>
-            </div>
-        </div>
-        <div title="All Phones" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'all-phones'}"  ng-click="vm.setMenuItemActive('all-phones')">            
-            <div>
-                <!-- <i class="glyphicon glyphicon-phone" aria-hidden="true"></i>  -->
-                <img src="./content/img/icon_estoque.png" style="width:20px;height:20px;">         
-                <span> All Phones </span>
-            </div>
-        </div>   
-        <div title="Templates Email" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'template-edit'}"  ng-click="vm.setMenuItemActive('template-edit')">            
-            <div>
-                <!-- <i class="glyphicon glyphicon-phone" aria-hidden="true"></i>  -->
-                <img src="./content/img/template.png" style="width:20px;height:20px;">         
-                <span> Edição conteúdo </span>
-            </div>
-        </div>   
-
-        <div title="Planos e Serviços" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'plan-edition'}"  ng-click="vm.setMenuItemActive('plan-edition')">            
-            <div>
-                <!-- <i class="glyphicon glyphicon-phone" aria-hidden="true"></i>  -->
-                <img src="./content/img/plans.png" style="width:20px;height:20px;">         
-                <span> Edição Planos </span>
-            </div>
-        </div>
-        
-        <div title="Report Comissões" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'report-comissions'}"  ng-click="vm.setMenuItemActive('report-comissions')">            
-            <div>
-                <!-- <i class="glyphicon glyphicon-phone" aria-hidden="true"></i>  -->
-                <img src="./content/img/comissions.png" style="width:20px;height:20px;">         
-                <span> Report Comissões </span>
-            </div>
-        </div>
-
-    </div>  
-     
-    <div class="menu-views" ui-view name="menu-tab">                            
     </div>
+    <div title="Pagar.me" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'list-customer'}" ng-click="vm.setMenuItemActive('list-customer')">
+      <div>
+        <i class="fa fa-rub" aria-hidden="true"></i><i class="fa fa-maxcdn" aria-hidden="true"></i>
+        <span> Pagar.me </span>
+      </div>
+    </div>
+    <div title="Clientes" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'customers'}" ng-click="vm.setMenuItemActive('customers')">
+      <div> 
+        <img src="./content/img/client.png" style="width:20px;height:20px;">
+        <span> Clientes </span>
+      </div>
+    </div>
+
+    <div title="Cobrança Massiva" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'mass-charging'}" ng-click="vm.setMenuItemActive('mass-charging')">
+      <div> 
+        <img src="./content/img/payment.png" style="width:20px;height:20px;">
+        <span> Cobrança Massiva </span>
+      </div>
+    </div>
+
+    <div title="Status Pagamentos" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'status-charging'}" ng-click="vm.setMenuItemActive('status-charging')">
+      <div> 
+        <img src="./content/img/paystatus.png" style="width:20px;height:20px;">
+        <span> Status Pagamentos </span>
+      </div>
+    </div> 
+    <div title="Estoque" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'estoque'}" ng-click="vm.setMenuItemActive('estoque')">
+      <div> 
+        <img src="./content/img/icon_estoque.png" style="width:20px;height:20px;">
+        <span> Estoque </span>
+      </div>
+    </div>
+    <div title="All Phones" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'all-phones'}" ng-click="vm.setMenuItemActive('all-phones')">
+      <div> 
+        <i class="fa fa-mobile" aria-hidden="true"></i>
+        <span> All Phones </span>
+      </div>
+    </div> 
+
+    <div title="All Phones New" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'all-phones-new'}" ng-click="vm.setMenuItemActive('all-phones-new')">
+      <div> 
+        <i class="fa fa-volume-control-phone"></i>
+        <span> All Phones New</span>
+      </div>
+    </div>
+
+    <div title="Templates Email" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'allphone-lines'}" ng-click="vm.setMenuItemActive('template-edit')">
+      <div>
+        <!-- <i class="glyphicon glyphicon-phone" aria-hidden="true"></i>  -->
+        <img src="./content/img/template.png" style="width:20px;height:20px;">
+        <span> Edição conteúdo </span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="menu-views" ui-view name="menu-tab">
+  </div>
 </div>
-<style>
-  .m-t-44 {
-    margin-top:44px;
-  }
-</style>
+
+

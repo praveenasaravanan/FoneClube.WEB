@@ -1,194 +1,140 @@
-<div class="home" ng-class="{'force-select': vm.selecaoMassiva }">
-    <fone-header title="Status de cobrança"></fone-header>
-    <div class="row header-filter">
-       <div class="subrow"> 
-            <div class="form-group col-xs-6 col-sm-1">
-                <label for="mes">Mês:</label>
-                <input type="number" class="form-control" placeholder="Mês" ng-model="vm.month"
-                    aria-describedby="sizing-addon2" id="mes">
-            </div>
-            <div class="form-group col-xs-6 col-sm-2">
-                <label for="ano">Ano:</label>
-                <input type="number" min="2000" class="form-control" placeholder="Ano" ng-model="vm.year"
-                    aria-describedby="sizing-addon2" id="ano">
-            </div>
+<div class="row header-filter headernone" ng-init="onPageLoad()">
+  <div class="clearfix"></div>
+  <div class="row">
+    <div class="form-group col-xs-6 col-sm-1">
+      <label>	Mês1</label>
+      <input type="number" class="form-control" placeholder="Mês" ng-model="vm.month"
+             aria-describedby="sizing-addon2" id="mes">
+    </div>
+    <div class="form-group col-xs-6 col-sm-1">
 
-            <div class="form-group col-xs-2 col-sm-2" style="margin-top: 30px;">
-                <input type="checkbox" class="form-check-input" ng-model="vm.selecaoMassiva">
-                <label class="form-check-label" for="exampleCheck1">Seleção massiva</label>
-            </div>
-
-            <div class="form-group col-xs-2 col-sm-2" style="margin-top: 30px;">
-                <input type="checkbox" class="form-check-input" ng-change="vm.changeFilter(true)" ng-model="vm.cobrancaAtiva">
-                <label class="form-check-label" for="exampleCheck1">Cobranças ativas</label>
-            </div>
-
-            <div class="form-group col-xs-2 col-sm-2" style="margin-top: 30px;">
-                <input type="checkbox" class="form-check-input" ng-change="vm.changeFilter(true)" ng-model="vm.clienteAtivo">
-                <label class="form-check-label" for="exampleCheck1">Clientes Ativos</label>
-            </div>
-
-            <div class="form-group col-xs-2 col-sm-1">
-                <button class="btn btn-primary busca-status" ng-click="vm.searchStatusCharging()"
-                        ng-disabled="vm.resquenting || vm.loading">Buscar
-                </button>
-            </div>
-
-
-            <div class="form-group col-xs-2 col-sm-1">
-                <button class="btn btn-primary busca-status" ng-click="vm.onTapUpdatePagarme()">{{vm.mensagemPagarme}}
-                </button>
-            </div>
-        </div>
-
-    </div> 
-
-    <div class="row subheader-filter">
-        <div class="form-group col-xs-2 col-sm-2">
-            <label>Clientes ativos</label>
-            <p ng-show="!vm.loading">{{vm.totalCustomers}}</p>
-        </div>
-
-        <div class="form-group col-xs-1 col-sm-2">
-            <label>Clientes cobrados</label>
-            <p ng-show="!vm.loading">{{vm.totalCustomersCharged}}</p>
-        </div>
-
-        <div class="form-group col-xs-1 col-sm-2">
-            <label>Clientes não cobrados</label>
-            <p ng-show="!vm.loading">{{vm.totalCustomersNotCharged}}</p>
-        </div>
-
-        <div class="form-group col-xs-1 col-sm-2">
-            <label>Valor total cobrado</label>
-            <p ng-show="!vm.loading">R$: {{vm.totalCharged}}</p>
-        </div>
-
-        <div class="form-group col-xs-1 col-sm-2">
-            <label>Valor total recebido</label>
-            <p ng-show="!vm.loading && vm.totalReceivedReady">R$: {{vm.totalReceived}}</p>
-        </div>
+      <label>	Ano</label>
+      <input type="number" min="2000" class="form-control" placeholder="Ano" ng-model="vm.year"
+             aria-describedby="sizing-addon2" id="ano">
+    </div>
+    <div class="form-group col-xs-6 col-sm-1">
+      <button class="btn btn-primary busca-status"
+              data-ng-click="onClickSearchCustomerData()">
+        Buscar
+      </button>
     </div>
 
-    <!--<table class="table table-hover">-->
-    <div ng-if="vm.loading" style="margin-top: 358px; position: fixed" class="loading-status">{{vm.loadingMessage}}</div>
-    <div id="table" ng-show="!vm.loading" style="margin-top: 355px;">
-        <table ng-table="vm.tableParams" show-filter="true" class="table table-scroll-charging">
-            <tr ng-repeat="customer in $data">
 
-                    <td sortable="'chargingDate'" filter="{ chargingDate: 'text'}" title="'Última Cob.'" ng-class="{'status-green': customer.dataIgual == true}">
-                        <strong>{{customer.chargingDate}}</strong>
-                    </td>
-                    
-                    <td sortable="'chargingDate'" filter="{ chargingDateDiffDays: 'text'}" title="'Dias'"><strong>{{vm.diffDays(customer.chargingDate) }}</strong></td>
-        
-                    <td sortable="'descricaoStatus'" filter="{descricaoStatus: 'select'}" filter-data="vm.tiposStatus" title="'Status'" style="text-align: center;">
-                    <!--<td ng-class="{'status-red': !customer.Charged, 'status-green': customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'INVÁLIDO', 'status-blue': customer.selectedCharge.StatusDescription == 'PENDENTE', 'status-grey': customer.selectedCharge.StatusDescription == 'CARREGANDO' }">-->
-                        <!--<strong>{{customer.selectedCharge.StatusDescription}}</strong>-->
-                        <!--<strong ng-if="customer.selectedCharge.StatusDescription == undefined || customer.selectedCharge.StatusDescription == null">-->
-                            <!--NÃO COBRADO</strong>-->
-                            <div ng-if="customer.descricaoStatus == 2">
-                                <strong><p>NÃO COBRADO</p></strong>
-                            </div>
-            
-                            <div  ng-if="customer.descricaoStatus == 3">
-                                <strong><p style="color: green;">PAGO</p></strong>
-                            </div>
-                            
-                            <div  ng-if="customer.descricaoStatus == 1">
-                                <strong><p style="color: blue;">COBRADO</p></strong>
-                            </div>
-            
-                            <div  ng-if="customer.descricaoStatus == 5">
-                                <strong><p style="color: red;">VENCIDO</p></strong>
-                            </div>
-            
-                            <div  ng-if="customer.descricaoStatus == 4">
-                                <strong><p style="color: purple;">REFUNDED</p></strong>
-                            </div>
-            
-                            <!-- customer.selectedCharge.Expired -->
-            
-                            <!-- <svg height="10" width="10" ng-if="customer.selectedCharge.Expired == true">
-                                <circle cx="5" cy="5" r="5" stroke="" stroke-width="3" fill="yellow" />
-                            </svg> -->
-            
-            
-                    </td>
-        
-                    
-        
-                    <td sortable="'ammoutInt'" filter="{ammoutInt: 'text'}" title="'R$ Cobrado'">
-                        <select
-                                ng-if="customer.ChargingValidity.length > 0"
-                                ng-show="customer.ChargingValidity.length > 1"
-                                ng-model="customer.selectedCharge"
-                                ng-options="vm.formatAmmout(item.Ammount) for item in customer.ChargingValidity"
-                                ng-init="customer.selectedCharge = customer.ChargingValidity[0]"
-                                ng-change="vm.changeSelect(customer.selectedCharge)">
-                        </select>
-        
-        
-                        <div ng-if="customer.ChargingValidity.length == 1">{{ customer.ammoutIntFormat }}</div>
-        
-        
-                    </td>
-        
-                    <td sortable="'descricaoTipo'" title="'Tipo'" filter="{descricaoTipo: 'select'}" filter-data="vm.tiposPagamento">
-                        <div ng-if="customer.ChargingValidity[0].Charged">
-                            <!-- {{ customer.ChargingValidity[0].PaymentType == 1 ? 'CARTÃO' : 'BOLETO' }} -->
-        
-                            <a ng-if="customer.selectedCharge.PaymentType != 1" ng-href="{{customer.selectedCharge.BoletoLink}}" target="_blank">BOLETO</a>
-                            
-                            <p ng-if="customer.selectedCharge.PaymentType == 1">CARTÃO</p>
-                        </div>
-        
-                    </td>
-        
-                    <td sortable="'descricaoCharge'" title="'Status'" filter="{descricaoCharge: 'select'}" filter-data="vm.tipoAtiva">
-                        {{customer.selectedCharge.Canceled ? 'Cancelada' : 'Ativa'}}   
-                    </td>
-        
-                    <td sortable="'descricaoAcao'" filter="{descricaoAcao: 'select'}" filter-data="vm.tipoAcao" title="'Ação'" >
-                        <button ng-if="customer.ChargingValidity.length > 0 && !customer.selectedCharge.Canceled" 
-                        class="btnb btn-danger action-buttons" 
-                        ng-click="vm.onDesativarBoleto(customer.selectedCharge)"
-                        ng-disabled="vm.resquenting || vm.loading">
-                        C
-                        </button>
-        
-                        <button ng-if="customer.ChargingValidity.length > 0 && customer.selectedCharge.Canceled"  
-                        class="btnb btn-info action-buttons" 
-                        ng-click="vm.onAtivarBoleto(customer.selectedCharge)"
-                        ng-disabled="vm.resquenting || vm.loading">
-                        A
-                        </button>
-        
-                    </td>
-        
-                    <td sortable="'boletoExpires'" filter="{boletoExpires: 'text'}" title="'Vencimento'"><strong></strong>{{customer.boletoExpires}}</strong></td>
-                    <td sortable="'LastPaidDate'" filter="{ LastPaidDate: 'text'}" title="'Ultimo pag.'"><strong></strong>{{customer.LastPaidDate}}</strong></td>
-                    <td sortable="'LastPaidDate'" filter="{ LastPaidDateDiffDays: 'text'}" title="'Dias'"><strong></strong>{{ vm.diffDays(customer.LastPaidDate) }}</strong></td>
-                    <!-- <td><strong></strong>{{customer.Charging.Ammount / 100}}</strong></td> -->
-        
-                    <td sortable="'ammoutIntPaid'" title="'R$ Pago'" filter="{ ammoutIntPaid: 'text'}">
-                        <select
-                                ng-if="customer.ChargingValidity.length > 0"
-                                ng-show="customer.ChargingValidity.length > 1"
-                                ng-model="customer.selectedCharge"
-                                ng-options="vm.formatAmmout(item.Ammount) for item in customer.ChargingValidity"
-                                ng-init="customer.selectedCharge = customer.ChargingValidity[0]"
-                                ng-change="vm.changeSelect(customer.selectedCharge)">
-                        </select>
-        
-                        <div ng-if="!customer.pending && customer.Charged && customer.selectedCharge.StatusDescription != 'CARREGANDO' && customer.selectedCharge.StatusDescription != 'PENDENTE'">
-                            <div ng-if="customer.ChargingValidity.length == 1 && customer.ammoutIntPaid > 0">{{ customer.ammoutPaidFormat }}</div>
-                        </div>   
-                    </td>
-        
-                    <td sortable="'Name'" title="'Nome'" filter="{ Name: 'text'}">{{customer.Name}}</td>
-            </tr>
-        </table>
+    <div class="form-group col-xs-6  col-sm-8 otherOptions">
+      <label>&nbsp;</label>
+      <ul>
+        <li>
+          <input type="checkbox" class="form-check-input" ng-change="vm.changeFilter(true)" ng-model="vm.cobrancaAtiva">
+          <label>	Seleção massiva</label>
+        </li>
+        <li>
+          <input type="checkbox" class="form-check-input" ng-change="vm.changeFilter(true)" ng-model="vm.clienteAtivo">
+          <label>	Cobranças ativas</label>
+        </li>
+        <li>
+          <input type="checkbox" class="form-check-input" ng-change="vm.changeFilter(true)" ng-model="vm.clienteAtivo">
+          <label>	Clientes Ativos</label>
+        </li>
+        <li>
+          <button class="btn btn-primary busca-status " style="margin-top:0px"
+                  data-ng-click="exportToExcel()">
+            Export To Excel
+          </button>
+        </li>
+      </ul>
     </div>
+
+  </div>
+
+  <div id="loadingDiv" style="display:none;">
+    <div class="row">
+      <div class="col-md-12">
+        <img src="../../content/img/Loading2.gif" style="width:50px" />
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Start -->
+      <div class="grid-container">
+        <kendo-grid id="customerGridData" options="customerGridOptions"
+                    k-data-source="customerDataSource"></kendo-grid>
+      </div>
+      <!-- End -->
+      <div class="clearfix"></div>
+    </div>
+  </div>
+
 </div>
-      
+
+
+<style>
+  #loadingDiv {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background-color: #dcdcdc;
+    width: 100%;
+  }
+
+  .header-filter {
+    padding-top: 0;
+  }
+
+  #header-filter-top {
+    margin-top: 0px !important;
+  }
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+
+  .m-t-44 {
+    margin-top: 0px;
+  }
+
+  .otherOptions ul li {
+    padding: 0;
+    float: left;
+    list-style: none;
+    padding-right: 30px;
+  }
+
+  .k-grid-excel {
+    display: none;
+  }
+
+  .k-filter-row th, .k-grid-header th.k-header {
+    height: 40px;
+  }
+
+  .k-grid-header th.k-header {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    vertical-align: middle;
+  }
+
+  .break-word {
+    word-wrap: break-word;
+    vertical-align: middle;
+    float: left;
+  }
+
+  .k-grid td.k-state-selected:hover, .k-grid tr:hover {
+    color: #fff;
+    background-color: #35baf6;
+  }
+
+  .grid-container {
+    margin-right: 4%;
+    font-size: 14px;
+  }
+
+  .form-control {
+    padding: 0px 4px;
+    border-radius: 0px;
+  }
+</style>
