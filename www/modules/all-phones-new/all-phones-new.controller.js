@@ -1,4 +1,25 @@
+/**
+CAUTION, IMPORTANT
 
+All this code is not following patterns. The pattern we trying to follow is: 
+https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md
+
+Please do not reaply any of pattern or the this code, structure or techniques 
+used here in this file or the code will not be aproved. 
+
+This page will be organized and refactored but we can not do it now. 
+This page represent all that we do not want in code technique and pattern.
+
+For example: 
+1. We do not use jquery approach, we use angularJS .
+2. We do not need use ajax, we have http service on foneclube.service
+3. Avoid use Scope, use vm.
+
+Maybe you will find other pages that are not following fully the desired patterns 
+But we have the a lot of samples in the project and especially the guide:
+https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md
+
+ */
 
 angular
   .module('foneClub')
