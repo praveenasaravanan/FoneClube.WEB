@@ -20,8 +20,27 @@
     vm.showLoader = showLoader;
     vm.hideLoader = hideLoader;
 
+    var releaseMode = false;
+    var version = '1.0.7';
+
+    setFavicon();
+
     function getVersion(){
-      return '1.0.7';
+      return version;
+    }
+
+    function setFavicon(){
+      var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+      link.type = 'image/x-icon';
+      link.rel = 'shortcut icon';
+      if(releaseMode){
+        link.href = 'content/favicon/favicon-32x32.png'
+      }
+      else{
+        link.href = 'content/favicon/homol/favicon-32x32.png'
+      }
+
+      document.getElementsByTagName('head')[0].appendChild(link);
     }
 
     function alert(params){
