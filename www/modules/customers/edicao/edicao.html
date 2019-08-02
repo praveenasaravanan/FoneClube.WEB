@@ -78,10 +78,10 @@
                         <label for="quemConvidou">Telefone de quem convidou: {{vm.telefonePai}}</label>
                     </div>  -->
 
-                <div class="form-group col-sm-3 col-xs-3">
+                <div class="form-group combo-atualiza-pai">
                         <label for="quemConvidou">Atualize o Pai:</label>
                         <td  title="'Lista Pais'">
-                                <select
+                                <select class="combo-pai"
                                         ng-model="vm.selectedPai"
                                         ng-options="item.Name for item in vm.testeResult"
                                         >
@@ -91,7 +91,7 @@
                             </td>
                         </div>
 
-                        <button class="btn btn-primary" style="margin-top:25px;" ng-disabled="vm.requesting"  ng-click="vm.onTapAtualizaPai(vm.selectedPai)">
+                        <button class="btn btn-primary atualiza-pai-btn" ng-disabled="vm.requesting"  ng-click="vm.onTapAtualizaPai(vm.selectedPai)">
                             <!-- <i class="glyphicon glyphicon-arrow-right"></i> -->
                             Atualiza Pai
                         </button>
@@ -339,6 +339,11 @@
                         </div>
                     </th>
 
+                    <th style="width: 40px;" ng-if="!vm.hideColunaLinhaAtiva">
+                        <div class="s_cls s_lbl">
+                            <span for="portabilidadeTelefone">FLAG:</span>
+                        </div>
+                    </th>
 
                     <th style="width: 100px;">
                         <div class="s_cls s_lbl">
@@ -498,6 +503,14 @@
                     <td ng-if="!vm.hideColunaLinhaAtiva" style="width: 40px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
                         <toggle ng-change="vm.activechanged($index)" on="On" off="Off"
                                 ng-model="phoneNumber.LinhaAtiva"></toggle>
+                    </td>
+
+                    <!-- todo -->
+
+                    <td ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+                        <button ng-click="vm.onClickFlag(phoneNumber)"><p> &#x2691; </p></button>
+                        <!-- <toggle ng-change="vm.activechanged($index)" on="On" off="Off"
+                                ng-model="phoneNumber.LinhaAtiva"></toggle> -->
                     </td>
 
                     <td style="width: 100px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">

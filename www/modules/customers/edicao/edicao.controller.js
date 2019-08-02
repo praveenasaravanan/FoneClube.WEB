@@ -47,7 +47,8 @@
     vm.opemEmailpopup = opemEmailpopup;
     vm.onTapAtualizaPai = onTapAtualizaPai;
     vm.changeExtraService = changeExtraService;
-    vm.changeSelectedService = changeSelectedService
+    vm.changeSelectedService = changeSelectedService;
+    vm.onClickFlag = onClickFlag;
 
     vm.search = "";
     vm.showall = false;
@@ -1602,6 +1603,12 @@
       FoneclubeService.postPersonAtivity(customer).then(function(result){
         // debugger;
       })
+    }
+
+    function onClickFlag(phoneNumber){
+      console.log('onClickFlag');
+      console.log(phoneNumber);
+
     }
 
 
