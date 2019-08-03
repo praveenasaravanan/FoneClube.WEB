@@ -58,12 +58,12 @@
       </section>
 
       <div style="clear:both;"></div>
-
-      <section class="available-card-list" ng-if="vm.etapaEscolhaCartao">
+      <!-- && vm.cards.length > 0 -->
+      <section class="available-card-list" ng-if="vm.etapaEscolhaCartao && (vm.cards.length > 0)">
         <div class="row fix-row">
           <div class="col-xs-12">
-            <h4>Cartões disponíveis</h4>
-            <div class="available-card" ng-repeat="card in vm.cards">
+            <h4 ng-click="vm.onClickCardTitle()" class="colapsable-title">&#x276F; Cartões disponíveis</h4>
+            <div ng-if="vm.showCards" class="available-card" ng-repeat="card in vm.cards">
               <div style="width: 20%">
                 <span>
                   <i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>
@@ -97,12 +97,14 @@
         </div>
       </section>
 
-      <section class="darker">
+      <section>
         <div class="row fix-row">
           <div class="col-sm-6">
-            <h4 ng-show="vm.chargesArray.length > 0">Cobranças</h4>
+              
+            <h4 ng-click="vm.onClickChargingsTitle()" class="colapsable-title" ng-show="vm.chargesArray.length > 0">&#x276F; Cobranças</h4>
 
             <v-accordion
+              ng-if="vm.showChargings"
               id="accordionB"
               class="vAccordion--default"
               multiple
@@ -214,8 +216,9 @@
           </div>
 
           <div class="col-sm-6">
-            <h4 ng-show="vm.osDescArray.length > 0">Ordens de Serviço</h4>
+            <h4 ng-click="vm.onClickServiceOrdersTitle()" class="colapsable-title" ng-show="vm.osDescArray.length > 0">&#x276F; Ordens de Serviço</h4>
             <v-accordion
+            ng-if="vm.showServiceOrders"
               ng-show="vm.osDescArray.length > 0"
               id="accordionB"
               class="vAccordion--default"

@@ -435,83 +435,6 @@ button {
 .pane {
   overflow-y: auto; }
 
-.cadastro-container {
-  display: flex;
-  flex: 1 1 auto;
-  height: 100%;
-  flex-direction: column;
-  background-color: #ecf0f5; }
-
-.botao-upload-cadastro {
-  height: 69px;
-  width: 130px;
-  background-color: #dfdfdf;
-  text-align: center;
-  margin-left: 12px;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-around;
-  align-items: center;
-  float: left;
-  cursor: pointer;
-  font-weight: bold;
-  color: #656565; }
-  .botao-upload-cadastro img {
-    height: 40px;
-    width: 40px; }
-  .botao-upload-cadastro input {
-    display: none; }
-
-.thumb-image {
-  height: 69px;
-  border: solid;
-  width: 130px;
-  border: none;
-  margin-left: 10px;
-  cursor: pointer; }
-
-.row {
-  margin-right: 0px;
-  margin-left: 0px; }
-
-.popup-lista-imagens {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center; }
-  .popup-lista-imagens .ngdialog-content {
-    position: relative;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    justify-content: center;
-    align-items: center; }
-  .popup-lista-imagens .ngdialog-close:before {
-    content: ''; }
-  .popup-lista-imagens img {
-    max-width: 600px; }
-  .popup-lista-imagens .next {
-    width: 100px;
-    cursor: pointer;
-    content: url("../../content/assets/icons/right-image.png"); }
-    .popup-lista-imagens .next:hover {
-      content: url("../../content/assets/icons/right-image-hover.png"); }
-  .popup-lista-imagens .back {
-    width: 100px;
-    cursor: pointer;
-    content: url("../../content/assets/icons/left-image.png"); }
-    .popup-lista-imagens .back:hover {
-      content: url("../../content/assets/icons/left-image-hover.png"); }
-
-.pane {
-  overflow-y: auto; }
-
 .customers-container {
   display: flex;
   flex: 1 1 auto;
@@ -589,6 +512,83 @@ button {
     .customers-container .divPhone a img.imgWhatsapp {
       max-width: 40px;
       border-radius: 50%; }
+
+.pane {
+  overflow-y: auto; }
+
+.cadastro-container {
+  display: flex;
+  flex: 1 1 auto;
+  height: 100%;
+  flex-direction: column;
+  background-color: #ecf0f5; }
+
+.botao-upload-cadastro {
+  height: 69px;
+  width: 130px;
+  background-color: #dfdfdf;
+  text-align: center;
+  margin-left: 12px;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+  align-items: center;
+  float: left;
+  cursor: pointer;
+  font-weight: bold;
+  color: #656565; }
+  .botao-upload-cadastro img {
+    height: 40px;
+    width: 40px; }
+  .botao-upload-cadastro input {
+    display: none; }
+
+.thumb-image {
+  height: 69px;
+  border: solid;
+  width: 130px;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer; }
+
+.row {
+  margin-right: 0px;
+  margin-left: 0px; }
+
+.popup-lista-imagens {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+  .popup-lista-imagens .ngdialog-content {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    justify-content: center;
+    align-items: center; }
+  .popup-lista-imagens .ngdialog-close:before {
+    content: ''; }
+  .popup-lista-imagens img {
+    max-width: 600px; }
+  .popup-lista-imagens .next {
+    width: 100px;
+    cursor: pointer;
+    content: url("../../content/assets/icons/right-image.png"); }
+    .popup-lista-imagens .next:hover {
+      content: url("../../content/assets/icons/right-image-hover.png"); }
+  .popup-lista-imagens .back {
+    width: 100px;
+    cursor: pointer;
+    content: url("../../content/assets/icons/left-image.png"); }
+    .popup-lista-imagens .back:hover {
+      content: url("../../content/assets/icons/left-image-hover.png"); }
 
 .home {
   width: 100%;
@@ -1061,9 +1061,6 @@ v-pane-content {
     margin-top: 12px;
     width: 120px; }
 
-.tela-report td {
-  padding-right: 20px; }
-
 .menu-container {
   cursor: default;
   color: white;
@@ -1135,6 +1132,9 @@ v-pane-content {
       width: 70px; }
   .menu-container .menu-close-mobile {
     display: none; }
+
+.tela-report td {
+  padding-right: 20px; }
 
 .busca-status {
   margin-top: 25px; }
@@ -1327,6 +1327,12 @@ v-pane-content {
     line-height: 19px;
     color: #262626; }
 
+.boleto-modal .btn {
+  margin-bottom: 5px; }
+
+.boleto-modal .btn:last-child {
+  margin-bottom: 10px; }
+
 textarea#nomeCartao {
   height: 150px; }
 
@@ -1346,11 +1352,19 @@ textarea#nomeCartao {
 input[type='checkbox'] {
   margin-top: -4px; }
 
-.boleto-modal .btn {
-  margin-bottom: 5px; }
-
-.boleto-modal .btn:last-child {
-  margin-bottom: 10px; }
+.customer-modal .colapsable-title {
+  cursor: pointer; }
+  .customer-modal .colapsable-title:after, .customer-modal .colapsable-title:before {
+    color: #72bcd4;
+    display: inline-block;
+    opacity: 0;
+    transition: all 300ms ease; }
+  .customer-modal .colapsable-title:hover {
+    color: #000;
+    background-color: #ccc; }
+    .customer-modal .colapsable-title:hover:after, .customer-modal .colapsable-title:hover:before {
+      opacity: 1;
+      transform: translatex(0); }
 
 .customer-modal .btn {
   margin-bottom: 5px; }
@@ -1388,7 +1402,6 @@ input[type='checkbox'] {
 .customer-modal section.available-card-list {
   margin-top: 50px;
   padding-bottom: 20px;
-  box-shadow: 0 10px 15px -12px #878787;
   z-index: 1;
   position: relative; }
 
@@ -1440,6 +1453,20 @@ input[type='checkbox'] {
     margin-left: 5px; }
   .edicao-container .combo-atualiza-pai {
     float: left; }
+  .edicao-container .checkcircle {
+    color: green;
+    font-size: 35px; }
+  .edicao-container .checkcircle:hover {
+    background-color: #bdffab; }
+  .edicao-container .checkcircle:active {
+    background-color: #95adff; }
+  .edicao-container .uncheckcircle {
+    color: red;
+    font-size: 35px; }
+  .edicao-container .uncheckcircle:hover {
+    background-color: #fdb6b6; }
+  .edicao-container .uncheckcircle:active {
+    background-color: #e2a3fd; }
 
 .s_cls span {
   display: inline-block;
@@ -1506,16 +1533,16 @@ table.s_table tr td {
 .new-card-modal .btn:last-child {
   margin-bottom: 10px; }
 
-.boleto-modal .btn {
-  margin-bottom: 5px; }
-
-.boleto-modal .btn:last-child {
-  margin-bottom: 10px; }
-
 .new-card-modal .btn {
   margin-bottom: 5px; }
 
 .new-card-modal .btn:last-child {
+  margin-bottom: 10px; }
+
+.boleto-modal .btn {
+  margin-bottom: 5px; }
+
+.boleto-modal .btn:last-child {
   margin-bottom: 10px; }
 
 .mensagens-dialog {
