@@ -270,10 +270,11 @@
 
             <br />
 
-            <h4 ng-show="vm.historyLog.length > 0">
-              Histórico Cobrança registro secundário
+            <h4 ng-click="vm.onClickSecundaryChargingsTitle()" class="colapsable-title" ng-show="vm.historyLog.length > 0">
+                &#x276F; Histórico Cobrança registro secundário
             </h4>
             <v-accordion
+              ng-if="vm.showSecundaryChargings"
               ng-show="vm.historyLog.length > 0"
               id="accordionB"
               class="vAccordion--default"
