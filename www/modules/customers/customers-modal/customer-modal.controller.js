@@ -456,5 +456,8 @@
     function onClickFlagsTitle(){
       vm.showFlags = !vm.showFlags;
     }
+
+    //clientes com flag em aberto aparece icone de bandeira preenchida, os que não tiverem, bandeira vazia
+    // ao clicar na bandeira cheia abre modal com flags expandidas, caso contrário abrem colapsado
   }
 })();
