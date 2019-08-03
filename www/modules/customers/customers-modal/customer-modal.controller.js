@@ -35,6 +35,8 @@
     vm.showChargings = true;
     vm.showServiceOrders = true;
     vm.showSecundaryChargings = false;
+    vm.showFlags = true;
+    
 
     vm.month = new Date().getMonth() + 1;
     vm.year = new Date().getFullYear();
@@ -57,6 +59,7 @@
     vm.onClickChargingsTitle = onClickChargingsTitle;
     vm.onClickServiceOrdersTitle = onClickServiceOrdersTitle;
     vm.onClickSecundaryChargingsTitle = onClickSecundaryChargingsTitle;
+    vm.onClickFlagsTitle = onClickFlagsTitle;
 
     init();
 
@@ -448,6 +451,10 @@
     
     function onClickSecundaryChargingsTitle(){
       vm.showSecundaryChargings = !vm.showSecundaryChargings;
+    }
+
+    function onClickFlagsTitle(){
+      vm.showFlags = !vm.showFlags;
     }
   }
 })();

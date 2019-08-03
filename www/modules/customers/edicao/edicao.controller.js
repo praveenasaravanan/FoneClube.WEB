@@ -1612,6 +1612,7 @@
       ViewModelUtilsService.showModalCustomer(vm.customer, -1);
 
     }
+    
 
   }
 })();

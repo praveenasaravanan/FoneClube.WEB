@@ -96,6 +96,17 @@
           </div>
         </div>
       </section>
+      <!-- ng-if="vm.flags.length > 0" -->
+      <section class="available-card-list" >
+          <div class="row fix-row">
+            <div class="col-xs-12">
+              <h4 ng-click="vm.onClickFlagsTitle()" class="colapsable-title">&#x276F; Flags</h4>
+              <div ng-if="vm.showFlags" class="available-card" ng-repeat="card in vm.cards">
+                
+              </div>
+            </div>
+          </div>
+        </section>
 
       <section>
         <div class="row fix-row">
@@ -270,7 +281,9 @@
 
             <br />
 
-            <h4 ng-click="vm.onClickSecundaryChargingsTitle()" class="colapsable-title" ng-show="vm.historyLog.length > 0">
+            <h4 ng-click="vm.onClickSecundaryChargingsTitle()" 
+            class="colapsable-title" 
+            ng-show="vm.historyLog.length > 0">
                 &#x276F; Histórico Cobrança registro secundário
             </h4>
             <v-accordion
