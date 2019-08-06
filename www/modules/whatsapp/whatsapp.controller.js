@@ -17,12 +17,16 @@
     vm.text = '';
     vm.sendButtonText = 'Send';
     vm.messages = [];
+	vm.currentUser=MainUtils.getAgent();
     init();
 
-    function init() {
-      FoneclubeService.getClientMessages(vm.customer.WClient.ClientId).then(function (result) {
+    function init() {		
+      FoneclubeService.getClientMessages(vm.customer.WClient.ClientId, false).then(function (result) {
         if (result) {
-          vm.messages = result;
+         vm.messages = result;
+		  if(vm.customer.WClient){
+			vm.customer.WClient.UnreadMessages=0;
+		}
         }
       });
     }
@@ -31,10 +35,17 @@
       if (!vm.text) {
         return;
       }
+	  debugger;
       var data = {
         ClientId: vm.customer.WClient.ClientId,
         Text: vm.text
       };
+	  
+	  if(vm.currentUser){
+		  data.Text = vm.currentUser + ": " + data.Text;
+		  data.SendBy= vm.currentUser;
+	  }
+	  
       vm.sendButtonText = 'Sending..';
       FoneclubeService.postSendWhatsappMessage(data).then(function (result) {
         console.log(result);
@@ -53,11 +64,11 @@
     }
 
     var awaitingResponse = false;
-    var stop = $interval(loadClientMessages, 5000);
+    var stop = null;//$interval(loadClientMessages, 5000);
     function loadClientMessages() {
       if (!awaitingResponse) {
         awaitingResponse = true;
-        FoneclubeService.getClientMessages(vm.customer.WClient.ClientId).then(function (result) {
+        FoneclubeService.getClientMessages(vm.customer.WClient.ClientId, true).then(function (result) {
           vm.messages = result;
           awaitingResponse = false;
           // console.log(result);

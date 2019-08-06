@@ -30,6 +30,25 @@
               <input id="tcheckbox-error" type="checkbox" ng-model="vm.filters.regerror" />
             </label>
           </div>
+
+          <div class="tfilter tcheckbox">
+            <label for="tcheckbox-all">
+              All
+              <input id="tcheckbox-all" type="checkbox" ng-model="vm.filters.all" />
+            </label>
+          </div>
+          <div class="tfilter tcheckbox">
+            <label for="tcheckbox-excludeFather">
+              Exclude Father
+              <input id="tcheckbox-excludeFather" type="checkbox" ng-model="vm.filters.excludeFather" />
+            </label>
+          </div>
+          <div class="tfilter tcheckbox">
+            <label for="tcheckbox-excludeAddress">
+              Exclude Address
+              <input id="tcheckbox-excludeAddress" type="checkbox" ng-model="vm.filters.excludeAddress" />
+            </label>
+          </div>
         </div>
       </div>
 
@@ -47,11 +66,12 @@
               <i class="glyphicon glyphicon-edit"></i>
             </button>
 			<span class="divPhone" ng-if="customer.WClient.PhoneNumber">
-              <a href="javascript:void(0);" ng-show="customer.WClient.IsRegisteredWithChat2Desk"
+              <a href="javascript:void(0);" ng-show="customer.WClient.IsRegisteredWithChat2Desk" ng-class="customer.WClient.UnreadMessages>0?'newMsg':'123'"
                 ng-click="vm.onTapMessage(customer)">
                 <img class="imgWhatsapp" ng-if="customer.WClient.ProfilePicUrl"
                   src="{{customer.WClient.ProfilePicUrl}}" />
                 <img ng-if="!customer.WClient.ProfilePicUrl" src="../../content/img/message-green.png" />
+                <span class="msgCountBadge" ng-show="customer.WClient.UnreadMessages>0">{{customer.WClient.UnreadMessages}}</span>
               </a>
               <a href="javascript:void(0);" ng-show="!customer.WClient.IsRegisteredWithChat2Desk">
                 <img src="../../content/img/message-red.png" />

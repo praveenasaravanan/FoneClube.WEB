@@ -509,6 +509,98 @@ button {
     .popup-lista-imagens .back:hover {
       content: url("../../content/assets/icons/left-image-hover.png"); }
 
+.pane {
+  overflow-y: auto; }
+
+.customers-container {
+  display: flex;
+  flex: 1 1 auto;
+  height: 100%;
+  flex-direction: column;
+  background-color: #ecf0f5;
+  /* Transparent Overlay */ }
+  .customers-container .form-container {
+    margin-top: 15px; }
+  .customers-container .filter {
+    display: none; }
+  .customers-container .loading {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    font-size: 20px; }
+  .customers-container .loading:before {
+    content: "";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0; }
+  .customers-container .filters-container {
+    margin-top: 60px; }
+    .customers-container .filters-container.d-flex,
+    .customers-container .filters-container .d-flex {
+      display: flex;
+      flex: 1; }
+      .customers-container .filters-container.d-flex.align-center,
+      .customers-container .filters-container .d-flex.align-center {
+        align-items: center; }
+    .customers-container .filters-container .dropdown {
+      margin-right: 16px; }
+      .customers-container .filters-container .dropdown > button {
+        height: 45px;
+        box-sizing: border-box;
+        background: #fff;
+        border-radius: 0;
+        border: none; }
+        .customers-container .filters-container .dropdown > button.dropdown-toggle::after {
+          content: "";
+          width: 0;
+          height: 0;
+          margin-left: 0.255em;
+          vertical-align: 0.255em;
+          display: inline-block;
+          border-top: 0.3em solid;
+          border-right: 0.3em solid transparent;
+          border-bottom: 0;
+          border-left: 0.3em solid transparent; }
+      .customers-container .filters-container .dropdown > .dropdown-menu {
+        width: 200px; }
+    .customers-container .filters-container .dropdown-menu .tfilter label {
+      background: #fff;
+      padding: 10px;
+      width: 100%;
+      margin: 0;
+      cursor: pointer; }
+      .customers-container .filters-container .dropdown-menu .tfilter label input[type="checkbox"] {
+        float: right;
+        margin-top: 5px; }
+    .customers-container .filters-container .tfilter.tsearch > input {
+      border-radius: 0;
+      border: none;
+      height: 45px; }
+  .customers-container .divPhone a.newMsg img {
+    border: 2px solid red; }
+  .customers-container .divPhone a {
+    text-decoration: none; }
+    .customers-container .divPhone a img.imgWhatsapp {
+      max-width: 40px;
+      border-radius: 50%; }
+  .customers-container .divPhone .msgCountBadge {
+    background-color: red;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 50%;
+    font-size: 12px;
+    position: relative;
+    bottom: 20px;
+    right: 20px; }
+
 .estoque .borda-topo-estoque {
   margin-top: 160px;
   position: relative; }
@@ -557,87 +649,6 @@ button {
 .home {
   width: 100%;
   height: 100%; }
-
-.pane {
-  overflow-y: auto; }
-
-.customers-container {
-  display: flex;
-  flex: 1 1 auto;
-  height: 100%;
-  flex-direction: column;
-  background-color: #ecf0f5;
-  /* Transparent Overlay */ }
-  .customers-container .form-container {
-    margin-top: 15px; }
-  .customers-container .filter {
-    display: none; }
-  .customers-container .loading {
-    position: fixed;
-    z-index: 999;
-    height: 2em;
-    width: 2em;
-    overflow: show;
-    margin: auto;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    font-size: 20px; }
-  .customers-container .loading:before {
-    content: '';
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0; }
-  .customers-container .filters-container {
-    margin-top: 60px; }
-    .customers-container .filters-container.d-flex,
-    .customers-container .filters-container .d-flex {
-      display: flex;
-      flex: 1; }
-      .customers-container .filters-container.d-flex.align-center,
-      .customers-container .filters-container .d-flex.align-center {
-        align-items: center; }
-    .customers-container .filters-container .dropdown {
-      margin-right: 16px; }
-      .customers-container .filters-container .dropdown > button {
-        height: 45px;
-        box-sizing: border-box;
-        background: #fff;
-        border-radius: 0;
-        border: none; }
-        .customers-container .filters-container .dropdown > button.dropdown-toggle::after {
-          content: '';
-          width: 0;
-          height: 0;
-          margin-left: 0.255em;
-          vertical-align: 0.255em;
-          display: inline-block;
-          border-top: 0.3em solid;
-          border-right: 0.3em solid transparent;
-          border-bottom: 0;
-          border-left: 0.3em solid transparent; }
-      .customers-container .filters-container .dropdown > .dropdown-menu {
-        width: 200px; }
-    .customers-container .filters-container .dropdown-menu .tfilter label {
-      background: #fff;
-      padding: 10px;
-      width: 100%;
-      margin: 0;
-      cursor: pointer; }
-      .customers-container .filters-container .dropdown-menu .tfilter label input[type='checkbox'] {
-        float: right;
-        margin-top: 5px; }
-    .customers-container .filters-container .tfilter.tsearch > input {
-      border-radius: 0;
-      border: none;
-      height: 45px; }
-  .customers-container .divPhone a {
-    text-decoration: none; }
-    .customers-container .divPhone a img.imgWhatsapp {
-      max-width: 40px;
-      border-radius: 50%; }
 
 .pane {
   overflow-y: auto; }
@@ -1302,14 +1313,21 @@ v-pane-content {
   position: absolute;
   bottom: 0;
   left: 0; }
-  .whatsapp-modal #divSendMessage input[type='text'] {
+  .whatsapp-modal #divSendMessage input[type="text"] {
     border-radius: 15px; }
+
+.whatsapp-modal .msgOuter {
+  max-width: 65%; }
+  .whatsapp-modal .msgOuter .spnClientName {
+    float: left;
+    font-size: 14px;
+    text-transform: capitalize;
+    color: teal; }
 
 .whatsapp-modal .message-in {
   background-color: #fff;
   border-radius: 7.5px;
-  box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
-  max-width: 65%; }
+  box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13); }
   .whatsapp-modal .message-in div {
     padding: 5px 10px 5px 10px;
     font-size: 14.2px;
@@ -1320,12 +1338,49 @@ v-pane-content {
   background-color: #dcf8c6;
   border-radius: 7.5px;
   box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
-  max-width: 65%; }
+  float: left; }
   .whatsapp-modal .message-out div {
     padding: 5px 10px 5px 10px;
     font-size: 14.2px;
     line-height: 19px;
     color: #262626; }
+
+.whatsapp-modal .divDate span {
+  background-color: #e1f4fb;
+  padding: 5px 10px 5px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  text-transform: uppercase; }
+
+.whatsapp-modal .spnTime {
+  float: right;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 11px;
+  height: 15px;
+  line-height: 15px;
+  white-space: nowrap;
+  margin: 8px 0px 5px 8px; }
+
+.whatsapp-modal .spnTopLeft {
+  font-size: 15px; }
+  .whatsapp-modal .spnTopLeft p {
+    margin: 0px;
+    line-height: 20px;
+    text-align: left; }
+  .whatsapp-modal .spnTopLeft img {
+    max-width: 40px; }
+  .whatsapp-modal .spnTopLeft p#pClientName {
+    color: red; }
+
+.whatsapp-modal #divTopTags {
+  margin-top: 10px; }
+  .whatsapp-modal #divTopTags span {
+    background-color: #35baf6;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    color: white;
+    margin-left: 5px;
+    font-size: 12px; }
 
 .boleto-modal .btn {
   margin-bottom: 5px; }

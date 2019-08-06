@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular.module('foneClub').service('FoneclubeService', FoneclubeService);
@@ -6,11 +6,11 @@
   FoneclubeService.inject = ['$q', 'HTTPService'];
   function FoneclubeService($q, HTTPService) {
 
-    
-    // var urlApi = 'http://localhost:57078/api';
+
+    var urlApi = 'http://localhost:57078/api';
 
     //API tests
-    var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+    // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
     this.postBasePerson = postBasePerson;
     this.postUpdatePerson = postUpdatePerson;
@@ -92,8 +92,8 @@
     this.getComissionsOrderHistory = getComissionsOrderHistory;
     this.getTotaisComissoes = getTotaisComissoes;
     this.postSendChargeMessage = postSendChargeMessage;
-	this.postSendWhatsappMessage=postSendWhatsappMessage;
-	this.getClientMessages=getClientMessages;
+    this.postSendWhatsappMessage = postSendWhatsappMessage;
+    this.getClientMessages = getClientMessages;
     this.getAPIUrl = getAPIUrl;
 
 
@@ -107,10 +107,10 @@
       HTTPService.get(
         urlApi.concat('/profile/getpaymentmethod?personID='.concat(customer.Id))
       )
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -122,15 +122,15 @@
       HTTPService.get(
         urlApi.concat(
           '/profile/customer/GetParentbyPhone?phoneparent=' +
-            phoneparent +
-            '&personid=' +
-            personid
+          phoneparent +
+          '&personid=' +
+          personid
         )
       )
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -141,10 +141,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/profile/customer/GetParentAll'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -156,17 +156,17 @@
       HTTPService.get(
         urlApi.concat(
           '/charging/cobranca/status/vingencia/cliente/' +
-            id +
-            '/mes/' +
-            month +
-            '/ano/' +
-            year
+          id +
+          '/mes/' +
+          month +
+          '/ano/' +
+          year
         )
       )
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -180,10 +180,10 @@
         urlApi.concat('/charging/cobranca/status/vingencia/mes/' + month + '/ano/' + year)
       )
         //HTTPService.get(urlApi.concat('/charging/cobranca/status/vingencia/mes/' + month + '/ano/' + year + '/ativos/' + ativos))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -194,10 +194,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/pagarme/transacao/update'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -208,66 +208,66 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/pagarme/transacao/reintegrate/date'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
       return q.promise;
     }
 
-    function getBonusLog(){
+    function getBonusLog() {
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/comission/bonus/lista/log'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
       return q.promise;
     }
 
-    function getBonusOrderHistory(total){
+    function getBonusOrderHistory(total) {
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/comission/bonus/order/history?total=' + total))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
       return q.promise;
     }
 
-    function getComissionsOrderHistory(total){
+    function getComissionsOrderHistory(total) {
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/comission/comission/order/history?total=' + total))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
       return q.promise;
     }
 
-    function getTotaisComissoes(customerId){
+    function getTotaisComissoes(customerId) {
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/comission/comission/totais/' + customerId))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -277,10 +277,10 @@
     function postCustomerComment(commentDetails) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/profile/comment'), commentDetails)
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -291,10 +291,10 @@
       var q = $q.defer();
 
       HTTPService.post(urlApi.concat('/profile/update'), personCheckout)
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -305,10 +305,10 @@
       var q = $q.defer();
 
       HTTPService.post(urlApi.concat('/profile/delete/customer'), personCheckout)
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -319,10 +319,10 @@
       var q = $q.defer();
 
       HTTPService.post(urlApi.concat('/profile/updateAdress'), personCheckout)
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -333,10 +333,10 @@
       var q = $q.defer();
 
       HTTPService.post(urlApi.concat('/profile/insert'), personCheckout)
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -347,10 +347,10 @@
       var q = $q.defer();
 
       HTTPService.post(urlApi.concat('/profile/cadastro'), personCheckout)
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -361,10 +361,10 @@
       var q = $q.defer();
 
       HTTPService.post(urlApi.concat('/profile/charging/insert'), personCharging)
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -375,10 +375,10 @@
       var q = $q.defer();
 
       HTTPService.post(urlApi.concat('/profile/customer/update'), customer)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -389,10 +389,10 @@
       var q = $q.defer();
 
       HTTPService.post(urlApi.concat('/profile/service/order'), param)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -404,10 +404,10 @@
       var q = $q.defer();
 
       HTTPService.post(urlApi.concat('/profile/customer/pagarme/id/insert'), customer)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -427,10 +427,10 @@
           .concat('/charging'),
         param
       )
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -450,10 +450,10 @@
           .concat(chargingId),
         param
       )
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -462,10 +462,10 @@
     function postCustomerParent(param) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/profile/customer/parent/insert'), param)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -474,10 +474,10 @@
     function postSendEmail(param) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/email/send'), param)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -486,10 +486,10 @@
     function postGeraBoleto() {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/pagarme/boleto'), param)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -498,10 +498,10 @@
     function postGeraCobrancaIntegrada(param) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/pagarme/integrada'), param)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -510,10 +510,10 @@
     function postUpdateTemplate(param) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/email/template/update'), param)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -522,10 +522,10 @@
     function postSoftDeletePhone(param) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/profile/delete/soft/phone'), param)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -534,10 +534,10 @@
     function postSoftDeleteCustomer(param) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/profile/delete/soft/customer'), param)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -549,10 +549,10 @@
       HTTPService.post(urlApi.concat('/charging/log/person/id/').concat(id), {
         SerializedCharging: param
       })
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -561,10 +561,10 @@
     function postPersonAtivity(param) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/profile/customer/ativity'), param)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -575,10 +575,10 @@
       HTTPService.post(
         urlApi.concat('/charging/update/id/' + chargingId + '/canceled/' + status)
       )
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -587,10 +587,10 @@
     function postDesassociarLinha(phoneId) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/manager/phones/desassociar?phoneId=' + phoneId))
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -599,10 +599,10 @@
     function postUpdatePhonePlan(plan) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/manager/phones/plan/foneclube/update'), plan)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -611,10 +611,10 @@
     function postCustomerUpdateParent(phone) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/profile/customer/parent/id/insert'), phone)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -623,10 +623,10 @@
     function postIsertServiceActive(phone) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/manager/phones/extra/service/insert'), phone)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -635,10 +635,10 @@
     function postIsertServiceDeactive(phone) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/manager/phones/extra/service/insert/deactive'), phone)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -647,10 +647,10 @@
     function postIsertServiceFoneclube(service) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/manager/phones/service/insert'), service)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -659,10 +659,10 @@
     function postUpdateServiceFoneclube(service) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/manager/phones/service/update'), service)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -671,10 +671,10 @@
     function postInsertPlanFoneclube(plan) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/manager/phones/plan/insert'), plan)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -683,10 +683,10 @@
     function postUpdatePlanFoneclube(plan) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/manager/phones/plan/update'), plan)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -696,10 +696,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/account/plans'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -710,10 +710,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/plans'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -724,10 +724,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/all/plans'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -738,10 +738,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/comission/customer/').concat(customerId))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -756,17 +756,17 @@
           .concat(customerId)
           .concat('/dispatched')
       )
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
       return q.promise;
     }
 
-    function dispatchedBonus(customerId){
+    function dispatchedBonus(customerId) {
       var q = $q.defer();
       HTTPService.post(
         urlApi
@@ -774,10 +774,10 @@
           .concat(customerId)
           .concat('/bonus/dispatched')
       )
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -792,10 +792,10 @@
           .concat('/profile/customer/plans?documentNumber=')
           .concat(register.toString())
       )
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -806,10 +806,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/account/operators'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -820,10 +820,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/profile/cliente?documentRegister='.concat(param)))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -836,10 +836,10 @@
       HTTPService.get(
         urlApi.concat('/profile/cliente/phone/status?documentRegister='.concat(param))
       )
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -850,10 +850,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/profile/cliente?documentRegister='.concat(param)))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -868,10 +868,10 @@
           '/manager/phones/claro/status/linha/ddd/' + ddd + '/numeroLinha/' + numeroLinha
         )
       )
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -884,17 +884,17 @@
       HTTPService.get(
         urlApi.concat(
           '/manager/phones/claro/status/linha/ddd/' +
-            ddd +
-            '/numeroLinha/' +
-            numeroLinha +
-            '/details'
+          ddd +
+          '/numeroLinha/' +
+          numeroLinha +
+          '/details'
         )
       )
-        .then(function(result) {
+        .then(function (result) {
           result.index = numero;
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -905,10 +905,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/profile/customers'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -919,10 +919,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/profile/charges?personID='.concat(id)))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -932,10 +932,10 @@
     function getTblServiceOrders(id) {
       var q = $q.defer();
       HTTPService.get(urlApi.concat('/profile/getorders?personID='.concat(id)))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -944,10 +944,10 @@
     function getChargeAndServiceOrderHistory(id) {
       var q = $q.defer();
       HTTPService.get(urlApi.concat('/charging/history?personID='.concat(id)))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -956,11 +956,11 @@
     function getChargeAndServiceOrderHistoryDinamic(id, index) {
       var q = $q.defer();
       HTTPService.get(urlApi.concat('/charging/history?personID='.concat(id)))
-        .then(function(result) {
+        .then(function (result) {
           result.indexLista = index;
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -970,10 +970,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/profile/phoneOwner'), param)
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -984,10 +984,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/profile/cliente/id/'.concat(id)))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1005,10 +1005,10 @@
           .concat(param.month)
           .concat('/clients')
       )
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1021,10 +1021,10 @@
       HTTPService.get(
         urlApi.concat('/profile/customer/status/new/document/').concat(documentNumber)
       )
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1034,11 +1034,11 @@
     function SendEmailStatus(emaildetails) {
       var q = $q.defer();
       HTTPService.postFile(urlApi.concat('/email/sendemailstatus'), emaildetails)
-        .then(function(result) {
+        .then(function (result) {
           console.log(result);
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
           q.reject(error);
         });
@@ -1050,10 +1050,10 @@
       var q = $q.defer();
 
       HTTPService.post(urlApi.concat('/email/getEmailDetails'), emaildetails)
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1064,10 +1064,10 @@
       var q = $q.defer();
 
       HTTPService.post(urlApi.concat('/email/saveEmailDetails'), emaildetails)
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1080,10 +1080,10 @@
       HTTPService.get(
         urlApi.concat('/pagarme/transacao/dataUltimoPagamento/') + idPargarme
       )
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1094,10 +1094,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/email/templates'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1108,10 +1108,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/status/database/name'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1122,10 +1122,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/charging/history/log/person/id/') + matricula)
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1136,10 +1136,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/estoque'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1150,10 +1150,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/status'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1164,10 +1164,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/charging/last/customer/') + matricula)
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1178,10 +1178,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/profile/all/customers?minimal=') + minimal)
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1192,10 +1192,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/all'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1212,10 +1212,10 @@
             .concat(ano)
         )
       )
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -1224,10 +1224,10 @@
     function getStatusDivergencia() {
       var q = $q.defer();
       HTTPService.get(urlApi.concat('/manager/phones/divergencia'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -1236,10 +1236,10 @@
     function getActiveCustomers() {
       var q = $q.defer();
       HTTPService.get(urlApi.concat('/profile/active/customers/parents'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
@@ -1249,10 +1249,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/') + phoneId + '/extra/services')
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1263,10 +1263,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/extra/services'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1277,10 +1277,10 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/extra/all/services'))
-        .then(function(result) {
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
@@ -1290,40 +1290,40 @@
     function postSendChargeMessage(param) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/message/send-invoice'), param)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
     }
-	
-	function postSendWhatsappMessage(param) {
+
+    function postSendWhatsappMessage(param) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/message/send'), param)
-        .then(function(data) {
+        .then(function (data) {
           q.resolve(data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
       return q.promise;
     }
-	
-	function getClientMessages(param){
-		var q = $q.defer();
 
-      HTTPService.get(urlApi.concat('/message/client/')+ param)
-        .then(function(result) {
+    function getClientMessages(param, minimal) {
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/message/client/') + param + "?minimal=" + minimal)
+        .then(function (result) {
           q.resolve(result);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           q.reject(error);
         });
 
       return q.promise;
-	}
+    }
 
   }
 })();
