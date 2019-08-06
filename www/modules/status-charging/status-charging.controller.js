@@ -61,8 +61,9 @@ function StatusChargingController($scope, $interval, FoneclubeService, PagarmeSe
     for (var i = 0; i < sourceData.length; i++) {
       var customer = sourceData[i];
 
-
-
+      if (customer.Id == 4164) {
+        debugger;
+      }
 
       var RCobrado = customer.ammoutIntFormat;
       var customerSelectedCharge = '';
@@ -73,22 +74,47 @@ function StatusChargingController($scope, $interval, FoneclubeService, PagarmeSe
       var Vencimento = customer.boletoExpires;
       var Ultimopag = customer.LastPaidDate;
       var Dias2 = diffDays(customer.LastPaidDate);
-      var RPago;
+      var RPago = 0;
       var CustomerName = customer.Name;
       var Status2 = '';
       var customerChargeId = '';
-      var UltimaCob = customer.chargingDate;
+      var UltimaCob = '';
       var Dias = 0;
-      var Status = customer.descricaoStatus;
+      var Status = '';//customer.descricaoStatus;
 
       if (isNaN(Dias2)) {
         Dias2 = 0;
       }
+      ///////////////
+      if (customer.ChargeAndServiceOrderHistory && customer.ChargeAndServiceOrderHistory.Charges) {
+        var charge = customer.ChargeAndServiceOrderHistory.Charges;
+        RPago = charge.Ammount;
 
-      if (customer.descricaoStatus == '2') { Status = 'NÃO COBRADO'; }
-      if (customer.descricaoStatus == '3') { Status = 'PAGO' };
-      if (customer.descricaoStatus == '4') { Status = 'REFUNDED' };
-      if (customer.descricaoStatus == '5') { Status = 'VENCIDO' };
+        var dataCobranca = charge.CreationDate;
+        var dataConvertida = new Date(dataCobranca).toISOString().split('T')[0].replace('-', '/').replace('-', '/');
+        var mes = dataConvertida.substring(5, 7);
+        var ano = dataConvertida.substring(0, 4);
+
+        customer.chargingDate = charge.CreationDate;
+        customer.chargingDateDiffDays = diffDays(dataConvertida);
+        Status= charge.PaymentStatusDescription;
+      }
+
+      var selecionado = new Date(vm.year.toString() + '/' + vm.month.toString()).toISOString().split('T')[0].replace('-', '/').replace('-', '/');
+      var mesSelecionado = selecionado.substring(5, 7);
+      var anoSelecionado = selecionado.substring(0, 4);
+
+      if (mesSelecionado == mes && anoSelecionado == ano) {
+        customer.dataIgual = true;
+      }
+      customer.LastPaidDateDiffDays = diffDays(customer.LastPaidDate);
+      UltimaCob = customer.chargingDate ? customer.chargingDate : "";
+      ///////////////
+
+      // if (customer.descricaoStatus == '2') { Status = 'NÃO COBRADO'; }
+      // if (customer.descricaoStatus == '3') { Status = 'PAGO' };
+      // if (customer.descricaoStatus == '4') { Status = 'REFUNDED' };
+      // if (customer.descricaoStatus == '5') { Status = 'VENCIDO' };
 
       if (customer.ChargingValidity != undefined) {
 
@@ -98,8 +124,7 @@ function StatusChargingController($scope, $interval, FoneclubeService, PagarmeSe
         customerSelectedCharge = customerChargingInfo;
         customerChargeId = customerChargingInfo.Id;
         if (customerChargingInfo.CreateDate != null && customerChargingInfo.CreateDate != undefined) {
-          UltimaCob = customerChargingInfo.CreateDate;
-
+          //UltimaCob = customerChargingInfo.CreateDate;
         }
 
 
@@ -153,18 +178,16 @@ function StatusChargingController($scope, $interval, FoneclubeService, PagarmeSe
   }
 
   $scope.onPageLoad = function () {
-     
+
     $scope.onClickSearchCustomerData();
   }
 
   $scope.onClickSearchCustomerData = function () {
-    debugger;
     $('#loadingDiv').show();
     vm.loading = true;
     vm.totalReceivedReady = false;
     hasUpdate = false;
     var ativos = vm.somenteAtivos ? 1 : 0;
-
     FoneclubeService.getStatusCharging(vm.month, vm.year, ativos).then(function (result) {
 
       vm.customers = result;
@@ -177,14 +200,11 @@ function StatusChargingController($scope, $interval, FoneclubeService, PagarmeSe
         }
       }
       handleData(vm.customers);
-      loadPaymentHistory();
+      // loadPaymentHistory();
       var gridData = vm.customers;
       initDataProperties(gridData);
     })
-
-
   }
-
 
   $scope.exportToExcel = function () {
     $('.k-grid-excel').trigger("click")
@@ -251,7 +271,8 @@ function StatusChargingController($scope, $interval, FoneclubeService, PagarmeSe
         },
         {
           field: "UltimaCob", title: "Última Cob.", width: "130px",
-          template: "#if( UltimaCob != '1999/12/31') {# <div>#=kendo.toString(kendo.parseDate(UltimaCob, 'yyyy-MM-dd'), 'dd.MMM')#</div> #}else{# <div>-</div> #}#",
+          //template: "#if( UltimaCob != '1999/12/31') {# <div>#=kendo.toString(kendo.parseDate(UltimaCob, 'yyyy-MM-dd'), 'dd.MMM')#</div> #}else{# <div>-</div> #}#",
+          template: "<div>#=kendo.toString(kendo.parseDate(UltimaCob, 'yyyy-MM-dd'), 'dd MMM, yyyy')#</div>",
           headerTemplate: "<div class='break-word'>Última Cob.<div>",
           filterable: { cell: { showOperators: false, operator: "contains", template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); }, } }
         },
@@ -563,7 +584,6 @@ function StatusChargingController($scope, $interval, FoneclubeService, PagarmeSe
         vm.customers[index].chargingDateDiffDays = diffDays(vm.customers[index].chargingDate);
       }
     }
-
   }
 
 

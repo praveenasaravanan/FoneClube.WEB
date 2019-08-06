@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular.module('foneClub').controller('CustomersController', CustomersController);
@@ -52,6 +52,9 @@
       active: false,
       inactive: false,
       regerror: false,
+      all: false,
+      excludeFather: false,
+      excludeAddress: false,
       search: ''
     };
 
@@ -77,7 +80,7 @@
         FlowManagerService.changeLoginView();
       }
 
-      FoneclubeService.getAllCustomers(true).then(function(result) {
+      FoneclubeService.getAllCustomers(true).then(function (result) {
         vm.data.customers = result;
         var customersSemSoftDelete = [];
 
@@ -90,16 +93,16 @@
 
         vm.tableParams = createUsingFullOptions(customersSemSoftDelete);
         vm.tableParams.reload();
-
-        FoneclubeService.getAllCustomers(false).then(function(result) {
-          vm.data.customers = result.map(function(user) {
-            user.Phones = user.Phones.map(function(phone) {
+        debugger;
+        FoneclubeService.getAllCustomers(false).then(function (result) {
+          vm.data.customers = result.map(function (user) {
+            user.Phones = user.Phones.map(function (phone) {
               phone.phoneFull = phone.DDD.concat(phone.Number);
               return phone;
             });
             return user;
           });
-
+          debugger;
           var customersSemSoftDelete = [];
           for (var i in vm.data.customers) {
             var customer = vm.data.customers[i];
@@ -141,7 +144,7 @@
     function onDeleteCustomer(customer) {
       var r = confirm('Deseja fazer um soft delete nesse cliente?');
       if (r == true) {
-        FoneclubeService.postSoftDeleteCustomer(customer).then(function(result) {
+        FoneclubeService.postSoftDeleteCustomer(customer).then(function (result) {
           if (result) {
             alert('Cliente deletado');
             customer.SoftDelete = true;
@@ -166,16 +169,33 @@
           paginationMaxBlocks: 10,
           paginationMinBlocks: 1,
           dataset: customers,
-          getData: function(params) {
+          getData: function (params) {
             var search = vm.filters.search;
             var filtered = getFilteredCustomers(customers, params);
 
             if (search && search !== '') {
-              var value = search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
-              var isnum = /^\d+$/.test(value.replace(' ', ''));
+              search = normalizeText(search);// search.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~]/g, '');
 
-              filtered = $filter('filter')(filtered, {
-                Name: isnum ? value.replace(' ', '') : value
+              //var isnum = /^\d+$/.test(value.replace(' ', ''));
+
+              // filtered = $filter('filter')(filtered, {
+              //   Name: isnum ? value.replace(' ', '') : value
+              // });
+              search = search.toLowerCase();
+              filtered = $filter('filter')(filtered, function (data) {
+                if (search) {
+                  return data.Name.toLowerCase().indexOf(search) > -1 ||
+                    data.Email.toLowerCase().indexOf(search) > -1 ||
+                    (data.DocumentNumber ? data.DocumentNumber.toLowerCase().indexOf(search) > -1 : false) ||
+                    (data.NickName ? data.NickName.toLowerCase().indexOf(search) > -1 : false) ||
+                    (data.Born ? data.Born.toLowerCase().indexOf(search) > -1 : false) ||
+                    (data.IdPagarme ? data.IdPagarme.toString().indexOf(search) > -1 : false) ||
+                    matchPhone(data.Phones, search) ||
+                    (!vm.filters.excludeAddress ? matchAddress(data.Addresses, search) : false) ||
+                    (!vm.filters.excludeFather ? (data.NameParent ? data.NameParent.toLowerCase().indexOf(search) > -1 : false) : false);
+                } else {
+                  return true;
+                }
               });
             }
 
@@ -195,6 +215,61 @@
           }
         }
       );
+    }
+
+    function matchPhone(phones, numberToCompare) {
+      numberToCompare = numberToCompare.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~' 'éá]/g, '');
+      if (phones && phones.length > 0) {
+        if (phones[0] == null) {
+          return false;
+        } else {
+          var phone = $filter('filter')(phones, function (data) {
+            return (data.Number ? ("55" + data.DDD + data.Number.toString()).indexOf(numberToCompare) > -1 : false);
+          });
+
+          return phone.length > 0;
+        }
+      }
+
+      return false;
+    }
+    function matchAddress(addresses, address) {
+      if (addresses && addresses.length > 0) {
+        if (addresses[0] == null) {
+          return false;
+        } else {
+          var address = $filter('filter')(addresses, function (data) {
+            data.Street = normalizeText(data.Street);
+            return (data.Street ? data.Street.toLowerCase().indexOf(address) > -1 : false);
+          });
+
+          return address.length > 0;
+        }
+      }
+
+      return false;
+    }
+    function normalizeText(text) {
+      var weird = 'öüóőúéáàűíÖÜÓŐÚÉÁÀŰÍçÇ';
+      var normalized = 'ouooueaauiOUOOUEAAUIcC';
+      var idoff = -1, new_text = '';
+      var lentext = text.toString().length - 1
+
+      for (i = 0; i <= lentext; i++) {
+        if (text[i].trim() == "+") {
+          new_text += text[i];
+        }
+        else {
+          idoff = weird.search(text.charAt(i));
+          if (idoff == -1 || text.charAt(i) == ".") {
+            new_text = new_text + text.charAt(i);
+          } else {
+            new_text = new_text + normalized.charAt(idoff);
+          }
+        }
+      }
+
+      return new_text;
     }
 
     function getFilteredCustomers(customers) {
@@ -232,13 +307,13 @@
       `;
 
       // TODO: confirm dialog
-      ViewModelUtilsService.showConfirmDialog('Atenção!', confirmMessage).then(function(
+      ViewModelUtilsService.showConfirmDialog('Atenção!', confirmMessage).then(function (
         confirm
       ) {
         if (confirm) {
           c.Desativo = customer.Desativo;
 
-          FoneclubeService.postPersonAtivity(customer).then(function(result) {
+          FoneclubeService.postPersonAtivity(customer).then(function (result) {
             if (!result) {
               customer.Desativo = oldValue;
             }
@@ -277,7 +352,7 @@
     }
 
     function onTapRepeatLastCharge(customer) {
-      FoneclubeService.getLastPaymentType(customer).then(function(result) {
+      FoneclubeService.getLastPaymentType(customer).then(function (result) {
         if (result['intIdPaymentType'] == 1) {
           ViewModelUtilsService.showModalRepeatCard(result, customer);
         }
@@ -295,9 +370,9 @@
       DialogFactory.dialogConfirm({
         mensagem:
           'Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?'
-      }).then(function(value) {
+      }).then(function (value) {
         if (value) {
-          FoneclubeService.postDeletePerson(personCheckout).then(function(result) {
+          FoneclubeService.postDeletePerson(personCheckout).then(function (result) {
             if (result) {
               DialogFactory.showMessageDialog({
                 message:

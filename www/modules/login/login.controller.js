@@ -29,9 +29,7 @@
 
             var users = FireBaseManagerUtil.getUsers();
 
-            debugger;
-
-          
+                      
             for(var i in users){
                 var user = users[i];
                 if(user.user == vm.user && user.password == vm.password)
