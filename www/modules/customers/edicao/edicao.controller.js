@@ -47,7 +47,9 @@
     vm.opemEmailpopup = opemEmailpopup;
     vm.onTapAtualizaPai = onTapAtualizaPai;
     vm.changeExtraService = changeExtraService;
-    vm.changeSelectedService = changeSelectedService
+    vm.changeSelectedService = changeSelectedService;
+    vm.onClickFlag = onClickFlag;
+    vm.onedit = onedit;
 
     vm.search = "";
     vm.showall = false;
@@ -1428,7 +1430,6 @@
       }
     }
 
-    vm.onedit = onedit;
     function onedit() {
       ViewModelUtilsService.showModalCustomer(vm.customer, -1);
     }
@@ -1604,6 +1605,14 @@
       })
     }
 
+    function onClickFlag(phoneNumber){
+      console.log('onClickFlag');
+      console.log(phoneNumber);
+      vm.customer.showFlagEdition = true;
+      ViewModelUtilsService.showModalCustomer(vm.customer, -1);
+
+    }
+    
 
   }
 })();

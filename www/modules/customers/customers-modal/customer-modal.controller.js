@@ -20,20 +20,28 @@
     FlowManagerService,
     DialogFactory
   ) {
+
     var vm = this;
+    
     var customer = ViewModelUtilsService.modalCustomerData;
+    
     var CARTAO = 1;
     var BOLETO = 2;
-    var carregandoPagarme = false;
-
-    // whatsapp
-    // var mensagem = "&text=Prezado%20cliente%2C%20estamos%20enviando%20o%20seu%20boleto%20tamb%C3%A9m%20por%20whatsapp.%20Um%20abra%C3%A7o%20da%20Equipe%20Foneclube%20{0}"
-    // replace('/', '%2F')
-
     vm.so_cnt = 0;
     vm.co_cnt = 0;
+    
+    var carregandoPagarme = false;
+    vm.showCards = true;
+    vm.showChargings = true;
+    vm.showServiceOrders = true;
+    vm.showSecundaryChargings = false;
+    vm.showFlags = true;
+    
+
     vm.month = new Date().getMonth() + 1;
     vm.year = new Date().getFullYear();
+    vm.mensagemPagarme = 'Refresh DB';
+
     vm.onTapNewCardPayment = onTapNewCardPayment;
     vm.onTapBoleto = onTapBoleto;
     vm.onTapCard = onTapCard;
@@ -44,9 +52,14 @@
     vm.cancelarPagamento = etapaEscolhaCartao;
     vm.onTapComment = onTapComment;
     vm.customer = customer;
-    vm.mensagemPagarme = 'Refresh DB';
+    
     vm.onTapUpdatePagarme = onTapUpdatePagarme;
     vm.onResentEmail = onResentEmail;
+    vm.onClickCardTitle = onClickCardTitle;
+    vm.onClickChargingsTitle = onClickChargingsTitle;
+    vm.onClickServiceOrdersTitle = onClickServiceOrdersTitle;
+    vm.onClickSecundaryChargingsTitle = onClickSecundaryChargingsTitle;
+    vm.onClickFlagsTitle = onClickFlagsTitle;
 
     init();
 
@@ -422,5 +435,29 @@
         }
       });
     }
+
+    function onClickCardTitle(){
+      console.log('teste')
+      vm.showCards = !vm.showCards;
+    }
+    
+    function onClickChargingsTitle(){
+      vm.showChargings = !vm.showChargings;
+    }
+
+    function onClickServiceOrdersTitle(){
+      vm.showServiceOrders = !vm.showServiceOrders;
+    }
+    
+    function onClickSecundaryChargingsTitle(){
+      vm.showSecundaryChargings = !vm.showSecundaryChargings;
+    }
+
+    function onClickFlagsTitle(){
+      vm.showFlags = !vm.showFlags;
+    }
+
+    //clientes com flag em aberto aparece icone de bandeira preenchida, os que não tiverem, bandeira vazia
+    // ao clicar na bandeira cheia abre modal com flags expandidas, caso contrário abrem colapsado
   }
 })();
