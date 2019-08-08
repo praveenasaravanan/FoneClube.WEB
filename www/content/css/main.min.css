@@ -1382,30 +1382,19 @@ v-pane-content {
     margin-left: 5px;
     font-size: 12px; }
 
-.boleto-modal .btn {
-  margin-bottom: 5px; }
-
-.boleto-modal .btn:last-child {
-  margin-bottom: 10px; }
-
-textarea#nomeCartao {
-  height: 150px; }
-
-.dialog-toolbar {
-  width: 100%;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 30px; }
-
-.show-template .header {
-  height: auto !important; }
-  .show-template .header button {
-    top: 0; }
-
-input[type='checkbox'] {
-  margin-top: -4px; }
+.customer-modal .colapsable-title {
+  cursor: pointer; }
+  .customer-modal .colapsable-title:after, .customer-modal .colapsable-title:before {
+    color: #72bcd4;
+    display: inline-block;
+    opacity: 0;
+    transition: all 300ms ease; }
+  .customer-modal .colapsable-title:hover {
+    color: #000;
+    background-color: #ccc; }
+    .customer-modal .colapsable-title:hover:after, .customer-modal .colapsable-title:hover:before {
+      opacity: 1;
+      transform: translatex(0); }
 
 .customer-modal .btn {
   margin-bottom: 5px; }
@@ -1441,9 +1430,8 @@ input[type='checkbox'] {
       height: 40px; }
 
 .customer-modal section.available-card-list {
-  margin-top: 50px;
+  margin-top: 10px;
   padding-bottom: 20px;
-  box-shadow: 0 10px 15px -12px #878787;
   z-index: 1;
   position: relative; }
 
@@ -1471,6 +1459,31 @@ input[type='checkbox'] {
   .customer-modal section .available-card button {
     margin: 0; }
 
+.boleto-modal .btn {
+  margin-bottom: 5px; }
+
+.boleto-modal .btn:last-child {
+  margin-bottom: 10px; }
+
+textarea#nomeCartao {
+  height: 150px; }
+
+.dialog-toolbar {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px; }
+
+.show-template .header {
+  height: auto !important; }
+  .show-template .header button {
+    top: 0; }
+
+input[type='checkbox'] {
+  margin-top: -4px; }
+
 .edicao-container {
   flex: 1 1 auto;
   height: 100%;
@@ -1489,6 +1502,26 @@ input[type='checkbox'] {
   .edicao-container .plano-operadora {
     font-size: 14px;
     font-weight: bold; }
+  .edicao-container .combo-pai {
+    width: 200px; }
+  .edicao-container .atualiza-pai-btn {
+    margin-left: 5px; }
+  .edicao-container .combo-atualiza-pai {
+    float: left; }
+  .edicao-container .checkcircle {
+    color: green;
+    font-size: 35px; }
+  .edicao-container .checkcircle:hover {
+    background-color: #bdffab; }
+  .edicao-container .checkcircle:active {
+    background-color: #95adff; }
+  .edicao-container .uncheckcircle {
+    color: red;
+    font-size: 35px; }
+  .edicao-container .uncheckcircle:hover {
+    background-color: #fdb6b6; }
+  .edicao-container .uncheckcircle:active {
+    background-color: #e2a3fd; }
 
 .s_cls span {
   display: inline-block;
@@ -1543,6 +1576,12 @@ table.s_table tr td {
   color: white;
   padding-top: 10px; }
 
+.new-card-modal .btn {
+  margin-bottom: 5px; }
+
+.new-card-modal .btn:last-child {
+  margin-bottom: 10px; }
+
 .existent-card-modal .btn {
   margin-bottom: 5px; }
 
@@ -1559,12 +1598,6 @@ table.s_table tr td {
   margin-bottom: 5px; }
 
 .boleto-modal .btn:last-child {
-  margin-bottom: 10px; }
-
-.new-card-modal .btn {
-  margin-bottom: 5px; }
-
-.new-card-modal .btn:last-child {
   margin-bottom: 10px; }
 
 .mensagens-dialog {

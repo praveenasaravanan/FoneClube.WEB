@@ -97,7 +97,12 @@
               off
             </button>
 
-            <button title="Cliente com problema no cadastro!" ng-show="customer.Orphan" class="btn btn-warning">
+            <!-- https://www.toptal.com/designers/htmlarrows/symbols/ -->
+            <button title="Cliente com flag pendente!" ng-if="customer.PendingFlagInteraction" class="btn btn-warning">
+              <i>&#9873;</i>
+            </button>
+
+            <button title="Cliente com problema no cadastro!" ng-if="customer.Orphan" class="btn btn-warning">
               <i class="glyphicon glyphicon-exclamation-sign"></i>
             </button>
 
