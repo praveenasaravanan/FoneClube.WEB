@@ -101,7 +101,37 @@
           <div class="row fix-row">
             <div class="col-xs-12">
               <h4 ng-if="vm.flags.length > 0" ng-click="vm.onClickFlagsTitle()" class="colapsable-title">&#x276F; Flags</h4>
-              <div ng-if="vm.showFlags" class="available-card" ng-repeat="flag in vm.flags">
+              
+              <v-accordion
+              ng-if="true"
+              ng-show="true"
+              id="accordionE"
+              class="vAccordion--default"
+              multiple
+              control="accordionE"
+            >
+              <v-pane
+                expanded="true"
+                ng-init="status.open = true"
+                is-open="status.open"
+                ng-repeat="flag in vm.flags"
+              >
+                <v-pane-header>
+                  <p>
+                    Cobrança criada:
+                    
+                  </p>
+                </v-pane-header>
+
+                <v-pane-content>
+                  
+                  <p>Tipo: {{flag.TypeDescription }}</p>
+                 
+                </v-pane-content>
+              </v-pane>
+            </v-accordion>
+              
+              <!-- <div ng-if="vm.showFlags" class="available-card" ng-repeat="vm.flags">
                 
                 <div style="width: 20%">
                   <span>
@@ -122,7 +152,7 @@
                   </span>
                 </div>
 
-              </div>
+              </div> -->
             </div>
           </div>
         </section>
