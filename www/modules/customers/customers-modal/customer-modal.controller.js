@@ -472,6 +472,7 @@
 
     function onClickFlagsTitle(){
       vm.showFlags = !vm.showFlags;
+      console.log(vm.showFlags)
     }
 
     //clientes com flag em aberto aparece icone de bandeira preenchida, os que não tiverem, bandeira vazia

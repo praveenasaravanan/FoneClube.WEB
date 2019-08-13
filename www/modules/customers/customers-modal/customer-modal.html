@@ -102,57 +102,37 @@
             <div class="col-xs-12">
               <h4 ng-if="vm.flags.length > 0" ng-click="vm.onClickFlagsTitle()" class="colapsable-title">&#x276F; Flags</h4>
               
-              <v-accordion
-              ng-if="true"
-              ng-show="true"
-              id="accordionE"
-              class="vAccordion--default"
-              multiple
-              control="accordionE"
-            >
-              <v-pane
-                expanded="true"
-                ng-init="status.open = true"
-                is-open="status.open"
-                ng-repeat="flag in vm.flags"
+                <v-accordion
+                ng-if="vm.showFlags"
+                id="accordionE"
+                class="vAccordion--default"
+                multiple
+                control="accordionE"
               >
-                <v-pane-header>
-                  <p>
-                    Cobrança criada:
+                <v-pane
+                  expanded="true"
+                  ng-init="status.open = true"
+                  is-open="status.open"
+                  ng-repeat="flag in vm.flags"
+                >
+                  <v-pane-header>
+                    <p>
+                      <span ng-if="flag.PendingInteraction" class="flag-warning">&#9872;</span>
+                      <span ng-if="!flag.PendingInteraction" class="flag-ok">&#9873;</span>
+                        Flag criada: <span class="text-capitalize">{{flag.RegisterDate | date: 'yyyy/MM/dd h:mm a'}}</span>
+                    </p>
+                  </v-pane-header>
+
+                  <v-pane-content>
                     
-                  </p>
-                </v-pane-header>
-
-                <v-pane-content>
-                  
-                  <p>Tipo: {{flag.TypeDescription }}</p>
-                 
-                </v-pane-content>
-              </v-pane>
-            </v-accordion>
+                    <p>Tipo: {{flag.TypeDescription }}</p>
+                    <p>Descrição: <span class="text-capitalize">{{flag.InteractionDescription}}</span></p>
+                    <!-- flag.PendingInteraction -->
+                  </v-pane-content>
+                </v-pane>
+              </v-accordion>
+          
               
-              <!-- <div ng-if="vm.showFlags" class="available-card" ng-repeat="vm.flags">
-                
-                <div style="width: 20%">
-                  <span>
-                    <i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>
-                    Data: <span class="text-capitalize">{{flag.RegisterDate}}</span>
-                  </span>
-                  <span>
-                    <i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>
-                    Tipo: <span class="text-capitalize">{{flag.TypeDescription}}</span>
-                  </span>
-                  <span>
-                    <i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>
-                    Descrição: <span class="text-capitalize">{{flag.InteractionDescription}}</span>
-                  </span>
-                  <span>
-                    <i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>
-                    Pendente: <span class="text-capitalize">{{flag.PendingInteraction}}</span>
-                  </span>
-                </div>
-
-              </div> -->
             </div>
           </div>
         </section>
