@@ -93,8 +93,10 @@
 
         vm.tableParams = createUsingFullOptions(customersSemSoftDelete);
         vm.tableParams.reload();
-        debugger;
+        
         FoneclubeService.getAllCustomers(false).then(function (result) {
+
+          debugger;
           vm.data.customers = result.map(function (user) {
             user.Phones = user.Phones.map(function (phone) {
               phone.phoneFull = phone.DDD.concat(phone.Number);
@@ -102,7 +104,7 @@
             });
             return user;
           });
-          debugger;
+         
           var customersSemSoftDelete = [];
           for (var i in vm.data.customers) {
             var customer = vm.data.customers[i];

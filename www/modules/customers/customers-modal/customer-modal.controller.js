@@ -24,7 +24,7 @@
     var vm = this;
     
     var customer = ViewModelUtilsService.modalCustomerData;
-    
+  
     var CARTAO = 1;
     var BOLETO = 2;
     vm.so_cnt = 0;
@@ -36,8 +36,8 @@
     vm.showServiceOrders = true;
     vm.showSecundaryChargings = false;
     vm.showFlags = true;
+    vm.flags = [];
     
-
     vm.month = new Date().getMonth() + 1;
     vm.year = new Date().getFullYear();
     vm.mensagemPagarme = 'Refresh DB';
@@ -64,6 +64,7 @@
     init();
 
     function init() {
+      debugger
       if (!customer.IdPagarme) {
         PagarmeService.getCustomer(customer.DocumentNumber)
           .then(function(result) {
@@ -85,6 +86,22 @@
         etapaEscolhaCartao();
         initCardList(customer.IdPagarme);
       }
+
+      for(var i in customer.Phones){
+                
+        // Id: 8
+        // IsFoneclube: true
+        // LinhaAtiva: true
+        // NickName: "Ivanildo 4"
+        // phoneFull: "21991302405"
+
+        for(var o in customer.Phones[i].Flags){
+          vm.flags.push(customer.Phones[i].Flags[0])
+        }
+      }
+
+      debugger
+
       FoneclubeService.getStatusChargingOfCustomer(customer.Id, vm.month, vm.year).then(
         function(result) {
           vm.charged_status = result[0];
