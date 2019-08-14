@@ -95,9 +95,9 @@
         // LinhaAtiva: true
         // NickName: "Ivanildo 4"
         // phoneFull: "21991302405"
-
+        debugger
         for(var o in customer.Phones[i].Flags){
-          vm.flags.push(customer.Phones[i].Flags[0])
+          vm.flags.push(customer.Phones[i].Flags[o])
         }
       }
 

@@ -113,8 +113,7 @@
                   expanded="true"
                   ng-init="status.open = true"
                   is-open="status.open"
-                  ng-repeat="flag in vm.flags"
-                >
+                  ng-repeat="flag in vm.flags track by $index">
                   <v-pane-header>
                     <p>
                       <span ng-if="flag.PendingInteraction" class="flag-warning">&#9872;</span>
