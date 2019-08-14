@@ -60,6 +60,7 @@
     vm.onClickServiceOrdersTitle = onClickServiceOrdersTitle;
     vm.onClickSecundaryChargingsTitle = onClickSecundaryChargingsTitle;
     vm.onClickFlagsTitle = onClickFlagsTitle;
+    vm.editPendingFlag = editPendingFlag;
 
     init();
 
@@ -473,6 +474,10 @@
     function onClickFlagsTitle(){
       vm.showFlags = !vm.showFlags;
       console.log(vm.showFlags)
+    }
+
+    function editPendingFlag(flag){
+      alert('Edição ainda não implementada')
     }
 
     //clientes com flag em aberto aparece icone de bandeira preenchida, os que não tiverem, bandeira vazia

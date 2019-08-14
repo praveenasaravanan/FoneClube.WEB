@@ -1382,12 +1382,6 @@ v-pane-content {
     margin-left: 5px;
     font-size: 12px; }
 
-.boleto-modal .btn {
-  margin-bottom: 5px; }
-
-.boleto-modal .btn:last-child {
-  margin-bottom: 10px; }
-
 textarea#nomeCartao {
   height: 150px; }
 
@@ -1407,11 +1401,20 @@ textarea#nomeCartao {
 input[type='checkbox'] {
   margin-top: -4px; }
 
+.boleto-modal .btn {
+  margin-bottom: 5px; }
+
+.boleto-modal .btn:last-child {
+  margin-bottom: 10px; }
+
 .customer-modal .flag-warning {
   color: #ffb300; }
 
 .customer-modal .flag-ok {
   color: #089000; }
+
+.customer-modal .clickable {
+  cursor: pointer; }
 
 .customer-modal .colapsable-title {
   cursor: pointer; }
@@ -1489,6 +1492,12 @@ input[type='checkbox'] {
     border-bottom: 1px solid #ccc; }
   .customer-modal section .available-card button {
     margin: 0; }
+
+.existent-card-modal .btn {
+  margin-bottom: 5px; }
+
+.existent-card-modal .btn:last-child {
+  margin-bottom: 10px; }
 
 .edicao-container {
   flex: 1 1 auto;
@@ -1581,12 +1590,6 @@ table.s_table tr td {
   border-radius: 5px;
   color: white;
   padding-top: 10px; }
-
-.existent-card-modal .btn {
-  margin-bottom: 5px; }
-
-.existent-card-modal .btn:last-child {
-  margin-bottom: 10px; }
 
 .new-card-modal .btn {
   margin-bottom: 5px; }
