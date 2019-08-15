@@ -81,8 +81,6 @@
       }
 
 
-        vm.tableParams = createUsingFullOptions(customersSemSoftDelete);
-        vm.tableParams.reload();
         FoneclubeService.getAllCustomers(false).then(function (result) {
           vm.data.customers = result.map(function (user) {
             user.Phones = user.Phones.map(function (phone) {
