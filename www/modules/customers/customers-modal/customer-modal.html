@@ -10,12 +10,7 @@
     <div class="container col-xs-12">
       <section>
         <div class="col-xs-1" style="padding-left:0px;padding-right:0px;">
-          <button
-            title="Editar cliente"
-            ng-click="vm.onTapEditar(); closeThisDialog(0);"
-            class="btn btn-primary"
-            style="margin-bottom:5px;"
-          >
+          <button title="Editar cliente" ng-click="vm.onTapEditar(); closeThisDialog(0);" class="btn btn-primary" style="margin-bottom:5px;">
             <i class="glyphicon glyphicon-edit" aria-hidden="true"></i>
           </button>
         </div>
@@ -24,30 +19,14 @@
           <h4>{{ vm.customer.Name }}</h4>
         </div>
 
-        <div
-          class="col-xs-4"
-          style="text-align:right;padding-left:0px;padding-right:0px;"
-        >
-          <button
-            title="Criar ordem de serviço"
-            ng-click="vm.onTapComment(); closeThisDialog(0);"
-            class="btn btn-primary"
-          >
+        <div class="col-xs-4" style="text-align:right;padding-left:0px;padding-right:0px;">
+          <button title="Criar ordem de serviço" ng-click="vm.onTapComment(); closeThisDialog(0);" class="btn btn-primary">
             <i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
           </button>
-          <button
-            title="Cobrança com novo cartão"
-            class="btn btn-primary"
-            ng-click="vm.onTapNewCardPayment()"
-          >
+          <button title="Cobrança com novo cartão" class="btn btn-primary" ng-click="vm.onTapNewCardPayment()">
             <i class="glyphicon glyphicon-credit-card" aria-hidden="true"></i>
           </button>
-          <button
-            title="Cobrança com boleto"
-            class="btn btn-primary"
-            ng-click="vm.onTapBoleto()"
-            style="margin-bottom:5px;"
-          >
+          <button title="Cobrança com boleto" class="btn btn-primary" ng-click="vm.onTapBoleto()" style="margin-bottom:5px;">
             <img src="./content/img/Boleto.png" width="25px" height="15px" />
           </button>
 
@@ -67,7 +46,8 @@
               <div style="width: 20%">
                 <span>
                   <i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>
-                  Cartão <span class="text-capitalize">{{ card.brand }}</span>
+                  Cartão
+                  <span class="text-capitalize">{{ card.brand }}</span>
                 </span>
               </div>
 
@@ -143,113 +123,84 @@
               
             <h4 ng-click="vm.onClickChargingsTitle()" class="colapsable-title" ng-show="vm.chargesArray.length > 0">&#x276F; Cobranças</h4>
 
-            <v-accordion
-              ng-if="vm.showChargings"
-              id="accordionB"
-              class="vAccordion--default"
-              multiple
-              control="accordionB"
-              ng-show="vm.chargesArray.length > 0"
-            >
-              <v-pane
-                expanded="true"
-                ng-init="status.open = true"
-                is-open="status.open"
-                ng-repeat="chargeAndOrder in vm.chargesArray"
-              >
+            <v-accordion id="accordionB" class="vAccordion--default" multiple control="accordionB" ng-show="vm.chargesArray.length > 0">
+              <v-pane expanded="true" ng-init="status.open = true" is-open="status.open" ng-repeat="chargeAndOrder in vm.chargesArray">
                 <v-pane-header>
-                  {{ vm.chargesArray.length - $index }}ª Cob.
-                  {{ chargeAndOrder.Charges.CreationDateFormatted | date: 'yyyy/MM/dd' }}
-                  R${{ chargeAndOrder.Charges.Ammount / 100 }}
-                  {{ chargeAndOrder.Charges.descriptionType }}
+                  <span class="spnHeader">
+                    <span class="spnStatus" style="background-color: {{chargeAndOrder.Charges.statusColor}}"></span>
+                    <span>{{ vm.chargesArray.length - $index }}ª Cob.</span>
+                    <span class="spnR">R${{ chargeAndOrder.Charges.Ammount / 100 }}</span>
+                    <span class="spnVence">Vence: {{ chargeAndOrder.Charges.ExpireDate | date: 'dd/MM/yyyy' }}</span>
+                    <span class="spnRef">Ref. {{ chargeAndOrder.Charges.MesVingencia + '/' + chargeAndOrder.Charges.AnoVingencia }}</span>
+                  </span>
                 </v-pane-header>
 
                 <v-pane-content>
-                  <p>
-                    Criado em:
-                    <strong
-                      >{{
-                        chargeAndOrder.Charges.CreationDate
-                          | date: 'yyyy/MM/dd hh:mm:ss
-                            a'
-                      }}.</strong
-                    >
-                  </p>
-                  <p>
-                    Comentário:
-                    <strong>{{ chargeAndOrder.Charges.Comment }}.</strong>
-                  </p>
-                  <p>
-                    Valor:
-                    <strong>{{ chargeAndOrder.Charges.Ammount / 100 }} R$ </strong>
-                  </p>
-                  <p>
-                    Tipo:
-                    <strong>{{ chargeAndOrder.Charges.descriptionType }} </strong>
-
-                    &nbsp;&nbsp;<label
-                      ng-if="chargeAndOrder.Charges.descriptionType =='Cartão de crédito'"
-                      >Final: {{ vm.cards[0].last_digits }}</label
-                    >
-                  </p>
-                  <p>
-                    Comentário boleto:
-                    <strong>{{ chargeAndOrder.Charges.CommentBoleto }} </strong>
-                  </p>
-                  <p>
-                    Comentário email:
-                    <strong>{{ chargeAndOrder.Charges.CommentEmail }} </strong>
-                  </p>
-                  <p>
-                    Agente:
-                    <strong>{{ chargeAndOrder.Charges.CollectorName }} </strong>
-                  </p>
-                  <p>
-                    Vigência:
-                    {{
-                      chargeAndOrder.Charges.AnoVingencia +
-                        '/' +
-                        chargeAndOrder.Charges.MesVingencia
-                    }}
-                  </p>
-
-                  <p>
-                    Status:
-                    {{
-                      chargeAndOrder.Charges.PaymentStatusDescription == ''
-                        ? 'Sem transaction associada'
-                        : chargeAndOrder.Charges.PaymentStatusDescription
-                    }}
-                  </p>
+                  <div class="divSubHeader form-group">
+                    <span>
+                      Status:{{ chargeAndOrder.Charges.PaymentStatusDescription == '' ? 'Sem transaction associada' : chargeAndOrder.Charges.PaymentStatusDescription
+                      }}
+                    </span>
+                    <span>
+                      <button class="btn btn-info resent-email" ng-click="vm.onResentEmail(chargeAndOrder.Charges);">
+                        {{ chargeAndOrder.Charges.resentMessage }}
+                      </button>
+                    </span>
+                    <span>
+                      <button class="btn btn-default resent-email">
+                        Copiar link Boleto
+                      </button>
+                    </span>
+                    <span>Tipo:
+                      <strong>{{ chargeAndOrder.Charges.descriptionType }} </strong>
+                      &nbsp;&nbsp;
+                      <label ng-if="chargeAndOrder.Charges.descriptionType =='Cartão de crédito'">Final: {{ vm.cards[0].last_digits }}</label>
+                    </span>
+                    <span>
+                      Agente:
+                      <strong>{{ chargeAndOrder.Charges.CollectorName }} </strong>
+                    </span>
+                  </div>
+                  <div class="form-group">
+                      <p>
+                          <strong>Comentário:</strong>
+                          {{ chargeAndOrder.Charges.Comment }}
+                        </p>
+                  </div>
+                  <div class="form-group">
+                      <p>
+                          <strong>Comentário boleto:</strong>
+                          {{ chargeAndOrder.Charges.CommentBoleto }}
+                        </p>
+                  </div>
+                  <div class="form-group">
+                      <p>
+                          <strong>Comentário email:</strong>
+                          {{ chargeAndOrder.Charges.CommentEmail }} 
+                        </p>
+                  </div>
+                  <div class="form-group">
+                      <p>
+                          Criado em:
+                          <strong>{{ chargeAndOrder.Charges.CreationDate | date: 'yyyy/MM/dd hh:mm:ss a' }}
+                          </strong>
+                        </p>
+                  </div>
 
                   <p ng-if="chargeAndOrder.Charges.boleto_url">
-                    <a href="{{ chargeAndOrder.Charges.boleto_url }}" target="_blank">{{
-                      chargeAndOrder.Charges.boleto_url
-                    }}</a>
+                    <a href="{{ chargeAndOrder.Charges.boleto_url }}" target="_blank">{{ chargeAndOrder.Charges.boleto_url }}
+                    </a>
                   </p>
 
-                  <button
-                    class="btn separador-botao-copy"
-                    ng-show="chargeAndOrder.Charges.boleto_url.length > 0"
-                    ngclipboard
-                    data-clipboard-text="{{ chargeAndOrder.Charges.boleto_url }}"
-                  >
+                  <button class="btn separador-botao-copy" ng-show="chargeAndOrder.Charges.boleto_url.length > 0" ngclipboard data-clipboard-text="{{ chargeAndOrder.Charges.boleto_url }}">
                     Copiar link Boleto
                   </button>
 
-                  <button
-                    class="btn btn-info col-xs-12 col-sm-3 info"
-                    ng-click="vm.onTapPaymentHistoryDetail(chargeAndOrder.Charges);"
-                  >
+                  <button class="btn btn-info col-xs-12 col-sm-3 info" ng-click="vm.onTapPaymentHistoryDetail(chargeAndOrder.Charges);">
                     + Info
                   </button>
 
-                  <button
-                    class="btn btn-info col-xs-12 col-sm-3 resent-email"
-                    ng-click="vm.onResentEmail(chargeAndOrder.Charges);"
-                  >
-                    {{ chargeAndOrder.Charges.resentMessage }}
-                  </button>
+
                 </v-pane-content>
               </v-pane>
             </v-accordion>
@@ -257,51 +208,27 @@
 
           <div class="col-sm-6">
             <h4 ng-click="vm.onClickServiceOrdersTitle()" class="colapsable-title" ng-show="vm.osDescArray.length > 0">&#x276F; Ordens de Serviço</h4>
-            <v-accordion
-            ng-if="vm.showServiceOrders"
-              ng-show="vm.osDescArray.length > 0"
-              id="accordionB"
-              class="vAccordion--default"
-              multiple
-              control="accordionB"
-            >
-              <v-pane
-                expanded="false"
-                ng-init="status.open = true"
-                is-open="status.open"
-                ng-repeat="os in vm.osDescArray"
-                ng-if="$index > 0"
-              >
+            <v-accordion ng-show="vm.osDescArray.length > 0" id="accordionB" class="vAccordion--default" multiple control="accordionB">
+              <v-pane expanded="false" ng-init="status.open = true" is-open="status.open" ng-repeat="os in vm.osDescArray" ng-if="$index > 0">
                 <v-pane-header>
-                  {{ vm.osArray.length - $index }}ª O.S.
-                  {{ vm.osArray[vm.osArray.length - $index].ServiceOrders.Description }}
+                  {{ vm.osArray.length - $index }}ª O.S. {{ vm.osArray[vm.osArray.length - $index].ServiceOrders.Description }}
                 </v-pane-header>
 
                 <v-pane-content>
                   <p>
                     Criado em:
-                    <strong
-                      >{{
-                        vm.osArray[vm.osArray.length - $index].ServiceOrders.RegisterDate
-                          | date: 'yyyy/MM/dd hh:mm:ss a'
-                      }}.</strong
-                    >
+                    <strong>{{ vm.osArray[vm.osArray.length - $index].ServiceOrders.RegisterDate | date: 'yyyy/MM/dd hh:mm:ss a'
+                      }}.
+                    </strong>
                   </p>
                   <p>
                     Comentário:
-                    <strong
-                      >{{
-                        vm.osArray[vm.osArray.length - $index].ServiceOrders.Description
-                      }}.</strong
-                    >
+                    <strong>{{ vm.osArray[vm.osArray.length - $index].ServiceOrders.Description }}.
+                    </strong>
                   </p>
                   <p>
                     Pendente interação:
-                    <strong
-                      >{{
-                        vm.osArray[vm.osArray.length - $index].ServiceOrders
-                          .PendingInteraction
-                      }}
+                    <strong>{{ vm.osArray[vm.osArray.length - $index].ServiceOrders .PendingInteraction }}
                     </strong>
                   </p>
                 </v-pane-content>
@@ -315,31 +242,17 @@
             ng-show="vm.historyLog.length > 0">
                 &#x276F; Histórico Cobrança registro secundário
             </h4>
-            <v-accordion
-              ng-if="vm.showSecundaryChargings"
-              ng-show="vm.historyLog.length > 0"
-              id="accordionB"
-              class="vAccordion--default"
-              multiple
-              control="accordionB"
-            >
-              <v-pane
-                expanded="false"
-                ng-init="status.open = true"
-                is-open="status.open"
-                ng-repeat="log in vm.historyLog"
-              >
+            <v-accordion ng-show="vm.historyLog.length > 0" id="accordionB" class="vAccordion--default" multiple control="accordionB">
+              <v-pane expanded="false" ng-init="status.open = true" is-open="status.open" ng-repeat="log in vm.historyLog">
                 <v-pane-header>
                   <p>
-                    Cobrança criada:
-                    {{ log.pagarmeResponse.date_created | date: 'yyyy/MM/dd' }}
+                    Cobrança criada: {{ log.pagarmeResponse.date_created | date: 'yyyy/MM/dd' }}
                   </p>
                 </v-pane-header>
 
                 <v-pane-content>
                   <p>
-                    Data da Cobrança:
-                    {{ log.pagarmeResponse.date_created | date: 'yyyy/MM/dd' }}
+                    Data da Cobrança: {{ log.pagarmeResponse.date_created | date: 'yyyy/MM/dd' }}
                   </p>
                   <p>Id pagarme da Cobrança: {{ log.pagarmeResponse.id }}</p>
                   <p>Método de Pagamento: {{ log.pagarmeResponse.payment_method }}</p>
@@ -349,9 +262,8 @@
                   <p>Comentário fonclube: {{ log.foneclubeComment }}</p>
                   <p ng-show="log.pagarmeResponse.boleto_url.length > 0">
                     link boleto:
-                    <a href="{{ log.pagarmeResponse.boleto_url }}" target="_blank">{{
-                      log.pagarmeResponse.boleto_url
-                    }}</a>
+                    <a href="{{ log.pagarmeResponse.boleto_url }}" target="_blank">{{ log.pagarmeResponse.boleto_url }}
+                    </a>
                   </p>
                 </v-pane-content>
               </v-pane>
@@ -364,13 +276,7 @@
         <div ng-if="vm.etapaQuantia" class="etapa-quantia">
           <div class="form-group">
             <label for="quantia">Quantia:</label>
-            <input
-              id="quantia"
-              class="form-control"
-              ng-model="vm.amount"
-              type="text"
-              money-input
-              placeholder="Digite o valor a ser pago"
+            <input id="quantia" class="form-control" ng-model="vm.amount" type="text" money-input placeholder="Digite o valor a ser pago"
             />
           </div>
           <button ng-click="vm.onTapPagar()" class="btn btn-success">

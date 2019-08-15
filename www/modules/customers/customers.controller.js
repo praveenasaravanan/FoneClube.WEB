@@ -81,19 +81,17 @@
       }
 
 
-      //mudar pra true e carrega mínimo
-      FoneclubeService.getAllCustomers(false).then(function (result) {
-        vm.data.customers = result;
-        
-        vm.data.customers = result.map(function (user) {
-          user.Phones = user.Phones.map(function (phone) {
-            phone.phoneFull = phone.DDD.concat(phone.Number);
-            return phone;
+        vm.tableParams = createUsingFullOptions(customersSemSoftDelete);
+        vm.tableParams.reload();
+        FoneclubeService.getAllCustomers(false).then(function (result) {
+          vm.data.customers = result.map(function (user) {
+            user.Phones = user.Phones.map(function (phone) {
+              phone.phoneFull = phone.DDD.concat(phone.Number);
+              return phone;
+            });
+            return user;
           });
-          return user;
-        });
-
-        var customersSemSoftDelete = [];
+          var customersSemSoftDelete = [];
           for (var i in vm.data.customers) {
             var customer = vm.data.customers[i];
             if (!customer.SoftDelete) {
