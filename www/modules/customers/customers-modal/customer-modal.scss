@@ -35,6 +35,34 @@
       }
     }
   }
+  .spnHeader{
+color:green;
+
+
+  .spnStatus{
+    background-color: green;
+    width: 25px;
+    min-height: 17px;
+    display: inline-block;
+    top: 3px;
+    position: relative;
+  }
+  .spnVence,.spnRef,.spnR{
+    padding-left: 10px;
+  }
+}
+.divSubHeader{
+  font-size: 15px;
+  margin-bottom: 10px;
+  span{
+    display: inline-block;
+
+  .btn{
+    margin:0px 0px 0px 10px;
+    padding: 5px 6px 5px 6px;
+  }
+}
+}
   .btn {
     margin-bottom: 5px;
   }

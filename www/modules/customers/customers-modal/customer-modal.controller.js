@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -68,7 +68,7 @@
       debugger
       if (!customer.IdPagarme) {
         PagarmeService.getCustomer(customer.DocumentNumber)
-          .then(function(result) {
+          .then(function (result) {
             try {
               var pagarmeID = result[0].id;
               updatePagarmeId(pagarmeID);
@@ -79,7 +79,7 @@
               etapaEscolhaCartao();
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.log(error);
             etapaEscolhaCartao();
           });
@@ -104,12 +104,12 @@
       debugger
 
       FoneclubeService.getStatusChargingOfCustomer(customer.Id, vm.month, vm.year).then(
-        function(result) {
+        function (result) {
           vm.charged_status = result[0];
         }
       );
 
-      FoneclubeService.getChargeAndServiceOrderHistory(customer.Id).then(function(
+      FoneclubeService.getChargeAndServiceOrderHistory(customer.Id).then(function (
         result
       ) {
         vm.chargesAndOrders = result;
@@ -129,23 +129,46 @@
           if (data.IsCharge) {
             try {
               vm.chargesAndOrders[i].Charges.resentMessage = 'Reenviar email';
-            } catch (e) {}
+            } catch (e) { }
 
             data.Charges.descriptionType =
               data.Charges.PaymentType == CARTAO ? 'Cartão de crédito' : 'Boleto';
 
             if (data.Charges.PaymentType == BOLETO) {
               PagarmeService.getBoletoUrl(data.Charges.BoletoId, vm.chargesAndOrders, i)
-                .then(function(result) {
+                .then(function (result) {
                   try {
                     result.chargesAndOrders[result.index].Charges.boleto_url =
                       result[0].boleto_url;
                     data.Charges.boleto_url = result[0].boleto_url;
-                  } catch (erro) {}
+                  } catch (erro) { }
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                   console.log(error);
                 });
+            }
+            if (data.Charges) {
+              debugger;
+              var expiryDate = new Date(data.Charges.ExpireDate);
+              var expiryDateAfter4 = new Date(data.Charges.ExpireDate);
+              expiryDateAfter4.setDate(expiryDateAfter4.getDate() + 4);
+
+              var currentDate = new Date();
+              if (data.Charges.descriptionType == "Boleto" && data.Charges.PaymentStatusDescription == "WaitingPayment" && currentDate <= expiryDate) {
+                //  change status to "Aguardando Pagamento" = Green Icon
+                data.Charges.statusColor="Green";
+              }
+              else if (data.Charges.descriptionType == "Boleto" && data.Charges.PaymentStatusDescription == "WaitingPayment" && currentDate < expiryDateAfter4) {
+                //change status to "Pendente Pagamento"   Yello Icon
+                data.Charges.statusColor="Yellow";
+              }
+              else if (data.Charges.descriptionType == "Boleto" && data.Charges.PaymentStatusDescription == "WaitingPayment" && currentDate > expiryDateAfter4) {
+                // change status to "Pendente Pagamento"   RED Icon
+                data.Charges.statusColor="Red";
+              }
+              else{
+                data.Charges.statusColor="grey";
+              }
             }
             vm.chargesArray.push(data); // na moral ning merece
           }
@@ -163,7 +186,7 @@
       });
 
       FoneclubeService.getHistoryPayment(customer.Id)
-        .then(function(result) {
+        .then(function (result) {
           vm.histories = result;
           for (var i in vm.histories) {
             var history = vm.histories[i];
@@ -175,24 +198,24 @@
           }
           customer.histories = vm.histories;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log('catch error');
           console.log(error);
         });
 
       FoneclubeService.getTblServiceOrders(customer.Id)
-        .then(function(result) {
+        .then(function (result) {
           console.log('FoneclubeService.getTblServiceOrders');
           console.log(result);
           vm.orders = result;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log('catch error');
           console.log(error);
         });
 
       FoneclubeService.getChargingLog(customer.Id)
-        .then(function(result) {
+        .then(function (result) {
           console.log('getChargingLog');
           // debugger;
           vm.historyLog = [];
@@ -201,7 +224,7 @@
           }
           // debugger;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log('catch error');
           console.log(error);
         });
@@ -211,7 +234,7 @@
       if (!carregandoPagarme) {
         carregandoPagarme = true;
         vm.mensagemPagarme = 'Aguarde...';
-        FoneclubeService.getUpdatePagarme().then(function(result) {
+        FoneclubeService.getUpdatePagarme().then(function (result) {
           if (result)
             alert('Lista pagarme atualizada, por favor recarregue a página sem cache.');
           else alert('Lista pagarme não atualizada');
@@ -229,10 +252,10 @@
       DialogFactory.dialogConfirm({
         mensagem:
           'Atenção essa ação irá excluir o cliente da base foneclube, após exclusão não terá volta, deseja proseguir?'
-      }).then(function(value) {
+      }).then(function (value) {
         if (value) {
           FoneclubeService.postDeletePerson(personCheckout)
-            .then(function(result) {
+            .then(function (result) {
               console.log(result);
               if (result) {
                 DialogFactory.showMessageDialog({
@@ -242,7 +265,7 @@
                 closeThisDialog(0);
               } else DialogFactory.showMessageDialog({ message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber });
             })
-            .catch(function(error) {
+            .catch(function (error) {
               console.log('catch error');
               console.log(error);
             });
@@ -253,7 +276,7 @@
     function setStatusBoleto(history) {
       console.log('setStatusBoleto');
       console.log(history);
-      PagarmeService.getStatusBoleto(history.BoletoId).then(function(result) {
+      PagarmeService.getStatusBoleto(history.BoletoId).then(function (result) {
         history.StatusPayment = result[0].status;
         boleto_url;
       });
@@ -266,11 +289,11 @@
       };
 
       FoneclubeService.postUpdatePerson(personCheckout)
-        .then(function(result) {
+        .then(function (result) {
           console.log(result);
           initCardList(pagarmeID);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log('catch error');
           console.log(error);
         });
@@ -287,12 +310,12 @@
 
     function initCardList(customerId) {
       PagarmeService.getCard(customerId)
-        .then(function(result) {
-          vm.cards = result.sort(function(a, b) {
+        .then(function (result) {
+          vm.cards = result.sort(function (a, b) {
             return new Date(b.date_updated) > new Date(a.date_updated) ? 1 : -1;
           });
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
           vm.message = 'falha ao recuperar cartão';
         });
@@ -335,13 +358,13 @@
       }
 
       PagarmeService.postTransactionExistentCard(vm.amount, vm.card.id, customer).then(
-        function(result) {
+        function (result) {
           vm.message = 'Transação efetuada';
           PagarmeService.postCaptureTransaction(result.token, vm.amount)
-            .then(function(result) {
+            .then(function (result) {
               vm.message = 'Transação concluída';
             })
-            .catch(function(error) {
+            .catch(function (error) {
               try {
                 vm.message = 'Erro na captura da transação' + error.status;
               } catch (erro) {
@@ -381,7 +404,7 @@
 
       DialogFactory.dialogConfirm({
         mensagem: 'Tem certeza que deseja reenviar o email dessa cobrança?'
-      }).then(function(value) {
+      }).then(function (value) {
         if (value) {
           if (charge.resentMessage != 'Enviando...') {
             charge.resentMessage = 'Enviando...';
@@ -402,7 +425,7 @@
               // emailObject.DiscountPrice = ($filter('currency')(vm.bonus / 100, "")).replace('.',',');
 
               FoneclubeService.postSendEmail(emailObject)
-                .then(function(result) {
+                .then(function (result) {
                   console.log(result);
                   charge.resentMessage = 'Reenviar email';
                   DialogFactory.showMessageDialog({
@@ -410,7 +433,7 @@
                     titulo: 'Informação'
                   });
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                   console.log('catch error');
                   console.log(error);
                   charge.resentMessage = 'Reenviar email';
@@ -431,7 +454,7 @@
               };
 
               FoneclubeService.postSendEmail(emailObject)
-                .then(function(result) {
+                .then(function (result) {
                   console.log(result);
                   charge.resentMessage = 'Reenviar email';
                   DialogFactory.showMessageDialog({
@@ -439,7 +462,7 @@
                     titulo: 'Informação'
                   });
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                   console.log('catch error');
                   console.log(error);
                   charge.resentMessage = 'Reenviar email';
