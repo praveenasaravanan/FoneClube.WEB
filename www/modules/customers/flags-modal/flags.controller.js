@@ -20,18 +20,25 @@
     DialogFactory,
     UtilsService
   ) {
-    
+
     console.log('--- FlagController ---')
     var vm = this;
     // debugger;
     vm.onTapAddComment = onTapAddComment;
+    vm.changeFlag = changeFlag;
     var customer = ViewModelUtilsService.modalCommentData;
 
     vm.customer = customer;
 
     FoneclubeService.getFlagsTypes().then(function(result){
       console.log(result)
+      vm.flagsTypes = result;
     })
+
+    function changeFlag(flag){
+      console.log(`changeFlag`)
+      console.log(flag)
+    }
 
     function onTapAddComment(data) {
       // debugger;

@@ -1,7 +1,7 @@
 <div class="new-card-modal" ng-controller="FlagController as vm">
   <div class="header">
     <div class="dialog-toolbar">
-      <h4>Cliente teste --- : {{ vm.customer.Name }}</h4>
+      <h4>Criar flag : {{ vm.customer.Name }}</h4>
     </div>
 
     <button ng-click="closeThisDialog(0)">X</button>
@@ -9,7 +9,15 @@
 
   <div class="modal-container">
     <div class="container col-xs-12">
+        <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
       <div>
+          <select id="qualServicoContratar" next-on-enter class="form-control"
+          ng-options="flag.IdType as flag.TypeDescription for flag in vm.flagsTypes"
+          ng-model="flag.IdType"
+          ng-change="vm.changeFlag(flag)"
+          style="width: 160px;">
+          <option value="">Selecione a flag</option>
+      </select>
         <div class="form-group col-xs-12">
           <label for="nomeCartao">Descrição:</label>
           <textarea
