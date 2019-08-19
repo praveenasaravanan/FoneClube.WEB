@@ -1382,6 +1382,12 @@ v-pane-content {
     margin-left: 5px;
     font-size: 12px; }
 
+.boleto-modal .btn {
+  margin-bottom: 5px; }
+
+.boleto-modal .btn:last-child {
+  margin-bottom: 10px; }
+
 textarea#nomeCartao {
   height: 150px; }
 
@@ -1400,12 +1406,6 @@ textarea#nomeCartao {
 
 input[type='checkbox'] {
   margin-top: -4px; }
-
-.boleto-modal .btn {
-  margin-bottom: 5px; }
-
-.boleto-modal .btn:last-child {
-  margin-bottom: 10px; }
 
 .customer-modal .flag-warning {
   color: #ffb300; }
@@ -1429,6 +1429,27 @@ input[type='checkbox'] {
     .customer-modal .colapsable-title:hover:after, .customer-modal .colapsable-title:hover:before {
       opacity: 1;
       transform: translatex(0); }
+
+.customer-modal .spnHeader {
+  color: green; }
+  .customer-modal .spnHeader .spnStatus {
+    background-color: green;
+    width: 25px;
+    min-height: 17px;
+    display: inline-block;
+    top: 3px;
+    position: relative; }
+  .customer-modal .spnHeader .spnVence, .customer-modal .spnHeader .spnRef, .customer-modal .spnHeader .spnR {
+    padding-left: 10px; }
+
+.customer-modal .divSubHeader {
+  font-size: 15px;
+  margin-bottom: 10px; }
+  .customer-modal .divSubHeader span {
+    display: inline-block; }
+    .customer-modal .divSubHeader span .btn {
+      margin: 0px 0px 0px 10px;
+      padding: 5px 6px 5px 6px; }
 
 .customer-modal .btn {
   margin-bottom: 5px; }
@@ -1492,12 +1513,6 @@ input[type='checkbox'] {
     border-bottom: 1px solid #ccc; }
   .customer-modal section .available-card button {
     margin: 0; }
-
-.existent-card-modal .btn {
-  margin-bottom: 5px; }
-
-.existent-card-modal .btn:last-child {
-  margin-bottom: 10px; }
 
 .edicao-container {
   flex: 1 1 auto;
@@ -1590,6 +1605,31 @@ table.s_table tr td {
   border-radius: 5px;
   color: white;
   padding-top: 10px; }
+
+.existent-card-modal .btn {
+  margin-bottom: 5px; }
+
+.existent-card-modal .btn:last-child {
+  margin-bottom: 10px; }
+
+textarea#nomeCartao {
+  height: 150px; }
+
+.dialog-toolbar {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px; }
+
+.show-template .header {
+  height: auto !important; }
+  .show-template .header button {
+    top: 0; }
+
+input[type='checkbox'] {
+  margin-top: -4px; }
 
 .new-card-modal .btn {
   margin-bottom: 5px; }
