@@ -51,6 +51,7 @@
     vm.onTapOrdemServico = onTapOrdemServico;
     vm.cancelarPagamento = etapaEscolhaCartao;
     vm.onTapComment = onTapComment;
+    vm.onTapFlag = onTapFlag;
     vm.customer = customer;
     
     vm.onTapUpdatePagarme = onTapUpdatePagarme;
@@ -65,7 +66,7 @@
     init();
 
     function init() {
-      debugger
+      // debugger
       if (!customer.IdPagarme) {
         PagarmeService.getCustomer(customer.DocumentNumber)
           .then(function (result) {
@@ -95,13 +96,13 @@
         // LinhaAtiva: true
         // NickName: "Ivanildo 4"
         // phoneFull: "21991302405"
-        debugger
+        // debugger
         for(var o in customer.Phones[i].Flags){
           vm.flags.push(customer.Phones[i].Flags[o])
         }
       }
 
-      debugger
+      // debugger
 
       FoneclubeService.getStatusChargingOfCustomer(customer.Id, vm.month, vm.year).then(
         function (result) {
@@ -148,7 +149,7 @@
                 });
             }
             if (data.Charges) {
-              debugger;
+              // debugger;
               var expiryDate = new Date(data.Charges.ExpireDate);
               var expiryDateAfter4 = new Date(data.Charges.ExpireDate);
               expiryDateAfter4.setDate(expiryDateAfter4.getDate() + 4);
@@ -306,6 +307,10 @@
 
     function onTapComment() {
       ViewModelUtilsService.showModalComment(customer);
+    }
+
+    function onTapFlag(){
+      ViewModelUtilsService.showModalFlag(customer);
     }
 
     function initCardList(customerId) {

@@ -9,6 +9,7 @@
     this.modalCustomerData = {};
     this.showModalCustomer = showModalCustomer;
     this.showModalComment = showModalComment;
+    this.showModalFlag = showModalFlag;
 
     this.modalNewCardPaymentData = {};
     this.showModalNewCardPayment = showModalNewCardPayment;
@@ -59,6 +60,12 @@
       this.modalCommentData = data;
       var service = this;
       DialogFactory.showTemplate('modules/customers/comment/comment.html');
+    }
+
+    function showModalFlag(data){
+      this.modalFlagData = data;
+      var service = this;
+      DialogFactory.showTemplate('modules/customers/flags-modal/flags.html');
     }
 
     function showModalExistentCardPayment(data, card) {

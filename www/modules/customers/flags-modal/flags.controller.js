@@ -20,6 +20,7 @@
     DialogFactory,
     UtilsService
   ) {
+    console.log('--- FlagController ---')
     var vm = this;
     // debugger;
     vm.onTapAddComment = onTapAddComment;
