@@ -95,6 +95,7 @@
     this.postSendWhatsappMessage = postSendWhatsappMessage;
     this.getClientMessages = getClientMessages;
     this.getAPIUrl = getAPIUrl;
+    this.getFlagsTypes = getFlagsTypes;
 
 
 
@@ -1315,6 +1316,20 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/message/client/') + param + "?minimal=" + minimal)
+        .then(function (result) {
+          q.resolve(result);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    function getFlagsTypes() {
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/profile/flags/types'))
         .then(function (result) {
           q.resolve(result);
         })
