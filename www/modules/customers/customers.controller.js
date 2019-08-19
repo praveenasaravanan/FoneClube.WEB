@@ -72,6 +72,7 @@
     vm.onDeleteCustomer = onDeleteCustomer;
     vm.onTapComment = onTapComment;
     vm.onTapMessage = onTapMessage;
+    vm.onTapFlag = onTapFlag;
 
     initialize();
 
@@ -409,5 +410,10 @@
     function onTapMessage(customer) {
       ViewModelUtilsService.showModalWhatsapp(customer);
     }
+
+    function onTapFlag(customer){
+      ViewModelUtilsService.showModalFlag(customer);
+    }
+
   }
 })();
