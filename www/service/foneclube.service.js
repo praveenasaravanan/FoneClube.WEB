@@ -40,6 +40,7 @@
     this.postIsertServiceDeactive = postIsertServiceDeactive;
     this.postIsertServiceActive = postIsertServiceActive;
     this.postUpdateServiceFoneclube = postUpdateServiceFoneclube;
+    this.postPersonFlag = postPersonFlag;
 
     this.getPlans = getPlans;
     this.getCustomerPlans = getCustomerPlans;
@@ -96,9 +97,8 @@
     this.getClientMessages = getClientMessages;
     this.getAPIUrl = getAPIUrl;
     this.getFlagsTypes = getFlagsTypes;
-
-
-
+    this.getPersonFlags = getPersonFlags;
+    this.getPersonPhones = getPersonPhones;
 
     function getAPIUrl() {
       return urlApi;
@@ -692,6 +692,19 @@
         });
       return q.promise;
     }
+
+    function postPersonFlag(flag) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/profile/flags/insert'), flag)
+        .then(function (data) {
+          q.resolve(data);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
+
 
     function getPlans() {
       var q = $q.defer();
@@ -1339,6 +1352,36 @@
 
       return q.promise;
     }
+
+    function getPersonFlags(idPerson) {
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/profile/customer/' + idPerson + '/flags'))
+        .then(function (result) {
+          q.resolve(result);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    function getPersonPhones(idPerson){
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/manager/phones/customer/' + idPerson))
+        .then(function (result) {
+          q.resolve(result);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    
 
   }
 })();

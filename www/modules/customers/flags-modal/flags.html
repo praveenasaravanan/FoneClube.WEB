@@ -1,7 +1,7 @@
 <div class="new-card-modal" ng-controller="FlagController as vm">
   <div class="header">
     <div class="dialog-toolbar">
-      <h4>Criar flag : {{ vm.customer.Name }}</h4>
+      <h4>Criar flag para: {{ vm.customer.Name }}</h4>
     </div>
 
     <button ng-click="closeThisDialog(0)">X</button>
@@ -15,9 +15,18 @@
           ng-options="flag.IdType as flag.TypeDescription for flag in vm.flagsTypes"
           ng-model="flag.IdType"
           ng-change="vm.changeFlag(flag)"
-          style="width: 160px;">
+          style="width: 160px; margin-left: 15px;">
           <option value="">Selecione a flag</option>
-      </select>
+        </select>
+
+        <select next-on-enter class="form-control"
+          ng-options="phone.PersonPhoneId as (phone.DisplayPhone + ' - ' + phone.PlanDescription) for phone in vm.customerPhones"
+          ng-model="phone.PersonPhoneId"
+          ng-change="vm.changeSelectedPhone(phone)"
+          style="width: 300px; margin-left: 15px;">
+          <option value="">Selecione o Telefone (opcional)</option>
+        </select>
+
         <div class="form-group col-xs-12">
           <label for="nomeCartao">Descrição:</label>
           <textarea

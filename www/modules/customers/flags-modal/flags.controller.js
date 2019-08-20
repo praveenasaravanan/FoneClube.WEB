@@ -23,40 +23,78 @@
 
     console.log('--- FlagController ---')
     var vm = this;
-    // debugger;
     vm.onTapAddComment = onTapAddComment;
     vm.changeFlag = changeFlag;
-    var customer = ViewModelUtilsService.modalCommentData;
+    vm.changeSelectedPhone = changeSelectedPhone;
 
+    var customer = ViewModelUtilsService.modalFlagData;
     vm.customer = customer;
+
+    vm.customerPhones = null;
+    vm.flagsTypes = null;
+    vm.txtDescription = '';
+
 
     FoneclubeService.getFlagsTypes().then(function(result){
       console.log(result)
       vm.flagsTypes = result;
     })
 
+    FoneclubeService.getPersonPhones(customer.Id).then(function(result){
+      console.log('getPersonPhones')
+      console.log(result)
+      vm.customerPhones = result;
+    })
+
+    function changeSelectedPhone(phone){
+      console.log(phone)
+      vm.selectedPhone = phone.PersonPhoneId;
+    }
+
     function changeFlag(flag){
-      console.log(`changeFlag`)
       console.log(flag)
+      vm.selectedFlag = flag;
     }
 
     function onTapAddComment(data) {
-      // debugger;
-      data.intIdPerson = customer.Id;
 
-      FoneclubeService.postCustomerComment(data).then(function(result) {
-        // debugger;
+       debugger;
+      if(vm.selectedFlag == null)
+        alert('Não é possível atribuir flag sem selecionar qual')
+
+      var flag;
+
+      if(vm.selectedPhone == null){
+        flag = {
+          'IdFlagType' : vm.selectedFlag.IdType,
+          'Description': vm.txtDescription,
+          'PendingInteraction': vm.bitPendingInteraction == true,
+          'IdPerson': customer.Id
+        };
+      }
+      else{
+        flag = {
+          'IdFlagType' : vm.selectedFlag.IdType,
+          'Description': vm.txtDescription,
+          'PendingInteraction': vm.bitPendingInteraction == true,
+          'IdPhone': vm.selectedPhone
+        };
+      }
+
+      
+      debugger;
+
+      
+      FoneclubeService.postPersonFlag(flag).then(function(result) {
+        debugger
         console.log(result);
         if (result) {
-          DialogFactory.showAlertDialog({ message: 'Inserido com sucesso' });
+          DialogFactory.showAlertDialog({ message: 'Flag inserida com sucesso' });
         } else {
-          DialogFactory.showAlertDialog({ message: 'Inserido falhou' });
+          DialogFactory.showAlertDialog({ message: 'Inserção de flag falhou' });
         }
-      }); /* 
-            .catch(function(error){
-                console.log('catch error');
-                console.log(error);
-            }); */
+      }); 
+
     }
   }
 })();
