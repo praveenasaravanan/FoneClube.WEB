@@ -89,15 +89,26 @@
         initCardList(customer.IdPagarme);
       }
 
-      var lista = [];
-      for(var i in customer.Phones){
-        for(var o in customer.Phones[i].Flags){
-          lista.push(customer.Phones[i].Flags[o]);
-        }
-      }
+      // var lista = [];
+      // for(var i in customer.Phones){
+      //   for(var o in customer.Phones[i].Flags){
+      //     lista.push(customer.Phones[i].Flags[o]);
+      //   }
+      // }
 
-      lista.reverse();
-      vm.flags = lista
+      // lista.reverse();
+      // vm.flags = lista
+
+      FoneclubeService.getPersonFlags(customer.Id).then(
+        function (result) {
+          debugger
+          var lista = result;
+          lista.reverse();
+          vm.flags = lista
+        }
+      );
+
+      
 
       FoneclubeService.getStatusChargingOfCustomer(customer.Id, vm.month, vm.year).then(
         function (result) {

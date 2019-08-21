@@ -109,7 +109,7 @@
                   <v-pane-content>
                     
                     <p>Tipo: {{flag.TypeDescription }}</p>
-                    <p>Interação: {{flag.PendingInteraction ? 'Pendente' : 'Concluída' }} <span class="clickable" ng-click="vm.editPendingFlag(flag)">&#9998;</span></p>
+                    <p>Interação: {{flag.PendingInteraction ? 'Pendente' : 'Concluída' }} <span style="cursor:pointer" class="clickable" ng-click="vm.editPendingFlag(flag)"> &#9998; </span></p>
                     <p>Descrição: <span class="text-capitalize">{{flag.InteractionDescription}}</span></p>
                     <!-- flag.PendingInteraction -->
                   </v-pane-content>
