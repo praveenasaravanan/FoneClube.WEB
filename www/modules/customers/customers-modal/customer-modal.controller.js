@@ -89,20 +89,15 @@
         initCardList(customer.IdPagarme);
       }
 
+      var lista = [];
       for(var i in customer.Phones){
-                
-        // Id: 8
-        // IsFoneclube: true
-        // LinhaAtiva: true
-        // NickName: "Ivanildo 4"
-        // phoneFull: "21991302405"
-        // debugger
         for(var o in customer.Phones[i].Flags){
-          vm.flags.push(customer.Phones[i].Flags[o])
+          lista.push(customer.Phones[i].Flags[o]);
         }
       }
 
-      // debugger
+      lista.reverse();
+      vm.flags = lista
 
       FoneclubeService.getStatusChargingOfCustomer(customer.Id, vm.month, vm.year).then(
         function (result) {
@@ -505,7 +500,23 @@
     }
 
     function editPendingFlag(flag){
-      alert('Edição ainda não implementada')
+      // alert('Edição ainda não implementada')
+      debugger;
+      var tempFlag = {
+        'Id' : flag.Id,
+        'PendingInteraction': !flag.PendingInteraction
+      }
+
+      FoneclubeService.postUpdateFlag(tempFlag).then(function(result) {
+        debugger
+        console.log(result);
+        if (result) {
+          flag.PendingInteraction = !flag.PendingInteraction
+          DialogFactory.showAlertDialog({ message: 'Flag alterada com sucesso' });
+        } else {
+          DialogFactory.showAlertDialog({ message: 'Update de flag falhou' });
+        }
+      }); 
     }
 
     //clientes com flag em aberto aparece icone de bandeira preenchida, os que não tiverem, bandeira vazia

@@ -20,10 +20,10 @@
         </div>
 
         <div class="col-xs-4" style="text-align:right;padding-left:0px;padding-right:0px;">
-          <button title="Criar Flag" ng-click="vm.onTapFlag(); closeThisDialog(0);" class="btn btn-primary">
+          <!-- <button title="Criar Flag" ng-click="vm.onTapFlag(); closeThisDialog(0);" class="btn btn-primary">
               &#9872;
             <i  aria-hidden="true"></i>
-          </button>
+          </button> -->
           <button title="Criar ordem de serviço" ng-click="vm.onTapComment(); closeThisDialog(0);" class="btn btn-primary">
             <i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
           </button>
@@ -102,7 +102,7 @@
                     <p>
                       <span ng-if="flag.PendingInteraction" class="flag-warning">&#9872;</span>
                       <span ng-if="!flag.PendingInteraction" class="flag-ok">&#9873;</span>
-                        Flag criada: <span class="text-capitalize">{{flag.RegisterDate | date: 'yyyy/MM/dd h:mm a'}}</span>
+                        Flag criada: <span class="text-capitalize">{{flag.RegisterDate | date: 'yyyy/MM/dd h:mm a' }}</span>
                     </p>
                   </v-pane-header>
 
@@ -127,7 +127,7 @@
               
             <h4 ng-click="vm.onClickChargingsTitle()" class="colapsable-title" ng-show="vm.chargesArray.length > 0">&#x276F; Cobranças</h4>
 
-            <v-accordion id="accordionB" class="vAccordion--default" multiple control="accordionB" ng-show="vm.chargesArray.length > 0">
+            <v-accordion ng-if="vm.showChargings" id="accordionB" class="vAccordion--default" multiple control="accordionB" ng-show="vm.chargesArray.length > 0">
               <v-pane expanded="true" ng-init="status.open = true" is-open="status.open" ng-repeat="chargeAndOrder in vm.chargesArray">
                 <v-pane-header>
                   <span class="spnHeader">
@@ -212,7 +212,7 @@
 
           <div class="col-sm-6">
             <h4 ng-click="vm.onClickServiceOrdersTitle()" class="colapsable-title" ng-show="vm.osDescArray.length > 0">&#x276F; Ordens de Serviço</h4>
-            <v-accordion ng-show="vm.osDescArray.length > 0" id="accordionB" class="vAccordion--default" multiple control="accordionB">
+            <v-accordion ng-if="vm.showServiceOrders" ng-show="vm.osDescArray.length > 0" id="accordionB" class="vAccordion--default" multiple control="accordionB">
               <v-pane expanded="false" ng-init="status.open = true" is-open="status.open" ng-repeat="os in vm.osDescArray" ng-if="$index > 0">
                 <v-pane-header>
                   {{ vm.osArray.length - $index }}ª O.S. {{ vm.osArray[vm.osArray.length - $index].ServiceOrders.Description }}
@@ -246,7 +246,7 @@
             ng-show="vm.historyLog.length > 0">
                 &#x276F; Histórico Cobrança registro secundário
             </h4>
-            <v-accordion ng-show="vm.historyLog.length > 0" id="accordionB" class="vAccordion--default" multiple control="accordionB">
+            <v-accordion ng-if="vm.showSecundaryChargings" ng-show="vm.historyLog.length > 0" id="accordionB" class="vAccordion--default" multiple control="accordionB">
               <v-pane expanded="false" ng-init="status.open = true" is-open="status.open" ng-repeat="log in vm.historyLog">
                 <v-pane-header>
                   <p>

@@ -41,6 +41,7 @@
     this.postIsertServiceActive = postIsertServiceActive;
     this.postUpdateServiceFoneclube = postUpdateServiceFoneclube;
     this.postPersonFlag = postPersonFlag;
+    this.postUpdateFlag = postUpdateFlag;
 
     this.getPlans = getPlans;
     this.getCustomerPlans = getCustomerPlans;
@@ -696,6 +697,18 @@
     function postPersonFlag(flag) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/profile/flags/insert'), flag)
+        .then(function (data) {
+          q.resolve(data);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
+
+    function postUpdateFlag(flag) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/profile/flag/update'), flag)
         .then(function (data) {
           q.resolve(data);
         })
