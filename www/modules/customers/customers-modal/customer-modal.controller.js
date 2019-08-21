@@ -89,16 +89,6 @@
         initCardList(customer.IdPagarme);
       }
 
-      // var lista = [];
-      // for(var i in customer.Phones){
-      //   for(var o in customer.Phones[i].Flags){
-      //     lista.push(customer.Phones[i].Flags[o]);
-      //   }
-      // }
-
-      // lista.reverse();
-      // vm.flags = lista
-
       FoneclubeService.getPersonFlags(customer.Id).then(
         function (result) {
           debugger
