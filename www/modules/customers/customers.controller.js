@@ -52,7 +52,7 @@
       active: false,
       inactive: false,
       regerror: false,
-      all: false,
+      all: true,
       excludeFather: false,
       excludeAddress: false,
       search: ''
@@ -82,33 +82,37 @@
       }
 
 
-        FoneclubeService.getAllCustomers(false).then(function (result) {
-          vm.data.customers = result.map(function (user) {
-            user.Phones = user.Phones.map(function (phone) {
+      FoneclubeService.getAllCustomers(false).then(function (result) {
+        vm.data.customers = result.map(function (user) {
+          user.Phones = user.Phones.map(function (phone) {
+            if (phone) {
               phone.phoneFull = phone.DDD.concat(phone.Number);
-              return phone;
-            });
-            return user;
+            }
+            return phone;
           });
-          var customersSemSoftDelete = [];
-          for (var i in vm.data.customers) {
-            var customer = vm.data.customers[i];
-            if (!customer.SoftDelete) {
-              customer.PhoneDDDParent = null;
-              customer.PhoneNumberParent = null;
-              for (var i in customer.Phones) {
+          return user;
+        });
+        var customersSemSoftDelete = [];
+        for (var i in vm.data.customers) {
+          var customer = vm.data.customers[i];
+          if (!customer.SoftDelete) {
+            customer.PhoneDDDParent = null;
+            customer.PhoneNumberParent = null;
+            for (var i in customer.Phones) {
+              if (customer.Phones[i]) {
                 if (!customer.Phones[i].IsFoneclube) {
                   customer.Phones.splice(i, 1);
                 }
               }
-
-              customersSemSoftDelete.push(customer);
             }
+
+            customersSemSoftDelete.push(customer);
           }
+        }
 
         vm.tableParams = createUsingFullOptions(customersSemSoftDelete);
         vm.tableParams.reload();
-        
+
         // FoneclubeService.getAllCustomers(false).then(function (result) {
 
         //   debugger;
@@ -119,7 +123,7 @@
         //     });
         //     return user;
         //   });
-         
+
         //   var customersSemSoftDelete = [];
         //   for (var i in vm.data.customers) {
         //     var customer = vm.data.customers[i];
@@ -411,7 +415,7 @@
       ViewModelUtilsService.showModalWhatsapp(customer);
     }
 
-    function onTapFlag(customer){
+    function onTapFlag(customer) {
       ViewModelUtilsService.showModalFlag(customer);
     }
 

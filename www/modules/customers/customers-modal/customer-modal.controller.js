@@ -22,14 +22,14 @@
   ) {
 
     var vm = this;
-    
+
     var customer = ViewModelUtilsService.modalCustomerData;
-  
+
     var CARTAO = 1;
     var BOLETO = 2;
     vm.so_cnt = 0;
     vm.co_cnt = 0;
-    
+
     var carregandoPagarme = false;
     vm.showCards = true;
     vm.showChargings = true;
@@ -37,7 +37,7 @@
     vm.showSecundaryChargings = false;
     vm.showFlags = false;
     vm.flags = [];
-    
+
     vm.month = new Date().getMonth() + 1;
     vm.year = new Date().getFullYear();
     vm.mensagemPagarme = 'Refresh DB';
@@ -53,7 +53,7 @@
     vm.onTapComment = onTapComment;
     vm.onTapFlag = onTapFlag;
     vm.customer = customer;
-    
+
     vm.onTapUpdatePagarme = onTapUpdatePagarme;
     vm.onResentEmail = onResentEmail;
     vm.onClickCardTitle = onClickCardTitle;
@@ -62,6 +62,7 @@
     vm.onClickSecundaryChargingsTitle = onClickSecundaryChargingsTitle;
     vm.onClickFlagsTitle = onClickFlagsTitle;
     vm.editPendingFlag = editPendingFlag;
+    vm.formatDate = formatDate;
 
     init();
 
@@ -98,7 +99,7 @@
         }
       );
 
-      
+
 
       FoneclubeService.getStatusChargingOfCustomer(customer.Id, vm.month, vm.year).then(
         function (result) {
@@ -145,26 +146,30 @@
                 });
             }
             if (data.Charges) {
-              // debugger;
-              var expiryDate = new Date(data.Charges.ExpireDate);
-              var expiryDateAfter4 = new Date(data.Charges.ExpireDate);
-              expiryDateAfter4.setDate(expiryDateAfter4.getDate() + 4);
+              if (data.Charges.BoletoExpires) {
+                var expiryDate = new Date(data.Charges.ExpireDate);
+                var expiryDateAfter4 = new Date(data.Charges.ExpireDate);
+                expiryDateAfter4.setDate(expiryDateAfter4.getDate() + 4);
 
-              var currentDate = new Date();
-              if (data.Charges.descriptionType == "Boleto" && data.Charges.PaymentStatusDescription == "WaitingPayment" && currentDate <= expiryDate) {
-                //  change status to "Aguardando Pagamento" = Green Icon
-                data.Charges.statusColor="Green";
+                var currentDate = new Date();
+                if (data.Charges.descriptionType == "Boleto" && data.Charges.PaymentStatusDescription == "WaitingPayment" && currentDate <= expiryDate) {
+                  //  change status to "Aguardando Pagamento" = Green Icon
+                  data.Charges.statusColor = "Green";
+                }
+                else if (data.Charges.descriptionType == "Boleto" && data.Charges.PaymentStatusDescription == "WaitingPayment" && currentDate < expiryDateAfter4) {
+                  //change status to "Pendente Pagamento"   Yello Icon
+                  data.Charges.statusColor = "Yellow";
+                }
+                else if (data.Charges.descriptionType == "Boleto" && data.Charges.PaymentStatusDescription == "WaitingPayment" && currentDate > expiryDateAfter4) {
+                  // change status to "Pendente Pagamento"   RED Icon
+                  data.Charges.statusColor = "Red";
+                }
+                else {
+                  data.Charges.statusColor = "grey";
+                }
               }
-              else if (data.Charges.descriptionType == "Boleto" && data.Charges.PaymentStatusDescription == "WaitingPayment" && currentDate < expiryDateAfter4) {
-                //change status to "Pendente Pagamento"   Yello Icon
-                data.Charges.statusColor="Yellow";
-              }
-              else if (data.Charges.descriptionType == "Boleto" && data.Charges.PaymentStatusDescription == "WaitingPayment" && currentDate > expiryDateAfter4) {
-                // change status to "Pendente Pagamento"   RED Icon
-                data.Charges.statusColor="Red";
-              }
-              else{
-                data.Charges.statusColor="grey";
+              else {
+                data.Charges.statusColor = "grey";
               }
             }
             vm.chargesArray.push(data); // na moral ning merece
@@ -225,6 +230,11 @@
           console.log('catch error');
           console.log(error);
         });
+    }
+
+    function formatDate(date) {
+      var dateOut = new Date(date);
+      return dateOut;
     }
 
     function onTapUpdatePagarme() {
@@ -305,7 +315,7 @@
       ViewModelUtilsService.showModalComment(customer);
     }
 
-    function onTapFlag(){
+    function onTapFlag() {
       ViewModelUtilsService.showModalFlag(customer);
     }
 
@@ -478,37 +488,37 @@
       });
     }
 
-    function onClickCardTitle(){
+    function onClickCardTitle() {
       console.log('teste')
       vm.showCards = !vm.showCards;
     }
-    
-    function onClickChargingsTitle(){
+
+    function onClickChargingsTitle() {
       vm.showChargings = !vm.showChargings;
     }
 
-    function onClickServiceOrdersTitle(){
+    function onClickServiceOrdersTitle() {
       vm.showServiceOrders = !vm.showServiceOrders;
     }
-    
-    function onClickSecundaryChargingsTitle(){
+
+    function onClickSecundaryChargingsTitle() {
       vm.showSecundaryChargings = !vm.showSecundaryChargings;
     }
 
-    function onClickFlagsTitle(){
+    function onClickFlagsTitle() {
       vm.showFlags = !vm.showFlags;
       console.log(vm.showFlags)
     }
 
-    function editPendingFlag(flag){
+    function editPendingFlag(flag) {
       // alert('Edição ainda não implementada')
       debugger;
       var tempFlag = {
-        'Id' : flag.Id,
+        'Id': flag.Id,
         'PendingInteraction': !flag.PendingInteraction
       }
 
-      FoneclubeService.postUpdateFlag(tempFlag).then(function(result) {
+      FoneclubeService.postUpdateFlag(tempFlag).then(function (result) {
         debugger
         console.log(result);
         if (result) {
@@ -517,7 +527,7 @@
         } else {
           DialogFactory.showAlertDialog({ message: 'Update de flag falhou' });
         }
-      }); 
+      });
     }
 
     //clientes com flag em aberto aparece icone de bandeira preenchida, os que não tiverem, bandeira vazia

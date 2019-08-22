@@ -81,50 +81,46 @@
         </div>
       </section>
       <!-- ng-if="vm.flags.length > 0" -->
-      <section class="available-card-list" >
-          <div class="row fix-row">
-            <div class="col-xs-12">
-              <h4 ng-if="vm.flags.length > 0" ng-click="vm.onClickFlagsTitle()" class="colapsable-title">&#x276F; Flags</h4>
-              
-                <v-accordion
-                ng-if="vm.showFlags"
-                id="accordionE"
-                class="vAccordion--default"
-                multiple
-                control="accordionE"
-              >
-                <v-pane
-                  expanded="true"
-                  ng-init="status.open = true"
-                  is-open="status.open"
-                  ng-repeat="flag in vm.flags track by $index">
-                  <v-pane-header>
-                    <p>
-                      <span ng-if="flag.PendingInteraction" class="flag-warning">&#9872;</span>
-                      <span ng-if="!flag.PendingInteraction" class="flag-ok">&#9873;</span>
-                        Flag criada: <span class="text-capitalize">{{flag.RegisterDate | date: 'yyyy/MM/dd h:mm a' }}</span>
-                    </p>
-                  </v-pane-header>
+      <section class="available-card-list">
+        <div class="row fix-row">
+          <div class="col-xs-12">
+            <h4 ng-if="vm.flags.length > 0" ng-click="vm.onClickFlagsTitle()" class="colapsable-title">&#x276F; Flags</h4>
 
-                  <v-pane-content>
-                    
-                    <p>Tipo: {{flag.TypeDescription }}</p>
-                    <p>Interação: {{flag.PendingInteraction ? 'Pendente' : 'Concluída' }} <span style="cursor:pointer" class="clickable" ng-click="vm.editPendingFlag(flag)"> &#9998; </span></p>
-                    <p>Descrição: <span class="text-capitalize">{{flag.InteractionDescription}}</span></p>
-                    <!-- flag.PendingInteraction -->
-                  </v-pane-content>
-                </v-pane>
-              </v-accordion>
-          
-              
-            </div>
+            <v-accordion ng-if="vm.showFlags" id="accordionE" class="vAccordion--default" multiple control="accordionE">
+              <v-pane expanded="true" ng-init="status.open = true" is-open="status.open" ng-repeat="flag in vm.flags track by $index">
+                <v-pane-header>
+                  <p>
+                    <span ng-if="flag.PendingInteraction" class="flag-warning">&#9872;</span>
+                    <span ng-if="!flag.PendingInteraction" class="flag-ok">&#9873;</span>
+                    Flag criada:
+                    <span class="text-capitalize">{{flag.RegisterDate | date: 'yyyy/MM/dd h:mm a' }}</span>
+                  </p>
+                </v-pane-header>
+
+                <v-pane-content>
+
+                  <p>Tipo: {{flag.TypeDescription }}</p>
+                  <p>Interação: {{flag.PendingInteraction ? 'Pendente' : 'Concluída' }}
+                    <span style="cursor:pointer" class="clickable"
+                      ng-click="vm.editPendingFlag(flag)"> &#9998; </span>
+                  </p>
+                  <p>Descrição:
+                    <span class="text-capitalize">{{flag.InteractionDescription}}</span>
+                  </p>
+                  <!-- flag.PendingInteraction -->
+                </v-pane-content>
+              </v-pane>
+            </v-accordion>
+
+
           </div>
-        </section>
+        </div>
+      </section>
 
       <section>
         <div class="row fix-row">
           <div class="col-sm-6">
-              
+
             <h4 ng-click="vm.onClickChargingsTitle()" class="colapsable-title" ng-show="vm.chargesArray.length > 0">&#x276F; Cobranças</h4>
 
             <v-accordion ng-if="vm.showChargings" id="accordionB" class="vAccordion--default" multiple control="accordionB" ng-show="vm.chargesArray.length > 0">
@@ -134,16 +130,19 @@
                     <span class="spnStatus" style="background-color: {{chargeAndOrder.Charges.statusColor}}"></span>
                     <span>{{ vm.chargesArray.length - $index }}ª Cob.</span>
                     <span class="spnR">R${{ chargeAndOrder.Charges.Ammount / 100 }}</span>
-                    <span class="spnVence">Vence: {{ chargeAndOrder.Charges.ExpireDate | date: 'dd/MM/yyyy' }}</span>
-                    <span class="spnRef">Ref. {{ chargeAndOrder.Charges.MesVingencia + '/' + chargeAndOrder.Charges.AnoVingencia }}</span>
+                    <span class="spnVence">Vencimento: {{ chargeAndOrder.Charges.BoletoExpires | date: 'dd/MM/yyyy' }}</span>
+                    <span class="spnRef">Vigencia. {{ chargeAndOrder.Charges.MesVingencia + '/' + chargeAndOrder.Charges.AnoVingencia }}</span>
                   </span>
                 </v-pane-header>
 
                 <v-pane-content>
                   <div class="divSubHeader form-group">
                     <span>
-                      Status:{{ chargeAndOrder.Charges.PaymentStatusDescription == '' ? 'Sem transaction associada' : chargeAndOrder.Charges.PaymentStatusDescription
-                      }}
+                      Status:
+                      <b>{{ chargeAndOrder.Charges.PaymentStatusDescription == '' ? 'Sem transaction associada' : chargeAndOrder.Charges.PaymentStatusDescription
+                        }} {{(chargeAndOrder.Charges.PaymentStatusDescription=='Paid'? vm.formatDate(chargeAndOrder.Charges.TransactionLastUpdate)
+                        : '') | date: 'dd/MM/yyyy' }}
+                      </b>
                     </span>
                     <span>
                       <button class="btn btn-info resent-email" ng-click="vm.onResentEmail(chargeAndOrder.Charges);">
@@ -166,29 +165,29 @@
                     </span>
                   </div>
                   <div class="form-group">
-                      <p>
-                          <strong>Comentário:</strong>
-                          {{ chargeAndOrder.Charges.Comment }}
-                        </p>
+                    <p>
+                      <strong>Comentário:</strong>
+                      {{ chargeAndOrder.Charges.Comment }}
+                    </p>
                   </div>
                   <div class="form-group">
-                      <p>
-                          <strong>Comentário boleto:</strong>
-                          {{ chargeAndOrder.Charges.CommentBoleto }}
-                        </p>
+                    <p>
+                      <strong>Comentário boleto:</strong>
+                      {{ chargeAndOrder.Charges.CommentBoleto }}
+                    </p>
                   </div>
                   <div class="form-group">
-                      <p>
-                          <strong>Comentário email:</strong>
-                          {{ chargeAndOrder.Charges.CommentEmail }} 
-                        </p>
+                    <p>
+                      <strong>Comentário email:</strong>
+                      {{ chargeAndOrder.Charges.CommentEmail }}
+                    </p>
                   </div>
                   <div class="form-group">
-                      <p>
-                          Criado em:
-                          <strong>{{ chargeAndOrder.Charges.CreationDate | date: 'yyyy/MM/dd hh:mm:ss a' }}
-                          </strong>
-                        </p>
+                    <p>
+                      Criado em:
+                      <strong>{{ chargeAndOrder.Charges.CreationDate | date: 'yyyy/MM/dd hh:mm:ss a' }}
+                      </strong>
+                    </p>
                   </div>
 
                   <p ng-if="chargeAndOrder.Charges.boleto_url">
@@ -212,7 +211,8 @@
 
           <div class="col-sm-6">
             <h4 ng-click="vm.onClickServiceOrdersTitle()" class="colapsable-title" ng-show="vm.osDescArray.length > 0">&#x276F; Ordens de Serviço</h4>
-            <v-accordion ng-if="vm.showServiceOrders" ng-show="vm.osDescArray.length > 0" id="accordionB" class="vAccordion--default" multiple control="accordionB">
+            <v-accordion ng-if="vm.showServiceOrders" ng-show="vm.osDescArray.length > 0" id="accordionB" class="vAccordion--default"
+              multiple control="accordionB">
               <v-pane expanded="false" ng-init="status.open = true" is-open="status.open" ng-repeat="os in vm.osDescArray" ng-if="$index > 0">
                 <v-pane-header>
                   {{ vm.osArray.length - $index }}ª O.S. {{ vm.osArray[vm.osArray.length - $index].ServiceOrders.Description }}
@@ -241,12 +241,11 @@
 
             <br />
 
-            <h4 ng-click="vm.onClickSecundaryChargingsTitle()" 
-            class="colapsable-title" 
-            ng-show="vm.historyLog.length > 0">
-                &#x276F; Histórico Cobrança registro secundário
+            <h4 ng-click="vm.onClickSecundaryChargingsTitle()" class="colapsable-title" ng-show="vm.historyLog.length > 0">
+              &#x276F; Histórico Cobrança registro secundário
             </h4>
-            <v-accordion ng-if="vm.showSecundaryChargings" ng-show="vm.historyLog.length > 0" id="accordionB" class="vAccordion--default" multiple control="accordionB">
+            <v-accordion ng-if="vm.showSecundaryChargings" ng-show="vm.historyLog.length > 0" id="accordionB" class="vAccordion--default"
+              multiple control="accordionB">
               <v-pane expanded="false" ng-init="status.open = true" is-open="status.open" ng-repeat="log in vm.historyLog">
                 <v-pane-header>
                   <p>
