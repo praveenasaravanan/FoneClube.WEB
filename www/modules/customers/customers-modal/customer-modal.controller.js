@@ -35,7 +35,7 @@
     vm.showChargings = true;
     vm.showServiceOrders = true;
     vm.showSecundaryChargings = false;
-    vm.showFlags = true;
+    vm.showFlags = false;
     vm.flags = [];
     
     vm.month = new Date().getMonth() + 1;
