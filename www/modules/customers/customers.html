@@ -4,12 +4,19 @@
   <div class="col-xs-12">
     <div class="filters-container d-flex align-center">
       <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
           <i class="fa fa-filter"></i> FILTROS
         </button>
 
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <div class="tfilter tcheckbox">
+            <label for="tcheckbox-all">
+              All
+              <input id="tcheckbox-all" type="checkbox" ng-model="vm.filters.all" />
+            </label>
+          </div>
+
           <div class="tfilter tcheckbox">
             <label for="tcheckbox-active">
               Somente ativos
@@ -31,12 +38,7 @@
             </label>
           </div>
 
-          <div class="tfilter tcheckbox">
-            <label for="tcheckbox-all">
-              All
-              <input id="tcheckbox-all" type="checkbox" ng-model="vm.filters.all" />
-            </label>
-          </div>
+
           <div class="tfilter tcheckbox">
             <label for="tcheckbox-excludeFather">
               Exclude Father
@@ -53,8 +55,8 @@
       </div>
 
       <div class="tfilter tsearch d-flex">
-        <input placeholder="BUSCA" class="form-control" type="text" ng-model="vm.filters.search"
-          ng-model-options="{ debounce: 667 }" />
+        <input placeholder="BUSCA" class="form-control" type="text" ng-model="vm.filters.search" ng-model-options="{ debounce: 667 }"
+        />
       </div>
     </div>
 
@@ -65,35 +67,30 @@
             <button class="btn btn-primary" ng-click="vm.onTapCustomer(customer, $index)">
               <i class="glyphicon glyphicon-edit"></i>
             </button>
-			<span class="divPhone" ng-if="customer.WClient.PhoneNumber">
+            <span class="divPhone" ng-if="customer.WClient.PhoneNumber">
               <a href="javascript:void(0);" ng-show="customer.WClient.IsRegisteredWithChat2Desk" ng-class="customer.WClient.UnreadMessages>0?'newMsg':'123'"
                 ng-click="vm.onTapMessage(customer)">
-                <img class="imgWhatsapp" ng-if="customer.WClient.ProfilePicUrl"
-                  src="{{customer.WClient.ProfilePicUrl}}" />
+                <img class="imgWhatsapp" ng-if="customer.WClient.ProfilePicUrl" src="{{customer.WClient.ProfilePicUrl}}" />
                 <img ng-if="!customer.WClient.ProfilePicUrl" src="../../content/img/message-green.png" />
                 <span class="msgCountBadge" ng-show="customer.WClient.UnreadMessages>0">{{customer.WClient.UnreadMessages}}</span>
               </a>
               <a href="javascript:void(0);" ng-show="!customer.WClient.IsRegisteredWithChat2Desk">
                 <img src="../../content/img/message-red.png" />
               </a>
-              
+
             </span>
           </td>
-          <td ng-click="vm.onTapCustomerEdit(customer, $index)" style="cursor: pointer;" title="'Clientes'"
-            sortable="'Name'">
-            <span title="{{ customer.Name }}" style="font-weight: bold;">{{
-              customer.Name
-            }}</span>
+          <td ng-click="vm.onTapCustomerEdit(customer, $index)" style="cursor: pointer;" title="'Clientes'" sortable="'Name'">
+            <span title="{{ customer.Name }}" style="font-weight: bold;">{{ customer.Name }}
+            </span>
           </td>
 
           <td title="'Ações'">
-            <button title="Desativar cliente" ng-if="!customer.Desativo" class="btn btn-info"
-              ng-click="vm.onTapSwitchActivate(customer)">
+            <button title="Desativar cliente" ng-if="!customer.Desativo" class="btn btn-info" ng-click="vm.onTapSwitchActivate(customer)">
               on
             </button>
 
-            <button title="Ativar cliente" ng-if="customer.Desativo" class="btn btn"
-              ng-click="vm.onTapSwitchActivate(customer, $index)">
+            <button title="Ativar cliente" ng-if="customer.Desativo" class="btn btn" ng-click="vm.onTapSwitchActivate(customer, $index)">
               off
             </button>
 
@@ -107,8 +104,8 @@
             </button>
 
             <button title="Criar Flag" ng-click="vm.onTapFlag(customer); closeThisDialog(0);" class="btn btn-primary">
-                &#9872;
-              <i  aria-hidden="true"></i>
+              &#9872;
+              <i aria-hidden="true"></i>
             </button>
 
             <button title="Criar ordem de serviço" ng-click="vm.onTapComment(customer)" class="btn btn-primary">
