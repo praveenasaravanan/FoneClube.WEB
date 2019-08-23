@@ -1608,8 +1608,12 @@
     function onClickFlag(phoneNumber){
       console.log('onClickFlag');
       console.log(phoneNumber);
-      vm.customer.showFlagEdition = true;
-      ViewModelUtilsService.showModalCustomer(vm.customer, -1);
+      
+      var cliente = vm.customer;
+      cliente.flagPhone = true;
+      cliente.selectedPhone = phoneNumber
+      // debugger
+      ViewModelUtilsService.showModalFlag(cliente);
 
     }
     

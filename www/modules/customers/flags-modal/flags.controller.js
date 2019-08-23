@@ -33,12 +33,25 @@
     vm.customerPhones = null;
     vm.flagsTypes = null;
     vm.txtDescription = '';
+    vm.showPhones = true;
 
+    debugger;
+    if(customer.flagPhone)
+      vm.showPhones = false;
+
+    if(customer.selectedPhone != null)
+      vm.selectedPhone = customer.selectedPhone.NovoFormatoNumero  
 
     FoneclubeService.getFlagsTypes().then(function(result){
       console.log(result)
       vm.flagsTypes = result;
     })
+
+    FoneclubeService.getPlans().then(function(result){
+      vm.allPlans = result;
+    })
+
+    
 
     FoneclubeService.getPersonPhones(customer.Id).then(function(result){
       console.log('getPersonPhones')

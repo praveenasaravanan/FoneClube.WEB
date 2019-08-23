@@ -1,7 +1,7 @@
 <div class="new-card-modal" ng-controller="FlagController as vm">
   <div class="header">
     <div class="dialog-toolbar">
-      <h4>Criar flag para: {{ vm.customer.Name }}</h4>
+      <h4>Criar flag para: {{ vm.customer.Name }} <span ng-if="vm.selectedPhone != null && vm.selectedPhone != undefined">{{vm.selectedPhone}}</span></h4>
     </div>
 
     <button ng-click="closeThisDialog(0)">X</button>
@@ -19,7 +19,9 @@
           <option value="">Selecione a flag</option>
         </select>
 
-        <select next-on-enter class="form-control"
+        <select 
+          ng-if="vm.showPhones"
+          next-on-enter class="form-control"
           ng-options="phone.PersonPhoneId as (phone.DisplayPhone + ' - ' + phone.PlanDescription) for phone in vm.customerPhones"
           ng-model="phone.PersonPhoneId"
           ng-change="vm.changeSelectedPhone(phone)"
