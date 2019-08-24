@@ -29,6 +29,15 @@
           <option value="">Selecione o Telefone (opcional)</option>
         </select>
 
+        <select  next-on-enter class="form-control"
+          ng-if="vm.showPlanList"
+          ng-options="plan.Id as plan.Description for plan in vm.allPlans"
+          ng-model="plan.Id"
+          ng-change="vm.changePlan(plan)"
+          style="width: 160px; margin-left: 15px;">
+          <option value="">Plano alvo</option>
+        </select>
+
         <div class="form-group col-xs-12">
           <label for="nomeCartao">Descrição:</label>
           <textarea

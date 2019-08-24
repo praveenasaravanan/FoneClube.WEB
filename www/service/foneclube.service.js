@@ -1352,10 +1352,10 @@
       return q.promise;
     }
 
-    function getFlagsTypes() {
+    function getFlagsTypes(onlyFlags) {
       var q = $q.defer();
 
-      HTTPService.get(urlApi.concat('/profile/flags/types'))
+      HTTPService.get(urlApi.concat('/profile/flags/types?phoneFlagOnly='.concat(onlyFlags)))
         .then(function (result) {
           q.resolve(result);
         })

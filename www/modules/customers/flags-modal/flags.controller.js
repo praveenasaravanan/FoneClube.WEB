@@ -34,16 +34,15 @@
     vm.flagsTypes = null;
     vm.txtDescription = '';
     vm.showPhones = true;
+    vm.changePlan = changePlan;
 
-    debugger;
     if(customer.flagPhone)
       vm.showPhones = false;
 
     if(customer.selectedPhone != null)
       vm.selectedPhone = customer.selectedPhone.NovoFormatoNumero  
 
-    FoneclubeService.getFlagsTypes().then(function(result){
-      console.log(result)
+    FoneclubeService.getFlagsTypes(!vm.showPhones).then(function(result){
       vm.flagsTypes = result;
     })
 
@@ -51,31 +50,32 @@
       vm.allPlans = result;
     })
 
-    
-
     FoneclubeService.getPersonPhones(customer.Id).then(function(result){
-      console.log('getPersonPhones')
-      console.log(result)
       vm.customerPhones = result;
     })
 
     function changeSelectedPhone(phone){
-      console.log(phone)
       vm.selectedPhone = phone.PersonPhoneId;
     }
 
     function changeFlag(flag){
-      console.log(flag)
       vm.selectedFlag = flag;
+
+      if(vm.selectedFlag.IdType == 1 || vm.selectedFlag.IdType == 2)
+        vm.showPlanList = true;
+      else
+        vm.showPlanList = false;
+
     }
 
     function onTapAddComment(data) {
 
-       debugger;
       if(vm.selectedFlag == null)
         alert('Não é possível atribuir flag sem selecionar qual')
 
       var flag;
+      
+      debugger;
 
       if(vm.selectedPhone == null){
         flag = {
@@ -92,6 +92,11 @@
           'PendingInteraction': vm.bitPendingInteraction == true,
           'IdPhone': vm.selectedPhone
         };
+
+        if(vm.showPlanList){
+          flag.PlanId = vm.selectedplan
+        }
+        
       }
 
       
@@ -110,7 +115,9 @@
 
     }
 
-    
-    
+    function changePlan(plan){
+      vm.selectedplan = plan
+    }
+
   }
 })();
