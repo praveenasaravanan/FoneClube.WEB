@@ -17,16 +17,16 @@
     vm.text = '';
     vm.sendButtonText = 'Send';
     vm.messages = [];
-	vm.currentUser=MainUtils.getAgent();
+    vm.currentUser = MainUtils.getAgent();
     init();
 
-    function init() {		
+    function init() {
       FoneclubeService.getClientMessages(vm.customer.WClient.ClientId, false).then(function (result) {
         if (result) {
-         vm.messages = result;
-		  if(vm.customer.WClient){
-			vm.customer.WClient.UnreadMessages=0;
-		}
+          vm.messages = result;
+          if (vm.customer.WClient) {
+            vm.customer.WClient.UnreadMessages = 0;
+          }
         }
       });
     }
@@ -35,17 +35,17 @@
       if (!vm.text) {
         return;
       }
-	  debugger;
+      debugger;
       var data = {
         ClientId: vm.customer.WClient.ClientId,
         Text: vm.text
       };
-	  
-	  if(vm.currentUser){
-		  data.Text = vm.currentUser + ": " + data.Text;
-		  data.SendBy= vm.currentUser;
-	  }
-	  
+
+      if (vm.currentUser) {
+        data.Text = vm.currentUser + ": " + data.Text;
+        data.SendBy = vm.currentUser;
+      }
+
       vm.sendButtonText = 'Sending..';
       FoneclubeService.postSendWhatsappMessage(data).then(function (result) {
         console.log(result);

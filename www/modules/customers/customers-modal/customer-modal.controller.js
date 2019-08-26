@@ -92,7 +92,6 @@
 
       FoneclubeService.getPersonFlags(customer.Id).then(
         function (result) {
-          debugger
           var lista = result;
           lista.reverse();
           vm.flags = lista
@@ -106,7 +105,6 @@
           vm.charged_status = result[0];
         }
       );
-
       FoneclubeService.getChargeAndServiceOrderHistory(customer.Id).then(function (
         result
       ) {
@@ -132,24 +130,23 @@
             data.Charges.descriptionType =
               data.Charges.PaymentType == CARTAO ? 'Cartão de crédito' : 'Boleto';
 
-            if (data.Charges.PaymentType == BOLETO) {
-              PagarmeService.getBoletoUrl(data.Charges.BoletoId, vm.chargesAndOrders, i)
-                .then(function (result) {
-                  try {
-                    result.chargesAndOrders[result.index].Charges.boleto_url =
-                      result[0].boleto_url;
-                    data.Charges.boleto_url = result[0].boleto_url;
-                  } catch (erro) { }
-                })
-                .catch(function (error) {
-                  console.log(error);
-                });
-            }
+            // if (data.Charges.PaymentType == BOLETO) {
+            //   PagarmeService.getBoletoUrl(data.Charges.BoletoId, vm.chargesAndOrders, i)
+            //     .then(function (result) {
+            //       try {
+            //         result.chargesAndOrders[result.index].Charges.boleto_url = result[0].boleto_url;
+            //         data.Charges.boleto_url = result[0].boleto_url;
+            //       } catch (erro) { }
+            //     })
+            //     .catch(function (error) {
+            //       console.log(error);
+            //     });
+            // }
             if (data.Charges) {
               if (data.Charges.BoletoExpires) {
                 var expiryDate = new Date(data.Charges.ExpireDate);
                 var expiryDateAfter4 = new Date(data.Charges.ExpireDate);
-                expiryDateAfter4.setDate(expiryDateAfter4.getDate() + 4);
+                expiryDateAfter4.setDate(expiryDateAfter4.getDate() + 3);
 
                 var currentDate = new Date();
                 if (data.Charges.descriptionType == "Boleto" && data.Charges.PaymentStatusDescription == "WaitingPayment" && currentDate <= expiryDate) {
@@ -171,6 +168,10 @@
               else {
                 data.Charges.statusColor = "grey";
               }
+            }
+
+            if( data.Charges.PaymentType == CARTAO && data.Charges.PaymentStatusDescription=='Paid'){
+              data.Charges.PaymentStatusDescription='Accepted';
             }
             vm.chargesArray.push(data); // na moral ning merece
           }
@@ -233,8 +234,15 @@
     }
 
     function formatDate(date) {
+      date = date.split(' ')[0];
       var dateOut = new Date(date);
+      dateOut = dateOut.getDate() + "/" + getMonth(dateOut.getMonth()) + "/" + dateOut.getFullYear().toString().substring(2);
       return dateOut;
+    }
+
+    function getMonth(monthNumber) {
+      var months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+      return months[monthNumber];
     }
 
     function onTapUpdatePagarme() {
