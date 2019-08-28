@@ -1439,7 +1439,9 @@ input[type='checkbox'] {
     display: inline-block;
     top: 3px;
     position: relative; }
-  .customer-modal .spnHeader .spnVence, .customer-modal .spnHeader .spnRef, .customer-modal .spnHeader .spnR {
+  .customer-modal .spnHeader .spnVence,
+  .customer-modal .spnHeader .spnRef,
+  .customer-modal .spnHeader .spnR {
     padding-left: 10px; }
 
 .customer-modal .divSubHeader {
@@ -1450,6 +1452,11 @@ input[type='checkbox'] {
     .customer-modal .divSubHeader span .btn {
       margin: 0px 0px 0px 10px;
       padding: 5px 6px 5px 6px; }
+  .customer-modal .divSubHeader span#spnCopyBoletoCode {
+    cursor: pointer; }
+    .customer-modal .divSubHeader span#spnCopyBoletoCode .btn {
+      color: red;
+      margin-top: 5px; }
 
 .customer-modal .btn {
   margin-bottom: 5px; }

@@ -39,8 +39,11 @@
     if(customer.flagPhone)
       vm.showPhones = false;
 
-    if(customer.selectedPhone != null)
-      vm.selectedPhone = customer.selectedPhone.NovoFormatoNumero  
+    if(customer.selectedPhone != null){
+      debugger
+      vm.selectedPhone = customer.selectedPhone.Id
+    }
+        
 
     FoneclubeService.getFlagsTypes(!vm.showPhones).then(function(result){
       vm.flagsTypes = result;
@@ -55,6 +58,7 @@
     })
 
     function changeSelectedPhone(phone){
+      console.log('changeSelectedPhone = ')
       vm.selectedPhone = phone.PersonPhoneId;
     }
 
@@ -92,11 +96,11 @@
           'PendingInteraction': vm.bitPendingInteraction == true,
           'IdPhone': vm.selectedPhone
         };
-
-        if(vm.showPlanList){
-          flag.PlanId = vm.selectedplan
-        }
         
+      }
+
+      if(vm.showPlanList){
+        flag.PlanId = vm.selectedplan.Id
       }
 
       
@@ -106,16 +110,26 @@
       FoneclubeService.postPersonFlag(flag).then(function(result) {
         debugger
         console.log(result);
-        if (result) {
-          DialogFactory.showAlertDialog({ message: 'Flag inserida com sucesso' });
-        } else {
+        if(result.EmailSuccess &&  result.FlagSuccess)
+        {
+          DialogFactory.showAlertDialog({ message: 'Flag inserida com sucesso e email enviado' });
+        }
+        else if(result.EmailSuccess && !result.FlagSuccess){
           DialogFactory.showAlertDialog({ message: 'Inserção de flag falhou' });
         }
+        else if(!result.EmailSuccess && result.FlagSuccess){
+          DialogFactory.showAlertDialog({ message: 'Inserção de flag falhou funcionou, email não enviado' });
+        }
+
+       
+
       }); 
 
     }
 
     function changePlan(plan){
+      console.log('changePlan')
+      console.log(plan)
       vm.selectedplan = plan
     }
 

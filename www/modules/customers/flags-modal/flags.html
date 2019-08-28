@@ -21,7 +21,7 @@
 
         <select 
           ng-if="vm.showPhones"
-          next-on-enter class="form-control"
+          class="form-control"
           ng-options="phone.PersonPhoneId as (phone.DisplayPhone + ' - ' + phone.PlanDescription) for phone in vm.customerPhones"
           ng-model="phone.PersonPhoneId"
           ng-change="vm.changeSelectedPhone(phone)"
