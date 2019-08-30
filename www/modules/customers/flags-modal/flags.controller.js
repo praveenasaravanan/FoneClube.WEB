@@ -74,6 +74,14 @@
 
     function onTapAddComment(data) {
 
+      var fullEmail = { 
+        To: vm.email,
+        Title: vm.subject, 
+        Body: vm.body, 
+        Cc: vm.cc, 
+        Bcc: vm.bcc 
+      };
+
       if(vm.selectedFlag == null)
         alert('Não é possível atribuir flag sem selecionar qual')
 
