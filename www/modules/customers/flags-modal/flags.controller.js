@@ -63,7 +63,24 @@
     }
 
     function changeFlag(flag){
+      
+      var selectedFlag;
       vm.selectedFlag = flag;
+
+      for(var i in vm.flagsTypes){
+        if(flag.IdType == vm.flagsTypes[i].IdType)
+        {
+          selectedFlag = vm.flagsTypes[i]
+        }
+      }
+
+      debugger
+      
+      vm.email = selectedFlag.FullEmail.To
+      vm.body = selectedFlag.FullEmail.Body
+      vm.subject = selectedFlag.FullEmail.Title
+      vm.cc = selectedFlag.FullEmail.Cc
+      vm.bcc = selectedFlag.FullEmail.Bcc
 
       if(vm.selectedFlag.IdType == 1 || vm.selectedFlag.IdType == 2)
         vm.showPlanList = true;
@@ -82,8 +99,11 @@
         Bcc: vm.bcc 
       };
 
-      if(vm.selectedFlag == null)
+      if(vm.selectedFlag == null){
         alert('Não é possível atribuir flag sem selecionar qual')
+        return
+      }
+        
 
       var flag;
       
@@ -94,7 +114,8 @@
           'IdFlagType' : vm.selectedFlag.IdType,
           'Description': vm.txtDescription,
           'PendingInteraction': vm.bitPendingInteraction == true,
-          'IdPerson': customer.Id
+          'IdPerson': customer.Id,
+          'FullEmail':fullEmail
         };
       }
       else{
@@ -102,7 +123,8 @@
           'IdFlagType' : vm.selectedFlag.IdType,
           'Description': vm.txtDescription,
           'PendingInteraction': vm.bitPendingInteraction == true,
-          'IdPhone': vm.selectedPhone
+          'IdPhone': vm.selectedPhone,
+          'FullEmail':fullEmail
         };
         
       }
