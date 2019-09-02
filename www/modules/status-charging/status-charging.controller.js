@@ -61,10 +61,6 @@ function StatusChargingController($scope, $interval, FoneclubeService, PagarmeSe
     for (var i = 0; i < sourceData.length; i++) {
       var customer = sourceData[i];
 
-      if (customer.Id == 4164) {
-        debugger;
-      }
-
       var RCobrado = customer.ammoutIntFormat;
       var customerSelectedCharge = '';
       var Tipo = '';

@@ -1,0 +1,188 @@
+<div id="divStatusCharging" class="row header-filter headernone" ng-init="onPageLoad()">
+    <fone-header title=""></fone-header>
+  <div class="clearfix"></div>
+  <div class="row" id="divTopFilters">
+    <div class="form-group col-xs-6 col-md-1">
+      <div id="divFilters" class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          <i class="fa fa-filter"></i> FILTROS
+          <i class="fa fa-carret"></i>
+        </button>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <div class="tfilter tcheckbox">
+            <label for="tcheckbox-all">
+              All
+              <input id="tcheckbox-all" type="checkbox" />
+            </label>
+          </div>
+
+          <div class="tfilter tcheckbox">
+            <label for="tcheckbox-active">
+              Somente ativos
+              <input id="tcheckbox-active" type="checkbox" />
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="divAll" class="form-group col-xs-6 col-md-2">
+      <p>
+        <input type="checkbox"> All</p>
+      <input type="text" class="form-control" placeholder="BUSCA" />
+    </div>
+
+
+    <div class="form-group col-xs-12 col-md-4">
+      <div id="divAIFilter">
+        <p>
+          <input type="checkbox"> So Ativo</p>
+        <p>
+          <input type="checkbox"> So InAtivo</p>
+        <p>
+          <input type="checkbox"> !Problema</p>
+      </div>
+      <div id="divColorFilters">
+          <p>
+            <input type="checkbox">
+            <span id="spnFilterGreen"></span>
+          </p>
+          <p>
+            <input type="checkbox">
+            <span id="spnFilterYellow"></span>
+          </p>
+          <p>
+            <input type="checkbox">
+            <span id="spnFilterRed"></span>
+          </p>
+        </div>
+        <div id="divExcFltr">
+            <p>
+                <input type="checkbox">
+                Exclude Father
+              </p>
+              <p>
+                <input type="checkbox">
+                Exclude Address
+              </p>
+        </div>
+    </div>
+    <div class="col-md-1 col-xs-6 form-group">        
+          <p>
+              <input type="checkbox">
+              <img src="../../content/img/message-red.png" />
+            </p>
+            <p style="margin-top: 5px;">
+              <input type="checkbox">
+              <img src="../../content/img/message-green.png" />
+            </p>
+    </div>
+
+    <div class="col-md-2 col-xs-6 form-group" id="divNameFltr">
+      <span style="color:green;">Name Filter</span>
+      <a href="javascript:void(0)"><i class="fa fa-save"></i></a> 
+    </div>
+    <div class="col-md-2 form-group col-xs-6 text-right">
+      <div class="btn-group">
+        <button class="btn btn-default busca-status " style="margin-top:0px" data-ng-click="exportToExcel()">
+            <i class="fa fa-file"></i>  
+          Export To Excel
+          </button>          
+        </div>
+    </div>
+  </div>
+
+  <div id="loadingDiv" style="display:none;">
+    <div class="row">
+      <div class="col-md-12">
+        <img src="../../content/img/Loading2.gif" style="width:50px" />
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Start -->
+      <div class="grid-container">
+        <kendo-grid id="customerGridData" options="customerGridOptions" k-data-source="customerDataSource"></kendo-grid>
+      </div>
+      <!-- End -->
+      <div class="clearfix"></div>
+    </div>
+  </div>
+
+</div>
+
+
+<style>
+  #loadingDiv {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background-color: #dcdcdc;
+    width: 100%;
+  }
+
+  .header-filter {
+    padding-top: 0;
+  }
+
+  #header-filter-top {
+    margin-top: 0px !important;
+  }
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+
+  .m-t-44 {
+    margin-top: 0px;
+  }
+
+  .otherOptions ul li {
+    padding: 0;
+    float: left;
+    list-style: none;
+    padding-right: 30px;
+  }
+
+  .k-grid-excel {
+    display: none;
+  }
+
+  .k-filter-row th,
+  .k-grid-header th.k-header {
+    height: 40px;
+  }
+
+  .k-grid-header th.k-header {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    vertical-align: middle;
+  }
+
+  .break-word {
+    word-wrap: break-word;
+    vertical-align: middle;
+    float: left;
+  }
+
+  .k-grid td.k-state-selected:hover,
+  .k-grid tr:hover {
+    color: #fff;
+    background-color: #35baf6;
+  }
+
+  .grid-container {
+    margin-right: 4%;
+    font-size: 14px;
+  }
+
+  .form-control {
+    padding: 0px 4px;
+    border-radius: 0px;
+  }
+</style>

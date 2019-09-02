@@ -1638,6 +1638,63 @@ textarea#nomeCartao {
 input[type='checkbox'] {
   margin-top: -4px; }
 
+#divStatusCharging #divTopFilters {
+  padding-top: 10px;
+  background-color: #EDF0F5;
+  border-bottom: 5px solid #A84FA8;
+  margin-top: 44px; }
+  #divStatusCharging #divTopFilters #divAll {
+    padding-left: 30px; }
+  #divStatusCharging #divTopFilters #divFilters {
+    position: relative;
+    top: 22px; }
+  #divStatusCharging #divTopFilters #divAIFilter, #divStatusCharging #divTopFilters #divColorFilters, #divStatusCharging #divTopFilters #divExcFltr {
+    float: left; }
+  #divStatusCharging #divTopFilters #divAIFilter {
+    width: 40%; }
+  #divStatusCharging #divTopFilters #divExcFltr {
+    width: 40%; }
+  #divStatusCharging #divTopFilters #divColorFilters {
+    width: 20%; }
+    #divStatusCharging #divTopFilters #divColorFilters #spnFilterGreen, #divStatusCharging #divTopFilters #divColorFilters #spnFilterYellow, #divStatusCharging #divTopFilters #divColorFilters #spnFilterRed {
+      padding: 0px 8px;
+      border-radius: 50%;
+      border-radius: 50%;
+      margin-left: 5px; }
+    #divStatusCharging #divTopFilters #divColorFilters #spnFilterGreen {
+      background-color: green; }
+    #divStatusCharging #divTopFilters #divColorFilters #spnFilterYellow {
+      background-color: yellow; }
+    #divStatusCharging #divTopFilters #divColorFilters #spnFilterRed {
+      background-color: red; }
+  #divStatusCharging #divTopFilters #divNameFltr {
+    text-align: center; }
+    #divStatusCharging #divTopFilters #divNameFltr i {
+      font-size: 25px;
+      margin-left: 10px;
+      color: black; }
+
+#divStatusCharging .grid-container {
+  width: 100%; }
+
+#divStatusCharging #loadingDiv {
+  z-index: 9999; }
+
+#divStatusCharging .payment-status-color {
+  text-align: center; }
+  #divStatusCharging .payment-status-color span {
+    padding: 5px 20px; }
+
+#divStatusCharging .break-word {
+  font-weight: bold; }
+
+#divStatusCharging .btn-flag {
+  content: '&#9872'; }
+
+@media only screen and (max-width: 600px) {
+  #divStatusCharging {
+    width: 100%; } }
+
 .new-card-modal .btn {
   margin-bottom: 5px; }
 

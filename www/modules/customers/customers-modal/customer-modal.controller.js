@@ -149,7 +149,10 @@
                 expiryDateAfter4.setDate(expiryDateAfter4.getDate() + 3);
 
                 var currentDate = new Date();
-                if (data.Charges.descriptionType == "Boleto" && data.Charges.PaymentStatusDescription == "WaitingPayment" && currentDate <= expiryDate) {
+                if (data.Charges.PaymentStatusDescription == "Paid") {
+                  data.Charges.statusColor = "Green";
+                }
+                else if (data.Charges.descriptionType == "Boleto" && data.Charges.PaymentStatusDescription == "WaitingPayment" && currentDate <= expiryDate) {
                   //  change status to "Aguardando Pagamento" = Green Icon
                   data.Charges.statusColor = "Green";
                 }
@@ -166,12 +169,17 @@
                 }
               }
               else {
-                data.Charges.statusColor = "grey";
+                if (data.Charges.PaymentStatusDescription == "Paid") {
+                  data.Charges.statusColor = "Green";
+                }
+                else {
+                  data.Charges.statusColor = "grey";
+                }
               }
             }
 
-            if( data.Charges.PaymentType == CARTAO && data.Charges.PaymentStatusDescription=='Paid'){
-              data.Charges.PaymentStatusDescription='Accepted';
+            if (data.Charges.PaymentType == CARTAO && data.Charges.PaymentStatusDescription == 'Paid') {
+              data.Charges.PaymentStatusDescription = 'Accepted';
             }
             vm.chargesArray.push(data); // na moral ning merece
           }
