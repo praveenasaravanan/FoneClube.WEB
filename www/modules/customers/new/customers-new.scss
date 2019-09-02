@@ -1,0 +1,79 @@
+#divStatusCharging{
+    
+#divTopFilters{
+    padding-top: 10px;
+    background-color: #EDF0F5;
+    border-bottom: 5px solid #A84FA8;
+    margin-top: 44px;
+
+    #divAll{
+        padding-left: 30px;
+    }
+    #divFilters{
+        position: relative;
+        top:22px;
+    }
+
+    #divAIFilter,#divColorFilters, #divExcFltr{
+        float:left;
+    }
+    #divAIFilter{
+        width:40%;
+    }
+    #divExcFltr{
+        width:40%;
+    }
+
+    #divColorFilters{
+        width:20%;
+        #spnFilterGreen, #spnFilterYellow, #spnFilterRed{
+            padding:0px 8px;
+            border-radius: 50%;   
+            border-radius: 50%;
+            margin-left: 5px;         
+        }
+        #spnFilterGreen{
+background-color: green;            
+        } #spnFilterYellow{
+            background-color: yellow;
+        } #spnFilterRed{
+            background-color: red;
+        }
+    }
+
+    #divNameFltr{
+        text-align: center;
+        i{
+            font-size: 25px;
+            margin-left: 10px;
+            color: black;
+        }
+    }
+}
+
+.grid-container{
+    width:100%;
+}
+#loadingDiv{
+    z-index: 9999;
+}
+
+.payment-status-color {
+    text-align: center;
+    span{
+        padding:5px 20px;
+    }
+}
+.break-word{
+    font-weight: bold;
+}
+.btn-flag{
+    content: '&#9872'
+}
+}
+
+@media only screen and (max-width: 600px) {
+    #divStatusCharging{
+        width:100%;
+    }
+} 

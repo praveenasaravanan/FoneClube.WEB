@@ -84,6 +84,15 @@
           }
         }
       })
+      .state('tabs.customers-new', {
+        url: "/customers-new",
+        views: {
+          'menu-tab': {
+            templateUrl: "modules/customers/new/customers-new.html",
+            controller: 'CustomersControllerNew as vm'
+          }
+        }
+      })
       .state('tabs.edicao', {
         url: "/edicao", 
         views: {      
