@@ -64,6 +64,7 @@
 
     function changeFlag(flag){
       
+      vm.hasEmailTosend = false;
       var selectedFlag;
       vm.selectedFlag = flag;
 
@@ -73,6 +74,9 @@
           selectedFlag = vm.flagsTypes[i]
         }
       }
+
+      vm.hasEmailTosend = (selectedFlag.FullEmail.Title != "")
+      
 
       debugger
       
@@ -89,7 +93,9 @@
 
     }
 
-    function onTapAddComment(data) {
+    function onTapAddComment(data, closeThisDialog) {
+
+      var showLoader = DialogFactory.showLoader('Fazendo envio...');
 
       var fullEmail = { 
         To: vm.email,
@@ -148,8 +154,10 @@
           DialogFactory.showAlertDialog({ message: 'Inserção de flag falhou' });
         }
         else if(!result.EmailSuccess && result.FlagSuccess){
-          DialogFactory.showAlertDialog({ message: 'Inserção de flag falhou funcionou, email não enviado' });
+          DialogFactory.showAlertDialog({ message: 'Inserção de flag funcionou' });
         }
+
+        showLoader.close();
 
        
 

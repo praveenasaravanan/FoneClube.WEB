@@ -21,7 +21,7 @@
     vm.hideLoader = hideLoader;
 
     var releaseMode = false;
-    var version = '1.1.5';
+    var version = '1.1.7';
 
     setFavicon();
 
