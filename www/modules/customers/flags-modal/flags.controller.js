@@ -154,7 +154,7 @@
           DialogFactory.showAlertDialog({ message: 'Inserção de flag falhou' });
         }
         else if(!result.EmailSuccess && result.FlagSuccess){
-          DialogFactory.showAlertDialog({ message: 'Inserção de flag funcionou' });
+          DialogFactory.showAlertDialog({ message: 'Flag inserida com sucesso' });
         }
 
         showLoader.close();

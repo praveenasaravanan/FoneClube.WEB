@@ -7,6 +7,7 @@
 
   function PagarmeService($q, HTTPService) {
     
+    
     //Testes
     var apiKey = 'ak_test_rIMnFMFbwNJR1A5RuTmSULl9xxDdoM';
     var encriptionKey = 'ek_test_5rLvyIU3tqMGHKAj94kpCuqSWT37Ps';
