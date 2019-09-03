@@ -95,79 +95,84 @@
 
     function onTapAddComment(data, closeThisDialog) {
 
-      var showLoader = DialogFactory.showLoader('Fazendo envio...');
-
-      var fullEmail = { 
-        To: vm.email,
-        Title: vm.subject, 
-        Body: vm.body, 
-        Cc: vm.cc, 
-        Bcc: vm.bcc 
-      };
-
+      debugger;
       if(vm.selectedFlag == null){
         alert('Não é possível atribuir flag sem selecionar qual')
-        return
+        return;
       }
-        
+      else if((vm.selectedplan == null || vm.selectedplan == undefined) && (vm.selectedFlag.IdType == 1 || vm.selectedFlag.IdType == 2)){
+        alert('Não é possível atribuir flag desse tipo sem selecionar qual plano')
+        return;
+      }
+      else if(vm.hasEmailTosend && (vm.selectedPhone == null || vm.selectedPhone == undefined)){
+        alert('Não é possível atribuir flag e enviar email sem selecionar telefone')
+        return;
+      }
+      else {
 
-      var flag;
-      
-      debugger;
+        closeThisDialog(0)
+        var showLoader = DialogFactory.showLoader('Fazendo envio...');
 
-      if(vm.selectedPhone == null){
-        flag = {
-          'IdFlagType' : vm.selectedFlag.IdType,
-          'Description': vm.txtDescription,
-          'PendingInteraction': vm.bitPendingInteraction == true,
-          'IdPerson': customer.Id,
-          'FullEmail':fullEmail
+        var fullEmail = { 
+          To: vm.email,
+          Title: vm.subject, 
+          Body: vm.body, 
+          Cc: vm.cc, 
+          Bcc: vm.bcc 
         };
-      }
-      else{
-        flag = {
-          'IdFlagType' : vm.selectedFlag.IdType,
-          'Description': vm.txtDescription,
-          'PendingInteraction': vm.bitPendingInteraction == true,
-          'IdPhone': vm.selectedPhone,
-          'FullEmail':fullEmail
-        };
-        
-      }
-
-      if(vm.showPlanList){
-        flag.PlanId = vm.selectedplan.Id
-      }
-
-      
-      debugger;
-
-      
-      FoneclubeService.postPersonFlag(flag).then(function(result) {
-        debugger
-        console.log(result);
-        if(result.EmailSuccess &&  result.FlagSuccess)
-        {
-          DialogFactory.showAlertDialog({ message: 'Flag inserida com sucesso e email enviado' });
+          
+        var flag;
+  
+        if(vm.selectedPhone == null){
+          flag = {
+            'IdFlagType' : vm.selectedFlag.IdType,
+            'Description': vm.txtDescription,
+            'PendingInteraction': vm.bitPendingInteraction == true,
+            'IdPerson': customer.Id,
+            'FullEmail':fullEmail
+          };
         }
-        else if(result.EmailSuccess && !result.FlagSuccess){
-          DialogFactory.showAlertDialog({ message: 'Inserção de flag falhou' });
+        else{
+          flag = {
+            'IdFlagType' : vm.selectedFlag.IdType,
+            'Description': vm.txtDescription,
+            'PendingInteraction': vm.bitPendingInteraction == true,
+            'IdPhone': vm.selectedPhone,
+            'FullEmail':fullEmail
+          };
+          
         }
-        else if(!result.EmailSuccess && result.FlagSuccess){
-          DialogFactory.showAlertDialog({ message: 'Flag inserida com sucesso' });
+  
+        if(vm.showPlanList){
+          flag.PlanId = vm.selectedplan.Id
         }
 
-        showLoader.close();
+        FoneclubeService.postPersonFlag(flag).then(function(result) {
+          debugger
+          console.log(result);
+          if(result.EmailSuccess &&  result.FlagSuccess)
+          {
+            DialogFactory.showAlertDialog({ message: 'Flag inserida com sucesso e email enviado' });
+          }
+          else if(result.EmailSuccess && !result.FlagSuccess){
+            DialogFactory.showAlertDialog({ message: 'Inserção de flag falhou' });
+          }
+          else if(!result.EmailSuccess && result.FlagSuccess){
+            DialogFactory.showAlertDialog({ message: 'Flag inserida com sucesso' });
+          }
+  
+          showLoader.close();
+  
+        }); 
+      }
 
-       
-
-      }); 
 
     }
 
     function changePlan(plan){
       console.log('changePlan')
       console.log(plan)
+      debugger
       vm.selectedplan = plan
     }
 

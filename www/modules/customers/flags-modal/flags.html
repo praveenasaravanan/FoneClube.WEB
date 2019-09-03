@@ -22,7 +22,7 @@
         <select 
           ng-if="vm.showPhones"
           class="form-control"
-          ng-options="phone.PersonPhoneId as (phone.DisplayPhone + ' - ' + phone.PlanDescription) for phone in vm.customerPhones"
+          ng-options="phone.PersonPhoneId as (phone.DisplayPhone + ' - ' + phone.PlanDescription + ' - ' + phone.NickName) for phone in vm.customerPhones"
           ng-model="phone.PersonPhoneId"
           ng-change="vm.changeSelectedPhone(phone)"
           style="width: 300px; margin-left: 15px;">
@@ -131,7 +131,7 @@
         </div>
         <button
           class="btn btn-success col-xs-12"
-          on-tap="vm.onTapAddComment(vm, closeThisDialog); closeThisDialog(0)"
+          on-tap="vm.onTapAddComment(vm, closeThisDialog);"
         >
           Enviar
         </button>
