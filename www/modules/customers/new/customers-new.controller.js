@@ -1,13 +1,6 @@
-
-
-
-
-//angular.module('foneClub', ['kendo.directives']);
 angular.module('foneClub').controller('CustomersControllerNew', CustomersControllerNew);
 
-
-
-function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeService) {
+function CustomersControllerNew($interval, FoneclubeService, PagarmeService, FlowManagerService, $filter) {
 
     var vm = this;
     var CARTAO = 1;
@@ -54,6 +47,121 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
         { id: 1, title: 'A' },
         { id: 2, title: 'C' }
     ]
+    vm.includeActive = false;
+    vm.includeInActive = false;
+    vm.loading = false;
+    vm.excludeFather = false;
+    vm.excludeAddress = false;
+    vm.excludeWhatsappUsers = false;
+    vm.includeWhatsappUsers = false;
+    vm.includeStatusGreen = false;
+    vm.includeStatusYellow = false;
+    vm.includeStatusRed = false;
+    vm.filterTextInAllCols = false;
+    vm.searchText = "";
+    vm.customerDataSource;
+    vm.customerGridOptions;
+
+    vm.filterClients = filterClients;
+    vm.onTapCustomerEdit = onTapCustomerEdit;
+    vm.onPageLoad = onPageLoad;
+    vm.exportToExcel = exportToExcel;
+
+    //BEGIN: New Functions
+    function filterClients() {
+        vm.loading = true;
+        var filteredData = $filter('filter')(vm.customers, function (data) {
+            if (data.fullData) {
+                return ((excludeAllFilters()) ||
+                    (filterByText(data)) &&
+                    ((!vm.includeActive && !vm.includeInActive) ||
+                        (vm.includeActive ? data.fullData.Desativo == false : false) ||
+                        (vm.includeInActive ? data.fullData.Desativo == true : false)) &&
+
+                    (vm.excludeFather ? !data.fullData.NameParent : true) &&
+                    (vm.excludeAddress ? !data.fullData.Adresses.length : true) &&
+
+                    ((!vm.excludeWhatsappUsers && !vm.includeWhatsappUsers) ||
+                        (vm.excludeWhatsappUsers ? (!data.fullData.WClient || !data.fullData.WClient.IsRegisteredWithChat2Desk) : false) ||
+                        (vm.includeWhatsappUsers ? (data.fullData.WClient && data.fullData.WClient.IsRegisteredWithChat2Desk) : false)) &&
+
+                    ((!vm.includeStatusGreen && !vm.includeStatusYellow && !vm.includeStatusRed) ||
+                        (vm.includeStatusGreen ? filterStatusColor(data, "green") : false) ||
+                        (vm.includeStatusYellow ? filterStatusColor(data, "yellow") : false) ||
+                        (vm.includeStatusRed ? filterStatusColor(data, "red") : false))
+                );
+            }
+            else {
+                return false;
+            }
+        });
+        vm.loading = false;
+        handleData(filteredData);
+        initDataProperties(filteredData);
+    }
+
+    function filterByText(data) {
+        if (vm.searchText) {
+            vm.searchText = vm.searchText.toLowerCase();
+
+            if (vm.filterTextInAllCols) {
+                return data.Id.toString().toLowerCase().indexOf(vm.searchText) > -1 ||
+                    data.Name.toLowerCase().indexOf(vm.searchText) > -1 ||
+                    data.Email.toLowerCase().indexOf(vm.searchText) > -1 ||
+                    matchPhone(data.Phones, vm.searchText);
+            } else {
+                return data.Name.toLowerCase().indexOf(vm.searchText) > -1;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    function filterStatusColor(data, color) {
+        return (data.ChargeAndServiceOrderHistory &&
+            data.ChargeAndServiceOrderHistory.Charges &&
+            data.ChargeAndServiceOrderHistory.Charges.PaymentStatusColor == color)
+    }
+
+    function excludeAllFilters() {
+        return !vm.includeActive
+            && !vm.includeInActive
+            && !vm.excludeFather
+            && !vm.excludeAddress
+            && !vm.excludeWhatsappUsers
+            && !vm.includeWhatsappUsers
+            && !vm.includeStatusGreen
+            && !vm.includeStatusYellow
+            && !vm.includeStatusRed
+            && !vm.searchText;
+    }
+
+    function matchPhone(phones, numberToCompare) {
+        numberToCompare = numberToCompare.replace(/[!#$%&'()*+,-./:;?@[\\\]_`{|}~' 'éá]/g, '');
+        if (phones && phones.length > 0) {
+            if (phones[0] == null) {
+                return false;
+            } else {
+                var phone = $filter('filter')(phones, function (data) {
+                    return (data.Number ? ("55" + data.DDD + data.Number.toString()).indexOf(numberToCompare) > -1 : false);
+                });
+
+                return phone.length > 0;
+            }
+        }
+
+        return false;
+    }
+
+    function onTapCustomerEdit(id) {
+        var customer = findCustomerById(id);
+        FlowManagerService.changeEdicaoView(customer.fullData);
+    }
+
+
+
+    //END: New Functions
+
 
     function convertToViewModel(sourceData) {
         var customerDataList = [];
@@ -78,12 +186,21 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
             var Dias = 0;
             var Status = '';//customer.descricaoStatus;
             var PaymentStatusColor = '';
-            var WhatsappImage = 'message-red.png';
+            var WhatsappImage = '../../content/img/message-red.png';
 
             if (isNaN(Dias2)) {
                 Dias2 = 0;
             }
             ///////////////
+            if (customer.fullData.WClient && customer.fullData.WClient.IsRegisteredWithChat2Desk) {
+                if (customer.fullData.WClient.ProfilePicUrl) {
+                    WhatsappImage = customer.fullData.WClient.ProfilePicUrl;
+                }
+                else {
+                    WhatsappImage = '../../content/img/message-green.png';
+                }
+            }
+
             if (customer.ChargeAndServiceOrderHistory && customer.ChargeAndServiceOrderHistory.Charges) {
                 var charge = customer.ChargeAndServiceOrderHistory.Charges;
                 RPago = charge.Ammount;
@@ -107,16 +224,16 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
 
                     var currentDate = new Date();
                     if (charges.PaymentStatusDescription == "Paid") {
-                        PaymentStatusColor = "Green";
+                        PaymentStatusColor = "green";
                     }
                     else if (charges.descriptionType == "Boleto" && charges.PaymentStatusDescription == "WaitingPayment" && currentDate <= expiryDate) {
-                        PaymentStatusColor = "Green";
+                        PaymentStatusColor = "green";
                     }
                     else if (charges.descriptionType == "Boleto" && charges.PaymentStatusDescription == "WaitingPayment" && currentDate < expiryDateAfter3) {
-                        PaymentStatusColor = "Yellow";
+                        PaymentStatusColor = "yellow";
                     }
                     else if (charges.descriptionType == "Boleto" && charges.PaymentStatusDescription == "WaitingPayment" && currentDate > expiryDateAfter3) {
-                        PaymentStatusColor = "Red";
+                        PaymentStatusColor = "red";
                     }
                     else {
                         PaymentStatusColor = "grey";
@@ -124,12 +241,14 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
 
                 } else {
                     if (charges.PaymentStatusDescription == "Paid") {
-                        PaymentStatusColor = "Green";
+                        PaymentStatusColor = "green";
                     }
                     else {
                         PaymentStatusColor = "grey";
                     }
                 }
+
+                charges.PaymentStatusColor = PaymentStatusColor;
                 //END
             }
 
@@ -191,7 +310,7 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
                 'PaymentStatusColor': PaymentStatusColor,
                 'WhatsappImage': WhatsappImage,
                 'CustomerName': CustomerName,
-
+                'CustomerId': customer.Id,
                 'UltimaCob': UltimaCob,
                 'Dias': Dias,
                 'RCobrado': RCobrado,
@@ -213,45 +332,91 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
         return customerDataList;
     }
 
-    $scope.onPageLoad = function () {
-
-        $scope.onClickSearchCustomerData();
+    function onPageLoad() {
+        loadCustomers();
     }
 
-    $scope.onClickSearchCustomerData = function () {
-        $('#loadingDiv').show();
+    function loadCustomers() {
         vm.loading = true;
         vm.totalReceivedReady = false;
         hasUpdate = false;
         var ativos = vm.somenteAtivos ? 1 : 0;
-        FoneclubeService.getStatusCharging(vm.month, vm.year, ativos).then(function (result) {
+        getAllCustomers(function (data) {
+            FoneclubeService.getStatusCharging(vm.month, vm.year, ativos).then(function (result) {
 
-            vm.customers = result;
-            for (var i in vm.customers) {
+                vm.customers = result;
+                for (var i in vm.customers) {
+                    for (var customer in data) {
+                        if (data[customer].Id == vm.customers[i].Id) {
+                            vm.customers[i].fullData = data[customer];
+                        }
+                    }
 
-                vm.customers[i].allChargingsCanceled = false;
+                    vm.customers[i].allChargingsCanceled = false;
 
-                for (var o in vm.customers[i].ChargingValidity) {
-                    vm.customers[i].ChargingValidity[o].display = true;
+                    for (var o in vm.customers[i].ChargingValidity) {
+                        vm.customers[i].ChargingValidity[o].display = true;
+                    }
                 }
-            }
-            handleData(vm.customers);
-            // loadPaymentHistory();
-            var gridData = vm.customers;
-            initDataProperties(gridData);
-        })
+                handleData(vm.customers);
+                var gridData = vm.customers;
+                initDataProperties(gridData);
+            });
+        });
     }
 
-    $scope.exportToExcel = function () {
+    function exportToExcel() {
         $('.k-grid-excel').trigger("click")
     }
+
+    function findCustomerById(id) {
+        for (var customer in vm.customers) {
+            if (vm.customers[customer].Id == id) {
+                return vm.customers[customer];
+            }
+        }
+    }
+
+    function getAllCustomers(callback) {
+        FoneclubeService.getAllCustomers(false).then(function (result) {
+            var customers = result.map(function (user) {
+                user.Phones = user.Phones.map(function (phone) {
+                    if (phone) {
+                        phone.phoneFull = phone.DDD.concat(phone.Number);
+                    }
+                    return phone;
+                });
+                return user;
+            });
+            var customersSemSoftDelete = [];
+            for (var i in customers) {
+                var customer = customers[i];
+                if (!customer.SoftDelete) {
+                    customer.PhoneDDDParent = null;
+                    customer.PhoneNumberParent = null;
+                    for (var i in customer.Phones) {
+                        if (customer.Phones[i]) {
+                            if (!customer.Phones[i].IsFoneclube) {
+                                customer.Phones.splice(i, 1);
+                            }
+                        }
+                    }
+
+                    customersSemSoftDelete.push(customer);
+                }
+            }
+
+            callback(customers);
+        });
+    }
+
 
     function initDataProperties(customerDatasource) {
         var customerData = convertToViewModel(customerDatasource);
         var totalRecords = customerData.length + 10;
         var pageHeight = $(window).height() - 110;
 
-        $scope.customerDataSource = new kendo.data.DataSource({
+        vm.customerDataSource = new kendo.data.DataSource({
             data: customerData,
             pageSize: totalRecords,
             schema: {
@@ -263,8 +428,8 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
                 }
             },
         });
-        $scope.customerGridOptions = {
-            dataSource: $scope.customerDataSource,
+        vm.customerGridOptions = {
+            dataSource: vm.customerDataSource,
             height: pageHeight,
             toolbar: ["excel"],
             excel: {
@@ -282,24 +447,24 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
             reorderable: true,
             resizable: true,
 
-            // filterable: {
-            //     mode: "row",
-            //     extra: false,
-            //     operators: {
-            //         string: {
-            //             contains: "Contains",
-            //             startswith: "Starts with",
-            //             eq: "Is equal to",
-            //             neq: "Is not equal to"
-            //         },
-            //         number: {
-            //             eq: "Equal to",
-            //             neq: "Not equal to",
-            //             gte: "Greater Than",
-            //             lte: "Less Than"
-            //         }
-            //     }
-            // },
+            filterable: {
+                mode: "row",
+                extra: false,
+                operators: {
+                    string: {
+                        contains: "Contains",
+                        startswith: "Starts with",
+                        eq: "Is equal to",
+                        neq: "Is not equal to"
+                    },
+                    number: {
+                        eq: "Equal to",
+                        neq: "Not equal to",
+                        gte: "Greater Than",
+                        lte: "Less Than"
+                    }
+                }
+            },
             columns: [
                 {
                     field: "PaymentStatusColor",
@@ -313,12 +478,14 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
                     title: "Payment Status",
                     width: "50px",
                     headerTemplate: "<img src='../../content/img/message-red.png' />",
-                    template: "<div><img src='../../content/img/#:WhatsappImage#' /></div>"
+                    template: "<div><img class='imgWhatsapp' src='#:WhatsappImage#' /></div>"
+                    // template: " #if(IndexOfSubstr(WhatsappImage, 'http') == 0 ) {# <div><img src='#:WhatsappImage#' /></div> #} else{#  <div><img src='../../content/img/#:WhatsappImage#' /></div>  #}# "
                 },
                 {
                     field: "CustomerName", title: "Name",
                     width: "200px",
                     headerTemplate: "<div class='break-word'>Name<div>",
+                    template: '<a ng-click="vm.onTapCustomerEdit(#:CustomerId#)" style="cursor: pointer;">#:CustomerName#</a>',
                     filterable: {
                         cell: {
                             operator: "contains",
@@ -328,26 +495,26 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
                 },
 
                 {
-                    field: "Flag",headerTemplate:'',
+                    field: "Flag", headerTemplate: '',
                     width: "50px",
                     template: "<button title='Flag' class='btn btn-primary btn-flag'>⚐<i aria-hidden='true'></i></button>",
                 },
                 {
-                    field: "ServiceOrder",headerTemplate:'',
+                    field: "ServiceOrder", headerTemplate: '',
                     width: "50px",
                     template: '<button title="Service Order" class="btn btn-primary"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button>',
                 },
                 {
-                    field: "Boleto",headerTemplate:'',
+                    field: "Boleto", headerTemplate: '',
                     width: "50px",
                     template: '<button title="Boleto" class="btn btn-primary"><i class="glyphicon glyphicon-retweet"></i></button>',
                 },
                 {
-                    field: "CreditCard",headerTemplate:'',
+                    field: "CreditCard", headerTemplate: '',
                     width: "50px",
                     template: '<button title="Credit Card" class="btn btn-primary"><i class="glyphicon glyphicon-credit-card"></i></button>',
                 },
-                
+
                 {
                     field: "Dias", title: "Ultima Cobrança Dias", width: "150px"
                     , headerTemplate: "<div class='break-word'>Ultima Cobrança<br> Dias<div>",
@@ -468,8 +635,6 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
             ]
         }
         vm.loading = false;
-
-        $('#loadingDiv').hide();
     }
 
 
@@ -524,7 +689,9 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
                     if (charge.PaymentType == 2 && charge.BoletoId != 0) {
                         customer.descricaoTipo = vm.PagamentosType.BOLETO;
                         PagarmeService.getStatusBoletoRecursivo(charge.BoletoId, customer, vm, index, i).then(function (result) {
-
+                            if (!result.length) {
+                                return;
+                            }
                             //result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].descricaoTipo = vm.PagamentosType.BOLETO;
                             result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].StatusDescription = 'INVÁLIDO'
 
@@ -610,56 +777,6 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
 
     }
 
-    function loadPaymentHistory() {
-        for (var index in vm.customers) {
-
-            FoneclubeService.getChargeAndServiceOrderHistoryDinamic(vm.customers[index].Id, index).then(function (result) {
-
-                if (result.length == 0) {
-                }
-                else {
-
-                    // TODO TEMPORARIO
-                    var dataCobranca;
-                    try {
-
-                        // dataCobranca = result[0].Charges.PaymentDate.substring(0,10).replace('-','/').replace('-','/');
-                        dataCobranca = result[0].Charges.CreationDate;
-                    }
-                    catch (erro) {
-
-                        // dataCobranca = result[0].CreatedDate.substring(0,10).replace('-','/').replace('-','/')
-                        dataCobranca = result[0].CreatedDate
-                    }
-
-                    var dataConvertida = new Date(dataCobranca).toISOString().split('T')[0].replace('-', '/').replace('-', '/');
-                    var mes = dataConvertida.substring(5, 7);
-                    var ano = dataConvertida.substring(0, 4);
-
-                    var selecionado = new Date(vm.year.toString() + '/' + vm.month.toString()).toISOString().split('T')[0].replace('-', '/').replace('-', '/');
-                    var mesSelecionado = selecionado.substring(5, 7);
-                    var anoSelecionado = selecionado.substring(0, 4);
-
-                    if (mesSelecionado == mes && anoSelecionado == ano) {
-                        vm.customers[result.indexLista].dataIgual = true;
-                    }
-
-                    vm.customers[result.indexLista].chargingDate = dataConvertida;
-                    vm.customers[result.indexLista].chargingDateDiffDays = diffDays(dataConvertida);
-                    vm.customers[result.indexLista].LastPaidDateDiffDays = diffDays(vm.customers[result.indexLista].LastPaidDate);
-                }
-            });
-        }
-        for (var index in vm.customers) {
-            if (vm.customers[index].chargingDate == undefined || vm.customers[index].chargingDate == null) {
-                vm.customers[index].chargingDate = new Date('2000/01/01').toISOString().split('T')[0].replace('-', '/').replace('-', '/');
-                vm.customers[index].chargingDateDiffDays = diffDays(vm.customers[index].chargingDate);
-            }
-        }
-    }
-
-
-
     var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds            
     var secondDate = new Date();
 
@@ -704,4 +821,4 @@ function CustomersControllerNew($scope, $interval, FoneclubeService, PagarmeServ
 };
 
 
-StatusChargingController.$inject = ['$scope', '$interval', 'FoneclubeService', 'PagarmeService']; 
+StatusChargingController.$inject = ['$interval', 'FoneclubeService', 'PagarmeService', 'FlowManagerService', '$filter']; 
