@@ -11,6 +11,7 @@
 
     //API tests
     var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+    //var urlApi = 'http://api.foneclube.com.br/api';
 
     this.postBasePerson = postBasePerson;
     this.postUpdatePerson = postUpdatePerson;
