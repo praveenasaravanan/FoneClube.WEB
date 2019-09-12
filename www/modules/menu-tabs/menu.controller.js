@@ -65,6 +65,9 @@
             else if (screen == 'all-phones-new') { 
               FlowManagerService.changeAllPhoneNewView();
             }
+            else if (screen == 'customers-new') { 
+                FlowManagerService.changeNewHomeView();
+              }
             else {
                 
             }

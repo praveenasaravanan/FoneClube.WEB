@@ -1,6 +1,6 @@
 angular.module('foneClub').controller('CustomersControllerNew', CustomersControllerNew);
 
-function CustomersControllerNew($interval, FoneclubeService, PagarmeService, FlowManagerService, $filter) {
+function CustomersControllerNew($interval, FoneclubeService, PagarmeService, FlowManagerService, $filter, ViewModelUtilsService) {
 
     var vm = this;
     var CARTAO = 1;
@@ -49,6 +49,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
     ]
     vm.includeActive = false;
     vm.includeInActive = false;
+    vm.excludeProblema = false;
     vm.loading = false;
     vm.excludeFather = false;
     vm.excludeAddress = false;
@@ -60,15 +61,28 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
     vm.filterTextInAllCols = false;
     vm.searchText = "";
     vm.customerDataSource;
+    vm.customerViewModel;
     vm.customerGridOptions;
 
     vm.filterClients = filterClients;
+    vm.onTapCustomer = onTapCustomer;
     vm.onTapCustomerEdit = onTapCustomerEdit;
+    vm.onTapMessage = onTapMessage;
+    vm.onTapFlag = onTapFlag;
+    vm.onTapComment = onTapComment;
+    vm.onTapBoletoPayment = onTapBoletoPayment;
+    vm.onDeleteCustomer = onDeleteCustomer;
     vm.onPageLoad = onPageLoad;
     vm.exportToExcel = exportToExcel;
+    vm.testLoading = testLoading;
 
     //BEGIN: New Functions
+    function testLoading() { }
     function filterClients() {
+        vm.loading = true;
+        filterClientsData();
+    }
+    function filterClientsData() {
         vm.loading = true;
         var filteredData = $filter('filter')(vm.customers, function (data) {
             if (data.fullData) {
@@ -95,9 +109,8 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                 return false;
             }
         });
+        refreshGrid(filteredData);
         vm.loading = false;
-        handleData(filteredData);
-        initDataProperties(filteredData);
     }
 
     function filterByText(data) {
@@ -157,25 +170,75 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
         var customer = findCustomerById(id);
         FlowManagerService.changeEdicaoView(customer.fullData);
     }
+    function onTapMessage(id) {
+        var customer = findCustomerById(id);
+        ViewModelUtilsService.showModalWhatsapp(customer);
+    }
+    function onTapFlag(id) {
+        var customer = findCustomerById(id);
+        ViewModelUtilsService.showModalFlag(customer);
+    }
+    function onTapComment(id) {
+        var customer = findCustomerById(id);
+        ViewModelUtilsService.showModalComment(customer);
+    }
+    function onTapBoletoPayment(id) {
+        var customer = findCustomerById(id);
+        ViewModelUtilsService.showModalBoletoPayment(customer);
+    }
+    function onTapCustomer(id, index) {
+        var customer = findCustomerById(id);
+        ViewModelUtilsService.showModalCustomer(customer, index);
+    }
+    function onDeleteCustomer(id) {
+        var r = confirm('Deseja fazer um soft delete nesse cliente?');
+        if (r == true) {
+            var customer = findCustomerById(id);//// 
+            FoneclubeService.postSoftDeleteCustomer(customer).then(function (result) {
+                if (result) {
+                    alert('Cliente deletado');
+                    var index = vm.customers.indexOf(vm.customers.filter(v => v.Id == id)[0]);
+                    if (index >= 0) {
+                        vm.customers.splice(index, 1);
+                        refreshGrid(vm.customers);
+                    }
+                }
+            });
+        } else {
+        }
+    }
 
-
-
+    function refreshGrid(data) {
+        var customerData = convertToViewModel(data);
+        var totalRecords = customerData.length + 10;
+        vm.customerDataSource = new kendo.data.DataSource({
+            data: customerData,
+            pageSize: totalRecords,
+            schema: {
+                model: {
+                    fields: {
+                        Dias: { type: "number" },
+                        AcaoBool: { type: "boolean" },
+                    }
+                }
+            },
+        });
+    }
     //END: New Functions
-
 
     function convertToViewModel(sourceData) {
         var customerDataList = [];
 
         for (var i = 0; i < sourceData.length; i++) {
             var customer = sourceData[i];
-
             var RCobrado = customer.ammoutIntFormat;
             var customerSelectedCharge = '';
             var Tipo = '';
             var TipoLink = '';
             var Acao = '';
             var AcaoBool = false;
-            var Vencimento = customer.boletoExpires;
+            var Vencimento = '-'
+            var Vigencia=customer.boletoExpires;
             var Ultimopag = customer.LastPaidDate;
             var Dias2 = diffDays(customer.LastPaidDate);
             var RPago = 0;
@@ -213,6 +276,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                 customer.chargingDate = charge.CreationDate;
                 customer.chargingDateDiffDays = diffDays(dataConvertida);
                 Status = charge.PaymentStatusDescription;
+                Vencimento=charge.TransactionLastUpdate
 
                 //BEGIN: Set status color                
                 var charges = customer.ChargeAndServiceOrderHistory.Charges;
@@ -305,6 +369,9 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                 //debugger;
 
             }
+            if (RPago) {
+                RPago = parseFloat(RPago / 100);//.toString().replace('.', ',');
+            }
 
             customerDataList.push({
                 'PaymentStatusColor': PaymentStatusColor,
@@ -329,6 +396,8 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                 'RPago': RPago
             });
         }
+
+        vm.customerViewModel = customerDataList;
         return customerDataList;
     }
 
@@ -372,7 +441,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
     function findCustomerById(id) {
         for (var customer in vm.customers) {
             if (vm.customers[customer].Id == id) {
-                return vm.customers[customer];
+                return vm.customers[customer].fullData;
             }
         }
     }
@@ -414,7 +483,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
     function initDataProperties(customerDatasource) {
         var customerData = convertToViewModel(customerDatasource);
         var totalRecords = customerData.length + 10;
-        var pageHeight = $(window).height() - 110;
+        var pageHeight = $(window).height() - 150;
 
         vm.customerDataSource = new kendo.data.DataSource({
             data: customerData,
@@ -471,21 +540,36 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                     title: "Payment Status",
                     width: "120px",
                     headerTemplate: "<div class='break-word'>Payment Status<div>",
-                    template: "<div class='payment-status-color'><span style='background-color:#:PaymentStatusColor#'></span></div>"
+                    template: "<div class='payment-status-color'><span style='background-color:#:PaymentStatusColor#'></span></div>",
+                    filterable: {
+                        cell: {
+                            showOperators: false,
+                            template: function (args) {
+                                args.element.kendoDropDownList({
+                                    dataTextField: "text",
+                                    dataValueField: "text",
+                                    dataSource: new kendo.data.DataSource({ data: [{ text: 'Red' }, { text: 'Yellow' }, { text: 'Green' }] }),
+                                    index: 0,
+                                    optionLabel: { text: "", value: "" },
+                                    valuePrimitive: true
+                                })
+                            }
+                        }
+                    }
                 },
                 {
                     field: "WhatsappImage",
                     title: "Payment Status",
                     width: "50px",
                     headerTemplate: "<img src='../../content/img/message-red.png' />",
-                    template: "<div><img class='imgWhatsapp' src='#:WhatsappImage#' /></div>"
-                    // template: " #if(IndexOfSubstr(WhatsappImage, 'http') == 0 ) {# <div><img src='#:WhatsappImage#' /></div> #} else{#  <div><img src='../../content/img/#:WhatsappImage#' /></div>  #}# "
+                    template: "<div><img ng-click='vm.onTapMessage(#:CustomerId#)' class='imgWhatsapp link' src='#:WhatsappImage#' /></div>",
+                    filterable: false
                 },
                 {
                     field: "CustomerName", title: "Name",
                     width: "200px",
                     headerTemplate: "<div class='break-word'>Name<div>",
-                    template: '<a ng-click="vm.onTapCustomerEdit(#:CustomerId#)" style="cursor: pointer;">#:CustomerName#</a>',
+                    template: '<a ng-click="vm.onTapCustomerEdit(#:CustomerId#)" class="link">#:CustomerName#</a>',
                     filterable: {
                         cell: {
                             operator: "contains",
@@ -495,29 +579,40 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                 },
 
                 {
-                    field: "Flag", headerTemplate: '',
+                    field: "", headerTemplate: '',
                     width: "50px",
-                    template: "<button title='Flag' class='btn btn-primary btn-flag'>⚐<i aria-hidden='true'></i></button>",
+                    template: '<button ng-click="vm.onTapCustomer(#:CustomerId#)" title="Service Order" class="btn btn-primary"><i class="glyphicon glyphicon-usd" aria-hidden="true"></i></button>',
                 },
                 {
-                    field: "ServiceOrder", headerTemplate: '',
+                    field: "", headerTemplate: '',
                     width: "50px",
-                    template: '<button title="Service Order" class="btn btn-primary"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button>',
+                    template: "<button ng-click='vm.onTapFlag(#:CustomerId#)' title='Flag' class='btn btn-primary btn-flag'>⚐<i aria-hidden='true'></i></button>",
                 },
                 {
-                    field: "Boleto", headerTemplate: '',
+                    field: "", headerTemplate: '',
                     width: "50px",
-                    template: '<button title="Boleto" class="btn btn-primary"><i class="glyphicon glyphicon-retweet"></i></button>',
+                    template: '<button ng-click="vm.onTapComment(#:CustomerId#)" title="Service Order" class="btn btn-primary"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button>',
                 },
                 {
-                    field: "CreditCard", headerTemplate: '',
+                    field: "", headerTemplate: '',
                     width: "50px",
-                    template: '<button title="Credit Card" class="btn btn-primary"><i class="glyphicon glyphicon-credit-card"></i></button>',
+                    template: '<button ng-click="vm.onTapBoletoPayment(#:CustomerId#)" title="Boleto" class="btn btn-primary"><i class="glyphicon glyphicon-retweet"></i></button>',
                 },
-
                 {
-                    field: "Dias", title: "Ultima Cobrança Dias", width: "150px"
-                    , headerTemplate: "<div class='break-word'>Ultima Cobrança<br> Dias<div>",
+                    field: "", headerTemplate: '',
+                    width: "50px",
+                    template: '<button ng-click="vm.onTapCustomer(#:CustomerId#)" title="Credit Card" class="btn btn-primary"><i class="glyphicon glyphicon-credit-card"></i></button>',
+                },
+                {
+                    field: "", headerTemplate: '',
+                    width: "50px",
+                    template: '<button title="Soft delete" class="btn btn-primary" ng-click="vm.onDeleteCustomer(#:CustomerId#)"><i class="glyphicon glyphicon-remove-circle uncheckcircle"></i></button>',
+                    filterable: false
+                },
+                {
+                    field: "Dias", title: "Ultima Cob.", width: "150px"
+                    , headerTemplate: "<div class='break-word'>Ultima Cob.<div>",
+                    template: "<div class='text-center'>#:Dias#<div>",
                     filterable: {
                         cell: {
                             operator: "gte",
@@ -538,20 +633,20 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                     }
                 },
                 {
-                    field: "RCobrado", title: "Ult. Cob. Valor R$", width: "110px",
+                    field: "RCobrado", title: "Ult. Cob. Valor R$", width: "150px",
                     headerTemplate: "<div class='break-word'>Ult. Cob. Valor<br> R$<div>",
                     filterable: {
                         cell: {
-                            showOperators: false, operator: "contains",
+                            operator: "gte",
                             template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); },
                         }
                     }
                 },
                 {
                     field: "Status",
-                    title: "Status",
+                    title: "Status Cob.",
                     width: "140px",
-                    headerTemplate: "<div class='break-word'>Status<div>",
+                    headerTemplate: "<div class='break-word'>Status Cob.<div>",
                     filterable: {
                         cell: {
                             showOperators: false,
@@ -559,7 +654,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                                 args.element.kendoDropDownList({
                                     dataTextField: "text",
                                     dataValueField: "text",
-                                    dataSource: new kendo.data.DataSource({ data: [{ text: 'COBRADO' }, { text: 'NÃO COBRADO' }, { text: 'PAGO' }, { text: 'REFUNDED' }, { text: 'VENCIDO' }] }),
+                                    dataSource: new kendo.data.DataSource({ data: [{ text: 'Paid' }, { text: 'WaitingPayment' }, { text: 'Refunded' }] }),
                                     index: 0,
                                     optionLabel: { text: "", value: "" },
                                     valuePrimitive: true
@@ -593,6 +688,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                     title: "Vencimento",
                     width: "110px",
                     headerTemplate: "<div class='break-word'>Vencimento<div>",
+                    template: "#if( Vencimento != '-') {# <div>#=kendo.toString(kendo.parseDate(Vencimento, 'yyyy-MM-dd'), 'dd MMM, yyyy')#</div>#}#",
                     filterable: {
                         cell: {
                             showOperators: false, operator: "contains",
@@ -601,18 +697,18 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                     }
                 },
                 {
-                    field: "",
+                    field: "Vigencia",
                     title: "Vigencia",
                     width: "150px",
                     headerTemplate: "<div class='break-word'>Vigencia<div>",
                 },
                 {
-                    field: "Dias2", title: "Ult. Pag. Dias", width: "110px", headerTemplate: "<div class='break-word'>Ult. Pag. Dias<div>"
+                    field: "Dias2", title: "Ult. Pag. Dias", width: "150px", headerTemplate: "<div class='break-word'>Ult. Pag. Dias<div>"
                     , template: " #if( Dias2 == 0 ) {# <div>-</div> #} else{#  <div>#:Dias2#</div>  #}# "
                     , filterable: {
                         cell: {
-                            showOperators: false, operator: "contains"
-                            , template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); },
+                            operator: "gte",
+                            template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); },
                         }
                     }
                 },
@@ -629,8 +725,16 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                     }
                 },
                 {
-                    field: "RPago", title: "Ult. Pag R$", width: "110px", headerTemplate: "<div class='break-word'>Ult. Pag R$<div>"
-                    , filterable: { cell: { showOperators: false, operator: "contains", template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); }, } }
+                    field: "RPago", 
+                    title: "Ult. Pag R$", 
+                    width: "150px",
+                    headerTemplate: "<div class='break-word'>Ult. Pag R$<div>",
+                    filterable: {
+                        cell: {
+                            operator: "gte",
+                            template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); },
+                        }
+                    }
                 },
             ]
         }
@@ -722,7 +826,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 
                                 result[0].elemento.registerPayd = true;
                                 result[0].elemento.status = charge.StatusDescription;
-                                totalRecebidoBoleto += parseInt(result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Ammount, 10)
+                                result[0].vm.totalRecebidoBoleto += parseInt(result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Ammount, 10)
                                 result[0].vm.totalReceived += parseInt(result[0].vm.customers[result[0].indexCustomer].ChargingValidity[result[0].indexCharge].Ammount, 10)
                             }
                             else {
@@ -764,7 +868,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                 customer.descricaoCharge = charge.Canceled ? vm.AtivoType.CANCELADA : vm.AtivoType.ATIVA;
                 customer.descricaoAcao = charge.Canceled ? vm.AtivoType.CANCELADA : vm.AtivoType.ATIVA;
                 customer.ammoutInt = parseFloat(customer.ammout);
-                customer.ammoutIntFormat = customer.ammoutInt.toString().replace('.', ',');
+                customer.ammoutIntFormat = customer.ammoutInt;//.toString().replace('.', ',');
             }
             else {
                 customer.status = 'NÃO COBRADO';
@@ -821,4 +925,4 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 };
 
 
-StatusChargingController.$inject = ['$interval', 'FoneclubeService', 'PagarmeService', 'FlowManagerService', '$filter']; 
+StatusChargingController.$inject = ['$interval', 'FoneclubeService', 'PagarmeService', 'FlowManagerService', '$filter', 'ViewModelUtilsService']; 

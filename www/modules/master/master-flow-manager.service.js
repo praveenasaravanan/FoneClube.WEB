@@ -10,6 +10,7 @@
 
         this.changeLoginView = changeLoginView;
         this.changeHomeView = changeHomeView;
+        this.changeNewHomeView=changeNewHomeView;
         this.changeCheckoutView = changeCheckoutView;
         this.changeEdicaoView = changeEdicaoView;
         this.changeCustomersView = changeCustomersView;
@@ -38,6 +39,11 @@
             localStorageService.set('menuItemActive', 'home');
             LocationService.change('tabs.home');
             $rootScope.$broadcast('changeMenuItem', 'home');
+        }
+        function changeNewHomeView(){
+            localStorageService.set('menuItemActive', 'customers-new');
+            LocationService.change('tabs.customers-new');
+            $rootScope.$broadcast('changeMenuItem', 'customers-new');
         }
         
         function changeEdicaoView(param) {
