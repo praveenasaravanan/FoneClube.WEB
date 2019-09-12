@@ -12,6 +12,12 @@
                 <span> Home </span>
             </div>
         </div>
+        <div title="Customers New" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'customers-new'}" ng-click="vm.setMenuItemActive('customers-new')">            
+          <div>
+              <i class="glyphicon glyphicon-home" aria-hidden="true"></i>            
+              <span> Home </span>
+          </div>
+      </div>
         <div title="Cadastro" class="menu-item" ng-class="{'item-menu-active': vm.menuItemActive == 'cadastro'}"  ng-click="vm.setMenuItemActive('cadastro')">  
             <div>
                 <i class="fa fa-user-plus" aria-hidden="true"></i>            
