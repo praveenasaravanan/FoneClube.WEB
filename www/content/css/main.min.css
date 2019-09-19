@@ -1388,6 +1388,25 @@ v-pane-content {
 .boleto-modal .btn:last-child {
   margin-bottom: 10px; }
 
+textarea#nomeCartao {
+  height: 150px; }
+
+.dialog-toolbar {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px; }
+
+.show-template .header {
+  height: auto !important; }
+  .show-template .header button {
+    top: 0; }
+
+input[type='checkbox'] {
+  margin-top: -4px; }
+
 .customer-modal .flag-warning {
   color: #ffb300; }
 
@@ -1502,25 +1521,6 @@ v-pane-content {
   .customer-modal section .available-card button {
     margin: 0; }
 
-textarea#nomeCartao {
-  height: 150px; }
-
-.dialog-toolbar {
-  width: 100%;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 30px; }
-
-.show-template .header {
-  height: auto !important; }
-  .show-template .header button {
-    top: 0; }
-
-input[type='checkbox'] {
-  margin-top: -4px; }
-
 .edicao-container {
   flex: 1 1 auto;
   height: 100%;
@@ -1619,31 +1619,6 @@ table.s_table tr td {
 .existent-card-modal .btn:last-child {
   margin-bottom: 10px; }
 
-textarea#nomeCartao {
-  height: 150px; }
-
-.dialog-toolbar {
-  width: 100%;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 30px; }
-
-.show-template .header {
-  height: auto !important; }
-  .show-template .header button {
-    top: 0; }
-
-input[type='checkbox'] {
-  margin-top: -4px; }
-
-.new-card-modal .btn {
-  margin-bottom: 5px; }
-
-.new-card-modal .btn:last-child {
-  margin-bottom: 10px; }
-
 #divStatusCharging #divTopFilters {
   padding-top: 10px;
   background-color: #EDF0F5;
@@ -1707,6 +1682,31 @@ input[type='checkbox'] {
 @media only screen and (max-width: 600px) {
   #divStatusCharging {
     width: 100%; } }
+
+textarea#nomeCartao {
+  height: 150px; }
+
+.dialog-toolbar {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px; }
+
+.show-template .header {
+  height: auto !important; }
+  .show-template .header button {
+    top: 0; }
+
+input[type='checkbox'] {
+  margin-top: -4px; }
+
+.new-card-modal .btn {
+  margin-bottom: 5px; }
+
+.new-card-modal .btn:last-child {
+  margin-bottom: 10px; }
 
 .boleto-modal .btn {
   margin-bottom: 5px; }
