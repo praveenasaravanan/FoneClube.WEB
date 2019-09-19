@@ -59,6 +59,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
     vm.includeStatusYellow = false;
     vm.includeStatusRed = false;
     vm.filterTextInAllCols = false;
+    vm.filterTextInNameOnly = false;
     vm.searchText = "";
     vm.customerDataSource;
     vm.customerViewModel;
@@ -74,13 +75,18 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
     vm.onDeleteCustomer = onDeleteCustomer;
     vm.onPageLoad = onPageLoad;
     vm.exportToExcel = exportToExcel;
-    vm.testLoading = testLoading;
+    vm.filterText = filterText;
 
     //BEGIN: New Functions
     function testLoading() { }
     function filterClients() {
         vm.loading = true;
         filterClientsData();
+    }
+    function filterText() {
+        if (vm.searchText) {
+            filterClientsData();
+        }
     }
     function filterClientsData() {
         vm.loading = true;
@@ -117,7 +123,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
         if (vm.searchText) {
             vm.searchText = vm.searchText.toLowerCase();
 
-            if (vm.filterTextInAllCols) {
+            if (vm.filterTextInAllCols && !vm.filterTextInNameOnly) {
                 return data.Id.toString().toLowerCase().indexOf(vm.searchText) > -1 ||
                     data.Name.toLowerCase().indexOf(vm.searchText) > -1 ||
                     data.Email.toLowerCase().indexOf(vm.searchText) > -1 ||
@@ -219,6 +225,10 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                     fields: {
                         Dias: { type: "number" },
                         AcaoBool: { type: "boolean" },
+                        RCobrado: { type: "number" },
+                        Dias2: { type: "number" },
+                        RPago: { type: "number" },
+                        Ultimopag: { type: "date" }
                     }
                 }
             },
@@ -238,7 +248,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
             var Acao = '';
             var AcaoBool = false;
             var Vencimento = '-'
-            var Vigencia=customer.boletoExpires;
+            var Vigencia = customer.boletoExpires;
             var Ultimopag = customer.LastPaidDate;
             var Dias2 = diffDays(customer.LastPaidDate);
             var RPago = 0;
@@ -276,7 +286,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                 customer.chargingDate = charge.CreationDate;
                 customer.chargingDateDiffDays = diffDays(dataConvertida);
                 Status = charge.PaymentStatusDescription;
-                Vencimento=charge.TransactionLastUpdate
+                Vencimento = charge.TransactionLastUpdate
 
                 //BEGIN: Set status color                
                 var charges = customer.ChargeAndServiceOrderHistory.Charges;
@@ -493,6 +503,9 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                     fields: {
                         Dias: { type: "number" },
                         AcaoBool: { type: "boolean" },
+                        RCobrado: { type: "number" },
+                        Dias2: { type: "number" },
+                        RPago: { type: "number" }
                     }
                 }
             },
@@ -531,6 +544,12 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                         neq: "Not equal to",
                         gte: "Greater Than",
                         lte: "Less Than"
+                    },
+                    date: {
+                        eq: "Equal to",
+                        neq: "Not equal to",
+                        gte: "Greater Than",
+                        lte: "Less Than"
                     }
                 }
             },
@@ -558,8 +577,8 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                     }
                 },
                 {
-                    field: "WhatsappImage",
-                    title: "Payment Status",
+                    field: "",
+                    title: "",
                     width: "50px",
                     headerTemplate: "<img src='../../content/img/message-red.png' />",
                     template: "<div><img ng-click='vm.onTapMessage(#:CustomerId#)' class='imgWhatsapp link' src='#:WhatsappImage#' /></div>",
@@ -702,6 +721,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                     width: "150px",
                     headerTemplate: "<div class='break-word'>Vigencia<div>",
                 },
+
                 {
                     field: "Dias2", title: "Ult. Pag. Dias", width: "150px", headerTemplate: "<div class='break-word'>Ult. Pag. Dias<div>"
                     , template: " #if( Dias2 == 0 ) {# <div>-</div> #} else{#  <div>#:Dias2#</div>  #}# "
@@ -712,21 +732,23 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                         }
                     }
                 },
+
                 {
                     field: "Ultimopag",
                     title: "Ult. Pag Data",
-                    width: "110px",
+                    width: "150px",
                     headerTemplate: "<div class='break-word'>Ult. Pag Data<div>",
+                    // template: "<div>#=kendo.toString(kendo.parseDate(Ultimopag, 'yyyy-MM-dd'), 'dd MMM, yyyy')#</div>",
                     filterable: {
                         cell: {
-                            showOperators: false, operator: "contains",
+                            operator: "gte",
                             template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); },
                         }
                     }
                 },
                 {
-                    field: "RPago", 
-                    title: "Ult. Pag R$", 
+                    field: "RPago",
+                    title: "Ult. Pag R$",
                     width: "150px",
                     headerTemplate: "<div class='break-word'>Ult. Pag R$<div>",
                     filterable: {
