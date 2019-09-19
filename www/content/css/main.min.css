@@ -1683,6 +1683,24 @@ table.s_table tr td {
   #divStatusCharging {
     width: 100%; } }
 
+.boleto-modal .btn {
+  margin-bottom: 5px; }
+
+.boleto-modal .btn:last-child {
+  margin-bottom: 10px; }
+
+.new-card-modal .btn {
+  margin-bottom: 5px; }
+
+.new-card-modal .btn:last-child {
+  margin-bottom: 10px; }
+
+.new-card-modal .btn {
+  margin-bottom: 5px; }
+
+.new-card-modal .btn:last-child {
+  margin-bottom: 10px; }
+
 textarea#nomeCartao {
   height: 150px; }
 
@@ -1701,24 +1719,6 @@ textarea#nomeCartao {
 
 input[type='checkbox'] {
   margin-top: -4px; }
-
-.new-card-modal .btn {
-  margin-bottom: 5px; }
-
-.new-card-modal .btn:last-child {
-  margin-bottom: 10px; }
-
-.boleto-modal .btn {
-  margin-bottom: 5px; }
-
-.boleto-modal .btn:last-child {
-  margin-bottom: 10px; }
-
-.new-card-modal .btn {
-  margin-bottom: 5px; }
-
-.new-card-modal .btn:last-child {
-  margin-bottom: 10px; }
 
 .mensagens-dialog {
   -webkit-user-select: none;
