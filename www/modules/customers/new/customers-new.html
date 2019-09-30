@@ -80,14 +80,21 @@
     </div>
   </div>
 
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-md-12">
-      <!-- Start -->
       <div class="grid-container">
         <kendo-grid id="customerGridData" options="vm.customerGridOptions" k-data-source="vm.customerDataSource"></kendo-grid>
       </div>
-      <!-- End -->
       <div class="clearfix"></div>
+    </div>
+  </div> -->
+
+  <div class="row">
+    <div class="col-md-12">
+      <div style="width: 100%; height: {{vm.gridHeight}}px;"
+                     ag-grid="vm.gridOptions"
+                     class="ag-theme-balham ag-basic">
+                </div>
     </div>
   </div>
 
@@ -165,4 +172,3 @@
     border-radius: 0px;
   }
 </style>
-<script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>

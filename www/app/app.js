@@ -1,7 +1,7 @@
 (function () {
 
     'use strict';
-
+    agGrid.initialiseAgGridWithAngular1(angular);
     angular.module('foneClub', [
 
         /* public modules */
@@ -22,7 +22,7 @@
         ,'vAccordion'
       , 'ngTable'
       , 'kendo.directives'
-
+      ,'agGrid'
     ]);
 
     angular.module('foneClub').controller('globalCtrl', globalCtrl);
