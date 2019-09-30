@@ -1619,6 +1619,29 @@ table.s_table tr td {
 .existent-card-modal .btn:last-child {
   margin-bottom: 10px; }
 
+textarea#nomeCartao {
+  height: 150px; }
+
+.dialog-toolbar {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px; }
+
+.show-template .header {
+  height: auto !important; }
+  .show-template .header button {
+    top: 0; }
+
+input[type='checkbox'] {
+  margin-top: -4px; }
+
+#divStatusCharging .ag-cell {
+  padding-top: 5px;
+  padding-bottom: 5px; }
+
 #divStatusCharging #divTopFilters {
   padding-top: 10px;
   background-color: #EDF0F5;
@@ -1683,6 +1706,12 @@ table.s_table tr td {
   #divStatusCharging {
     width: 100%; } }
 
+.new-card-modal .btn {
+  margin-bottom: 5px; }
+
+.new-card-modal .btn:last-child {
+  margin-bottom: 10px; }
+
 .boleto-modal .btn {
   margin-bottom: 5px; }
 
@@ -1694,31 +1723,6 @@ table.s_table tr td {
 
 .new-card-modal .btn:last-child {
   margin-bottom: 10px; }
-
-.new-card-modal .btn {
-  margin-bottom: 5px; }
-
-.new-card-modal .btn:last-child {
-  margin-bottom: 10px; }
-
-textarea#nomeCartao {
-  height: 150px; }
-
-.dialog-toolbar {
-  width: 100%;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 30px; }
-
-.show-template .header {
-  height: auto !important; }
-  .show-template .header button {
-    top: 0; }
-
-input[type='checkbox'] {
-  margin-top: -4px; }
 
 .mensagens-dialog {
   -webkit-user-select: none;
