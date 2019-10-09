@@ -16,8 +16,8 @@
                 </div>
                 <div class="form-group col-sm-3 col-xs-12">
 
-                    <label for="cpf">CPF - </label>
-                    <label>(Selecione checkbox para CNPJ)
+                    <label for="cpf">Documento - </label>
+                    <label>(checkbox para {{vm.CNPJField ? 'CPF' : 'CNPJ'}})
                         <input type="checkbox" ng-model="vm.checkboxCNPJ" ng-change="vm.onCheckCNPJ()">
                     </label>
                     <input id="cpf" ng-if="vm.CPFField" next-on-enter class="form-control"

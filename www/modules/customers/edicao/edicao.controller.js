@@ -84,10 +84,9 @@
           }
         }
 
-        debugger;
         DialogFactory.dialogConfirm({ title: 'Adicionar serviço', mensagem: 'Tem certeza que deseja adicionar o serviço '+ selectedService.Descricao +' ?:', btn1: 'não', btn2: 'sim' })
         .then(function (result) {
-          debugger
+          
           if (result == 1) {
             console.log('clicou em sim')
             //todo validar falta de id de phone ou de serivço
@@ -318,7 +317,12 @@
       FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
         
         vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
+        debugger
         vm.customer = result;
+
+        if(vm.customer.DocumentNumber.length > 11)
+          onShowCNPJField()
+
         vm.customerAtivo = !vm.customer.Desativo;
         
         if(vm.customer.Pai != null)
@@ -1170,7 +1174,12 @@
     }
 
     function validarCPF() {
-      if (vm.customer.DocumentNumber.length < 11) { return }
+
+      debugger;
+
+      if (vm.customer.DocumentNumber.length < 11) { 
+        return 
+      }
       FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)).then(function (existentClient) {
         if (existentClient.Id == 0) {
           HubDevService.validaCPF(UtilsService.clearDocumentNumber(vm.customer.DocumentNumber)).then(function (result) {
@@ -1182,7 +1191,7 @@
           DialogFactory.showMessageConfirm({ titulo: 'CPF já cadastrado', mensagem: 'Você não pode cadastrar um cpf repetido.' })
             .then(function (param) {
               var cpf = angular.copy(vm.DocumentNumberFreeze);
-              vm.customer.DocumentNumber = cpf.substr(0, 3) + '.' + cpf.substr(3, 3) + '.' + cpf.substr(6, 3) + '-' + cpf.substr(9)
+              // vm.customer.DocumentNumber = cpf.substr(0, 3) + '.' + cpf.substr(3, 3) + '.' + cpf.substr(6, 3) + '-' + cpf.substr(9)
             })
         }
       }, function (result) {
