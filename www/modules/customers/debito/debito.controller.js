@@ -56,6 +56,7 @@
 
             var CARTAO = 1;
             var BOLETO = 2;
+            var DEBITO = 3;
 
             init();
             calculate();
@@ -206,7 +207,7 @@
                     CommentBoleto:vm.commentBoleto,
                     Ammount: vm.amount,
                     CollectorName: MainUtils.getAgent(),
-                    PaymentType: BOLETO,
+                    PaymentType: DEBITO,
                     // BoletoId: idBoleto,
                     // AcquireId: acquirer_id,
                     AnoVingencia:vm.year,
