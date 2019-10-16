@@ -7,16 +7,17 @@
   function FoneclubeService($q, HTTPService) {
 
 
-    // var urlApi = 'http://localhost:57078/api';
+    var urlApi = 'http://localhost:57078/api';
 
     //API tests
-    var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+    // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
 
     this.postBasePerson = postBasePerson;
     this.postUpdatePerson = postUpdatePerson;
     this.postUpdatePersonAdress = postUpdatePersonAdress;
     this.postCheckout = postCheckout;
     this.postHistoryPayment = postHistoryPayment;
+    this.postDebitoTransaction = postDebitoTransaction;
     this.postDeletePerson = postDeletePerson;
     this.postUpdateCustomer = postUpdateCustomer;
     this.postOrderServicePerson = postOrderServicePerson;
@@ -718,6 +719,19 @@
       return q.promise;
     }
 
+    function postDebitoTransaction(personCharging) {
+      var q = $q.defer();
+
+      HTTPService.post(urlApi.concat('/charging/cielo/transaction/insert'), personCharging)
+        .then(function (result) {
+          q.resolve(result);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
 
     function getPlans() {
       var q = $q.defer();

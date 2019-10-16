@@ -67,6 +67,7 @@
     vm.onTapRepeatLastCharge = onTapRepeatLastCharge;
     vm.onTapBoleto = onTapBoleto;
     vm.onTapBoletoPayment = onTapBoletoPayment;
+    vm.onTapDebito = onTapDebito;
     vm.onTapNewCardPayment = onTapNewCardPayment;
     vm.onTapExcluir = onTapExcluir;
     vm.onDeleteCustomer = onDeleteCustomer;
@@ -370,6 +371,10 @@
 
     function onTapBoleto(customer) {
       ViewModelUtilsService.showModalBoleto(customer);
+    }
+
+    function onTapDebito(customer) {
+      ViewModelUtilsService.showModalDebito(customer);
     }
 
     function onTapRepeatLastCharge(customer) {
