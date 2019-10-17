@@ -101,6 +101,7 @@
     this.getFlagsTypes = getFlagsTypes;
     this.getPersonFlags = getPersonFlags;
     this.getPersonPhones = getPersonPhones;
+    this.getStatusCardDebito = getStatusCardDebito;
 
     function getAPIUrl() {
       return urlApi;
@@ -1398,6 +1399,20 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/customer/' + idPerson))
+        .then(function (result) {
+          q.resolve(result);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    function getStatusCardDebito(idPerson){
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/cielo/debito/apto/' + idPerson))
         .then(function (result) {
           q.resolve(result);
         })

@@ -40,6 +40,7 @@
             vm.expirationDateField = 3;
             vm.year = new Date().getFullYear().toString();
             vm.month = (new Date().getMonth() + 1).toString();
+            vm.hasDebitoCard = true;
             
             var customerId = customer.Id;
             var existentCustomer = {
@@ -104,6 +105,16 @@
               .catch(function (error) {
 
               });
+
+
+              FoneclubeService.getStatusCardDebito(customer.Id).then(function (result) {
+                console.log('cartao debito')
+                console.log(result)
+                vm.hasDebitoCard = result;
+              })
+              .catch(function (error) {
+
+              });
           }
 
           function checkOne(val) {
@@ -142,12 +153,18 @@
           }
 
           function onTapConfirmarPagamento() {
+            debugger
+            if(!vm.hasDebitoCard)
+            {
+              alert('cliente sem cartão de débito')
+              return;
+            }
             //alert(vm.Excepcional);
             //if (!vm.claro) {
             //  vm.Excepcional
-                if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
-                    return;
-                }
+                // if (!getAddress(vm.customer) || !getContactPhone(vm.customer)) {
+                //     return;
+                // }
 
                 if (parseInt(vm.amount) < 1) {
                   DialogFactory.showMessageDialog({ titulo: 'Aviso', mensagem: 'Não é possível criar uma cobrança com valor inferior a R$1.00. Por favor corrija o valor ou opte por criar uma ordem de serviço com os detalhes desta cobrança.' });
@@ -221,6 +238,19 @@
             debugger;
             FoneclubeService.postDebitoTransaction(customerCharging).then(function(result){
                 console.log(result);
+                debugger;
+                if(result.Charged)
+                {
+                  vm.message = 'Cobrança por débito gerada'
+                  vm.cobrancaRealizada = true;
+                  vm.disableTapPay = false;
+                }
+                else{
+                  vm.message = 'Cobrança com falha'
+                  vm.cobrancaRealizada = false;
+                  vm.disableTapPay = false;
+                }
+
             })
             .catch(function(error){
                 console.log('catch error');
@@ -468,8 +498,8 @@
                 var contacts = UtilsService.getContactPhoneFromPhones(customer.Phones);
                 if (!contacts || contacts.length == 0  || contacts[0].DDD == '' || contacts[0].Number == '') {
                     // debugger
-                    DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'É necessário cadastrar Telefone de Contato para este cliente.'});
-                    return null;
+                    // DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'É necessário cadastrar Telefone de Contato para este cliente.'});
+                    // return null;
                 } else {
                     return {
                         'ddd' : contacts[0].DDD.toString(),
@@ -481,8 +511,8 @@
             function getAddress(customer) {
                 var address = customer.Adresses;
                 if (!address || address.length == 0) {
-                    DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'É necessário cadastrar um Endereço para este cliente.'});
-                    return null;
+                    // DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'É necessário cadastrar um Endereço para este cliente.'});
+                    // return null;
                 } else {
                     return {
                         'street' : address[0].Street,

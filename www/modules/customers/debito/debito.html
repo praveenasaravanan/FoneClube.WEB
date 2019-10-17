@@ -10,8 +10,8 @@
         <div class="container col-xs-12">
             <div ng-if="vm.etapaDados">
 
-                <h4>Período de vingência da cobrança</h4>
-
+                <h4>Período de vingência da cobrança <span class="aviso-sem-pagamento" ng-if="!vm.hasDebitoCard" >Cliente sem cartão de débito</span></h4>
+                
                 <div class="form-group col-xs-12">
                     <div>
                         <label>Ano:</label>
@@ -206,7 +206,7 @@
                 </div>
                 <div ng-if="vm.disableTapPay || !vm.cobrancaRealizada">
                     <button ng-click="vm.onTapPagar()" class="btn btn-success col-xs-12" ng-disabled="vm.disableTapPay">
-                        Cobrar
+                        <span ng-if="vm.hasDebitoCard" >Cobrar</span>
                     </button>
                     <button ng-click="vm.onTapCancel()" class="btn btn-danger col-xs-12" ng-disabled="vm.disableTapPay">
                         Cancelar
