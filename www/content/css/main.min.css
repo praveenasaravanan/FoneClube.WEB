@@ -1392,6 +1392,25 @@ v-pane-content {
   color: red;
   font-size: 18px; }
 
+textarea#nomeCartao {
+  height: 150px; }
+
+.dialog-toolbar {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px; }
+
+.show-template .header {
+  height: auto !important; }
+  .show-template .header button {
+    top: 0; }
+
+input[type='checkbox'] {
+  margin-top: -4px; }
+
 .customer-modal .flag-warning {
   color: #ffb300; }
 
@@ -1505,25 +1524,6 @@ v-pane-content {
     border-bottom: 1px solid #ccc; }
   .customer-modal section .available-card button {
     margin: 0; }
-
-textarea#nomeCartao {
-  height: 150px; }
-
-.dialog-toolbar {
-  width: 100%;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 30px; }
-
-.show-template .header {
-  height: auto !important; }
-  .show-template .header button {
-    top: 0; }
-
-input[type='checkbox'] {
-  margin-top: -4px; }
 
 .edicao-container {
   flex: 1 1 auto;

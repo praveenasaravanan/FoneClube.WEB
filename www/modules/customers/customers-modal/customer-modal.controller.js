@@ -63,6 +63,7 @@
     vm.onClickFlagsTitle = onClickFlagsTitle;
     vm.editPendingFlag = editPendingFlag;
     vm.formatDate = formatDate;
+    vm.onTapDebito = onTapDebito;
 
     init();
 
@@ -524,6 +525,10 @@
     function onClickFlagsTitle() {
       vm.showFlags = !vm.showFlags;
       console.log(vm.showFlags)
+    }
+
+    function onTapDebito(customer) {
+      ViewModelUtilsService.showModalDebito(customer);
     }
 
     function editPendingFlag(flag) {

@@ -18,7 +18,11 @@
             vm.etapaDados = true;
             vm.chargeDisabled = true;
             vm.cobrancaRealizada = false;
-            vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
+            vm.amount 
+            try{
+              vm.amount = vm.customer.CacheIn ? vm.customer.CacheIn : '';
+            }
+            catch(e){}
             vm.comment = '';
             vm.onTapPagar = onTapPagar;
             vm.onTapConfirmarPagamento = onTapConfirmarPagamento;
