@@ -106,20 +106,20 @@
           vm.charged_status = result[0];
         }
       );
-      FoneclubeService.getChargeAndServiceOrderHistory(customer.Id).then(function (
-        result
-      ) {
-        vm.chargesAndOrders = result;
 
+      FoneclubeService.getChargeAndServiceOrderHistory(customer.Id).then(function (result){
+        
+        debugger;
+        vm.chargesAndOrders = result;
         vm.chargesArray = [];
         vm.osArray = [];
         vm.osDescArray = [];
         // debugger;
 
         for (var i in vm.chargesAndOrders) {
-          if (parseInt(i) >= 203) {
-            // debugger
-          }
+          // if (parseInt(i) >= 203) {
+          //   // debugger
+          // }
 
           var data = vm.chargesAndOrders[+i];
 
@@ -128,21 +128,13 @@
               vm.chargesAndOrders[i].Charges.resentMessage = 'Reenviar email';
             } catch (e) { }
 
-            data.Charges.descriptionType =
-              data.Charges.PaymentType == CARTAO ? 'Cartão de crédito' : 'Boleto';
+            
+            data.Charges.descriptionType = data.Charges.PaymentType == CARTAO ? 'Cartão de crédito' : 'Boleto';
 
-            // if (data.Charges.PaymentType == BOLETO) {
-            //   PagarmeService.getBoletoUrl(data.Charges.BoletoId, vm.chargesAndOrders, i)
-            //     .then(function (result) {
-            //       try {
-            //         result.chargesAndOrders[result.index].Charges.boleto_url = result[0].boleto_url;
-            //         data.Charges.boleto_url = result[0].boleto_url;
-            //       } catch (erro) { }
-            //     })
-            //     .catch(function (error) {
-            //       console.log(error);
-            //     });
-            // }
+            var DEBITO = 3;
+            if(data.Charges.PaymentType == DEBITO)
+               data.Charges.descriptionType = "Débito";
+
             if (data.Charges) {
               if (data.Charges.BoletoExpires) {
                 var expiryDate = new Date(data.Charges.ExpireDate);
@@ -428,7 +420,13 @@
     }
 
     function onResentEmail(charge) {
-      // debugger;
+      debugger;
+      var DEBITO = 3;
+      if(charge.PaymentType == DEBITO)
+      {
+       alert('ainda não é possível reenviar email de cobrança de débito');
+       return; 
+      }
 
       DialogFactory.dialogConfirm({
         mensagem: 'Tem certeza que deseja reenviar o email dessa cobrança?'
