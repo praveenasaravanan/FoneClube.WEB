@@ -158,11 +158,38 @@
 
           function onTapConfirmarPagamento() {
             debugger
-            if(!vm.hasDebitoCard)
+            if(!vm.hasDebitoCard && !vm.newDebitCard)
             {
               alert('cliente sem cartão de débito')
               return;
             }
+
+            var card = getCardData();
+
+            if(!card){
+              alert('pendente dados de cartão de débito')
+               return;
+            }
+
+            if(vm.newDebitCard)
+            {
+              if((card.HolderName == '' || card.HolderName == undefined) ||
+              (card.ExpirationMonth == '' || card.ExpirationMonth == undefined) ||
+              (card.ExpirationYear == '' || card.ExpirationYear == undefined) ||
+              (card.Number == '' || card.Number == undefined) ||
+              (card.Cvv == '' || card.Cvv == undefined)){
+               alert('pendente dados de cartão de débito')
+               return;
+              }
+            }
+            
+
+            // HolderName: vm.cardHolderName.toUpperCase(),
+            // ExpirationMonth: vm.cardExpirationMonth,
+            // ExpirationYear: vm.cardExpirationYear,
+            // Number: vm.cardNumber,
+            // Cvv:vm.cardCVV
+
             //alert(vm.Excepcional);
             //if (!vm.claro) {
             //  vm.Excepcional
@@ -236,7 +263,8 @@
                   ChargeStatus: vm.chargeStatus,
                   TransactionId: vm.TransactionId,
                   ComissionConceded: vm.pagar // need to see the property nameComissionConceded
-                }
+                },
+                Card:getCardData()
             }
 
             debugger;
@@ -264,148 +292,7 @@
                 var teste3 = vm.amount;
                 alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
             });
-                    /*
-                     PagarmeService.postBoletoDirect(vm.amount, vm.commentBoleto, existentCustomer, addExpirationDays(vm.expirationDateField)).then(function(resultCapture){
-    
-                        
-                        try{
-                            var chargingLog = {
-                                'customer': existentCustomer,
-                                'ammount': vm.amount,
-                                'pagarmeResponse': resultCapture,
-                                'boletoComment':vm.commentBoleto,
-                                'customerComment':vm.customerComment,
-                                'foneclubeComment' : vm.comment
-                            };
-                            
-                            // debugger
-                            FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
-                                console.log(result);
-                            })
-                            .catch(function(error){
-                                console.log('catch error');
-                                console.log(error);
-                                var teste1 = emailObject;
-                                var teste2 = existentCustomer;
-                                var teste3 = vm.amount;
-                                alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
-                            });
-                        }
-                        catch(erro){
-                            var teste1 = emailObject;
-                            var teste2 = existentCustomer;
-                            var teste3 = vm.amount;
-                            alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
-                        }
-
-                        // debugger;
-                            if(vm.enviaEmail)
-                            {
-                                // debugger;
-                                if(vm.customerComment == undefined)
-                                    vm.customerComment = ''
-
-                                var emailObject = {
-                                    'To': existentCustomer.email, //existentCustomer.email
-                                    'TargetName' : existentCustomer.name,
-                                    'TargetTextBlue': resultCapture.boleto_url,
-                                    'TargetSecondaryText' : vm.customerComment,
-                                    // 'CustomerComment':vm.customerComment,
-                                    'TemplateType' : 2
-                                }
-                                
-                                vm.boleto_url = resultCapture.boleto_url;
-
-                                // debugger;
-
-                                if(vm.pagar && vm.totaisComissoes.ValorTotalLiberadoParaPagarCliente != '0.00')
-                                {
-                                    emailObject.DiscountPrice = ($filter('currency')(vm.totaisComissoes.ValorTotalLiberadoParaPagarCliente / 100, "")).replace('.',',')
-                                }
-
-
-                                FoneclubeService.postSendEmail(emailObject).then(function(result){
-                                    console.log('FoneclubeService.postHistoryPayment');
-                                    console.log(result);
-                                })
-                                .catch(function(error){
-                                    console.log('catch error');
-                                    console.log(error);
-                                });
-                            }
-
-                            if(vm.enviaWhatsapp){
-                                debugger;
-                              //Send message to whatsapp
-                              if(vm.customerComment == undefined)
-                                    vm.customerComment = ''
-
-                                var messageObject = {
-                                    'ClientId': vm.customer.Id, //existentCustomer.email
-                                    'ClientName' : vm.customer.Name,
-                                    'CurrentYear': vm.year,
-                                    'CurrentMonth' : vm.month,
-                                    'CurrentDate' : vm.expirationDateField,
-                                    'AmountTemp':vm.amountTemp,
-                                    'ValorTotalLiberadoParaPagarCliente':vm.totaisComissoes.ValorTotalLiberadoParaPagarCliente,
-                                    'AmountTemp1':vm.amountTemp1,
-                                    'CustomerComment':vm.customerComment,
-                                    'CommentBoleto':vm.commentBoleto,
-                                    'Comment':vm.comment
-                                }
-                                FoneclubeService.postSendChargeMessage(messageObject).then(function(result){
-                                    console.log('Whatsapp Message sent');
-                                    console.log(result);
-                                })
-                                .catch(function(error){
-                                    console.log('Whats app message could not sent. See error log bellow:');
-                                    console.log(error);
-                                });
-                            }
-                            
-    
-                            try{
-                              vm.TransactionId = resultCapture.tid;
-                                PagarmeService.notifyCustomerBoleto(resultCapture.id, existentCustomer.email).then(function(resultNotify){
-                                vm.message = 'Boleto gerado com sucesso'
-                                vm.cobrancaRealizada = true;
-                                vm.disableTapPay = false;
-                                    })
-                                    .catch(function(error){
-                                    try{
-                                        vm.message = 'Boleto gerado com sucesso. Sem envio de notificação'
-                                        vm.cobrancaRealizada = true;
-                                        vm.disableTapPay = false;                                    
-                                    }
-                                    catch(erro){
-                                        vm.message = 'Boleto gerado com sucesso. Sem envio de notificação'
-                                        vm.cobrancaRealizada = true;
-                                        vm.disableTapPay = false;                                    
-                                    }
-                                    console.log(error);
-    
-                                });
-    
-                            }
-                            catch(erro){
-    
-                            }
-    
-    
-                        saveHistoryPayment(resultCapture.id, resultCapture.acquirer_id);
-    
-                            vm.message = 'Boleto gerado com sucesso'
-                        })
-                        .catch(function(error){
-                            try{
-                                DialogFactory.showMessageDialog({mensagem: 'Erro na captura da transação' + error.status});                             
-                            }
-                            catch(erro){
-                                DialogFactory.showMessageDialog({mensagem:'Erro na captura da transação'});                             
-                            }
-                            console.log(error);
-                        });
-                        */
+                    
             }
     
             function saveHistoryPayment(idBoleto, acquirer_id){
@@ -438,17 +325,6 @@
                           if(!result)
                             alert('Não foi possível dar baixa em comissão');
                             
-
-                            // FoneclubeService.dispatchedBonus(vm.customer.Id).then(function (result) {
-                              
-                            //   debugger
-                            //   if(!result)
-                            //     alert('Não foi possível dar baixa em comissão');
-
-                            // })
-                            // .catch(function (error) {
-                            //   alert('Não foi possível dar baixa em comissão');
-                            // })
 
                         })
                         .catch(function (error) {
@@ -538,7 +414,22 @@
                 var dat = new Date();
                 dat.setDate(dat.getDate() + days);
                 return dat.toISOString();
+            }
+
+            function getCardData(){  
+              try{
+                return {
+                  HolderName: vm.cardHolderName.toUpperCase(),
+                  ExpirationMonth: vm.cardExpirationMonth,
+                  ExpirationYear: vm.cardExpirationYear,
+                  Number: vm.cardNumber,
+                  Cvv:vm.cardCVV
               }
+              }
+              catch(e){
+                return false;
+              }
+          }
     
         }
     })();

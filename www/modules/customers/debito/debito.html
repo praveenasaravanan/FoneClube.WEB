@@ -27,6 +27,8 @@
                         </select>
                         <label>D+:</label>
                         <input style="width: 65px;" ng-model="vm.expirationDateField" type="number">
+                        <label><input type="checkbox" ng-model="vm.newDebitCard"
+                            value="1"/> Novo Cartão</label>
                     </div>
                     <div style="float: right; margin-top: -45px;" class="checkbox-wrapper">
                         <label><input type="checkbox" ng-model="vm.chargeStatusfirst" ng-change="vm.checkOne('1')"
@@ -82,7 +84,31 @@
                 <div class="form-group col-xs-12">
 
 
+                </div >
+                <div ng-if="vm.newDebitCard">
+                    <h4>Dados Cartão de Débito</h4>
+                    <div class="form-group col-xs-12">
+                        <label for="nomeCartao">Nome como no cartão:</label>
+                        <input id="nomeCartao" next-on-enter class="form-control" ng-model="vm.cardHolderName" type="text">
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="numeroCartao">Número do cartão:</label>
+                        <input id="numeroCartao" next-on-enter class="form-control" ng-model="vm.cardNumber" type="tel">
+                    </div>         
+                    <div class="form-group col-xs-12">
+                        <label for="mesExpericao">Mês expiração:</label>
+                        <input id="mesExpericao" next-on-enter class="form-control" ng-model="vm.cardExpirationMonth" type="tel" placeholder="01">
+                    </div>                           
+                    <div class="form-group col-xs-12">
+                        <label for="anoExpericao">Ano expiração:</label>
+                        <input id="anoExpericao" next-on-enter class="form-control" ng-model="vm.cardExpirationYear" type="tel" placeholder="2019">
+                    </div>                                       
+                    <div class="form-group col-xs-12">
+                        <label for="codigoVerificacao">Código de verificação:</label>
+                        <input id="codigoVerificacao" next-on-enter class="form-control" ng-model="vm.cardCVV" type="tel">
+                    </div> 
                 </div>
+                 
 
                 <div class="form-group col-xs-12">
                     <label for="observacao">Observação cliente (email):</label>
