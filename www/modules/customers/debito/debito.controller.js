@@ -166,7 +166,7 @@
 
             var card = getCardData();
 
-            if(!card){
+            if(!card && vm.newDebitCard){
               alert('pendente dados de cartão de débito')
                return;
             }
@@ -423,7 +423,8 @@
                   ExpirationMonth: vm.cardExpirationMonth,
                   ExpirationYear: vm.cardExpirationYear,
                   Number: vm.cardNumber,
-                  Cvv:vm.cardCVV
+                  Cvv:vm.cardCVV,
+                  Flag:vm.cardFlag
               }
               }
               catch(e){

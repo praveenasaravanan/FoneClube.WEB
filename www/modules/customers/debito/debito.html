@@ -106,7 +106,23 @@
                     <div class="form-group col-xs-12">
                         <label for="codigoVerificacao">Código de verificação:</label>
                         <input id="codigoVerificacao" next-on-enter class="form-control" ng-model="vm.cardCVV" type="tel">
-                    </div> 
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="codigoVerificacao">Bandeira:</label>
+                        <!-- <input id="codigoVerificacao" next-on-enter class="form-control" ng-model="vm.cardFlag" type="tel"> -->
+                        <!-- visa, Master, Discover, Amex, Elo, Aura, JCB, Diners, Hicard -->
+                        <select ng-model="vm.cardFlag">
+                            <option value="visa">visa</option>
+                            <option value="Master">Master</option>
+                            <option value="Discover">Discover</option>
+                            <option value="Amex">Amex</option>
+                            <option value="Elo">Elo</option>
+                            <option value="Aura">Aura</option>
+                            <option value="JCB">JCB</option>
+                            <option value="Diners">Diners</option>
+                            <option value="Hicard">Hicard</option>
+                          </select>
+                    </div>  
                 </div>
                  
 
