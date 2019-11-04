@@ -43,13 +43,14 @@
 
         init();
         function init() {
-          FoneclubeService.getCommision(customer.Id).then(function (result) {
-            vm.bonus = parseFloat(result.Ammount / 100).toFixed(2);
-            calculate();
-          })
-            .catch(function (error) {
 
-            });
+        FoneclubeService.getTotaisComissoes(customer.Id).then(function (result) {
+            console.log('FoneclubeService.getTotaisComissoes')
+            console.log(result)
+            debugger
+            vm.bonus = parseFloat(result.ValorTotalLiberadoParaPagarCliente/ 100).toFixed(2);
+
+          })
 
             FoneclubeService.getLastPersonCharging(customer.Id).then(function (result) {
                 // debugger
