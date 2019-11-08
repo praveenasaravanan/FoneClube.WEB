@@ -31,7 +31,8 @@
             <div class="form-group shadow-z-1 col-xs-12 margin-top" ng-show="!vm.loading && vm.lista.length > 0">
                <!-- inicio da tabela -->
                
-               <div class="list-group" ng-repeat="customer in vm.lista">
+               
+               <div class="list-group" ng-repeat="customer in vm.massList">
                 <!-- active -->
                 <div  class="list-group-item list-group-item-action flex-column align-items-start container-mass">
                   <div class="d-flex w-100 justify-content-between">
@@ -41,7 +42,7 @@
                     <div class="mb-1 single-price-mass" ng-if="customer.SinglePrice > 0">Preço Único: R{{ customer.SinglePrice / 100 | currency}}</div>
                   </div>
 
-                  <button ng-click="vm.onClickCobrar(customer)" ng-disable="customer.requesting" class="btn botao-cobrar-cliente btn-primary ng-binding">
+                  <!-- <button ng-click="vm.onClickCobrar(customer)" ng-disable="customer.requesting" class="btn botao-cobrar-cliente btn-primary ng-binding">
                         Realizar Cobrança
                   </button> 
                   
@@ -75,9 +76,9 @@
                             money-input="" 
                             ng-model="customer.chargingAmmount">
                         </div>
-                    </div>
+                    </div> -->
 
-                    <div class="container-boxes">
+                    <!-- <div class="container-boxes">
                             <div class="form-check check-mass">
                                 <input ng-change="vm.onChangeCheckboxSoma(customer)" ng-model="customer.soma" class="form-check-input" type="checkbox">
                                 <label class="form-check-label label-check" for="exampleRadios2">
@@ -128,17 +129,17 @@
                           <td>R{{phone.OperatorChargedPrice / 100 | currency}}</td>
                           <td>R{{phone.ResultAmount / 100 | currency}}</td>
                         </tr>
-                      </table>
+                      </table> -->
 
                     
-                  <div ng-if="customer.Charged" class="list-group-item list-group-item-action list-group-item-success message-mass">
+                  <!-- <div ng-if="customer.Charged" class="list-group-item list-group-item-action list-group-item-success message-mass">
                       Cliente Cobrado no mês vingente definido.
                     </div>
                   <div ng-if="false" class="list-group-item list-group-item-action list-group-item-warning message-mass">
                       This is a warning list group item</div>
                   <div ng-if="!customer.Charged" class="list-group-item list-group-item-action list-group-item-info message-mass">
                         {{customer.infoMessage}}
-                    </div>
+                    </div> -->
                 </div>
                 
               </div>

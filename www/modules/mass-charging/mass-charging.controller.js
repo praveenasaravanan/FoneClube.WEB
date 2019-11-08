@@ -27,11 +27,15 @@
             { id:'boleto', description: 'Boleto' },
             { id:'cartao', description: 'Cartão de Crédito' }
         ]
-        
 
         function onSearchMassCharging(){
 
             vm.loading = true;
+            FoneclubeService.getMassChargingFull(vm.month,vm.year).then(function (result) {
+                debugger;
+                vm.massList = result.MassCharging;
+            })
+
             FoneclubeService.getMassChargingData(vm.month,vm.year).then(function (result) {
                 vm.lista = result;
                 console.log(result)
