@@ -38,8 +38,9 @@
                   <div class="d-flex w-100 justify-content-between">
                     <h4 class="mb-1">{{customer.Name}}</h4>
                     <h6 class="mb-1 customer-desc">Email: {{customer.Email}}  | Documento: {{customer.DocumentNumber}}</h6>
-                    <h6 class="mb-1 single-price-mass-desc" ng-if="customer.SinglePrice > 0">Descrição Preço único: {{ customer.DescriptionSinglePrice }}</h6>
-                    <div class="mb-1 single-price-mass" ng-if="customer.SinglePrice > 0">Preço Único: R{{ customer.SinglePrice / 100 | currency}}</div>
+                    <!-- <h6 class="mb-1 single-price-mass-desc" ng-if="customer.SinglePrice > 0">Descrição Preço único: {{ customer.DescriptionSinglePrice }}</h6> -->
+                    <div class="mb-1 single-price-mass" ng-if="customer.PrecoUnico > 0">Preço Único: R{{ customer.PrecoUnico / 100 | currency}}</div>
+                    <div class="mb-1 single-price-mass" ng-if="customer.ValorTotalCobranca > 0">Valor Total Cobrança: R{{ customer.ValorTotalCobranca / 100 | currency}}</div>
                   </div>
 
                   <!-- <button ng-click="vm.onClickCobrar(customer)" ng-disable="customer.requesting" class="btn botao-cobrar-cliente btn-primary ng-binding">
@@ -77,6 +78,24 @@
                             ng-model="customer.chargingAmmount">
                         </div>
                     </div> -->
+
+                    <!-- Name: "01 Marcio Franco",
+                    CPF: "90616693753",
+                    Email: "marcio.franco@gmail.com",
+                    ValorTotalCobranca: "25000",
+                    PrecoUnico: "25000",
+                    LastChargingPaid: null,
+                    LastCharging: null,
+                    NovoComentario: null,
+                    ValorOperadoraTotalLinhas: "51030",
+                    Phones: [],
+                    IdPerson: 1,
+                    IdPagarme: null,
+                    GoodToCharge: true,
+                    Reason: "Não é possível realizar uma cobrança a custo zero",
+                    FonteDoTotalCobrar: 1,
+                    ResulTransaction: null,
+                    EmailEnviado: false -->
 
                     <!-- <div class="container-boxes">
                             <div class="form-check check-mass">

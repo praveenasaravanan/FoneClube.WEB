@@ -38,7 +38,7 @@
 
             FoneclubeService.getMassChargingData(vm.month,vm.year).then(function (result) {
                 vm.lista = result;
-                console.log(result)
+                
                 vm.lista.forEach(customer => {
                     
                     if(!customer.Charged)
