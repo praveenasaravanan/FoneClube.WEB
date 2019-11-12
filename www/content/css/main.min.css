@@ -845,7 +845,12 @@ v-pane-content {
   flex: 1 1 auto;
   height: 100%;
   flex-direction: column;
-  background-color: #ecf0f5; }
+  background-color: #ecf0f5;
+  /* Green */
+  /* Blue */
+  /* Orange */
+  /* Red */
+  /* Gray */ }
   .mass-charging-container .no-outline {
     outline: none !important; }
   .mass-charging-container .floating-button {
@@ -1071,6 +1076,21 @@ v-pane-content {
     /* margin: 0; */
     margin-top: 12px;
     width: 120px; }
+  .mass-charging-container .label {
+    color: white; }
+  .mass-charging-container .success {
+    background-color: #4CAF50; }
+  .mass-charging-container .info {
+    background-color: #2196F3; }
+  .mass-charging-container .warning {
+    background-color: #ff9800; }
+  .mass-charging-container .danger {
+    background-color: #f44336; }
+  .mass-charging-container .other {
+    background-color: #e7e7e7;
+    color: black; }
+  .mass-charging-container .margem-titulo {
+    margin-top: 5px; }
 
 .menu-container {
   cursor: default;
@@ -1271,6 +1291,44 @@ v-pane-content {
   text-align: center;
   font-size: 1vw; }
 
+.borda-topo {
+  margin-top: 100px;
+  position: relative; }
+
+.container-button {
+  position: relative;
+  width: 250px;
+  height: 20px; }
+
+.container-texto {
+  position: absolute;
+  top: 100px;
+  right: 0;
+  width: 70%; }
+
+.largura-area-texto {
+  width: 70%; }
+
+.altura-area-texto {
+  height: 400px; }
+
+.preview {
+  position: relative;
+  width: 600px;
+  background-color: white; }
+
+.container-plan-edition {
+  margin-top: 70px;
+  margin-left: 30px;
+  width: 95%; }
+
+.btn-edicao-foneclube-plan {
+  width: 90%;
+  margin-top: 15px; }
+
+.margem-item-tabela-plans {
+  margin-left: 20px; }
+
 .whatsapp-modal #divSendMessage {
   position: absolute;
   bottom: 0;
@@ -1344,44 +1402,6 @@ v-pane-content {
     margin-left: 5px;
     font-size: 12px; }
 
-.borda-topo {
-  margin-top: 100px;
-  position: relative; }
-
-.container-button {
-  position: relative;
-  width: 250px;
-  height: 20px; }
-
-.container-texto {
-  position: absolute;
-  top: 100px;
-  right: 0;
-  width: 70%; }
-
-.largura-area-texto {
-  width: 70%; }
-
-.altura-area-texto {
-  height: 400px; }
-
-.preview {
-  position: relative;
-  width: 600px;
-  background-color: white; }
-
-.container-plan-edition {
-  margin-top: 70px;
-  margin-left: 30px;
-  width: 95%; }
-
-.btn-edicao-foneclube-plan {
-  width: 90%;
-  margin-top: 15px; }
-
-.margem-item-tabela-plans {
-  margin-left: 20px; }
-
 .boleto-modal .btn {
   margin-bottom: 5px; }
 
@@ -1391,6 +1411,104 @@ v-pane-content {
 .aviso-sem-pagamento {
   color: red;
   font-size: 18px; }
+
+.existent-card-modal .btn {
+  margin-bottom: 5px; }
+
+.existent-card-modal .btn:last-child {
+  margin-bottom: 10px; }
+
+.edicao-container {
+  flex: 1 1 auto;
+  height: 100%;
+  flex-direction: column;
+  background-color: #ecf0f5; }
+  .edicao-container .form-container {
+    margin-top: 15px; }
+  .edicao-container .accordion-container-close {
+    max-height: 0px;
+    transition: max-height 0.15s ease-out; }
+    .edicao-container .accordion-container-close .form-container {
+      display: none; }
+  .edicao-container .accordion-container-open {
+    max-height: auto;
+    transition: max-height 0.25s ease-in; }
+  .edicao-container .plano-operadora {
+    font-size: 14px;
+    font-weight: bold; }
+  .edicao-container .combo-pai {
+    width: 200px; }
+  .edicao-container .atualiza-pai-btn {
+    margin-left: 5px; }
+  .edicao-container .combo-atualiza-pai {
+    float: left; }
+  .edicao-container .checkcircle {
+    color: green;
+    font-size: 35px; }
+  .edicao-container .checkcircle:hover {
+    background-color: #bdffab; }
+  .edicao-container .checkcircle:active {
+    background-color: #95adff; }
+  .edicao-container .uncheckcircle {
+    color: red;
+    font-size: 35px; }
+  .edicao-container .uncheckcircle:hover {
+    background-color: #fdb6b6; }
+  .edicao-container .uncheckcircle:active {
+    background-color: #e2a3fd; }
+
+.s_cls span {
+  display: inline-block;
+  vertical-align: middle;
+  color: #de0303;
+  font-weight: 600; }
+
+.s_cls input, .s_cls select {
+  display: inline-block;
+  width: 180px;
+  vertical-align: middle;
+  padding: 6px !important; }
+
+.s_cls {
+  width: 100%;
+  display: inline-block; }
+
+.s_lable {
+  padding-left: 30px;
+  margin-top: 30px; }
+
+.s_cls.s_lbl {
+  text-align: center;
+  margin-bottom: 0px;
+  margin: 0; }
+
+button.s_button-icon {
+  margin-right: 20px;
+  font-size: 26px; }
+
+button.s_button-icon:hover {
+  color: #3379b7; }
+
+table.s_table {
+  width: 100%; }
+
+table.s_table tr th {
+  text-align: center;
+  padding: 15px 15px  10px; }
+
+table.s_table tr td:nth-child(5) {
+  text-align: center; }
+
+table.s_table tr td {
+  text-align: center;
+  padding: 8px; }
+
+.box-status {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  color: white;
+  padding-top: 10px; }
 
 textarea#nomeCartao {
   height: 150px; }
@@ -1410,6 +1528,92 @@ textarea#nomeCartao {
 
 input[type='checkbox'] {
   margin-top: -4px; }
+
+#divStatusCharging .ag-cell {
+  padding-top: 5px;
+  padding-bottom: 5px; }
+
+#divStatusCharging #divTopFilters {
+  padding-top: 10px;
+  background-color: #EDF0F5;
+  border-bottom: 5px solid #A84FA8;
+  margin-top: 44px; }
+  #divStatusCharging #divTopFilters #divAll {
+    padding-left: 30px; }
+  #divStatusCharging #divTopFilters #divFilters {
+    position: relative;
+    top: 22px; }
+  #divStatusCharging #divTopFilters #divAIFilter, #divStatusCharging #divTopFilters #divColorFilters, #divStatusCharging #divTopFilters #divExcFltr {
+    float: left; }
+  #divStatusCharging #divTopFilters #divAIFilter {
+    width: 40%; }
+  #divStatusCharging #divTopFilters #divExcFltr {
+    width: 40%; }
+  #divStatusCharging #divTopFilters #divColorFilters {
+    width: 20%; }
+    #divStatusCharging #divTopFilters #divColorFilters #spnFilterGreen, #divStatusCharging #divTopFilters #divColorFilters #spnFilterYellow, #divStatusCharging #divTopFilters #divColorFilters #spnFilterRed {
+      padding: 0px 8px;
+      border-radius: 50%;
+      border-radius: 50%;
+      margin-left: 5px; }
+    #divStatusCharging #divTopFilters #divColorFilters #spnFilterGreen {
+      background-color: green; }
+    #divStatusCharging #divTopFilters #divColorFilters #spnFilterYellow {
+      background-color: yellow; }
+    #divStatusCharging #divTopFilters #divColorFilters #spnFilterRed {
+      background-color: red; }
+  #divStatusCharging #divTopFilters #divNameFltr {
+    text-align: center; }
+    #divStatusCharging #divTopFilters #divNameFltr i {
+      font-size: 25px;
+      margin-left: 10px;
+      color: black; }
+
+#divStatusCharging .grid-container {
+  width: 100%; }
+
+#divStatusCharging #loadingDiv {
+  z-index: 9999; }
+
+#divStatusCharging .payment-status-color {
+  text-align: center; }
+  #divStatusCharging .payment-status-color span {
+    padding: 5px 20px; }
+
+#divStatusCharging .break-word {
+  font-weight: bold; }
+
+#divStatusCharging .btn-flag {
+  content: '&#9872'; }
+
+#divStatusCharging img.imgWhatsapp {
+  max-width: 40px;
+  border-radius: 50%; }
+
+#divStatusCharging .link {
+  cursor: pointer; }
+
+@media only screen and (max-width: 600px) {
+  #divStatusCharging {
+    width: 100%; } }
+
+.new-card-modal .btn {
+  margin-bottom: 5px; }
+
+.new-card-modal .btn:last-child {
+  margin-bottom: 10px; }
+
+.boleto-modal .btn {
+  margin-bottom: 5px; }
+
+.boleto-modal .btn:last-child {
+  margin-bottom: 10px; }
+
+.new-card-modal .btn {
+  margin-bottom: 5px; }
+
+.new-card-modal .btn:last-child {
+  margin-bottom: 10px; }
 
 .customer-modal .flag-warning {
   color: #ffb300; }
@@ -1525,104 +1729,6 @@ input[type='checkbox'] {
   .customer-modal section .available-card button {
     margin: 0; }
 
-.edicao-container {
-  flex: 1 1 auto;
-  height: 100%;
-  flex-direction: column;
-  background-color: #ecf0f5; }
-  .edicao-container .form-container {
-    margin-top: 15px; }
-  .edicao-container .accordion-container-close {
-    max-height: 0px;
-    transition: max-height 0.15s ease-out; }
-    .edicao-container .accordion-container-close .form-container {
-      display: none; }
-  .edicao-container .accordion-container-open {
-    max-height: auto;
-    transition: max-height 0.25s ease-in; }
-  .edicao-container .plano-operadora {
-    font-size: 14px;
-    font-weight: bold; }
-  .edicao-container .combo-pai {
-    width: 200px; }
-  .edicao-container .atualiza-pai-btn {
-    margin-left: 5px; }
-  .edicao-container .combo-atualiza-pai {
-    float: left; }
-  .edicao-container .checkcircle {
-    color: green;
-    font-size: 35px; }
-  .edicao-container .checkcircle:hover {
-    background-color: #bdffab; }
-  .edicao-container .checkcircle:active {
-    background-color: #95adff; }
-  .edicao-container .uncheckcircle {
-    color: red;
-    font-size: 35px; }
-  .edicao-container .uncheckcircle:hover {
-    background-color: #fdb6b6; }
-  .edicao-container .uncheckcircle:active {
-    background-color: #e2a3fd; }
-
-.s_cls span {
-  display: inline-block;
-  vertical-align: middle;
-  color: #de0303;
-  font-weight: 600; }
-
-.s_cls input, .s_cls select {
-  display: inline-block;
-  width: 180px;
-  vertical-align: middle;
-  padding: 6px !important; }
-
-.s_cls {
-  width: 100%;
-  display: inline-block; }
-
-.s_lable {
-  padding-left: 30px;
-  margin-top: 30px; }
-
-.s_cls.s_lbl {
-  text-align: center;
-  margin-bottom: 0px;
-  margin: 0; }
-
-button.s_button-icon {
-  margin-right: 20px;
-  font-size: 26px; }
-
-button.s_button-icon:hover {
-  color: #3379b7; }
-
-table.s_table {
-  width: 100%; }
-
-table.s_table tr th {
-  text-align: center;
-  padding: 15px 15px  10px; }
-
-table.s_table tr td:nth-child(5) {
-  text-align: center; }
-
-table.s_table tr td {
-  text-align: center;
-  padding: 8px; }
-
-.box-status {
-  width: 40px;
-  height: 40px;
-  border-radius: 5px;
-  color: white;
-  padding-top: 10px; }
-
-.existent-card-modal .btn {
-  margin-bottom: 5px; }
-
-.existent-card-modal .btn:last-child {
-  margin-bottom: 10px; }
-
 textarea#nomeCartao {
   height: 150px; }
 
@@ -1641,92 +1747,6 @@ textarea#nomeCartao {
 
 input[type='checkbox'] {
   margin-top: -4px; }
-
-#divStatusCharging .ag-cell {
-  padding-top: 5px;
-  padding-bottom: 5px; }
-
-#divStatusCharging #divTopFilters {
-  padding-top: 10px;
-  background-color: #EDF0F5;
-  border-bottom: 5px solid #A84FA8;
-  margin-top: 44px; }
-  #divStatusCharging #divTopFilters #divAll {
-    padding-left: 30px; }
-  #divStatusCharging #divTopFilters #divFilters {
-    position: relative;
-    top: 22px; }
-  #divStatusCharging #divTopFilters #divAIFilter, #divStatusCharging #divTopFilters #divColorFilters, #divStatusCharging #divTopFilters #divExcFltr {
-    float: left; }
-  #divStatusCharging #divTopFilters #divAIFilter {
-    width: 40%; }
-  #divStatusCharging #divTopFilters #divExcFltr {
-    width: 40%; }
-  #divStatusCharging #divTopFilters #divColorFilters {
-    width: 20%; }
-    #divStatusCharging #divTopFilters #divColorFilters #spnFilterGreen, #divStatusCharging #divTopFilters #divColorFilters #spnFilterYellow, #divStatusCharging #divTopFilters #divColorFilters #spnFilterRed {
-      padding: 0px 8px;
-      border-radius: 50%;
-      border-radius: 50%;
-      margin-left: 5px; }
-    #divStatusCharging #divTopFilters #divColorFilters #spnFilterGreen {
-      background-color: green; }
-    #divStatusCharging #divTopFilters #divColorFilters #spnFilterYellow {
-      background-color: yellow; }
-    #divStatusCharging #divTopFilters #divColorFilters #spnFilterRed {
-      background-color: red; }
-  #divStatusCharging #divTopFilters #divNameFltr {
-    text-align: center; }
-    #divStatusCharging #divTopFilters #divNameFltr i {
-      font-size: 25px;
-      margin-left: 10px;
-      color: black; }
-
-#divStatusCharging .grid-container {
-  width: 100%; }
-
-#divStatusCharging #loadingDiv {
-  z-index: 9999; }
-
-#divStatusCharging .payment-status-color {
-  text-align: center; }
-  #divStatusCharging .payment-status-color span {
-    padding: 5px 20px; }
-
-#divStatusCharging .break-word {
-  font-weight: bold; }
-
-#divStatusCharging .btn-flag {
-  content: '&#9872'; }
-
-#divStatusCharging img.imgWhatsapp {
-  max-width: 40px;
-  border-radius: 50%; }
-
-#divStatusCharging .link {
-  cursor: pointer; }
-
-@media only screen and (max-width: 600px) {
-  #divStatusCharging {
-    width: 100%; } }
-
-.new-card-modal .btn {
-  margin-bottom: 5px; }
-
-.new-card-modal .btn:last-child {
-  margin-bottom: 10px; }
-
-.boleto-modal .btn {
-  margin-bottom: 5px; }
-
-.boleto-modal .btn:last-child {
-  margin-bottom: 10px; }
-
-.new-card-modal .btn {
-  margin-bottom: 5px; }
-
-.new-card-modal .btn:last-child {
-  margin-bottom: 10px; }
 
 .mensagens-dialog {
   -webkit-user-select: none;
