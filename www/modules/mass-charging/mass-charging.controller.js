@@ -34,6 +34,25 @@
             FoneclubeService.getMassChargingFull(vm.month,vm.year).then(function (result) {
                 debugger;
                 vm.massList = result.MassCharging;
+
+                for(var i in result.MassCharging){
+
+                    result.MassCharging[i].idTypeCharging = boleto;
+                    result.MassCharging[i].typeCharging = 'boleto'
+
+                    if(result.MassCharging[i].HasCard && result.MassCharging[i].LastCharging.PaymentType == cartao){
+                        result.MassCharging[i].idTypeCharging = cartao;
+                        result.MassCharging[i].typeCharging = 'cartao'
+                    }
+
+                    result.MassCharging[i].chargingAmmount = result.MassCharging[i].PrecoUnico;
+                    result.MassCharging[i].enviarEmail = true;
+
+
+                    if(result.MassCharging[i].Charged)
+                        setMessageInfoCharged(result.MassCharging[i], "Cliente Cobrado no mês vingente definido. " )
+
+                }
             })
 
             FoneclubeService.getMassChargingData(vm.month,vm.year).then(function (result) {
@@ -62,7 +81,7 @@
 
         function onClickCobrar(customer){
 
-            // debugger
+            debugger
             setMessageInfo(customer, "Iniciando cobrança, validando campos preenchidos")
             var valorTotalCobrar = customer.chargingAmmount;
             valorTotalCobrar = parseInt(valorTotalCobrar.replace('.','').replace(prefixoMoetario, ''))
@@ -80,10 +99,16 @@
             if(!customer.requesting)
             {
 
+                if(customer.LastChargingPaid == null)
+                {
+                    customer.LastChargingPaid = {};
+                    customer.LastChargingPaid.Comment = undefined;
+                }
+
                 var customerSend = {
-                    Id: customer.Id,
+                    Id: customer.IdPerson,
                     Charging:{
-                        Comment:customer.foneclubeComment,
+                        Comment: customer.LastChargingPaid.Comment ,
                         CommentEmail:customer.emailComment,
                         CommentBoleto: customer.boletoComment, 
                         Ammount: valorTotalCobrar,
@@ -98,8 +123,13 @@
                 setMessageInfo(customer, "Iniciando envio de transação, aguarde, esperando retorno do gateway de pagamento")
                 FoneclubeService.postGeraCobrancaIntegrada(customerSend).then(function (result) {
                     
+                    debugger
+                    var linkBoleto = '';
+                    if(customerSend.Charging.PaymentType == boleto)
+                        linkBoleto = result.LinkBoleto
+
                     if(result.StatusPaid){
-                        setMessageInfo(customer, "Transação efetuada concluindo processo")
+                        setMessageInfo(customer, "Cliente Cobrado no mês vingente definido, finalizando procedimentos. " + linkBoleto)
                     }
                     else{
                         setMessageInfo(customer, result.DescriptionMessage);
@@ -114,7 +144,7 @@
                         {
                             if(result.StatusPaid){
 
-                                // debugger
+                                
                                 var emailObject = {
                                     To: customer.Email,
                                     TargetName : customer.Name,
@@ -124,6 +154,7 @@
                                     TemplateType : 2
                                 }
                                 
+                                debugger
                                 FoneclubeService.postSendEmail(emailObject).then(function(result){
                                     console.log('FoneclubeService.postHistoryPayment');
                                     console.log(result);
@@ -134,21 +165,22 @@
                                         customer.Charged = true
                                     } 
                                     else{
-                                        setMessageInfo(customer, "Cliente cobrado, histórico salvo, mas email não enviado, importante.")
+                                        setMessageInfo(customer, "Cliente cobrado, histórico salvo, mas email não enviado, importante. " + linkBoleto)
                                     }
                                 })
                                 .catch(function(error){
                                     console.log('catch error');
                                     console.log(error);
                                     customer.requesting = false;
-                                    setMessageInfo(customer, "Cliente cobrado, histórico salvo, mas email não enviado, importante.")
+                                    setMessageInfo(customer, "Cliente cobrado, histórico salvo, mas email não enviado, importante. " + linkBoleto)
                                 });
                                 
                             }
                                 
                         }
                         else{
-                            console.log('Cobrado sem email concluído')
+                            console.log('Cobrado sem email concluído ' + linkBoleto)
+                            setMessageInfo(customer, "Cliente Cobrado no mês vingente definido. " + linkBoleto)
                             customer.requesting = false;
                             customer.Charged = true
                         }
@@ -175,9 +207,10 @@
 
                             if(result){
                                 customer.Charged = true
+                                setMessageInfo(customer, "Cliente Cobrado no mês vingente definido. " + linkBoleto)
                             } 
                             else{
-                                setMessageInfo(customer, "Cliente cobrado, histórico salvo, mas email não enviado, importante.")
+                                setMessageInfo(customer, "Cliente cobrado, histórico salvo, mas email não enviado, importante. " +  linkBoleto)
                             }
                                 
                         })
@@ -305,6 +338,10 @@
         function setMessageInfo(customer, message){
             customer.infoMessage = message;
             customer.Charged = false;
+        }
+
+        function setMessageInfoCharged(customer, message){
+            customer.infoMessage = message;
         }
 
     }

@@ -36,7 +36,7 @@
                 <!-- active -->
                 <div  class="list-group-item list-group-item-action flex-column align-items-start container-mass">
                   <div class="d-flex w-100 justify-content-between">
-                    <h4 class="mb-1">{{customer.Name}} <span ng-if="customer.GoodToCharge" class="label success">Bom Para Cobrar</span> <span ng-if="!customer.GoodToCharge" class="label warning">Atenção ao cobrar</span> </h4>
+                    <h4 class="mb-1">{{customer.Name}} <span ng-if="customer.GoodToCharge && !customer.Charged" class="label success">Bom Para Cobrar</span> <span ng-if="!customer.GoodToCharge && !customer.Charged" class="label warning">Risco de não ter lucro</span> </h4>
                     <h6 class="mb-1 customer-desc margem-titulo">Email: {{customer.Email}}  | Documento: {{customer.CPF}}</h6>
                     <!-- <h6 class="mb-1 single-price-mass-desc" ng-if="customer.SinglePrice > 0">Descrição Preço único: {{ customer.DescriptionSinglePrice }}</h6> -->
                     <div class="mb-1 single-price-mass" ng-if="customer.PrecoUnico > 0">Preço Único: R{{ customer.PrecoUnico / 100 | currency}}</div>
@@ -51,7 +51,11 @@
                   <div class="payment-set">
                         <div class="column-payment type-payment">
                             <label class="titulo">Forma Pagamento:</label>
-                            <select id="selectPaymentMethod" class="form-control ng-pristine ng-valid ng-empty ng-touched select-mass" ng-options="payment.id as payment.description for payment in vm.paymentMethod" ng-model="customer.typeCharging" ng-disabled="customer.Charging.Charged || customer.statusOnCharging == 3 || customer.statusOnCharging == 2" style="">
+                            <select id="selectPaymentMethod" 
+                            class="form-control ng-pristine ng-valid ng-empty ng-touched select-mass" 
+                            ng-options="payment.id as payment.description for payment in vm.paymentMethod" 
+                            ng-model="customer.typeCharging" 
+                            ng-disabled="customer.Charging.Charged || customer.statusOnCharging == 3 || customer.statusOnCharging == 2" style="">
                                 <option value="" selected="selected">Selecione</option>
                             </select>
                         </div>
@@ -98,12 +102,13 @@
                                 Cobrança padrão
                                 </label>
                             </div> -->
-                            <!-- <div class="form-check check-mass">
+                            <div class="form-check check-mass" style="margin-top: 20px;">
+                                                      
                                 <input ng-model="customer.enviarEmail" class="form-check-input" type="checkbox">
                                 <label class="form-check-label label-check" for="exampleRadios3">
                                 Enviar Email
                                 </label>
-                            </div> -->
+                            </div> 
                          </div> 
                   
                   <table >
@@ -139,12 +144,12 @@
 
                     
                    <div ng-if="customer.Charged" class="list-group-item list-group-item-action list-group-item-success message-mass">
-                      Cliente Cobrado no mês vingente definido.
+                      {{customer.infoMessage}}
                     </div>
                   <div ng-if="false" class="list-group-item list-group-item-action list-group-item-warning message-mass">
                       This is a warning list group item</div>
                   <div ng-if="!customer.Charged" class="list-group-item list-group-item-action list-group-item-info message-mass">
-                        {{customer.infoMessage}}
+                        {{customer.infoMessage}} | {{customer.Reason}}
                     </div> 
                 </div>
                 
