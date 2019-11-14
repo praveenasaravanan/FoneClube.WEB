@@ -23,10 +23,12 @@
         vm.onClickCobrar = onClickCobrar;
         vm.onChangeCheckboxSoma = onChangeCheckboxSoma;
         vm.onChangeCheckboxLastPayment = onChangeCheckboxLastPayment;
+        vm.onChangeCheckboxCharged = onChangeCheckboxCharged;
         vm.paymentMethod = [
             { id:'boleto', description: 'Boleto' },
             { id:'cartao', description: 'Cartão de Crédito' }
         ]
+        vm.showCharged = true;
 
         function onSearchMassCharging(){
 
@@ -48,6 +50,10 @@
                     result.MassCharging[i].chargingAmmount = result.MassCharging[i].PrecoUnico;
                     result.MassCharging[i].enviarEmail = true;
 
+                    if(result.MassCharging[i].ChargeDoMes != null){
+                        // result.MassCharging[i].ChargeDoMes.BoletoId
+                        //colocar chamada pra pegar link
+                    }
 
                     if(result.MassCharging[i].Charged)
                         setMessageInfoCharged(result.MassCharging[i], "Cliente Cobrado no mês vingente definido. " )
@@ -342,6 +348,10 @@
 
         function setMessageInfoCharged(customer, message){
             customer.infoMessage = message;
+        }
+
+        function onChangeCheckboxCharged(){
+            // console.log('teste')
         }
 
     }

@@ -1033,6 +1033,10 @@ v-pane-content {
     top: 3px;
     margin-right: 190px;
     font-size: small; }
+  .mass-charging-container .checkbox-topo {
+    margin-top: 40px; }
+  .mass-charging-container .input-topo {
+    margin-left: 20px; }
   .mass-charging-container .label-check {
     padding-top: 0px; }
   .mass-charging-container .check-mass {

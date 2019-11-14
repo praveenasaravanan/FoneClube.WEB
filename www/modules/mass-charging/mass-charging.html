@@ -16,11 +16,23 @@
                     <input type="number" class="form-control-mass" placeholder="Ano" ng-model="vm.year" aria-describedby="sizing-addon2" id="ano">
                 </div>
 
+                
+
                 <div class="row">
                     <button class="btn btn-primary col-sm-2 col-xs-12 btn-buscar" 
                     ng-click="vm.onSearchMassCharging()" 
                     ng-disabled="vm.resquenting || vm.loading">Buscar</button>
+
+                    <div class="form-check checkbox-topo">
+                        <input ng-model="vm.showCharged" ng-change="vm.onChangeCheckboxCharged()"  class="form-check-input input-topo ng-pristine ng-untouched ng-valid ng-empty" type="checkbox">
+                        <label class="form-check-label label-check" for="exampleRadios3">
+                            Exibe clientes já cobrados
+                        </label>
+                        </div>
+                       
                 </div>
+
+               
             </div>
             
             
@@ -34,7 +46,7 @@
                
                <div class="list-group" ng-repeat="customer in vm.massList">
                 <!-- active -->
-                <div  class="list-group-item list-group-item-action flex-column align-items-start container-mass">
+                <div class="list-group-item list-group-item-action flex-column align-items-start container-mass">
                   <div class="d-flex w-100 justify-content-between">
                     <h4 class="mb-1">{{customer.Name}} <span ng-if="customer.GoodToCharge && !customer.Charged" class="label success">Bom Para Cobrar</span> <span ng-if="!customer.GoodToCharge && !customer.Charged" class="label warning">Risco de não ter lucro</span> </h4>
                     <h6 class="mb-1 customer-desc margem-titulo">Email: {{customer.Email}}  | Documento: {{customer.CPF}}</h6>
