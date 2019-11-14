@@ -29,12 +29,13 @@
             { id:'cartao', description: 'Cartão de Crédito' }
         ]
         vm.showCharged = true;
+        vm.getLinkBoleto = getLinkBoleto;
 
         function onSearchMassCharging(){
 
             vm.loading = true;
             FoneclubeService.getMassChargingFull(vm.month,vm.year).then(function (result) {
-                debugger;
+                // debugger;
                 vm.massList = result.MassCharging;
 
                 for(var i in result.MassCharging){
@@ -50,10 +51,6 @@
                     result.MassCharging[i].chargingAmmount = result.MassCharging[i].PrecoUnico;
                     result.MassCharging[i].enviarEmail = true;
 
-                    if(result.MassCharging[i].ChargeDoMes != null){
-                        // result.MassCharging[i].ChargeDoMes.BoletoId
-                        //colocar chamada pra pegar link
-                    }
 
                     if(result.MassCharging[i].Charged)
                         setMessageInfoCharged(result.MassCharging[i], "Cliente Cobrado no mês vingente definido. " )
@@ -87,7 +84,7 @@
 
         function onClickCobrar(customer){
 
-            debugger
+            // debugger
             setMessageInfo(customer, "Iniciando cobrança, validando campos preenchidos")
             var valorTotalCobrar = customer.chargingAmmount;
             valorTotalCobrar = parseInt(valorTotalCobrar.replace('.','').replace(prefixoMoetario, ''))
@@ -129,7 +126,7 @@
                 setMessageInfo(customer, "Iniciando envio de transação, aguarde, esperando retorno do gateway de pagamento")
                 FoneclubeService.postGeraCobrancaIntegrada(customerSend).then(function (result) {
                     
-                    debugger
+                    // debugger
                     var linkBoleto = '';
                     if(customerSend.Charging.PaymentType == boleto)
                         linkBoleto = result.LinkBoleto
@@ -160,7 +157,7 @@
                                     TemplateType : 2
                                 }
                                 
-                                debugger
+                                // debugger
                                 FoneclubeService.postSendEmail(emailObject).then(function(result){
                                     console.log('FoneclubeService.postHistoryPayment');
                                     console.log(result);
@@ -352,6 +349,15 @@
 
         function onChangeCheckboxCharged(){
             // console.log('teste')
+        }
+
+        function getLinkBoleto(idBoleto){
+            
+                PagarmeService.getBoletoUrl(idBoleto, null, null).then(function (result) {
+                    return idBoleto;
+                })
+            
+            
         }
 
     }
