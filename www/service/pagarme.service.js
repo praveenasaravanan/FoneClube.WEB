@@ -7,9 +7,9 @@
 
   function PagarmeService($q, HTTPService) {
         
-    //live
-    var apiKey = 'ak_live_fP7ceLSpdBe8gCXGTywVRmC5VTkvN0'
-    var encriptionKey = 'ek_live_U52ijlxsDgB8mk0rzcJde7HYHzqWYl';
+    //Testes
+    var apiKey = 'ak_test_rIMnFMFbwNJR1A5RuTmSULl9xxDdoM';
+    var encriptionKey = 'ek_test_5rLvyIU3tqMGHKAj94kpCuqSWT37Ps';
 
     this.getCards = getCards;
     this.getCustomers = getCustomers;

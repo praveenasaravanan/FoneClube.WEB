@@ -20,7 +20,7 @@
     vm.showLoader = showLoader;
     vm.hideLoader = hideLoader;
 
-    var releaseMode = true;
+    var releaseMode = false;
     var version = '1.2.9';
 
     setFavicon();
