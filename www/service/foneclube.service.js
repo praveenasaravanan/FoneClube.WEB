@@ -8,7 +8,7 @@
 
 
     //API tests
-    var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+    var urlApi = 'http://localhost:57078/api';
 
     this.postBasePerson = postBasePerson;
     this.postUpdatePerson = postUpdatePerson;

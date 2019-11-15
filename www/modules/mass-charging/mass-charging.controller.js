@@ -51,6 +51,12 @@
                     result.MassCharging[i].chargingAmmount = result.MassCharging[i].PrecoUnico;
                     result.MassCharging[i].enviarEmail = true;
 
+                    if(result.MassCharging[i].ChargeDoMes != null){
+                        if(result.MassCharging[i].ChargeDoMes.BoletoId > 0){
+                            getLinkBoleto(result.MassCharging[i].ChargeDoMes.BoletoId)
+                        }
+                    }
+                    
 
                     if(result.MassCharging[i].Charged)
                         setMessageInfoCharged(result.MassCharging[i], "Cliente Cobrado no mês vingente definido. " )
@@ -352,12 +358,9 @@
         }
 
         function getLinkBoleto(idBoleto){
-            
-                PagarmeService.getBoletoUrl(idBoleto, null, null).then(function (result) {
-                    return idBoleto;
-                })
-            
-            
+            PagarmeService.getBoletoUrl(idBoleto, null, null).then(function (result) {
+                console.log(result)
+            })
         }
 
     }
