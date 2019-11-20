@@ -57,10 +57,21 @@
                         }
                     }
                     
-
                     if(result.MassCharging[i].Charged)
                         setMessageInfoCharged(result.MassCharging[i], "Cliente Cobrado no mês vingente definido. " )
 
+                    result.MassCharging[i].showed = true;
+
+                    if(result.MassCharging[i].LastCharging){
+
+                        var dataCriacao = new Date(result.MassCharging[i].LastCharging.CreateDate)
+                        var dataCompare = new Date(result.MassCharging[i].LastCharging.CreateDate);
+                        dataCompare.setDate(dataCompare.getDate() + 35);
+
+                        if(dataCompare <= new Date()){
+                            result.MassCharging[i].tempoLongoCobrado = true;
+                        }
+                    }
                 }
             })
 
@@ -354,7 +365,22 @@
         }
 
         function onChangeCheckboxCharged(){
-            // console.log('teste')
+            console.log('teste');
+            debugger
+            for(var i in vm.massList){
+
+                if(vm.showCharged){
+                    vm.massList[i].showed = true; 
+                }
+                else{
+                    if(vm.massList[i].Charged){
+                        vm.massList[i].showed = false;
+                    }
+                }
+                
+                // vm.massList[i].showed = false;
+                
+            }
         }
 
         function getLinkBoleto(idBoleto){

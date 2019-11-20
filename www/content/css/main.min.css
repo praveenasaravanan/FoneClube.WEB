@@ -509,6 +509,51 @@ button {
     .popup-lista-imagens .back:hover {
       content: url("../../content/assets/icons/left-image-hover.png"); }
 
+.estoque .borda-topo-estoque {
+  margin-top: 160px;
+  position: relative; }
+
+.estoque .table-scroll thead {
+  display: table;
+  width: 94%;
+  table-layout: fixed;
+  margin-top: -120px;
+  position: absolute;
+  background-color: white; }
+
+.estoque .table-scroll tbody {
+  overflow-y: auto;
+  display: block;
+  width: 100%;
+  table-layout: fixed; }
+
+.estoque .table-scroll tr {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  height: 100%; }
+
+.estoque .table-scroll td {
+  height: 47px; }
+
+.estoque .titulo-teste {
+  color: grey;
+  position: absolute;
+  z-index: 10000;
+  margin-top: -104px;
+  margin-left: 80px; }
+
+.estoque .pagination-custom {
+  position: absolute;
+  margin-top: -110px; }
+
+.estoque .limites-pag {
+  position: absolute;
+  right: 0;
+  z-index: 10001;
+  margin-right: 24px;
+  margin-top: -150px; }
+
 .pane {
   overflow-y: auto; }
 
@@ -600,51 +645,6 @@ button {
     position: relative;
     bottom: 20px;
     right: 20px; }
-
-.estoque .borda-topo-estoque {
-  margin-top: 160px;
-  position: relative; }
-
-.estoque .table-scroll thead {
-  display: table;
-  width: 94%;
-  table-layout: fixed;
-  margin-top: -120px;
-  position: absolute;
-  background-color: white; }
-
-.estoque .table-scroll tbody {
-  overflow-y: auto;
-  display: block;
-  width: 100%;
-  table-layout: fixed; }
-
-.estoque .table-scroll tr {
-  display: table;
-  table-layout: fixed;
-  width: 100%;
-  height: 100%; }
-
-.estoque .table-scroll td {
-  height: 47px; }
-
-.estoque .titulo-teste {
-  color: grey;
-  position: absolute;
-  z-index: 10000;
-  margin-top: -104px;
-  margin-left: 80px; }
-
-.estoque .pagination-custom {
-  position: absolute;
-  margin-top: -110px; }
-
-.estoque .limites-pag {
-  position: absolute;
-  right: 0;
-  z-index: 10001;
-  margin-right: 24px;
-  margin-top: -150px; }
 
 .home {
   width: 100%;
@@ -1083,13 +1083,17 @@ v-pane-content {
   .mass-charging-container .label {
     color: white; }
   .mass-charging-container .success {
-    background-color: #4CAF50; }
+    background-color: #4CAF50;
+    margin-left: 10px; }
   .mass-charging-container .info {
-    background-color: #2196F3; }
+    background-color: #2196F3;
+    margin-left: 10px; }
   .mass-charging-container .warning {
-    background-color: #ff9800; }
+    background-color: #ff9800;
+    margin-left: 10px; }
   .mass-charging-container .danger {
-    background-color: #f44336; }
+    background-color: #f44336;
+    margin-left: 10px; }
   .mass-charging-container .other {
     background-color: #e7e7e7;
     color: black; }
@@ -1170,6 +1174,117 @@ v-pane-content {
 
 .tela-report td {
   padding-right: 20px; }
+
+.borda-topo {
+  margin-top: 100px;
+  position: relative; }
+
+.container-button {
+  position: relative;
+  width: 250px;
+  height: 20px; }
+
+.container-texto {
+  position: absolute;
+  top: 100px;
+  right: 0;
+  width: 70%; }
+
+.largura-area-texto {
+  width: 70%; }
+
+.altura-area-texto {
+  height: 400px; }
+
+.preview {
+  position: relative;
+  width: 600px;
+  background-color: white; }
+
+.container-plan-edition {
+  margin-top: 70px;
+  margin-left: 30px;
+  width: 95%; }
+
+.btn-edicao-foneclube-plan {
+  width: 90%;
+  margin-top: 15px; }
+
+.margem-item-tabela-plans {
+  margin-left: 20px; }
+
+.whatsapp-modal #divSendMessage {
+  position: absolute;
+  bottom: 0;
+  left: 0; }
+  .whatsapp-modal #divSendMessage input[type="text"] {
+    border-radius: 15px; }
+
+.whatsapp-modal .msgOuter {
+  max-width: 65%; }
+  .whatsapp-modal .msgOuter .spnClientName {
+    float: left;
+    font-size: 14px;
+    text-transform: capitalize;
+    color: teal; }
+
+.whatsapp-modal .message-in {
+  background-color: #fff;
+  border-radius: 7.5px;
+  box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13); }
+  .whatsapp-modal .message-in div {
+    padding: 5px 10px 5px 10px;
+    font-size: 14.2px;
+    line-height: 19px;
+    color: #262626; }
+
+.whatsapp-modal .message-out {
+  background-color: #dcf8c6;
+  border-radius: 7.5px;
+  box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+  float: left; }
+  .whatsapp-modal .message-out div {
+    padding: 5px 10px 5px 10px;
+    font-size: 14.2px;
+    line-height: 19px;
+    color: #262626; }
+
+.whatsapp-modal .divDate span {
+  background-color: #e1f4fb;
+  padding: 5px 10px 5px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  text-transform: uppercase; }
+
+.whatsapp-modal .spnTime {
+  float: right;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 11px;
+  height: 15px;
+  line-height: 15px;
+  white-space: nowrap;
+  margin: 8px 0px 5px 8px; }
+
+.whatsapp-modal .spnTopLeft {
+  font-size: 15px; }
+  .whatsapp-modal .spnTopLeft p {
+    margin: 0px;
+    line-height: 20px;
+    text-align: left; }
+  .whatsapp-modal .spnTopLeft img {
+    max-width: 40px; }
+  .whatsapp-modal .spnTopLeft p#pClientName {
+    color: red; }
+
+.whatsapp-modal #divTopTags {
+  margin-top: 10px; }
+  .whatsapp-modal #divTopTags span {
+    background-color: #35baf6;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    color: white;
+    margin-left: 5px;
+    font-size: 12px; }
 
 .busca-status {
   margin-top: 25px; }
@@ -1294,117 +1409,6 @@ v-pane-content {
   word-wrap: break-word;
   text-align: center;
   font-size: 1vw; }
-
-.borda-topo {
-  margin-top: 100px;
-  position: relative; }
-
-.container-button {
-  position: relative;
-  width: 250px;
-  height: 20px; }
-
-.container-texto {
-  position: absolute;
-  top: 100px;
-  right: 0;
-  width: 70%; }
-
-.largura-area-texto {
-  width: 70%; }
-
-.altura-area-texto {
-  height: 400px; }
-
-.preview {
-  position: relative;
-  width: 600px;
-  background-color: white; }
-
-.container-plan-edition {
-  margin-top: 70px;
-  margin-left: 30px;
-  width: 95%; }
-
-.btn-edicao-foneclube-plan {
-  width: 90%;
-  margin-top: 15px; }
-
-.margem-item-tabela-plans {
-  margin-left: 20px; }
-
-.whatsapp-modal #divSendMessage {
-  position: absolute;
-  bottom: 0;
-  left: 0; }
-  .whatsapp-modal #divSendMessage input[type="text"] {
-    border-radius: 15px; }
-
-.whatsapp-modal .msgOuter {
-  max-width: 65%; }
-  .whatsapp-modal .msgOuter .spnClientName {
-    float: left;
-    font-size: 14px;
-    text-transform: capitalize;
-    color: teal; }
-
-.whatsapp-modal .message-in {
-  background-color: #fff;
-  border-radius: 7.5px;
-  box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13); }
-  .whatsapp-modal .message-in div {
-    padding: 5px 10px 5px 10px;
-    font-size: 14.2px;
-    line-height: 19px;
-    color: #262626; }
-
-.whatsapp-modal .message-out {
-  background-color: #dcf8c6;
-  border-radius: 7.5px;
-  box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
-  float: left; }
-  .whatsapp-modal .message-out div {
-    padding: 5px 10px 5px 10px;
-    font-size: 14.2px;
-    line-height: 19px;
-    color: #262626; }
-
-.whatsapp-modal .divDate span {
-  background-color: #e1f4fb;
-  padding: 5px 10px 5px 10px;
-  font-size: 14px;
-  border-radius: 5px;
-  text-transform: uppercase; }
-
-.whatsapp-modal .spnTime {
-  float: right;
-  color: rgba(0, 0, 0, 0.45);
-  font-size: 11px;
-  height: 15px;
-  line-height: 15px;
-  white-space: nowrap;
-  margin: 8px 0px 5px 8px; }
-
-.whatsapp-modal .spnTopLeft {
-  font-size: 15px; }
-  .whatsapp-modal .spnTopLeft p {
-    margin: 0px;
-    line-height: 20px;
-    text-align: left; }
-  .whatsapp-modal .spnTopLeft img {
-    max-width: 40px; }
-  .whatsapp-modal .spnTopLeft p#pClientName {
-    color: red; }
-
-.whatsapp-modal #divTopTags {
-  margin-top: 10px; }
-  .whatsapp-modal #divTopTags span {
-    background-color: #35baf6;
-    padding: 5px 10px 5px 10px;
-    border-radius: 5px;
-    color: white;
-    margin-left: 5px;
-    font-size: 12px; }
 
 .boleto-modal .btn {
   margin-bottom: 5px; }
@@ -1647,25 +1651,6 @@ table.s_table tr td {
 .existent-card-modal .btn:last-child {
   margin-bottom: 10px; }
 
-textarea#nomeCartao {
-  height: 150px; }
-
-.dialog-toolbar {
-  width: 100%;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 30px; }
-
-.show-template .header {
-  height: auto !important; }
-  .show-template .header button {
-    top: 0; }
-
-input[type='checkbox'] {
-  margin-top: -4px; }
-
 #divStatusCharging .ag-cell {
   padding-top: 5px;
   padding-bottom: 5px; }
@@ -1733,6 +1718,25 @@ input[type='checkbox'] {
 @media only screen and (max-width: 600px) {
   #divStatusCharging {
     width: 100%; } }
+
+textarea#nomeCartao {
+  height: 150px; }
+
+.dialog-toolbar {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px; }
+
+.show-template .header {
+  height: auto !important; }
+  .show-template .header button {
+    top: 0; }
+
+input[type='checkbox'] {
+  margin-top: -4px; }
 
 .new-card-modal .btn {
   margin-bottom: 5px; }
