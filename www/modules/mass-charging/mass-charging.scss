@@ -282,9 +282,15 @@
         margin-right: 190px;
         font-size: small;
     }
+    .checkbox-topo{
+        margin-top: 5px;
+    }
 
+    .input-topo{
+        margin-left: 20px;
+    }
     .label-check{
-        padding-top: 10px;
+        padding-top: 0px;
     }
 
     .check-mass {
@@ -337,4 +343,19 @@
         margin-top: 12px;
         width: 120px;
         }
+
+    .label {
+        color: white;
+    }
+          
+    .success {background-color: #4CAF50; margin-left: 10px;} /* Green */
+    .info {background-color: #2196F3; margin-left: 10px;} /* Blue */
+    .warning {background-color: #ff9800; margin-left: 10px;} /* Orange */
+    .danger {background-color: #f44336; margin-left: 10px;} /* Red */
+    .other {background-color: #e7e7e7; color: black;} /* Gray */
+
+
+    .margem-titulo{
+        margin-top: 5px;
+    }
 }

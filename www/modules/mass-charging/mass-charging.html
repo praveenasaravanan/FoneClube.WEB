@@ -20,7 +20,31 @@
                     <button class="btn btn-primary col-sm-2 col-xs-12 btn-buscar" 
                     ng-click="vm.onSearchMassCharging()" 
                     ng-disabled="vm.resquenting || vm.loading">Buscar</button>
+
+                    <div class="form-check checkbox-topo">
+                        <input ng-model="vm.showCharged" ng-change="vm.onChangeCheckboxCharged()"  class="form-check-input input-topo ng-pristine ng-untouched ng-valid ng-empty" type="checkbox">
+                        <label class="form-check-label label-check" for="exampleRadios3">
+                            Exibe clientes já cobrados
+                        </label>
+                    </div>
+
+                    <div class="form-check checkbox-topo">
+                        <input ng-model="vm.showRisk" ng-change="vm.onChangeRiskCheckboxCharged()"  class="form-check-input input-topo ng-pristine ng-untouched ng-valid ng-empty" type="checkbox">
+                        <label class="form-check-label label-check" for="exampleRadios3">
+                            Exibe clientes com risco
+                        </label>
+                    </div>
+                       
+                    <div class="form-check checkbox-topo">
+                        <input ng-model="vm.showSemPagamento" ng-change="vm.onChangePaymentCheckboxCharged()"  class="form-check-input input-topo ng-pristine ng-untouched ng-valid ng-empty" type="checkbox">
+                        <label class="form-check-label label-check" for="exampleRadios3">
+                            Exibe clientes sem pagamento 35 dias
+                        </label>
+                    </div>
+
                 </div>
+
+               
             </div>
             
             
@@ -31,17 +55,31 @@
             <div class="form-group shadow-z-1 col-xs-12 margin-top" ng-show="!vm.loading && vm.lista.length > 0">
                <!-- inicio da tabela -->
                
-               <div class="list-group" ng-repeat="customer in vm.lista">
+               
+               <div class="list-group" ng-repeat="customer in vm.massList">
                 <!-- active -->
-                <div  class="list-group-item list-group-item-action flex-column align-items-start container-mass">
+                <div ng-if="customer.showed" class="list-group-item list-group-item-action flex-column align-items-start container-mass">
                   <div class="d-flex w-100 justify-content-between">
-                    <h4 class="mb-1">{{customer.Name}}</h4>
-                    <h6 class="mb-1 customer-desc">Email: {{customer.Email}}  | Documento: {{customer.DocumentNumber}}</h6>
-                    <h6 class="mb-1 single-price-mass-desc" ng-if="customer.SinglePrice > 0">Descrição Preço único: {{ customer.DescriptionSinglePrice }}</h6>
-                    <div class="mb-1 single-price-mass" ng-if="customer.SinglePrice > 0">Preço Único: R{{ customer.SinglePrice / 100 | currency}}</div>
+                    <h4 class="mb-1">{{customer.Name}} 
+                        <span ng-if="customer.GoodToCharge && !customer.Charged" class="label success">
+                            Bom Para Cobrar
+                        </span> 
+                        <span ng-if="!customer.GoodToCharge && !customer.Charged" class="label warning">
+                            Risco de não ter lucro
+                        </span>
+                        <span ng-if="customer.tempoLongoCobrado" class="label danger">
+                            Mais de 35 dias sem cobrar
+                        </span>  
+                    </h4>
+                    <h6 class="mb-1 customer-desc margem-titulo">Email: {{customer.Email}}  | Documento: {{customer.CPF}}</h6>
+                    <!-- <h6 class="mb-1 single-price-mass-desc" ng-if="customer.SinglePrice > 0">Descrição Preço único: {{ customer.DescriptionSinglePrice }}</h6> -->
+                    <div class="mb-1 single-price-mass" ng-if="customer.PrecoUnico > 0">Preço Único: R{{ customer.PrecoUnico / 100 | currency}}</div>
+                    <div class="mb-1 single-price-mass" ng-if="customer.ValorTotalCobranca > 0">Valor Total Cobrança: R{{ customer.ValorTotalCobranca / 100 | currency}}</div>
+                    <div class="mb-1 single-price-mass" >Data Última cobrança: {{ customer.LastCharging.CreateDate | date:"dd/MM/yyyy" }}</div>
+                    <div class="mb-1 single-price-mass" >Valor Última cobrança: R{{ customer.LastCharging.Ammount / 100 | currency}}</div>
                   </div>
 
-                  <button ng-click="vm.onClickCobrar(customer)" ng-disable="customer.requesting" class="btn botao-cobrar-cliente btn-primary ng-binding">
+                   <button ng-click="vm.onClickCobrar(customer)" ng-disable="customer.requesting" class="btn botao-cobrar-cliente btn-primary ng-binding">
                         Realizar Cobrança
                   </button> 
                   
@@ -49,14 +87,18 @@
                   <div class="payment-set">
                         <div class="column-payment type-payment">
                             <label class="titulo">Forma Pagamento:</label>
-                            <select id="selectPaymentMethod" class="form-control ng-pristine ng-valid ng-empty ng-touched select-mass" ng-options="payment.id as payment.description for payment in vm.paymentMethod" ng-model="customer.typeCharging" ng-disabled="customer.Charging.Charged || customer.statusOnCharging == 3 || customer.statusOnCharging == 2" style="">
+                            <select id="selectPaymentMethod" 
+                            class="form-control ng-pristine ng-valid ng-empty ng-touched select-mass" 
+                            ng-options="payment.id as payment.description for payment in vm.paymentMethod" 
+                            ng-model="customer.typeCharging" 
+                            ng-disabled="customer.Charging.Charged || customer.statusOnCharging == 3 || customer.statusOnCharging == 2" style="">
                                 <option value="" selected="selected">Selecione</option>
                             </select>
                         </div>
 
                         <div class="column-payment">
                             <label class="titulo">Comentário Foneclube (interno):</label>
-                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched input-mass" type="text" ng-disabled="false" ng-model="customer.foneclubeComment" style="">
+                            <input class="form-control ng-pristine ng-valid ng-empty ng-touched input-mass" type="text" ng-disabled="false" ng-model="customer.LastChargingPaid.Comment" style="">
                         </div>
 
                         <div class="column-payment">
@@ -75,34 +117,35 @@
                             money-input="" 
                             ng-model="customer.chargingAmmount">
                         </div>
-                    </div>
+                    </div> 
 
-                    <div class="container-boxes">
-                            <div class="form-check check-mass">
+                     <div class="container-boxes">
+                            <!-- <div class="form-check check-mass">
                                 <input ng-change="vm.onChangeCheckboxSoma(customer)" ng-model="customer.soma" class="form-check-input" type="checkbox">
                                 <label class="form-check-label label-check" for="exampleRadios2">
                                 Sugerir Soma relatório
                                 </label>
-                            </div>
-                            <div class="form-check check-mass">
+                            </div> -->
+                            <!-- <div class="form-check check-mass">
                                 <input ng-change="vm.onChangeCheckboxLastPayment(customer)" ng-model="customer.lastPayment" class="form-check-input" type="checkbox">
                                 <label class="form-check-label label-check" for="exampleRadios3">
                                 Sugerir Última Cobrança
                                 </label>
-                            </div>
-                            <div class="form-check check-mass">
+                            </div> -->
+                            <!-- <div class="form-check check-mass">
                                 <input ng-model="customer.defaultCharging" class="form-check-input" type="checkbox">
                                 <label class="form-check-label label-check" for="exampleRadios3">
                                 Cobrança padrão
                                 </label>
-                            </div>
-                            <div class="form-check check-mass">
+                            </div> -->
+                            <div class="form-check check-mass" style="margin-top: 20px;">
+                                                      
                                 <input ng-model="customer.enviarEmail" class="form-check-input" type="checkbox">
                                 <label class="form-check-label label-check" for="exampleRadios3">
                                 Enviar Email
                                 </label>
-                            </div>
-                         </div>
+                            </div> 
+                         </div> 
                   
                   <table >
                         <tr>
@@ -110,35 +153,40 @@
                           <th>NickName</th>
                           <th>Operadora</th>
                           <th>Preço VIP</th>
-                          <th>Total Cobrança</th>
+                          <!-- <th>Total Cobrança</th> -->
                           <th>Valor Operadora</th>
-                          <th>Resultado</th>
+                          <th>Valor</th>
                         </tr>
                         <tr ng-repeat="phone in customer.Phones">
                           <td>{{phone.DDD + phone.Number}}</td>
                           <td>{{phone.NickName | limitTo : 20}}</td>
-                          <td>{{phone.OperatorDescription}}</td>
+                          <td>{{phone.Operator}}</td>
                           <td>
-                              <div ng-show="phone.AmmountPrecoVip > 0">
-                                  R{{phone.AmmountPrecoVip/ 100 | currency}}
+                              <div ng-show="phone.AmmountVIP > 0">
+                                  R{{phone.AmmountVIP/ 100 | currency}}
                               </div>
-                              <div ng-show="phone.AmmountPrecoVip == 0 || phone.AmmountPrecoVip == undefined || phone.AmmountPrecoVip == null"></div>
+                              <div ng-show="phone.AmmountVIP == 0 || phone.AmmountVIP == undefined || phone.AmmountVIP == null"></div>
                           </td>
-                          <td>R{{phone.ChargeAmount/ 100 | currency}}</td>
-                          <td>R{{phone.OperatorChargedPrice / 100 | currency}}</td>
-                          <td>R{{phone.ResultAmount / 100 | currency}}</td>
+                          <!-- <td>R{{phone.ChargeAmount/ 100 | currency}}</td> -->
+                          <td>
+                            <div ng-show="phone.OperatorAmount > 0">
+                                R{{phone.OperatorAmount/ 100 | currency}}
+                            </div>
+                            <div ng-show="phone.OperatorAmount == 0 || phone.OperatorAmount == undefined || phone.OperatorAmount == null"></div>
+                          </td>
+                          <td>R{{phone.Ammount / 100 | currency}}</td>
                         </tr>
-                      </table>
+                      </table> 
 
                     
-                  <div ng-if="customer.Charged" class="list-group-item list-group-item-action list-group-item-success message-mass">
-                      Cliente Cobrado no mês vingente definido.
+                   <div ng-if="customer.Charged" class="list-group-item list-group-item-action list-group-item-success message-mass">
+                      {{customer.infoMessage}}
                     </div>
                   <div ng-if="false" class="list-group-item list-group-item-action list-group-item-warning message-mass">
                       This is a warning list group item</div>
                   <div ng-if="!customer.Charged" class="list-group-item list-group-item-action list-group-item-info message-mass">
-                        {{customer.infoMessage}}
-                    </div>
+                        {{customer.infoMessage}} | {{customer.Reason}}
+                    </div> 
                 </div>
                 
               </div>

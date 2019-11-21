@@ -38,6 +38,8 @@
           .concat(id)
       )
         .then(function(result) {
+
+          debugger
           result.index = index;
           result.chargesAndOrders = chargesAndOrders;
           q.resolve(result);

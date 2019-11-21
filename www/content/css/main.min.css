@@ -845,7 +845,12 @@ v-pane-content {
   flex: 1 1 auto;
   height: 100%;
   flex-direction: column;
-  background-color: #ecf0f5; }
+  background-color: #ecf0f5;
+  /* Green */
+  /* Blue */
+  /* Orange */
+  /* Red */
+  /* Gray */ }
   .mass-charging-container .no-outline {
     outline: none !important; }
   .mass-charging-container .floating-button {
@@ -1028,8 +1033,12 @@ v-pane-content {
     top: 3px;
     margin-right: 190px;
     font-size: small; }
+  .mass-charging-container .checkbox-topo {
+    margin-top: 5px; }
+  .mass-charging-container .input-topo {
+    margin-left: 20px; }
   .mass-charging-container .label-check {
-    padding-top: 10px; }
+    padding-top: 0px; }
   .mass-charging-container .check-mass {
     height: 20px; }
   .mass-charging-container .loader-mass {
@@ -1071,6 +1080,25 @@ v-pane-content {
     /* margin: 0; */
     margin-top: 12px;
     width: 120px; }
+  .mass-charging-container .label {
+    color: white; }
+  .mass-charging-container .success {
+    background-color: #4CAF50;
+    margin-left: 10px; }
+  .mass-charging-container .info {
+    background-color: #2196F3;
+    margin-left: 10px; }
+  .mass-charging-container .warning {
+    background-color: #ff9800;
+    margin-left: 10px; }
+  .mass-charging-container .danger {
+    background-color: #f44336;
+    margin-left: 10px; }
+  .mass-charging-container .other {
+    background-color: #e7e7e7;
+    color: black; }
+  .mass-charging-container .margem-titulo {
+    margin-top: 5px; }
 
 .menu-container {
   cursor: default;
@@ -1271,44 +1299,6 @@ v-pane-content {
   text-align: center;
   font-size: 1vw; }
 
-.borda-topo {
-  margin-top: 100px;
-  position: relative; }
-
-.container-button {
-  position: relative;
-  width: 250px;
-  height: 20px; }
-
-.container-texto {
-  position: absolute;
-  top: 100px;
-  right: 0;
-  width: 70%; }
-
-.largura-area-texto {
-  width: 70%; }
-
-.altura-area-texto {
-  height: 400px; }
-
-.preview {
-  position: relative;
-  width: 600px;
-  background-color: white; }
-
-.container-plan-edition {
-  margin-top: 70px;
-  margin-left: 30px;
-  width: 95%; }
-
-.btn-edicao-foneclube-plan {
-  width: 90%;
-  margin-top: 15px; }
-
-.margem-item-tabela-plans {
-  margin-left: 20px; }
-
 .whatsapp-modal #divSendMessage {
   position: absolute;
   bottom: 0;
@@ -1381,6 +1371,44 @@ v-pane-content {
     color: white;
     margin-left: 5px;
     font-size: 12px; }
+
+.borda-topo {
+  margin-top: 100px;
+  position: relative; }
+
+.container-button {
+  position: relative;
+  width: 250px;
+  height: 20px; }
+
+.container-texto {
+  position: absolute;
+  top: 100px;
+  right: 0;
+  width: 70%; }
+
+.largura-area-texto {
+  width: 70%; }
+
+.altura-area-texto {
+  height: 400px; }
+
+.preview {
+  position: relative;
+  width: 600px;
+  background-color: white; }
+
+.container-plan-edition {
+  margin-top: 70px;
+  margin-left: 30px;
+  width: 95%; }
+
+.btn-edicao-foneclube-plan {
+  width: 90%;
+  margin-top: 15px; }
+
+.margem-item-tabela-plans {
+  margin-left: 20px; }
 
 .boleto-modal .btn {
   margin-bottom: 5px; }

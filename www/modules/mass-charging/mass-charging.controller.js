@@ -23,18 +23,67 @@
         vm.onClickCobrar = onClickCobrar;
         vm.onChangeCheckboxSoma = onChangeCheckboxSoma;
         vm.onChangeCheckboxLastPayment = onChangeCheckboxLastPayment;
+        vm.onChangeCheckboxCharged = onChangeCheckboxCharged;
         vm.paymentMethod = [
             { id:'boleto', description: 'Boleto' },
             { id:'cartao', description: 'Cartão de Crédito' }
         ]
-        
+        vm.getLinkBoleto = getLinkBoleto;
 
+        vm.showCharged = true;
+        vm.showRisk = true;
+        vm.showSemPagamento = true;
+        vm.onChangePaymentCheckboxCharged = onChangePaymentCheckboxCharged;
+        vm.onChangeRiskCheckboxCharged = onChangeRiskCheckboxCharged;
+        vm.onChangeCheckboxCharged = onChangeCheckboxCharged;
+        
         function onSearchMassCharging(){
 
             vm.loading = true;
+            FoneclubeService.getMassChargingFull(vm.month,vm.year).then(function (result) {
+                // debugger;
+                vm.massList = result.MassCharging;
+
+                for(var i in result.MassCharging){
+
+                    result.MassCharging[i].idTypeCharging = boleto;
+                    result.MassCharging[i].typeCharging = 'boleto'
+
+                    if(result.MassCharging[i].HasCard && result.MassCharging[i].LastCharging.PaymentType == cartao){
+                        result.MassCharging[i].idTypeCharging = cartao;
+                        result.MassCharging[i].typeCharging = 'cartao'
+                    }
+
+                    result.MassCharging[i].chargingAmmount = result.MassCharging[i].PrecoUnico;
+                    result.MassCharging[i].enviarEmail = true;
+
+                    if(result.MassCharging[i].ChargeDoMes != null){
+                        if(result.MassCharging[i].ChargeDoMes.BoletoId > 0){
+                            getLinkBoleto(result.MassCharging[i].ChargeDoMes.BoletoId)
+                        }
+                    }
+                    
+                    if(result.MassCharging[i].Charged)
+                        setMessageInfoCharged(result.MassCharging[i], "Cliente Cobrado no mês vingente definido. " )
+
+                    result.MassCharging[i].showed = true;
+
+                    if(result.MassCharging[i].LastCharging){
+
+                        var dataCriacao = new Date(result.MassCharging[i].LastCharging.CreateDate)
+                        var dataCompare = new Date(result.MassCharging[i].LastCharging.CreateDate);
+                        dataCompare.setDate(dataCompare.getDate() + 35);
+
+                        if(dataCompare <= new Date()){
+                            result.MassCharging[i].tempoLongoCobrado = true;
+                        }
+                    }
+                }
+            })
+
             FoneclubeService.getMassChargingData(vm.month,vm.year).then(function (result) {
                 vm.lista = result;
-                console.log(result)
+                
                 vm.lista.forEach(customer => {
                     
                     if(!customer.Charged)
@@ -76,10 +125,16 @@
             if(!customer.requesting)
             {
 
+                if(customer.LastChargingPaid == null)
+                {
+                    customer.LastChargingPaid = {};
+                    customer.LastChargingPaid.Comment = undefined;
+                }
+
                 var customerSend = {
-                    Id: customer.Id,
+                    Id: customer.IdPerson,
                     Charging:{
-                        Comment:customer.foneclubeComment,
+                        Comment: customer.LastChargingPaid.Comment ,
                         CommentEmail:customer.emailComment,
                         CommentBoleto: customer.boletoComment, 
                         Ammount: valorTotalCobrar,
@@ -94,8 +149,13 @@
                 setMessageInfo(customer, "Iniciando envio de transação, aguarde, esperando retorno do gateway de pagamento")
                 FoneclubeService.postGeraCobrancaIntegrada(customerSend).then(function (result) {
                     
+                    // debugger
+                    var linkBoleto = '';
+                    if(customerSend.Charging.PaymentType == boleto)
+                        linkBoleto = result.LinkBoleto
+
                     if(result.StatusPaid){
-                        setMessageInfo(customer, "Transação efetuada concluindo processo")
+                        setMessageInfo(customer, "Cliente Cobrado no mês vingente definido, finalizando procedimentos. " + linkBoleto)
                     }
                     else{
                         setMessageInfo(customer, result.DescriptionMessage);
@@ -110,7 +170,7 @@
                         {
                             if(result.StatusPaid){
 
-                                // debugger
+                                
                                 var emailObject = {
                                     To: customer.Email,
                                     TargetName : customer.Name,
@@ -120,6 +180,7 @@
                                     TemplateType : 2
                                 }
                                 
+                                // debugger
                                 FoneclubeService.postSendEmail(emailObject).then(function(result){
                                     console.log('FoneclubeService.postHistoryPayment');
                                     console.log(result);
@@ -130,21 +191,22 @@
                                         customer.Charged = true
                                     } 
                                     else{
-                                        setMessageInfo(customer, "Cliente cobrado, histórico salvo, mas email não enviado, importante.")
+                                        setMessageInfo(customer, "Cliente cobrado, histórico salvo, mas email não enviado, importante. " + linkBoleto)
                                     }
                                 })
                                 .catch(function(error){
                                     console.log('catch error');
                                     console.log(error);
                                     customer.requesting = false;
-                                    setMessageInfo(customer, "Cliente cobrado, histórico salvo, mas email não enviado, importante.")
+                                    setMessageInfo(customer, "Cliente cobrado, histórico salvo, mas email não enviado, importante. " + linkBoleto)
                                 });
                                 
                             }
                                 
                         }
                         else{
-                            console.log('Cobrado sem email concluído')
+                            console.log('Cobrado sem email concluído ' + linkBoleto)
+                            setMessageInfo(customer, "Cliente Cobrado no mês vingente definido. " + linkBoleto)
                             customer.requesting = false;
                             customer.Charged = true
                         }
@@ -171,9 +233,10 @@
 
                             if(result){
                                 customer.Charged = true
+                                setMessageInfo(customer, "Cliente Cobrado no mês vingente definido. " + linkBoleto)
                             } 
                             else{
-                                setMessageInfo(customer, "Cliente cobrado, histórico salvo, mas email não enviado, importante.")
+                                setMessageInfo(customer, "Cliente cobrado, histórico salvo, mas email não enviado, importante. " +  linkBoleto)
                             }
                                 
                         })
@@ -303,5 +366,102 @@
             customer.Charged = false;
         }
 
+        function setMessageInfoCharged(customer, message){
+            customer.infoMessage = message;
+        }
+
+        function onChangeCheckboxCharged(){
+            console.log('teste');
+            debugger
+            vm.showSemPagamento = true;
+            vm.showRisk = true;
+
+            for(var i in vm.massList){
+
+                vm.massList[i].showed = true;
+                
+                if(vm.showCharged){
+                    vm.massList[i].showed = true; 
+                }
+                else{
+                    if(vm.massList[i].Charged){
+                        vm.massList[i].showed = false;
+                    }
+                }
+
+                // if(vm.showRisk){
+                //     vm.massList[i].showed = true;
+                // }
+                // else{
+                //     if(!vm.massList[i].GoodToCharge && !vm.massList[i].Charged){
+                //         vm.massList[i].showed = false; 
+                //     }
+                // }
+
+                // if(vm.showSemPagamento){
+                //     vm.massList[i].showed = true;
+                // }
+                // else{
+                //     if(vm.massList[i].tempoLongoCobrado){
+                //         vm.massList[i].showed = false;
+                //     }
+                // }
+                
+                // vm.massList[i].showed = false;
+                
+            }
+        }
+
+        function  onChangePaymentCheckboxCharged(){
+
+            vm.showCharged = true;
+            vm.showRisk = true;
+            
+            for(var i in vm.massList){
+
+                vm.massList[i].showed = true;
+
+                if(vm.showSemPagamento){
+                    vm.massList[i].showed = true;
+                }
+                else{
+                    if(vm.massList[i].tempoLongoCobrado){
+                        vm.massList[i].showed = false;
+                    }
+                }
+            }
+
+        };
+
+        function  onChangeRiskCheckboxCharged(){
+            vm.showCharged = true;
+            vm.showSemPagamento = true;
+
+            for(var i in vm.massList){
+
+                vm.massList[i].showed = true;
+
+                if(vm.showRisk){
+                    vm.massList[i].showed = true;
+                }
+                else{
+                    if(!vm.massList[i].GoodToCharge && !vm.massList[i].Charged){
+                        vm.massList[i].showed = false; 
+                    }
+                }
+
+               
+                
+                // vm.massList[i].showed = false;
+                
+            }
+
+        };
+
+        function getLinkBoleto(idBoleto){
+            PagarmeService.getBoletoUrl(idBoleto, null, null).then(function (result) {
+                console.log(result)
+            })
+        }
     }
 })();

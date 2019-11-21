@@ -7,8 +7,6 @@
   function FoneclubeService($q, HTTPService) {
 
 
-    // var urlApi = 'http://localhost:57078/api';
-
     //API live
     var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
 
@@ -102,6 +100,7 @@
     this.getPersonFlags = getPersonFlags;
     this.getPersonPhones = getPersonPhones;
     this.getStatusCardDebito = getStatusCardDebito;
+    this.getMassChargingFull = getMassChargingFull;
 
     function getAPIUrl() {
       return urlApi;
@@ -1413,6 +1412,21 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/cielo/debito/apto/' + idPerson))
+        .then(function (result) {
+          q.resolve(result);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+
+    function getMassChargingFull(mes,ano){
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/charging/mass/full/mes/'+ mes +'/ano/' + ano))
         .then(function (result) {
           q.resolve(result);
         })
