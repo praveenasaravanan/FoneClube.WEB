@@ -33,6 +33,9 @@
         vm.showCharged = true;
         vm.showRisk = true;
         vm.showSemPagamento = true;
+        vm.onChangePaymentCheckboxCharged = onChangePaymentCheckboxCharged;
+        vm.onChangeRiskCheckboxCharged = onChangeRiskCheckboxCharged;
+        vm.onChangeCheckboxCharged = onChangeCheckboxCharged;
         
         function onSearchMassCharging(){
 
@@ -370,11 +373,13 @@
         function onChangeCheckboxCharged(){
             console.log('teste');
             debugger
+            vm.showSemPagamento = true;
+            vm.showRisk = true;
+
             for(var i in vm.massList){
 
-                // vm.showRisk
-                // vm.showSemPagamento
-
+                vm.massList[i].showed = true;
+                
                 if(vm.showCharged){
                     vm.massList[i].showed = true; 
                 }
@@ -383,6 +388,58 @@
                         vm.massList[i].showed = false;
                     }
                 }
+
+                // if(vm.showRisk){
+                //     vm.massList[i].showed = true;
+                // }
+                // else{
+                //     if(!vm.massList[i].GoodToCharge && !vm.massList[i].Charged){
+                //         vm.massList[i].showed = false; 
+                //     }
+                // }
+
+                // if(vm.showSemPagamento){
+                //     vm.massList[i].showed = true;
+                // }
+                // else{
+                //     if(vm.massList[i].tempoLongoCobrado){
+                //         vm.massList[i].showed = false;
+                //     }
+                // }
+                
+                // vm.massList[i].showed = false;
+                
+            }
+        }
+
+        function  onChangePaymentCheckboxCharged(){
+
+            vm.showCharged = true;
+            vm.showRisk = true;
+            
+            for(var i in vm.massList){
+
+                vm.massList[i].showed = true;
+
+                if(vm.showSemPagamento){
+                    vm.massList[i].showed = true;
+                }
+                else{
+                    if(vm.massList[i].tempoLongoCobrado){
+                        vm.massList[i].showed = false;
+                    }
+                }
+            }
+
+        };
+
+        function  onChangeRiskCheckboxCharged(){
+            vm.showCharged = true;
+            vm.showSemPagamento = true;
+
+            for(var i in vm.massList){
+
+                vm.massList[i].showed = true;
 
                 if(vm.showRisk){
                     vm.massList[i].showed = true;
@@ -393,25 +450,18 @@
                     }
                 }
 
-                if(vm.showSemPagamento){
-                    vm.massList[i].showed = true;
-                }
-                else{
-                    if(vm.massList[i].tempoLongoCobrado){
-                        vm.massList[i].showed = false;
-                    }
-                }
+               
                 
                 // vm.massList[i].showed = false;
                 
             }
-        }
+
+        };
 
         function getLinkBoleto(idBoleto){
             PagarmeService.getBoletoUrl(idBoleto, null, null).then(function (result) {
                 console.log(result)
             })
         }
-
     }
 })();
