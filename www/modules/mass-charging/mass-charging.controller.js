@@ -28,9 +28,12 @@
             { id:'boleto', description: 'Boleto' },
             { id:'cartao', description: 'Cartão de Crédito' }
         ]
-        vm.showCharged = true;
         vm.getLinkBoleto = getLinkBoleto;
 
+        vm.showCharged = true;
+        vm.showRisk = true;
+        vm.showSemPagamento = true;
+        
         function onSearchMassCharging(){
 
             vm.loading = true;
@@ -369,11 +372,32 @@
             debugger
             for(var i in vm.massList){
 
+                // vm.showRisk
+                // vm.showSemPagamento
+
                 if(vm.showCharged){
                     vm.massList[i].showed = true; 
                 }
                 else{
                     if(vm.massList[i].Charged){
+                        vm.massList[i].showed = false;
+                    }
+                }
+
+                if(vm.showRisk){
+                    vm.massList[i].showed = true;
+                }
+                else{
+                    if(!vm.massList[i].GoodToCharge && !vm.massList[i].Charged){
+                        vm.massList[i].showed = false; 
+                    }
+                }
+
+                if(vm.showSemPagamento){
+                    vm.massList[i].showed = true;
+                }
+                else{
+                    if(vm.massList[i].tempoLongoCobrado){
                         vm.massList[i].showed = false;
                     }
                 }
