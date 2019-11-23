@@ -180,7 +180,7 @@
 
                     
                    <div ng-if="customer.Charged" class="list-group-item list-group-item-action list-group-item-success message-mass">
-                      {{customer.infoMessage}}
+                      {{customer.infoMessage + '  Link do último Boleto:' + customer.linkBoletoAnterior}}
                     </div>
                   <div ng-if="false" class="list-group-item list-group-item-action list-group-item-warning message-mass">
                       This is a warning list group item</div>

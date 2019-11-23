@@ -58,9 +58,17 @@
                     result.MassCharging[i].enviarEmail = true;
 
                     if(result.MassCharging[i].ChargeDoMes != null){
-                        if(result.MassCharging[i].ChargeDoMes.BoletoId > 0){
-                            getLinkBoleto(result.MassCharging[i].ChargeDoMes.BoletoId)
-                        }
+                        
+                        if(result.MassCharging[i].ChargeDoMes.TransactionId > 0){
+                            
+                            PagarmeService.getBoletoUrl(result.MassCharging[i].ChargeDoMes.TransactionId, result.MassCharging, i)
+                            .then(function (result) {
+                                
+                                if(result[0].boleto_url != null){
+                                    result.chargesAndOrders[result.index].linkBoletoAnterior = result[0].boleto_url;
+                                }
+                            })
+                        }   
                     }
                     
                     if(result.MassCharging[i].Charged)
@@ -458,10 +466,12 @@
 
         };
 
-        function getLinkBoleto(idBoleto){
-            PagarmeService.getBoletoUrl(idBoleto, null, null).then(function (result) {
-                console.log(result)
-            })
+        function getLinkBoleto(lastCharging){
+            // debugger
+            // var id
+            // PagarmeService.getBoletoUrl(idBoleto, null, null).then(function (result) {
+            //     console.log(result)
+            // })
         }
     }
 })();
