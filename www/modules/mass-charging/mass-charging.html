@@ -170,7 +170,7 @@
                           <!-- <td>R{{phone.ChargeAmount/ 100 | currency}}</td> -->
                           <td>
                             <div ng-show="phone.OperatorAmount > 0">
-                                R{{phone.OperatorAmount/ 100 | currency}}
+                                R{{phone.OperatorAmount | currency}}
                             </div>
                             <div ng-show="phone.OperatorAmount == 0 || phone.OperatorAmount == undefined || phone.OperatorAmount == null"></div>
                           </td>
