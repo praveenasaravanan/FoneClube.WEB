@@ -354,7 +354,7 @@
 
         FoneclubeService.getStatusTelefonesOperadora().then(function (result) {
           
-          // debugger
+          //  debugger
           for(var i in vm.customer.Phones)
           {
             var telefone = vm.customer.Phones[i].DDD + vm.customer.Phones[i].Number;
