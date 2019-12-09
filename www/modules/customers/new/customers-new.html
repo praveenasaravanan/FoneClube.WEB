@@ -9,7 +9,8 @@
         <span class="pull-right">
           <input type="checkbox" ng-click="vm.filterText()" ng-model="vm.filterTextInNameOnly"> So Nome</span>
       </p>
-      <input type="text" class="form-control" placeholder="BUSCA" ng-blur="vm.filterClients()" ng-model="vm.searchText" />
+      <input type="text" class="form-control" placeholder="BUSCA" ng-blur="vm.filterClients()"
+        ng-change="vm.filterClients()" ng-model="vm.searchText" />
     </div>
 
 
@@ -91,10 +92,8 @@
 
   <div class="row">
     <div class="col-md-12">
-      <div style="width: 100%; height: {{vm.gridHeight}}px;"
-                     ag-grid="vm.gridOptions"
-                     class="ag-theme-balham ag-basic">
-                </div>
+      <div style="width: 100%; height: {{vm.gridHeight}}px;" ag-grid="vm.gridOptions" class="ag-theme-balham ag-basic">
+      </div>
     </div>
   </div>
 

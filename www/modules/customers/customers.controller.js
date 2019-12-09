@@ -313,8 +313,6 @@
     //////////////////////////////////////////////////
     // Eventos de tap
     function onTapSwitchActivate(c) {
-      // console.log(c);
-
       var oldValue = angular.copy(c.Desativo);
 
       var customer = {
