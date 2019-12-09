@@ -326,11 +326,15 @@
                     </th>
 
                     <th style="width: 40px;">
-                        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">Serviço:</span></div>
+                        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">Roaming:</span></div>
                     </th>
 
                     <th style="width: 40px;">
-                        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">Remover Serviço:</span></div>
+                        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">Adicionar serviço:</span></div>
+                    </th>
+
+                    <th style="width: 40px;">
+                        <div class="s_cls s_lbl"><span for="portabilidadeTelefone">Serviços da linha:</span></div>
                     </th>
 
                     <th style="width: 40px;" ng-if="!vm.hideColunaLinhaAtiva">
@@ -453,6 +457,12 @@
                         </div>
                     </td>
 
+                    <td style="width: 100px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
+                        <div class="s_cls" ng-show="phoneNumber.Servicos[0].Descricao.length > 0">
+                            <img src="./content/img/globe.png" width="25px" height="25px" />
+                        </div>
+                    </td>
+
                     <!-- <td style="width: 100px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
                         <div class="s_cls">
                             <select next-on-enter class="form-control"
@@ -472,35 +482,30 @@
                         </div>
                     </td> -->
 
+                    
+
                     <td style="width: 100px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
                         <div class="s_cls">
-                            <!-- <select id="qualServicoContratar" next-on-enter class="form-control"
+                            <select id="qualServicoContratar" next-on-enter class="form-control"
                                     ng-options="service.Id as service.Descricao for service in vm.extraServices"
                                     ng-model="service.Id"
                                     ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)"
                                     style="width: 160px;">
                                 <option value="">Adicione Serviço</option>
-                            </select> -->
-                            <!-- <select id="qualServicoContratar" next-on-enter class="form-control"
-                                    ng-options="servico.Descricao for servico in phoneNumber.Servicos"
-                                    ng-model="servico.Descricao"
-                                    style="width: 160px;">
-                                <option value="">{{servico.Descricao}}</option>
-                            </select> -->
-                            <div style="width: 160px;">{{phoneNumber.Servicos[0].Descricao}}</div>
-                            
+                            </select>
+
 
                         </div>
                     </td>
 
                     <td style="width: 100px;" ng-show="!phoneNumber.Delete && phoneNumber.IsFoneclube == true">
                         <div class="s_cls">
-                            <select ng-show="phoneNumber.Servicos[0].Descricao.length > 0" id="qualServicoContratar" next-on-enter class="form-control"
+                            <select id="qualServicoContratar" next-on-enter class="form-control"
                                     ng-options="servico.Id as servico.Descricao for servico in phoneNumber.Servicos"
                                     ng-model="servico.Id"
                                     ng-change="vm.changeSelectedService($index,servico.Id, phoneNumber, true, servico)"
                                     style="width: 160px;">
-                                <option value="">Remover Serviço</option>
+                                <option value="">Serviços da linha</option>
                             </select>
 
 
