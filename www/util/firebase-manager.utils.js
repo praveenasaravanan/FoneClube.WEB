@@ -37,7 +37,7 @@
         }
 
         function getUsers(){
-
+            console.log(users);
             // var obj = $firebaseObject(ref);
             // obj.$loaded()
             // .then(function(data) {
