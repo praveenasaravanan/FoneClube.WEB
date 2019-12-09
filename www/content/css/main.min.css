@@ -1738,6 +1738,9 @@ input[type='checkbox'] {
   #divStatusCharging {
     width: 100%; } }
 
+.ag-header-cell-label .ag-header-cell-text {
+  white-space: normal !important; }
+
 .new-card-modal .btn {
   margin-bottom: 5px; }
 

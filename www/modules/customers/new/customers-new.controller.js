@@ -83,7 +83,8 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
         defaultColDef: {
             sortable: true,
             filter: true,
-            resize: true
+            resizable: true,
+            supressMenu: true,
         },
         rowHeight: 50,
         angularCompileRows: true
@@ -103,32 +104,72 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
             { hide: true, field: 'customerSelectedCharge' },
             { hide: true, field: 'customerChargeId' },
             {
-                headerName: 'Payment Status', field: 'PaymentStatusColor',width:150,
+                headerName: 'Payment Status', field: 'PaymentStatusColor', width: 200,
                 cellRenderer: function (params) {
                     return "<div class='payment-status-color'><span style='background-color:" + params.value + "'></span></div>";
                 }
             },
             {
-                headerName: '', field: 'WhatsappImage',width:50, cellRenderer: function (params) {
+                headerName: '', field: 'WhatsappImage', width: 50, cellRenderer: function (params) {
                     return "<a ng-click='vm.onTapMessage(" + params.node.data.CustomerId + ")'><img class='imgWhatsapp link' src=" + params.value + " /></a>";
                 }
             },
             { headerName: 'Name', field: 'CustomerName' },
             {
-                headerName: '', field: '', width: 300, cellRenderer: function (params) {
-                    var cellHtml = '<button ng-click="vm.onTapCustomer(' + params.node.data.CustomerId + ')" title="Service Order" class="btn btn-primary"><i class="glyphicon glyphicon-usd" aria-hidden="true"></i></button>';
+                headerName: '', field: '', width: 460, cellRenderer: function (params) {
+                    var cellHtml = "";
+                    // cellHtml += '<button title="Ativar cliente" ng-if="customer.Desativo" class="btn btn" ng-click="vm.onTapSwitchActivate(customer, $index)">off</button>';
+                    
+                    cellHtml += '<button title="Desativar cliente" class="btn btn-info" ng-click="vm.onTapSwitchActivate(' + params.node.data.CustomerId + ')">on</button>';
+                    cellHtml += '&nbsp;<button title="Cliente com flag pendente!" class="btn btn-warning"><i>&#9873;</i></button>';
+                    cellHtml += '&nbsp;<button ng-click="vm.onTapCustomer(' + params.node.data.CustomerId + ')" title="Service Order" class="btn btn-primary"><i class="glyphicon glyphicon-usd" aria-hidden="true"></i></button>';
                     cellHtml += "&nbsp;<button ng-click='vm.onTapFlag(" + params.node.data.CustomerId + ")' title='Flag' class='btn btn - primary btn - flag'>⚐<i aria-hidden='true'></i></button>";
                     cellHtml += '&nbsp;<button ng-click="vm.onTapComment(' + params.node.data.CustomerId + ')" title="Service Order" class="btn btn-primary"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button>';
                     cellHtml += '&nbsp;<button ng-click="vm.onTapBoletoPayment(' + params.node.data.CustomerId + ')" title="Boleto" class="btn btn-primary"><i class="glyphicon glyphicon-retweet"></i></button>';
                     cellHtml += '&nbsp;<button ng-click="vm.onTapCustomer(' + params.node.data.CustomerId + ')" title="Credit Card" class="btn btn-primary"><i class="glyphicon glyphicon-credit-card"></i></button>';
+                    cellHtml += '&nbsp;<button class="btn btn-primary" ng-click="vm.onTapBoleto(customer)"><img src="./content/img/Boleto.png" width="15px" height="15px" /></button>';
+                    cellHtml += '&nbsp;<button class="btn btn-primary" ng-click="vm.onTapDebito(customer)"><img src="./content/img/debito.png" width="15px" height="15px" /></button>';
                     cellHtml += '&nbsp;<button title="Soft delete" class="btn btn-primary" ng-click="vm.onDeleteCustomer(' + params.node.data.CustomerId + ')"><i class="glyphicon glyphicon-remove-circle uncheckcircle"></i></button>';
                     return cellHtml;
                 }
             },
-            { headerName: 'Ultima Cob.', field: 'Dias' },
-            { headerName: 'Ultima Cobrança', field: 'UltimaCob' },
-            { headerName: 'Ult. Cob. Valor<br> R$', field: 'RCobrado' },
-            { headerName: 'Status Cob.', field: 'Status' },
+            {
+                headerName: 'Ultima Cob.', field: 'Dias', width: 100,  filterParams: {
+                    filterOptions: ['greaterThan', 'lessThan', 'equals', 'notEqual']
+                }
+            },
+            {
+                headerName: 'Ultima Cobrança', field: 'UltimaCob', filterParams: {
+                    filterOptions: [
+                        {
+                            displayKey: 'olderThan',
+                            displayName: 'Older than',
+                            test: function (filterValue, cellValue) {
+                                return cellValue < filterValue;
+                            }
+                        },
+                        {
+                            displayKey: 'youngerThan',
+                            displayName: 'Younger than',
+                            test: function (filterValue, cellValue) {
+                                return filterValue < cellValue;
+                            }
+                        },
+                        {
+                            displayKey: 'specifics',
+                            displayName: 'Specific date',
+                            test: function (filterValue, cellValue) {
+                                return filterValue == cellValue;
+                            }
+                        }]
+                }
+            },
+            {
+                headerName: 'Ult. Cob. R$', field: 'RCobrado', width: 100, filter: 'agNumberColumnFilter', cellRenderer: function (params) {
+                    return params.value ? (Math.round(params.value * 100) / 100).toFixed(2) : '';
+                }
+            },
+            { headerName: 'Status Cob.', field: 'Status2' },
             {
                 headerName: 'Tipo', field: 'Tipo', cellRenderer: function (params) {
                     if (params.value != 'BOLETO') {
@@ -145,6 +186,31 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                     } else {
                         return "<div>" + params.value + "</div>";
                     }
+                },
+                filterParams: {
+                    filterOptions: [
+                        {
+                            displayKey: 'beforeDate',
+                            displayName: 'Before Date',
+                            test: function (filterValue, cellValue) {
+                                return cellValue < filterValue;
+                            }
+                        },
+                        {
+                            displayKey: 'afterDate',
+                            displayName: 'After Date',
+                            test: function (filterValue, cellValue) {
+                                return filterValue < cellValue;
+                            }
+                        },
+                        {
+                            displayKey: 'exactDate',
+                            displayName: 'Exact Date',
+                            test: function (filterValue, cellValue) {
+                                return filterValue == cellValue;
+                            }
+                        }
+                    ]
                 }
             },
             { headerName: 'Vigencia', field: 'Vigencia' },
@@ -157,12 +223,37 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                     }
                 }
             },
-            { headerName: 'Ult. Pag Data', field: 'Ultimopag' },
-            { headerName: 'Ult. Pag R$', field: 'RPago' }
+            {
+                headerName: 'Ult. Pag Data', field: 'Ultimopag',
+                filterParams: {
+                    filterOptions: [
+                        {
+                            displayKey: 'beforeSpecific',
+                            displayName: 'Before a specific date',
+                            test: function (filterValue, cellValue) {
+                                return cellValue < filterValue;
+                            }
+                        },
+                        {
+                            displayKey: 'afterSpecific',
+                            displayName: 'After a specific date',
+                            test: function (filterValue, cellValue) {
+                                return filterValue < cellValue;
+                            }
+                        },
+                    ]
+                }
+            },
+            {
+                headerName: 'Ult. Pag R$', field: 'RPago', cellRenderer: function (params) {
+                    return params.value ? (Math.round(params.value * 100) / 100).toFixed(2) : '';
+                }, filter: 'agNumberColumnFilter'
+            }
         ];
 
         return columnDefs;
     }
+
     function bindAgGrid(data) {
         var rowData = convertToViewModel(data);
         vm.gridOptions.api.setRowData(rowData);
@@ -264,6 +355,10 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
         return false;
     }
 
+    function onTapSwitchActivate(id) {
+        var customer = findCustomerById(id);
+    }
+
     function onTapCustomerEdit(id) {
         var customer = findCustomerById(id);
         FlowManagerService.changeEdicaoView(customer.fullData);
@@ -352,7 +447,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
             var Status = '';//customer.descricaoStatus;
             var PaymentStatusColor = '';
             var WhatsappImage = '../../content/img/message-red.png';
-
+            //console.log(customer);
             if (isNaN(Dias2)) {
                 Dias2 = 0;
             }
@@ -465,7 +560,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                 }
             }
 
-            if (UltimaCob != undefined && UltimaCob != null) { Dias = diffDays(UltimaCob); }
+            if (UltimaCob != undefined && UltimaCob != null && UltimaCob != '') { Dias = diffDays(UltimaCob); }
 
             if (customer.Name == 'Rodrigo Cardozo Pinto') {
                 //debugger;
@@ -474,7 +569,6 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
             if (RPago) {
                 RPago = parseFloat(RPago / 100);//.toString().replace('.', ',');
             }
-
             customerDataList.push({
                 'PaymentStatusColor': PaymentStatusColor,
                 'WhatsappImage': WhatsappImage,
@@ -515,7 +609,6 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
         var ativos = vm.somenteAtivos ? 1 : 0;
         getAllCustomers(function (data) {
             FoneclubeService.getStatusCharging(vm.month, vm.year, ativos).then(function (result) {
-
                 vm.customers = result;
                 for (var i in vm.customers) {
                     for (var customer in data) {
