@@ -41,7 +41,6 @@
     // ngTableDefaults
     $filter
   ) {
-    console.log('=== Customers Controller ===');
 
     var vm = this;
     var checkvalidate = localStorageService.get('userid');

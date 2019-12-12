@@ -9,7 +9,7 @@
     function FlowManagerService(LocationService, FireBaseManagerUtil, $window, localStorageService, $rootScope, $templateCache, UtilsService) {
 
         this.changeLoginView = changeLoginView;
-        this.changeHomeView = changeHomeView;
+        this.changeNewHomeView = changeNewHomeView;
         this.changeNewHomeView=changeNewHomeView;
         this.changeCheckoutView = changeCheckoutView;
         this.changeEdicaoView = changeEdicaoView;
@@ -35,7 +35,7 @@
             LocationService.change('tabs.checkout-view');
         }
 
-        function changeHomeView(){
+        function changeNewHomeView(){
             localStorageService.set('menuItemActive', 'home');
             LocationService.change('tabs.home');
             $rootScope.$broadcast('changeMenuItem', 'home');
@@ -47,6 +47,7 @@
         }
         
         function changeEdicaoView(param) {
+            console.log(param);
             LocationService.change('tabs.edicao', param);
         }
         

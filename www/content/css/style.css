@@ -146,3 +146,12 @@
     padding: 0;
     border-bottom: 1px solid #cccccc;
   }
+
+  /* functionalities */
+  .m-l-5 {
+    margin-left: 5px;
+  }
+
+  .m-l-10 {
+    margin-left: 10px;
+  }

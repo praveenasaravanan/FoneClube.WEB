@@ -67,16 +67,20 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
     vm.customerGridOptions;
 
     vm.filterClients = filterClients;
+    vm.onTapSwitchActivate = onTapSwitchActivate;
     vm.onTapCustomer = onTapCustomer;
     vm.onTapCustomerEdit = onTapCustomerEdit;
     vm.onTapMessage = onTapMessage;
     vm.onTapFlag = onTapFlag;
     vm.onTapComment = onTapComment;
     vm.onTapBoletoPayment = onTapBoletoPayment;
+    vm.onTapBoleto = onTapBoleto;
+    vm.onTapDebito = onTapDebito;
     vm.onDeleteCustomer = onDeleteCustomer;
     vm.onPageLoad = onPageLoad;
     vm.exportToExcel = exportToExcel;
     vm.filterText = filterText;
+    vm.refreshPage = refreshPage;
     vm.gridOptions = {
         columnDefs: setColumnDefs(),
         rowData: [],
@@ -114,28 +118,62 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                     return "<a ng-click='vm.onTapMessage(" + params.node.data.CustomerId + ")'><img class='imgWhatsapp link' src=" + params.value + " /></a>";
                 }
             },
-            { headerName: 'Name', field: 'CustomerName' },
+            {
+                headerName: 'Name', field: 'CustomerName', cellRenderer: function (params) {
+                    return "<a ng-click='vm.onTapCustomerEdit(" + params.node.data.CustomerId + ")' class='black-link'>" + params.value + "</a>";
+                }
+            },
             {
                 headerName: '', field: '', width: 460, cellRenderer: function (params) {
                     var cellHtml = "";
+
+                    var customer = findCustomerById(params.node.data.CustomerId);
+                    if (!customer.Desativo) {
+                        cellHtml += '<button title="Desativar cliente" class="btn btn-info" ng-click="vm.onTapSwitchActivate(' + params.node.data.CustomerId + ', ' + params.node.id + ')">on</button>';
+                    } else {
+                        cellHtml += '<button title="Ativar cliente" class="btn " ng-click="vm.onTapSwitchActivate(' + params.node.data.CustomerId + ', ' + params.node.id + ')">off</button>';
+                    }
                     // cellHtml += '<button title="Ativar cliente" ng-if="customer.Desativo" class="btn btn" ng-click="vm.onTapSwitchActivate(customer, $index)">off</button>';
-                    
-                    cellHtml += '<button title="Desativar cliente" class="btn btn-info" ng-click="vm.onTapSwitchActivate(' + params.node.data.CustomerId + ')">on</button>';
-                    cellHtml += '&nbsp;<button title="Cliente com flag pendente!" class="btn btn-warning"><i>&#9873;</i></button>';
-                    cellHtml += '&nbsp;<button ng-click="vm.onTapCustomer(' + params.node.data.CustomerId + ')" title="Service Order" class="btn btn-primary"><i class="glyphicon glyphicon-usd" aria-hidden="true"></i></button>';
-                    cellHtml += "&nbsp;<button ng-click='vm.onTapFlag(" + params.node.data.CustomerId + ")' title='Flag' class='btn btn - primary btn - flag'>⚐<i aria-hidden='true'></i></button>";
+                    //cellHtml += '<button title="Desativar cliente" class="btn btn-info" ng-click="vm.onTapSwitchActivate(' + params.node.data.CustomerId + ')">on</button>';
+                    if (customer.PendingFlagInteraction) {
+                        cellHtml += '&nbsp;<button title="Cliente com flag pendente!" class="btn btn-warning"><i>&#9873;</i></button>';
+                    }
+                    if (customer.Orphan) {
+                        cellHtml += '&nbsp;<button title="Cliente com problema no cadastro!" class="btn btn-warning"><i class="glyphicon glyphicon-exclamation-sign"></i></button>';
+                    }
+
+                    cellHtml += '&nbsp;<button ng-click="vm.onTapCustomer(' + params.node.data.CustomerId + ')" title="Financeiro" class="btn btn-primary"><i class="glyphicon glyphicon-usd" aria-hidden="true"></i></button>';
+                    cellHtml += '&nbsp;<button ng-click="vm.onTapFlag(' + params.node.data.CustomerId + ')" title="Criar Flag" class="btn btn-primary btn-flag">⚐<i aria-hidden="true"></i></button>';
                     cellHtml += '&nbsp;<button ng-click="vm.onTapComment(' + params.node.data.CustomerId + ')" title="Service Order" class="btn btn-primary"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button>';
                     cellHtml += '&nbsp;<button ng-click="vm.onTapBoletoPayment(' + params.node.data.CustomerId + ')" title="Boleto" class="btn btn-primary"><i class="glyphicon glyphicon-retweet"></i></button>';
                     cellHtml += '&nbsp;<button ng-click="vm.onTapCustomer(' + params.node.data.CustomerId + ')" title="Credit Card" class="btn btn-primary"><i class="glyphicon glyphicon-credit-card"></i></button>';
-                    cellHtml += '&nbsp;<button class="btn btn-primary" ng-click="vm.onTapBoleto(customer)"><img src="./content/img/Boleto.png" width="15px" height="15px" /></button>';
-                    cellHtml += '&nbsp;<button class="btn btn-primary" ng-click="vm.onTapDebito(customer)"><img src="./content/img/debito.png" width="15px" height="15px" /></button>';
-                    cellHtml += '&nbsp;<button title="Soft delete" class="btn btn-primary" ng-click="vm.onDeleteCustomer(' + params.node.data.CustomerId + ')"><i class="glyphicon glyphicon-remove-circle uncheckcircle"></i></button>';
+                    cellHtml += '&nbsp;<button class="btn btn-primary" ng-click="vm.onTapBoleto(' + params.node.data.CustomerId + ')" title="boleto"><img src="./content/img/Boleto.png" width="15px" height="15px" /></button>';
+                    cellHtml += '&nbsp;<button class="btn btn-primary" ng-click="vm.onTapDebito(' + params.node.data.CustomerId + ')" title="Debit card"><img src="./content/img/debito.png" width="15px" height="15px" /></button>';
+                    cellHtml += '&nbsp;<button title="Soft delete" class="btn btn-primary" ng-click="vm.onDeleteCustomer(' + params.node.data.CustomerId + ', ' + params.node.id + ')"><i class="glyphicon glyphicon-remove-circle uncheckcircle"></i></button>';
                     return cellHtml;
                 }
             },
             {
-                headerName: 'Ultima Cob.', field: 'Dias', width: 100,  filterParams: {
-                    filterOptions: ['greaterThan', 'lessThan', 'equals', 'notEqual']
+                headerName: 'Ultima Cob.', field: 'Dias', width: 100, filterParams: {
+                    filterOptions: [
+                        {
+                            displayKey: 'largerThan',
+                            displayName: 'Larger than',
+                            test: function (filterValue, cellValue) {
+                                return parseInt(cellValue) > parseInt(filterValue);
+                            }
+
+                        },
+                        {
+                            displayKey: 'smallerThan',
+                            displayName: 'Smaller than',
+                            test: function (filterValue, cellValue) {
+                                return parseInt(cellValue) < parseInt(filterValue);
+                            }
+                        },
+                        'equals',
+                        'notEqual'
+                    ]
                 }
             },
             {
@@ -355,13 +393,49 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
         return false;
     }
 
-    function onTapSwitchActivate(id) {
-        var customer = findCustomerById(id);
+    function onTapSwitchActivate(id, nodeId) {
+        var c = findCustomerById(id);
+        var oldValue = angular.copy(c.Desativo);
+
+        var customer = {
+            Id: c.Id,
+            Desativo: !c.Desativo
+        };
+
+        var confirmMessage = `
+        <span class="text-center">
+          Tem certeza que deseja ${c.Desativo ? 'ativar' : 'desativar'} esse cliente?
+        </span>
+      `;
+
+        // TODO: confirm dialog
+        ViewModelUtilsService.showConfirmDialog('Atenção!', confirmMessage).then(function (
+            confirm
+        ) {
+            if (confirm) {
+                c.Desativo = customer.Desativo;
+
+                FoneclubeService.postPersonAtivity(customer).then(function (result) {
+                    if (!result) {
+                        customer.Desativo = oldValue;
+                    } else {
+                        // update ag-grid
+                        let row = vm.gridOptions.api.getRowNode(nodeId);
+                        var index = vm.customers.indexOf(vm.customers.filter(v => v.Id == id)[0]);
+                        if(index >= 0) {
+                            vm.customers[index].Desativo = c.Desativo;
+                            var res = vm.gridOptions.api.redrawRows({rowNodes: [row]});
+                            console.log(res);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     function onTapCustomerEdit(id) {
         var customer = findCustomerById(id);
-        FlowManagerService.changeEdicaoView(customer.fullData);
+        FlowManagerService.changeEdicaoView(customer);
     }
     function onTapMessage(id) {
         var customer = findCustomerById(id);
@@ -379,11 +453,19 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
         var customer = findCustomerById(id);
         ViewModelUtilsService.showModalBoletoPayment(customer);
     }
+    function onTapBoleto(id) {
+        var customer = findCustomerById(id);
+        ViewModelUtilsService.showModalBoleto(customer);
+    }
+    function onTapDebito(id) {
+        var customer = findCustomerById(id);
+        ViewModelUtilsService.showModalDebito(customer);
+    }
     function onTapCustomer(id, index) {
         var customer = findCustomerById(id);
         ViewModelUtilsService.showModalCustomer(customer, index);
     }
-    function onDeleteCustomer(id) {
+    function onDeleteCustomer(id, nodeId) {
         var r = confirm('Deseja fazer um soft delete nesse cliente?');
         if (r == true) {
             var customer = findCustomerById(id);//// 
@@ -393,7 +475,8 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                     var index = vm.customers.indexOf(vm.customers.filter(v => v.Id == id)[0]);
                     if (index >= 0) {
                         vm.customers.splice(index, 1);
-                        refreshGrid(vm.customers);
+                        var row = vm.gridOptions.api.getRowNode(nodeId);
+                        vm.gridOptions.api.updateRowData({remove: [row.data]});
                     }
                 }
             });
@@ -609,18 +692,25 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
         var ativos = vm.somenteAtivos ? 1 : 0;
         getAllCustomers(function (data) {
             FoneclubeService.getStatusCharging(vm.month, vm.year, ativos).then(function (result) {
-                vm.customers = result;
-                for (var i in vm.customers) {
-                    for (var customer in data) {
-                        if (data[customer].Id == vm.customers[i].Id) {
-                            vm.customers[i].fullData = data[customer];
+                //vm.customers = result;
+                vm.customers = [];
+                for (var i in result) {
+                    let c = result[i];
+                    const customer = data.find(d => d.Id == c.Id);
+                    if (customer && !customer.SoftDelete) {
+                        c.fullData = customer;
+                        // if(customer.Desativo == undefined) {
+                        //     vm.customers[i].fullData.Desativo = false;
+                        // }
+                        //console.log(customer);
+                        c.allChargingsCanceled = false;
+
+                        for (var o in c.ChargingValidity) {
+                            c.ChargingValidity[o].display = true;
                         }
-                    }
-
-                    vm.customers[i].allChargingsCanceled = false;
-
-                    for (var o in vm.customers[i].ChargingValidity) {
-                        vm.customers[i].ChargingValidity[o].display = true;
+                        vm.customers.push(c);
+                    } else {
+                        //c.fullData = {};
                     }
                 }
                 handleData(vm.customers);
@@ -636,6 +726,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
     }
 
     function findCustomerById(id) {
+
         for (var customer in vm.customers) {
             if (vm.customers[customer].Id == id) {
                 return vm.customers[customer].fullData;
@@ -654,7 +745,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                 });
                 return user;
             });
-            var customersSemSoftDelete = [];
+            //var customersSemSoftDelete = [];
             for (var i in customers) {
                 var customer = customers[i];
                 if (!customer.SoftDelete) {
@@ -667,8 +758,10 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                             }
                         }
                     }
-
-                    customersSemSoftDelete.push(customer);
+                    customers[i] = customer;
+                    //customersSemSoftDelete.push(customer);
+                } else {
+                    //console.log(customer);
                 }
             }
 
@@ -1098,9 +1191,6 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
         return Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
     }
 
-
-
-
     vm.onDesativarBoleto = onDesativarBoleto;
     vm.onAtivarBoleto = onAtivarBoleto;
 
@@ -1131,6 +1221,13 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
                 }
             })
     }
+    function refreshPage() {
+        // console.log('refresh');
+
+        //onPageLoad();
+        location.reload();
+    }
+
 };
 
 

@@ -91,3 +91,21 @@ cursor: pointer;
 .ag-header-cell-label .ag-header-cell-text {
     white-space: normal !important;
 }
+
+#refreshButton {
+    cursor: pointer;
+    :hover {
+        color: #424242;
+    }
+}
+
+.black-link {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    
+}
+.black-link:hover {
+    text-decoration: none;
+    color: #424242;
+}

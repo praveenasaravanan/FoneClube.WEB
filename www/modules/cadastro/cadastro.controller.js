@@ -145,14 +145,14 @@
                         if(res) {
                             FlowManagerService.changeEdicaoView(existentClient);
                         } else {
-                            FlowManagerService.changeHomeView();
+                            FlowManagerService.changeNewHomeView();
                         }
                     })                    
                 }
             }, function (result) {
-                FlowManagerService.changeHomeView();
+                FlowManagerService.changeNewHomeView();
             }).catch(function (error) {
-                FlowManagerService.changeHomeView();
+                FlowManagerService.changeNewHomeView();
             });
         }
 
@@ -813,7 +813,7 @@
                                         }
                                     });
                                 } else {
-                                    FlowManagerService.changeHomeView();
+                                    FlowManagerService.changeNewHomeView();
                                 }
                             })                    
                         }
@@ -843,7 +843,7 @@
                                         }
                                     });
                                 } else {
-                                    FlowManagerService.changeHomeView();
+                                    FlowManagerService.changeNewHomeView();
                                 }
                             })                    
                         }

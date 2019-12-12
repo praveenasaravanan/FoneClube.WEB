@@ -129,7 +129,6 @@
 
     var changingSelectedService = false;
     function changeSelectedService(index,serviceId, phoneNumber, fromUser, service){
-      debugger;
       if(serviceId != null)
       {
         if(!changingSelectedService)
@@ -207,7 +206,6 @@
 
     function onTapAtualizaPai(selectedPai){
       
-      debugger;
       if(selectedPai == undefined)
       {
         alert('Sem nenhum pai selecionado.');
@@ -288,10 +286,7 @@
 
 
     function init() {
-
-      debugger
       FoneclubeService.getServices().then(function (result) {
-        debugger
         vm.extraServices = result;
       })
 
@@ -317,7 +312,6 @@
       FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
         
         vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
-        debugger
         vm.customer = result;
 
         if(vm.customer.DocumentNumber.length > 11)
@@ -354,7 +348,6 @@
 
         FoneclubeService.getStatusTelefonesOperadora().then(function (result) {
           
-          //  debugger
           for(var i in vm.customer.Phones)
           {
             var telefone = vm.customer.Phones[i].DDD + vm.customer.Phones[i].Number;
@@ -386,17 +379,13 @@
                 }
               }
             }
-            // debugger;
           }
 
           // vm.concluiuVerificacaoStatus = 'S';
-          // debugger;
 
           vm.tempPhones = angular.copy(vm.customer.Phones);
           for (var number in vm.customer.Phones) {
-            // debugger
             // FoneclubeService.getPhoneServices(vm.customer.Phones[number].Id, index).then(function (result) {
-            //   debugger
             //   vm.customer.Phones[result.index].Servicos = result.Servicos;
             // })
             var contactPhone = !vm.customer.Phones[number].IsFoneclube;
@@ -507,7 +496,6 @@
             }, 200);
 
             vm.pricelist = [];
-            debugger;
             for (var i = 0; i < vm.customer.Phones.length; i++) {
 
               var phoneNumber = vm.customer.Phones[i];
@@ -519,7 +507,6 @@
                 }
               }
               
-              debugger;
 
               if (phoneNumber.IdPlanOption == '') {
                 vm.pricelist.push(0);
@@ -638,7 +625,6 @@
     }
 
     function getPersonParent(id) {
-      // debugger
       if (id) {
         FoneclubeService.getCustomerById(id).then(function (result) {
 
@@ -667,7 +653,6 @@
 
     function onTapSendUser(customer) {
        
-      // debugger;
 
       if (vm.requesting == true)
         return;
@@ -680,7 +665,6 @@
 
       if(dontHaveContact.length == 0)
       {
-        // debugger;
         var contactPhone = {
           "DDD":UtilsService.getPhoneNumberFromStringToJson(vm.actual_phone).DDD,
           "Number":UtilsService.getPhoneNumberFromStringToJson(vm.actual_phone).Number,
@@ -705,7 +689,6 @@
         
       }
       
-      // debugger;
       var customerSend = {
         "Id": customer.Id,
         "DocumentNumber": UtilsService.clearDocumentNumber(customer.DocumentNumber),
@@ -906,7 +889,7 @@
                   ViewModelUtilsService.showModalCustomer(result);
                 });
               } else {
-                FlowManagerService.changeHomeView();
+                FlowManagerService.changeNewHomeView();
               }
             })
         }
@@ -1096,7 +1079,6 @@
             }
           }).catch(function (erro) {
 
-            debugger
             FoneclubeService.postUpdateCustomer(customerSend).then(postUpdateCustomerSucesscheck).catch(postUpdateCustomerError);
 
           });
@@ -1123,7 +1105,7 @@
                   ViewModelUtilsService.showModalCustomer(result);
                 });
               } else {
-                FlowManagerService.changeHomeView();
+                FlowManagerService.changeNewHomeView();
               }
             })
         }
@@ -1175,7 +1157,6 @@
 
     function validarCPF() {
 
-      debugger;
 
       if (vm.customer.DocumentNumber.length < 11) { 
         return 
@@ -1195,9 +1176,9 @@
             })
         }
       }, function (result) {
-        FlowManagerService.changeHomeView();
+        FlowManagerService.changeNewHomeView();
       }).catch(function (error) {
-        FlowManagerService.changeHomeView();
+        FlowManagerService.changeNewHomeView();
       });
     }
 

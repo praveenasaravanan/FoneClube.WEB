@@ -5,6 +5,9 @@
     <div id="divAll" class="form-group col-xs-6 col-md-2">
       <p>
         <span class="pull-left">
+          <span ng-click="vm.refreshPage()" id="refreshButton"><i class="glyphicon glyphicon-refresh"></i></span>
+        </span>
+        <span class="pull-left m-l-10">
           <input type="checkbox" ng-click="vm.filterText()" ng-model="vm.filterTextInAllCols"> All</span>
         <span class="pull-right">
           <input type="checkbox" ng-click="vm.filterText()" ng-model="vm.filterTextInNameOnly"> So Nome</span>

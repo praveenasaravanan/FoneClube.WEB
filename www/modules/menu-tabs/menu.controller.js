@@ -41,7 +41,7 @@
             
             
             if(screen == 'home') {
-                FlowManagerService.changeHomeView();
+                FlowManagerService.changeNewHomeView();
             } else if (screen == 'cadastro') {
                 FlowManagerService.changeCadastro();
             } else if (screen == 'list-customer') {

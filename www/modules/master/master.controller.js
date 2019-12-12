@@ -14,7 +14,7 @@
         // vm.viewName = 'Cadastro Foneclube';
         ////////
         //MainUtils.setAgent('Cardozo');
-        //FlowManagerService.changeHomeView();
+        //FlowManagerService.changeNewHomeView();
         ////////
 
     }

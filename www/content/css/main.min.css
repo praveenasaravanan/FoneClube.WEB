@@ -840,6 +840,78 @@ v-pane-content {
   .vAccordion--default v-pane-header:hover, .vAccordion--default v-pane-header:focus {
     color: #2196F3; }
 
+.menu-container {
+  cursor: default;
+  color: white;
+  height: 94.4vh; }
+  .menu-container .menu-views {
+    display: flex;
+    flex: auto 1 1;
+    height: 105%;
+    color: #656565;
+    overflow-y: auto; }
+  .menu-container .menu-open, .menu-container .menu-close {
+    display: flex;
+    flex: 1 1;
+    height: 100%;
+    float: left;
+    background-color: #32404e;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center; }
+    .menu-container .menu-open img, .menu-container .menu-close img {
+      width: 40px;
+      height: 40px; }
+    .menu-container .menu-open .menu-item.logo, .menu-container .menu-close .menu-item.logo {
+      background-color: #35baf6;
+      margin-top: 0px; }
+    .menu-container .menu-open .menu-item:hover, .menu-container .menu-close .menu-item:hover {
+      background-color: #35baf6; }
+    .menu-container .menu-open .item-menu-active, .menu-container .menu-close .item-menu-active {
+      background-color: #475360; }
+      .menu-container .menu-open .item-menu-active::before, .menu-container .menu-close .item-menu-active::before {
+        content: " ";
+        position: absolute;
+        display: block;
+        left: 0;
+        width: 5px;
+        height: 43px;
+        background-color: #35baf6; }
+  .menu-container .menu-open {
+    min-width: 150px; }
+    .menu-container .menu-open .menu-item {
+      margin-top: 5px;
+      margin-bottom: 5px;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 43px; }
+      .menu-container .menu-open .menu-item span {
+        margin-top: 5px; }
+    .menu-container .menu-open .menu-item-settings {
+      width: 150px; }
+  .menu-container .menu-close {
+    min-width: 70px; }
+    .menu-container .menu-close .menu-item {
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 43px; }
+      .menu-container .menu-close .menu-item span {
+        display: none; }
+    .menu-container .menu-close .menu-item-settings {
+      width: 70px; }
+  .menu-container .menu-close-mobile {
+    display: none; }
+
 .mass-charging-container {
   display: flex;
   flex: 1 1 auto;
@@ -1099,78 +1171,6 @@ v-pane-content {
     color: black; }
   .mass-charging-container .margem-titulo {
     margin-top: 5px; }
-
-.menu-container {
-  cursor: default;
-  color: white;
-  height: 94.4vh; }
-  .menu-container .menu-views {
-    display: flex;
-    flex: auto 1 1;
-    height: 105%;
-    color: #656565;
-    overflow-y: auto; }
-  .menu-container .menu-open, .menu-container .menu-close {
-    display: flex;
-    flex: 1 1;
-    height: 100%;
-    float: left;
-    background-color: #32404e;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center; }
-    .menu-container .menu-open img, .menu-container .menu-close img {
-      width: 40px;
-      height: 40px; }
-    .menu-container .menu-open .menu-item.logo, .menu-container .menu-close .menu-item.logo {
-      background-color: #35baf6;
-      margin-top: 0px; }
-    .menu-container .menu-open .menu-item:hover, .menu-container .menu-close .menu-item:hover {
-      background-color: #35baf6; }
-    .menu-container .menu-open .item-menu-active, .menu-container .menu-close .item-menu-active {
-      background-color: #475360; }
-      .menu-container .menu-open .item-menu-active::before, .menu-container .menu-close .item-menu-active::before {
-        content: " ";
-        position: absolute;
-        display: block;
-        left: 0;
-        width: 5px;
-        height: 43px;
-        background-color: #35baf6; }
-  .menu-container .menu-open {
-    min-width: 150px; }
-    .menu-container .menu-open .menu-item {
-      margin-top: 5px;
-      margin-bottom: 5px;
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      height: 43px; }
-      .menu-container .menu-open .menu-item span {
-        margin-top: 5px; }
-    .menu-container .menu-open .menu-item-settings {
-      width: 150px; }
-  .menu-container .menu-close {
-    min-width: 70px; }
-    .menu-container .menu-close .menu-item {
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      height: 43px; }
-      .menu-container .menu-close .menu-item span {
-        display: none; }
-    .menu-container .menu-close .menu-item-settings {
-      width: 70px; }
-  .menu-container .menu-close-mobile {
-    display: none; }
 
 .tela-report td {
   padding-right: 20px; }
@@ -1651,25 +1651,6 @@ table.s_table tr td {
 .existent-card-modal .btn:last-child {
   margin-bottom: 10px; }
 
-textarea#nomeCartao {
-  height: 150px; }
-
-.dialog-toolbar {
-  width: 100%;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 30px; }
-
-.show-template .header {
-  height: auto !important; }
-  .show-template .header button {
-    top: 0; }
-
-input[type='checkbox'] {
-  margin-top: -4px; }
-
 #divStatusCharging .ag-cell {
   padding-top: 5px;
   padding-bottom: 5px; }
@@ -1740,6 +1721,39 @@ input[type='checkbox'] {
 
 .ag-header-cell-label .ag-header-cell-text {
   white-space: normal !important; }
+
+#refreshButton {
+  cursor: pointer; }
+  #refreshButton :hover {
+    color: #424242; }
+
+.black-link {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer; }
+
+.black-link:hover {
+  text-decoration: none;
+  color: #424242; }
+
+textarea#nomeCartao {
+  height: 150px; }
+
+.dialog-toolbar {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px; }
+
+.show-template .header {
+  height: auto !important; }
+  .show-template .header button {
+    top: 0; }
+
+input[type='checkbox'] {
+  margin-top: -4px; }
 
 .new-card-modal .btn {
   margin-bottom: 5px; }

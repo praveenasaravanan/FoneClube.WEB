@@ -47,7 +47,7 @@
             if(validaLogin())
             {
               localStorageService.add("userid",'True')
-              FlowManagerService.changeHomeView();
+              FlowManagerService.changeNewHomeView();
 
 
             }
