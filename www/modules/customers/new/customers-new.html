@@ -1,88 +1,73 @@
-<div id="divStatusCharging" class="row header-filter headernone" ng-init="vm.onPageLoad()">
-  <fone-header title=""></fone-header>
+<div class="row header-filter headernone customers" ng-init="vm.onPageLoad()">
   <div class="clearfix"></div>
-  <div class="row" id="divTopFilters">
-    <div id="divAll" class="form-group col-xs-6 col-md-2">
+  <div class="row p-t-10">
+    <div class="form-group col-xs-6 col-md-2">
       <p>
-        <span class="pull-left">
-          <span ng-click="vm.refreshPage()" id="refreshButton"><i class="glyphicon glyphicon-refresh"></i></span>
-        </span>
-        <span class="pull-left m-l-10">
-          <input type="checkbox" ng-click="vm.filterText()" ng-model="vm.filterTextInAllCols"> All</span>
-        <span class="pull-right">
-          <input type="checkbox" ng-click="vm.filterText()" ng-model="vm.filterTextInNameOnly"> So Nome</span>
+        <span class="pull-left"><span ng-click="vm.refreshPage()" id="refreshButton"><i
+              class="glyphicon glyphicon-refresh"></i></span></span>
+        <span class="pull-left m-t-n5 m-l-5" ng-show="vm.loading"><img src="../../../content/img/Loading2.gif"
+            style="height:7px;" /></span>
+        <span class="pull-right m-l-10"><label><input type="checkbox" ng-click="vm.filterText()"
+              ng-model="vm.filterTextInNameOnly"> So Nome</label></span>
+        <span class="pull-right "><label><input type="checkbox" ng-click="vm.filterText()"
+              ng-model="vm.filterTextInAllCols"> All</label></span>
       </p>
       <input type="text" class="form-control" placeholder="BUSCA" ng-blur="vm.filterClients()"
         ng-change="vm.filterClients()" ng-model="vm.searchText" />
+      <p><span class="pull-right" style="font-size: small;" ng-bind="vm.resultText"></span></p>
     </div>
 
+    <div class="form-group col-xs-12 col-md-6 p-t-10">
+      <div class="pull-left">
+        <p><label><input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.includeActive"> So Ativo</label></p>
+        <p><label><input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.includeInActive"> So InAtivo</label></p>
+      </div>
+      <div class="pull-left m-l-10">
+        <p><label><input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.excludeProblema"> !Problema</label></p>
+        <p><label><input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.excludeFlag"> !Flag</label></p>
+      </div>
+      <div class="pull-left m-l-30 payment-filter">
+        <div>
+          <p class="pull-left"><label><input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.includeStatusGreen"><span class="payment-green"></span></label></p>
+          <p class="pull-left m-l-10"><label><input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.includeStatusYellow"><span class="payment-yellow"></span></label></p>
+          <p class="pull-left m-l-10"><label><input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.includeStatusRed"><span class="payment-red"></span></label></p class="pull-left m-l-10">
+        </div>
+        <div>
+          <p class="pull-left"><label><input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.includeStatusGray"><span class="payment-grey"></span></label></p>
+          <p class="pull-left m-l-10"><label><input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.includeStatusNan"><span class="payment-nan"></span></label></p>
+        </div>
+      </div>
+      <div class="pull-left m-l-30">
+        <p><label><input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.excludeFather"> - Pai</label></p>
+        <p><label><input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.excludeAddress"> - Endereço</label>
+        </p>
+      </div>
 
-    <div class="form-group col-xs-12 col-md-4">
-      <div id="divAIFilter">
-        <p>
-          <input type="checkbox" ng-click="vm.filterClients()" ng-model="vm.includeActive"> So Ativo</p>
-        <p>
-          <input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.includeInActive"> So InAtivo</p>
-        <p>
-          <input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.excludeProblema"> !Problema</p>
-      </div>
-      <div id="divColorFilters">
-        <p>
-          <input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.includeStatusGreen">
-          <span id="spnFilterGreen"></span>
-        </p>
-        <p>
-          <input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.includeStatusYellow">
-          <span id="spnFilterYellow"></span>
-        </p>
-        <p>
-          <input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.includeStatusRed">
-          <span id="spnFilterRed"></span>
-        </p>
-      </div>
-      <div id="divExcFltr">
-        <p>
-          <input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.excludeFather"> Exclude Father
-        </p>
-        <p>
-          <input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.excludeAddress"> Exclude Address
-        </p>
+      <div class="pull-left m-l-30 p-t-5">
+        <p class="pull-left"><label><input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.excludeWhatsappUsers">&nbsp;<img src="../../content/img/message-red.png" /></label></p>
+        <p class="pull-left m-l-10"><label><input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.includeWhatsappUsers">&nbsp;<img src="../../content/img/message-green.png" /></label></p>
       </div>
     </div>
-    <div class="col-md-1 col-xs-6 form-group">
-      <p>
-        <input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.excludeWhatsappUsers">
-        <img src="../../content/img/message-red.png" />
-      </p>
-      <p style="margin-top: 5px;">
-        <input type="checkbox" ng-change="vm.filterClients()" ng-model="vm.includeWhatsappUsers">
-        <img src="../../content/img/message-green.png" />
-      </p>
+    <div class="form-group col-xs-12 col-md-4 p-t-10">
+      <div class="pull-left p-t-10">
+        <span style="color:green;">Name Filter</span>
+        <a href="javascript:void(0)">
+          <i class="fa fa-save"></i>
+        </a>
+      </div>
+      <div class="pull-left m-l-30">
+        <div class="btn-group">
+          <button class="btn btn-default busca-status " style="margin-top:0px" data-ng-click="vm.exportToExcel()">
+            <i class="fa fa-file"></i>
+            Export To Excel
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div class="col-md-2 col-xs-6 form-group" id="divNameFltr">
-      <span style="color:green;">Name Filter</span>
-      <a href="javascript:void(0)">
-        <i class="fa fa-save"></i>
-      </a>
-    </div>
-    <div class="col-md-2 form-group col-xs-6 text-right">
-      <div class="btn-group">
-        <button class="btn btn-default busca-status " style="margin-top:0px" data-ng-click="vm.exportToExcel()">
-          <i class="fa fa-file"></i>
-          Export To Excel
-        </button>
-      </div>
-    </div>
   </div>
 
-  <div id="loadingDiv" ng-show="vm.loading">
-    <div class="row">
-      <div class="col-md-12">
-        <img src="../../content/img/Loading2.gif" style="width:50px" />
-      </div>
-    </div>
-  </div>
+
 
   <!-- <div class="row">
     <div class="col-md-12">

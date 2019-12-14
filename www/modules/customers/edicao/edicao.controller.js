@@ -27,6 +27,7 @@
     vm.showLoader = false;
     vm.data = DataFactory;
     vm.onTapSendUser = onTapSendUser;
+    vm.onTapCancel = onTapCancel;
     vm.onTapSendUserAllCheck = onTapSendUserAllCheck;
     vm.onTapRemoveNewNumber = onTapRemoveNewNumber;
     vm.onTapNewPhoneNumber = onTapNewPhoneNumber;
@@ -880,10 +881,10 @@
 
       function postUpdateCustomerSucess(result) {
         if (result) {
-          DialogFactory.dialogConfirm({ title: 'Edição Realizada', mensagem: 'Todos os dados pessoais enviados, edição Foneclube feita com sucesso.', btn1: 'Ir para Home', btn2: 'Visualizar Cliente' })
+          DialogFactory.dialogConfirm({ title: 'Edição Realizada', mensagem: 'Todos os dados pessoais enviados, edição Foneclube feita com sucesso.', btn1: 'Voltar para Clientes', btn2: 'Cobrança Cliente' })
             .then(function (result) {
               if (result) {
-                FlowManagerService.changeCustomersView();
+                FlowManagerService.changeNewHomeView();
                 FoneclubeService.getCustomerByCPF(UtilsService.clearDocumentNumber(vm.cpf)).then(function (result) {
                   vm.data.customers.splice(index, 1, result);
                   ViewModelUtilsService.showModalCustomer(result);
@@ -907,6 +908,9 @@
       // aqui
     };
 
+    function onTapCancel() {
+      FlowManagerService.changeNewHomeView();
+    }
 
     function onTapSendUserAllCheck(customer) {
 

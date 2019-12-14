@@ -1,90 +1,85 @@
-#divStatusCharging{
-    .ag-cell{
-        padding-top:5px;
-        padding-bottom: 5px;
-    }
-#divTopFilters{
-    padding-top: 10px;
-    background-color: #EDF0F5;
-    border-bottom: 5px solid #A84FA8;
-    margin-top: 44px;
+.customers .ag-cell {
+    padding-top: 5px;
+    padding-bottom: 5px;
 
-    #divAll{
-        padding-left: 30px;
-    }
-    #divFilters{
-        position: relative;
-        top:22px;
-    }
-
-    #divAIFilter,#divColorFilters, #divExcFltr{
-        float:left;
-    }
-    #divAIFilter{
-        width:40%;
-    }
-    #divExcFltr{
-        width:40%;
-    }
-
-    #divColorFilters{
-        width:20%;
-        #spnFilterGreen, #spnFilterYellow, #spnFilterRed{
-            padding:0px 8px;
-            border-radius: 50%;   
-            border-radius: 50%;
-            margin-left: 5px;         
-        }
-        #spnFilterGreen{
-background-color: green;            
-        } #spnFilterYellow{
-            background-color: yellow;
-        } #spnFilterRed{
-            background-color: red;
-        }
-    }
-
-    #divNameFltr{
-        text-align: center;
-        i{
-            font-size: 25px;
-            margin-left: 10px;
-            color: black;
-        }
+    img.imgWhatsapp {
+        max-width: 30px;
+        border-radius: 50%;
     }
 }
 
-.grid-container{
-    width:100%;
+.payment-filter {
+    span {
+        padding: 0px 7px;
+        border-radius: 50%;
+        margin-left: 5px;
+        border: solid 1px;
+    }
+
+    ;
+
+    .payment-green {
+        background-color: green;
+        border-color: green;
+    }
+
+    .payment-yellow {
+        background-color: yellow;
+        border-color: yellow;
+    }
+
+    .payment-red {
+        background-color: red;
+        border-color: red;
+    }
+
+    .payment-grey {
+        background-color: gray;
+        border-color: gray;
+    }
+
+    .payment-nan {
+        border-color: black;
+    }
 }
-#loadingDiv{
+
+.grid-container {
+    width: 100%;
+}
+
+#loadingDiv {
     z-index: 9999;
 }
 
 .payment-status-color {
     text-align: center;
-    span{
-        padding:5px 20px;
+
+    span {
+        padding: 0px 8px;
+        border-radius: 50%;
     }
 }
-.break-word{
+
+.break-word {
     font-weight: bold;
 }
-.btn-flag{
+
+.btn-flag {
     content: '&#9872'
 }
+
 img.imgWhatsapp {
     max-width: 40px;
     border-radius: 50%;
-  }
-  .link{
-cursor: pointer;
-  }
+}
+
+.link {
+    cursor: pointer;
 }
 
 @media only screen and (max-width: 600px) {
-    #divStatusCharging{
-        width:100%;
+    #divStatusCharging {
+        width: 100%;
     }
 }
 
@@ -94,6 +89,7 @@ cursor: pointer;
 
 #refreshButton {
     cursor: pointer;
+
     :hover {
         color: #424242;
     }
@@ -103,9 +99,18 @@ cursor: pointer;
     color: #000;
     text-decoration: none;
     cursor: pointer;
-    
+
 }
+
 .black-link:hover {
     text-decoration: none;
     color: #424242;
+}
+
+label {
+    font-weight: 100;
+}
+
+input[type="checkbox"] {
+    margin-top: 0px;
 }
