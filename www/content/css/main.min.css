@@ -1553,12 +1553,6 @@ input[type='checkbox'] {
   .customer-modal section .available-card button {
     margin: 0; }
 
-.existent-card-modal .btn {
-  margin-bottom: 5px; }
-
-.existent-card-modal .btn:last-child {
-  margin-bottom: 10px; }
-
 .edicao-container {
   flex: 1 1 auto;
   height: 100%;
@@ -1650,6 +1644,12 @@ table.s_table tr td {
   border-radius: 5px;
   color: white;
   padding-top: 10px; }
+
+.existent-card-modal .btn {
+  margin-bottom: 5px; }
+
+.existent-card-modal .btn:last-child {
+  margin-bottom: 10px; }
 
 textarea#nomeCartao {
   height: 150px; }
