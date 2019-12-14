@@ -155,3 +155,24 @@
   .m-l-10 {
     margin-left: 10px;
   }
+  .m-l-20 {
+    margin-left: 20px;
+  }
+  .m-l-30 {
+    margin-left: 30px;
+  }
+  .m-t-n5 {
+    margin-top: -5px;
+  }
+  .m-t-10 {
+    margin-top: 10px;
+  }
+  .p-t-5 {
+    padding-top: 5px;
+  }
+  .p-t-10 {
+    padding-top:10px;
+  }
+  .p-t-20 {
+    padding-top:20px;
+  }

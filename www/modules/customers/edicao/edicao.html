@@ -583,8 +583,9 @@
     </div>
     <div class="form-group col-xs-12">
         <button class="btn btn-primary col-sm-2 col-xs-12" ng-disabled="vm.requesting"
-                ng-enter="vm.onTapSendUser(vm.customer)" ng-click="vm.onTapSendUser(vm.customer)">Enviar
+                ng-enter="vm.onTapSendUser(vm.customer)" ng-click="vm.onTapSendUser(vm.customer)">Salvar
         </button>
+        <button class="btn btn-primary col-sm-2 col-xs-12 m-l-10" ng-disabled="vm.requesting" ng-click="vm.onTapCancel()">Cancelar sem salavar
         <button ng-enter="vm.onTapNewPhoneNumber()" ng-click="vm.onTapNewPhoneNumber()"
                 style="background: transparent; border: none; position: absolute; right: 0; padding-right: 16px;"
                 class="s_button-icon">
