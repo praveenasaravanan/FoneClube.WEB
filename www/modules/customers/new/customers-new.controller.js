@@ -568,7 +568,12 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 				return data.Id.toString().toLowerCase().indexOf(vm.searchText) > -1 ||
 					data.Name.toLowerCase().indexOf(vm.searchText) > -1 ||
 					data.Email.toLowerCase().indexOf(vm.searchText) > -1 ||
-					matchPhone(data.Phones, vm.searchText);
+					(data.fullData.DocumentNumber ? data.fullData.DocumentNumber.toLowerCase().indexOf(vm.searchText) > -1 : false) ||
+					//(data.NickName ? data.NickName.toLowerCase().indexOf(vm.searchText) > -1 : false) ||
+					(data.fullData.Born ? data.fullData.Born.toLowerCase().indexOf(vm.searchText) > -1 : false) ||
+					(data.fullData.IdPagarme ? data.fullData.IdPagarme.toString().indexOf(vm.searchText) > -1 : false) ||
+					matchPhone(data.Phones, vm.searchText) ||
+					(data.fullData.NameParent ? data.fullData.NameParent.toLowerCase().indexOf(vm.searchText) > -1 : false);
 			} else {
 				return checkContains(RemoveAccents(data.Name.toLowerCase()), RemoveAccents(vm.searchText));
 				//return data.Name.toLowerCase().indexOf(vm.searchText) > -1;
