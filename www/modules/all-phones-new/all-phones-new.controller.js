@@ -118,6 +118,10 @@ function AllPhoneNewController($scope, $interval, FoneclubeService, PagarmeServi
     $('#hdnPhoneNumber').val(phoneNumber);
   }
 
+  $scope.CCID = function (value) {
+    debugger
+  }
+
   $scope.showtabInfo = function (tabNumber) {
     $('#btnCustomerTab').removeClass('btn-default');
     $('#btnCustomerTab').removeClass('btn-info');
@@ -663,12 +667,8 @@ function AllPhoneNewController($scope, $interval, FoneclubeService, PagarmeServi
     $scope.MonthlySubscription();
 
 
-    $scope.customerAllPhoneGridDataSource = new kendo.data.DataSource({
-      type: "json",
-      transport: { read: FoneclubeService.getAPIUrl() + '/manager/phones/AllCustomer/Phones?personId=' + $('#hdnPersonId').val() },
-      serverPaging: false,
-      serverSorting: false
-    });
+    debugger;
+
     $scope.customerAllPhoneGridGridOptions = {
       dataSource: $scope.customerAllPhoneGridDataSource,
       sortable: true,
@@ -827,21 +827,31 @@ function AllPhoneNewController($scope, $interval, FoneclubeService, PagarmeServi
 
     $scope.allphoneDataSource = new kendo.data.DataSource({
       type: "json",
-      transport: { read: readUrl },
+      transport: { 
+        read: {
+          dataType: "json",
+          url: readUrl,
+        }
+      },
       serverPaging: false,
       serverSorting: false,
       schema: {
         model: {
           fields: {
-            PlanCost: { type: "number" },
-            AmoutPrecoVip: { type: "number" },
-            CalculateAmoutPrecoVip: { type: "number" },
-            CalculatePlanCost: { type: "number" },
+            // PlanCost: { type: "number" },
+            // AmoutPrecoVip: { type: "number" },
+            // CalculateAmoutPrecoVip: { type: "number" },
+            // CalculatePlanCost: { type: "number" }
+            // ,CCID: { type: "string" }
           }
         }
       },
 
     });
+
+    // console.log('works')
+    // debugger;
+    //  console.log($scope.allphoneDataSource)
 
     $scope.allphoneGridOptions = {
       dataSource: $scope.allphoneDataSource,
@@ -892,6 +902,24 @@ function AllPhoneNewController($scope, $interval, FoneclubeService, PagarmeServi
           field: "CompletePhone", width: "180px", title: "Telefone"
           , template: "#:DisplayPhone#", attributes: { "class": "#=DisplayOperatorCss#" }
           , filterable: { cell: { showOperators: false, operator: "contains", template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); }, } }
+        },
+        {
+          field: "CCID", width: "180px", title: "CCID"
+          , template: "#:CCID#"
+          , attributes: { "class": "#=DisplayOperatorCss#" }
+          , filterable: { cell: { showOperators: false } }
+        },
+        {
+          field: "CodigoCliente", width: "180px", title: "Cod. Cliente"
+          , template: "#:CodigoCliente#"
+          , attributes: { "class": "#=DisplayOperatorCss#" }
+          , filterable: { cell: { showOperators: false } }
+        },
+        {
+          field: "RazaoSocial", width: "180px", title: "Razao Social"
+          , template: "#:RazaoSocial#"
+          , attributes: { "class": "#=DisplayOperatorCss#" }
+          , filterable: { cell: { showOperators: false } }
         },
         {
           field: "PersonName", width: "180px", title: "Cliente 2"
