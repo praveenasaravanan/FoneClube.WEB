@@ -730,13 +730,13 @@
         });
       }
 
-      if (vm.singlePriceLocal) {
-        if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
-          DialogFactory.showMessageDialog({ mensagem: 'Preço único não pode ser maior do que o preço de todos os planos somados.' });
-          vm.requesting = false;
-          return;
-        }
-      }
+      // if (vm.singlePriceLocal) {
+      //   if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
+      //     DialogFactory.showMessageDialog({ mensagem: 'Preço único aplicado é maior do que o preço de todos os planos somados.' });
+      //     // vm.requesting = false;
+      //     // return;
+      //   }
+      // }
 
       var digitosMinimosTelefone = 11
       
@@ -957,14 +957,15 @@
           }
         });
       }
-      if (vm.singlePriceLocal) {
-        if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
-          DialogFactory.showMessageDialog({ mensagem: 'Preço único não pode ser maior do que o preço de todos os planos somados.' });
-          //showLoader.close();
-          vm.requesting = false;
-          return;
-        }
-      }
+
+      // if (vm.singlePriceLocal) {
+      //   if ((vm.singlePriceLocal / 100) > totalPriceValidade) {
+      //     DialogFactory.showMessageDialog({ mensagem: 'Preço único aplicado é maior do que o preço de todos os planos somados.' });
+      //     //showLoader.close();
+      //     // vm.requesting = false;
+      //     // return;
+      //   }
+      // }
 
 
       var digitosMinimosTelefone = 11
