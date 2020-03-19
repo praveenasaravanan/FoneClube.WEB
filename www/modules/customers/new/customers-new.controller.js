@@ -94,7 +94,11 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 			sortable: true,
 			filter: true,
 			resizable: true,
-			// supressMenuHide: true,
+			filterParams: {
+				applyButton: true,
+				clearButton: true,
+				resetButton: true,
+			}
 		},
 		rowHeight: 50,
 		angularCompileRows: true,
@@ -218,6 +222,7 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 					}
 
 				},
+				// filter: 'agNumberColumnFilter',
 				filterParams: {
 					filterOptions: [
 						{
@@ -236,8 +241,12 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 						},
 						'equals',
 						'notEqual'
-					]
-				}
+					],
+					applyButton: true,
+					clearButton: true,
+					resetButton: true,
+				},
+
 			},
 			// Ultima cobranca
 			{
@@ -273,7 +282,10 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 								var origin = new Date(cellValue);
 								return filterValue == cellValue;
 							}
-						}]
+						}],
+					applyButton: true,
+					clearButton: true,
+					resetButton: true,
 				}
 			},
 			// Ult Cob R$
@@ -302,7 +314,10 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 						},
 						'equals',
 						'notEqual'
-					]
+					],
+					applyButton: true,
+					clearButton: true,
+					resetButton: true,
 				}
 			},
 			// Status Cob   (Select Filter)            
@@ -310,7 +325,30 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 				headerName: 'Status Cob.',
 				field: 'Status2',
 				width: 100,
-				filter: false
+				filterParams: {
+					filterOptions: [
+						'empty',
+						{
+							displayKey: 'Ativa',
+							displayName: 'Ativa',
+							test: function (filterValue, cellValue) {
+								return ('ativa' == cellValue || 'Ativa' == cellValue);
+							},
+							hideFilterInput: true
+						},
+						{
+							displayKey: 'Cancelada',
+							displayName: 'Cancelada',
+							test: function (filterValue, cellValue) {
+								return ('Cancelada' == cellValue || 'cancelada' == cellValue);
+							},
+							hideFilterInput: true
+						}
+					],
+					applyButton: true,
+					clearButton: true,
+					resetButton: true,
+				}
 			},
 			// Tip (Select Filter)
 			{
@@ -324,7 +362,38 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 						return "<a href=" + params.node.data.TipoLink + " target='_blank'>" + params.value + "</a>";
 					}
 				},
-				filter: false
+				filterParams: {
+					filterOptions: [
+						'empty',
+						{
+							displayKey: 'TipoBoleto',
+							displayName: 'Boleto',
+							test: function (filterValue, cellValue) {
+								return (cellValue == 'BOLETO' || cellValue == 'boleto');
+							},
+							hideFilterInput: true
+						},
+						{
+							displayKey: 'TipoCartao',
+							displayName: 'Cartao',
+							test: function (filterValue, cellValue) {
+								return (cellValue == 'CARTÃO' || cellValue == 'cartão');
+							},
+							hideFilterInput: true
+						},
+						{
+							displayKey: 'TipoOther',
+							displayName: 'Other',
+							test: function (filterValue, cellValue) {
+								return (cellValue != 'cartão' && cellValue != 'boleto');
+							},
+							hideFilterInput: true
+						}
+					],
+					applyButton: true,
+					clearButton: true,
+					resetButton: true,
+				}
 			},
 			// Vecimento
 			{
@@ -360,7 +429,10 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 								var origin = new Date(cellValue);
 								return filterValue == cellValue;
 							}
-						}]
+						}],
+					applyButton: true,
+					clearButton: true,
+					resetButton: true,
 				}
 			},
 			// Vigencia
@@ -397,7 +469,10 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 								var origin = new Date(cellValue);
 								return filterValue == cellValue;
 							}
-						}]
+						}],
+					applyButton: true,
+					clearButton: true,
+					resetButton: true,
 				}
 			},
 			// Ult Pag Dias
@@ -430,7 +505,10 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 						},
 						'equals',
 						'notEqual'
-					]
+					],
+					applyButton: true,
+					clearButton: true,
+					resetButton: true,
 				}
 			},
 			// Ult Pag Data
@@ -467,7 +545,10 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 								var origin = new Date(cellValue);
 								return filterValue == cellValue;
 							}
-						}]
+						}],
+					applyButton: true,
+					clearButton: true,
+					resetButton: true,
 				}
 
 			},
@@ -497,7 +578,10 @@ function CustomersControllerNew($interval, FoneclubeService, PagarmeService, Flo
 						},
 						'equals',
 						'notEqual'
-					]
+					],
+					applyButton: true,
+					clearButton: true,
+					resetButton: true,
 				}
 			}
 		];

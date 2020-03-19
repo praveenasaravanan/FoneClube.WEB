@@ -1,1014 +1,1149 @@
-/**
-CAUTION, IMPORTANT
-
-All this code is not following patterns. The pattern we trying to follow is: 
-https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md
-
-Please do not reaply any of pattern or the this code, structure or techniques 
-used here in this file or the code will not be aproved. 
-
-This page will be organized and refactored but we can not do it now. 
-This page represent all that we do not want in code technique and pattern.
-
-For example: 
-1. We do not use jquery approach, we use angularJS .
-2. We do not need use ajax, we have http service on foneclube.service
-3. Avoid use Scope, use vm.
-
-Maybe you will find other pages that are not following fully the desired patterns 
-But we have the a lot of samples in the project and especially the guide:
-https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md
-
- */
-
 angular
   .module('foneClub')
   .controller('AllPhoneNewController', AllPhoneNewController);
 
+AllPhoneNewController.$inject = ['$scope', 'FoneclubeService', 'localStorageService', 'MainUtils', 'notify'];
 
-function AllPhoneNewController($scope, $interval, FoneclubeService, PagarmeService) {
+function AllPhoneNewController($scope, FoneclubeService, localStorageService, MainUtils, notify) {
+
+  // local variables
+  let updateMainGrid = false;
+  let updateServiceGrid = false;
+  let updateAssignGrid = false;
 
   var vm = this;
-  vm.planOptions;
-  vm.result;
-  vm.filtroCliente = false;
 
-  $scope.initPageLoad = function () {
-    this.AllPhoneData();
+  vm.loading = false;
+  vm.visible_details = true;
+  // edit phone = 0,  new phone = 1, select phone = 2
+  vm.phoneMode = 1;
 
-    this.BindDropDowns();
-  }
+  // select options
+  // customer list
+  vm.customers = [];
+  // selected customer
+  vm.customer = {
+    Id: -1,
+    Name: "",
+    DocumentNumber: "",
+    Email: "",
+    NickName: "",
+    Parent: ""
+  };
+  // selected phone
+  vm.phone = {
+    CompletePhone: ""
+  };
+  // unassigned phone list
+  vm.freePhones = [];
+  // available services
+  vm.services = [];
+  // avaiable plans
+  vm.plans = [];
+  // available operators
+  vm.operators = [];
 
-  $scope.RemoveService = function (serviceId, phoneId) {
-    // 
-    var removeUrl = FoneclubeService.getAPIUrl() + '/manager/phones/extra/service/insert/deactive';
-    $.ajax({
-      url: removeUrl,
-      type: 'POST',
-      data: {
-        'Id': phoneId,
-        'Servicos[0].Id': serviceId
-      },
-      dataType: 'json',
-      success: function (data) {
-        $scope.ShowSystemAlert('Service Removed Successfully!');
+  // local variable
+  vm.selectedPersonPhoneId = -1;
+  vm.selectedNodeId = -1;
+  vm.selectedPhoneNumber = "";
 
-        $("#phoneService").data("kendoGrid").dataSource.read();
-        $("#phoneService").data("kendoGrid").refresh();
+  // personal information
+  vm.detail_phone = '';
+  vm.detail_email = '';
+  vm.detail_cpf = '';
+  vm.detail_nomePai = '';
+  vm.detail_atualize = '';
+  vm.detail_cep = '';
+  vm.detail_rua = '';
+  vm.detail_numero = '';
+  vm.detail_complemento = '';
+  vm.detail_bairro = '';
+  vm.detail_cidade = '';
+  vm.detail_estado = '';
 
-        $("#allphoneGrid").data("kendoGrid").dataSource.read();
-        $("#allphoneGrid").data("kendoGrid").refresh();
+  vm.total_linhas = 0;
 
-
-        $("#customerAllPhoneGrid").data("kendoGrid").dataSource.read();
-        $("#customerAllPhoneGrid").data("kendoGrid").refresh();
-
-        $scope.MonthlySubscription();
-      }
-    });
-  }
-
-  $scope.AddNewService = function (personPhoneId) {
-    $('#accountServicesModel').modal('show');
-    $('#hdnPersonPhoneId').val(personPhoneId);
-
-    var readUrl = FoneclubeService.getAPIUrl() + '/manager/phones/Service/ByPerson?personId=' + personPhoneId;
-    $scope.phoneServiceDataSource = new kendo.data.DataSource({
-      type: "json",
-      transport: { read: readUrl },
-      serverPaging: false,
-      serverSorting: false
-    });
-    $scope.phoneServiceGridOptions = {
-      dataSource: $scope.phoneServiceDataSource,
-      columns: [
-        { field: "ServiceName", width: "180px", title: "Service" },
-        { field: "ActiveDate", width: "180px", title: "Active Date" },
-      ]
-    }
-  }
-
-  $scope.AllPhoneData = function () {
-    SetGridProperties();
-
-    var allServicesUrl = FoneclubeService.getAPIUrl() + '/manager/phones/extra/services';
-    $("#phoneServices").kendoDropDownList({
-      dataTextField: "Descricao",
-      dataValueField: "Id",
-      dataSource: {
-        transport: {
-          read: {
-            dataType: "json",
-            url: allServicesUrl,
+  // main grid
+  vm.grdMainOption = {
+    columnDefs: [
+      // Linha em Uso
+      {
+        headerName: 'Linha em Uso',
+        field: 'UsoLinha',
+        width: 100,
+        minWidth: 100,
+        cellRenderer: function (params) {
+          if (params.value) {
+            return "<button class='btn btn-success btn-xs'>sim</button>";
+          } else {
+            return "<button class='btn btn-warning btn-xs'>não</button>";
           }
+        },
+        filterParams: {
+          filterOptions: [
+            'empty',
+            {
+              displayKey: 'UsoLinhaSim',
+              displayName: 'sim',
+              test: function (filterValue, cellValue) {
+                return (cellValue == 'sim' || cellValue == 1);
+              },
+              hideFilterInput: true
+            },
+            {
+              displayKey: 'UsoLinhaNao',
+              displayName: 'não',
+              test: function (filterValue, cellValue) {
+                return (cellValue == 'não' || cellValue == 0);
+              },
+              hideFilterInput: true
+            }
+          ],
+          applyButton: true,
+          clearButton: true,
+          resetButton: true,
         }
-      }
-    });
-
-
-  }
-
-  $scope.closeCustomers = function () {
-    $('#allCustomerModel').hide();
-    $('#hdnPhoneNumber').val('');
-  }
-
-  $scope.ShowAllCustomers = function (phoneNumber) {
-    $('#allCustomerModel').show();
-    $('#hdnPhoneNumber').val(phoneNumber);
-  }
-
-  $scope.CCID = function (value) {
-    debugger
-  }
-
-  $scope.showtabInfo = function (tabNumber) {
-    $('#btnCustomerTab').removeClass('btn-default');
-    $('#btnCustomerTab').removeClass('btn-info');
-    $('#btnPhoneTab').removeClass('btn-default');
-    $('#btnPhoneTab').removeClass('btn-info');
-
-    $('#CustomerDetail-Container').hide();
-    $('#PhoneDetail-Container').hide();
-
-    if (tabNumber == 1) {
-      $('#btnCustomerTab').addClass('btn-info');
-      $('#btnPhoneTab').addClass('btn-default');
-      $('#CustomerDetail-Container').show();
-    }
-    else {
-      $('#btnCustomerTab').addClass('btn-default');
-      $('#btnPhoneTab').addClass('btn-info');
-      $('#PhoneDetail-Container').show();
-
-
-      $('#hdnRecordId').val(0);
-      $('#hdnPersonPhoneId').val(0);
-      $('#hdnIsPrecoVip').val();
-      $('#hdnEditPhoneNumber').val('');
-
-      $('#phoneDetailTitle').html('Add New Phone');
-      $("#AmoutPrecoVip").kendoNumericTextBox({
-        value: 0.00
-      });
-
-      var url = FoneclubeService.getAPIUrl() + '/manager/phones/Available/Numbers?number=';
-      $("#PhoneNumber").kendoDropDownList({
-        optionLabel: "Select",
-        dataTextField: "DisplayPhone",
-        dataValueField: "CompletePhone",
-        dataSource: {
-          transport: {
-            read: {
-              dataType: "json",
-              url: url
+      },
+      // Operadora Divergente
+      {
+        headerName: 'Operadora Divergente',
+        field: 'DisplayOperator',
+        width: 110,
+        minWidth: 110,
+        cellRenderer: function (params) {
+          if (params.node.data.OperatorId == 1) {
+            return "<button class='btn btn-success btn-xs'>A</button>";
+          } else {
+            return "<button class='btn btn-danger btn-xs'>E</button>";
+          }
+        },
+        filterParams: {
+          filterOptions: [
+            'empty',
+            {
+              displayKey: 'OperadoraA',
+              displayName: 'A',
+              test: function (filtervalue, cellValue) {
+                return (cellValue == 'a');
+              },
+              hideFilterInput: true
+            },
+            {
+              displayKey: 'OperadoraE',
+              displayName: 'E',
+              test: function (filtervalue, cellValue) {
+                return (cellValue == 'e');
+              },
+              hideFilterInput: true
+            }
+          ],
+          applyButton: true,
+          clearButton: true,
+          resetButton: true,
+        }
+      },
+      // Plano Operadora 3
+      {
+        headerName: 'Plano Operadora 3',
+        field: 'DisplayPlanoOperador',
+        width: 150,
+      },
+      // Telefone
+      {
+        headerName: 'Telefone',
+        field: 'DisplayPhone',
+        cellRenderer: function (params) {
+          if (params.value) {
+            return "<div>" + params.value + "</div>";
+          } else {
+            return "<div>" + params.node.data.CompletePhone + "</div>";
+          }
+        },
+        width: 100,
+      },
+      // CCID
+      {
+        headerName: 'CCID',
+        field: 'CCID',
+        width: 100
+      },
+      // Cod. Cliente
+      {
+        headerName: 'Cod. Cliente',
+        field: 'CodigoCliente',
+        width: 100
+      },
+      // Razao Social
+      {
+        headerName: 'Razao Social',
+        field: 'RazaoSocial',
+        width: 100
+      },
+      // Cliente 2
+      {
+        headerName: 'Cliente 2',
+        field: 'PersonName',
+        width: 200,
+        cellRenderer: function (params) {
+          const personPhoneId = params.node.data.PersonPhoneId;
+          if (personPhoneId == 0) {
+            return "<button class='btn btn-success btn-xs' ng-click='assignCustomer(" + personPhoneId + ", " + params.node.data.CompletePhone + ", " + params.node.id + ")'><i class='fa fa-plus'></i></button>";
+          } else {
+            return "<div><a ng-click='showCustomerDetail(" + personPhoneId + ")'>" + params.value + "</a></div>";
+          }
+        },
+      },
+      // Servico da linha
+      {
+        headerName: 'Servico da linha',
+        field: 'PhoneServices',
+        width: 300,
+        cellRenderer: function (params) {
+          const personPhoneId = params.node.data.PersonPhoneId;
+          let html = "<ul>";
+          if (params.value != undefined) {
+            for (let i = 0; i < params.value.length; i++) {
+              const item = params.value[i];
+              const serviceName = item.ServiceName;
+              const serviceId = item.ServiceId;
+              html += "<li class='phone-services'>"
+              html += "<button class='btn btn-info btn-xs' ng-click='removeService(" + serviceId + "," + personPhoneId + "," + params.node.id + ")'>";
+              html += serviceName;
+              html += "<i class='fa fa-times'></i></button></li>";
             }
           }
+          html += "<li class='phone-services'><button class='btn btn-success btn-xs' ng-click='addNewService(" + personPhoneId + "," + params.node.id + ")'>";
+          html += "<i class= 'fa fa-plus'></i></button></li>";
+          html += "</ul>";
+          return html;
         }
-      });
-
-    }
-
-  }
-
-  $scope.ShowMessage = function (personId) {
-    $('#ShowMessageModel').show();
-    $('#hdnPersonPhoneId').val(personId);
-  }
-
-  $scope.CancelPhone = function () {
-    $('#hdnPersonPhoneId').val(0);
-    $('#ShowMessageModel').hide();
-  }
-
-  $scope.DeactivePhone = function () {
-
-    var personId = $('#hdnPersonPhoneId').val();
-    $scope.ActivateDeactivePhone(personId, false);
-    $('#ShowMessageModel').hide();
-  }
-
-  $scope.ActivateDeactivePhone = function (personId, activate) {
-    var url = FoneclubeService.getAPIUrl() + '/profile/Phone/Activate/Deactive?personPhoneId=' + personId + '&activate=' + activate;
-    $.ajax({
-      url: url,
-      type: 'GET',
-      dataType: 'json',
-      success: function (data) {
-        $('#hdnPersonPhoneId').val(0);
-        $("#allphoneGrid").data("kendoGrid").dataSource.read();
-        $("#allphoneGrid").data("kendoGrid").refresh();
-      }
-    });
-  }
-
-  //---------------------------------------------------------------------------------
-
-
-  $scope.BindDropDowns = function () {
-
-    //Phone Plans
-
-
-    $("#CustomerPhonePlanId").kendoDropDownList({
-      dataTextField: "Description",
-      dataValueField: "Id",
-      dataSource: {
-        transport: {
-          read: {
-            dataType: "json",
-            url: FoneclubeService.getAPIUrl() + '/manager/phones/plans'
-          }
-        }
-      }
-    });
-
-    $("#PhonePlanId").kendoDropDownList({
-      optionLabel: "Select",
-      dataTextField: "Description",
-      dataValueField: "Id",
-      dataSource: {
-        transport: {
-          read: {
-            dataType: "json",
-            url: FoneclubeService.getAPIUrl() + '/manager/phones/plans'
-          }
-        }
-      }
-    });
-    // All Availabl Phone Numbers
-    $("#PhoneNumber").kendoDropDownList({
-      optionLabel: "Select",
-
-      dataTextField: "DisplayPhone",
-      dataValueField: "CompletePhone",
-
-      dataSource: {
-        transport: {
-          read: {
-            dataType: "json",
-            url: FoneclubeService.getAPIUrl() + '/manager/phones/Available/Numbers?number=' + $('#hdnEditPhoneNumber').val()
-          }
-        }
-      }
-    });
-    //All Phone Plan Extra Services
-    //$("#newPhoneOptionId").kendoDropDownList({
-    //  optionLabel: "Select",
-    //  dataTextField: "Descricao",
-    //  dataValueField: "Id",
-    //  dataSource: {
-    //    transport: {
-    //      read: {
-    //        dataType: "json",
-    //        url: FoneclubeService.getAPIUrl() + '/manager/phones/extra/services',
-    //      }
-    //    }
-    //  }
-    //});
-
-    $("#PhoneOperatorId").kendoDropDownList({
-      optionLabel: "Select",
-      dataTextField: "Name",
-      dataValueField: "Id",
-      dataSource: {
-        transport: {
-          read: {
-            dataType: "json",
-            url: FoneclubeService.getAPIUrl() + '/account/operators',
-          }
-        }
-      }
-    });
-  }
-
-
-  $scope.editParentRef = function () {
-
-
-    $('#parentRefDisplay-container').hide();
-    $('#parentRefEdit-container').show();
-
-    $('#editRefButton').hide();
-    $('#cancelRefButton').show();
-    $('#saveRefButton').show();
-
-    $("#RefParentList").kendoDropDownList({
-      optionLabel: "Select",
-      dataTextField: "Name",
-      dataValueField: "Id",
-      dataSource: {
-        transport: {
-          read: {
-            dataType: "json",
-            url: FoneclubeService.getAPIUrl() + '/profile/active/customers/parents',
-          }
-        }
-      }
-    });
-
-    var parentId = $('#ParentId').html();
-    var dropdownlist = $("#RefParentList").data("kendoDropDownList");
-    dropdownlist.value(parentId);
-
-  }
-  $scope.cancelParentRef = function () {
-    $('#parentRefDisplay-container').show();
-    $('#parentRefEdit-container').hide();
-
-    $('#editRefButton').show();
-    $('#cancelRefButton').hide();
-    $('#saveRefButton').hide();
-
-  }
-  $scope.saveParentRef = function () {
-
-    var ddParentReference = $("#RefParentList").data("kendoDropDownList");
-
-
-    var parentId = ddParentReference.value();
-    var parentName = ddParentReference.text();
-    $.ajax({
-      url: FoneclubeService.getAPIUrl() + '/profile/customer/parent/id/insert',
-      type: 'Post',
-      data: {
-        'Id': $('#hdnPersonId').val(),
-        'Pai.Id': parentId,
-        'Pai.Name': parentName,
       },
-      dataType: 'json',
-      success: function (data) {
-        $scope.ShowSystemAlert('Reference Updated Successfully!');
-        $('#ParentName').html(parentName);
-        $('#ParentId').html(parentId);
-        $scope.cancelParentRef();
-      }
-    });
-
-
-  }
-
-  //---------------------------------------------------------------------------------
-  $scope.SaveCustomerBasicInfo = function () {
-    var url = FoneclubeService.getAPIUrl() + '/profile/customer/SaveBasicInfo';
-    $.ajax({
-      url: url,
-      type: 'Post',
-      data: {
-        'Name': $('#CustomerName').val(),
-        'PersonName': $('#CustomerName').val(),
-        'Email': $('#CustomerEmail').val(),
-        'DocumentNumber': $('#CustomerDocumentNumber').val(),
-        'NickName': $('#CustomerNickName').val(),
-        'PersonId': $('#hdnPersonId').val(),
-      },
-      dataType: 'json',
-      success: function (data) {
-        $scope.ShowSystemAlert('Customer Information Saved Successfully!');
-      }
-    });
-
-  }
-
-  $scope.SaveService = function (serviceId) {
-    /// manager/phones/ 
-    var saveUrl = FoneclubeService.getAPIUrl() + '/manager/phones/extra/service/insert';
-    var phoneId = $('#hdnPersonPhoneId').val();
-    var serviceId = $('#phoneServices').val();
-    $.ajax({
-      url: saveUrl,
-      type: 'POST',
-      data: {
-        'Id': phoneId,
-        'Servicos[0].Id': serviceId
-      },
-      dataType: 'json',
-      success: function (data) {
-        $scope.ShowSystemAlert('Service Successfully Added!');
-
-        $("#phoneService").data("kendoGrid").dataSource.read();
-        $("#phoneService").data("kendoGrid").refresh();
-
-        $("#allphoneGrid").data("kendoGrid").dataSource.read();
-        $("#allphoneGrid").data("kendoGrid").refresh();
-
-
-        $("#customerAllPhoneGrid").data("kendoGrid").dataSource.read();
-        $("#customerAllPhoneGrid").data("kendoGrid").refresh();
-
-        $scope.MonthlySubscription();
-      }
-    });
-  }
-
-  $scope.SavePersonPhone = function () {
-
-    var url = FoneclubeService.getAPIUrl() + '/manager/phones/Save/PersonPhone';
-    var Id = $('#hdnRecordId').val();
-    var PersonPhoneId = $('#hdnPersonPhoneId').val();
-    var PersonId = $('#hdnPersonId').val();
-    var DDNumber;
-    var PhoneNumber = $('#PhoneNumber').val();
-    var PlanId = $('#PhonePlanId').val();
-    var OperatorId = $('#PhoneOperatorId').val();
-    //var PlanOptionId = $('#newPhoneOptionId').val();
-    var StatusId = $('#hdnStatusId').val();
-     
-    var AmoutPrecoVip = $('#AmoutPrecoVip').val();
-
-    var newAmoutPrecoVip = 0;
-
-    if (parseInt(AmoutPrecoVip) > 0)
-    {
-      newAmoutPrecoVip = AmoutPrecoVip * 100;
-    }
-
-    var Nickname = $('#PhoneNickName').val();
-    var IsActive = true;
-    var IsPhoneClube = true;
-    var IsPortability = false;
-    var IsPrecoVip = $('#hdnIsPrecoVip').val();
-
-    DDNumber = PhoneNumber.substring(0, 2);
-    PhoneNumber = PhoneNumber.substring(2, 11);
-
-    $.ajax({
-      url: url,
-      type: 'Post',
-      data: {
-        'Id': Id,
-        'PersonId': PersonId,
-        'PersonPhoneId': PersonPhoneId,
-        'DDNumber': DDNumber,
-        'PhoneNumber': PhoneNumber,
-        'OperatorId': OperatorId,
-        'PlanId': PlanId,
-        'StatusId': StatusId,
-        'AmoutPrecoVip': newAmoutPrecoVip,
-        //'PlanOptionId': PlanOptionId,
-        'Nickname': Nickname,
-        'IsActive': IsActive,
-        'IsPhoneClube': IsPhoneClube,
-        'IsPortability': IsPortability,
-        'IsPrecoVip': IsPrecoVip
-      },
-      dataType: 'json',
-      success: function (data) {
-        //Once Record is Saved refresh the Grid
-        $("#customerAllPhoneGrid").data("kendoGrid").dataSource.read();
-        $("#customerAllPhoneGrid").data("kendoGrid").refresh();
-
-        $('#PhonePlanId').val("");
-        $('#PhoneNumber').val(""); 
-        $('#PhoneOperatorId').val("");
-        $('#hdnPersonPhoneId').val('');
-        $('#PhoneNickName').val(""); 
-        $('#AmoutPrecoVip').val("0")
-        $scope.BindDropDowns();
-        $scope.ShowSystemAlert('Record Saved Successfully!');
-      }
-    });
-  }
-
-  $scope.SaveCustomerToPhone = function (personId) {
-     
-
-    var phone = $('#hdnPhoneNumber').val();
-    var DDNumber = phone.substring(0, 2);
-    var PhoneNumber = phone.substring(2, 11);
-
-    var url = FoneclubeService.getAPIUrl() + '/manager/phones/Save/PersonPhone';
-    var Id = $('#hdnRecordId').val();
-    var PlanId = $('#CustomerPhonePlanId').val();
-    var OperatorId = $('#PhoneOperatorId').val();
-    //var PlanOptionId = $('#newPhoneOptionId').val();
-    var StatusId = $('#hdnStatusId').val();
-    var AmoutPrecoVip = $('#AmoutPrecoVip').val();
-    var Nickname = $('#PhoneNickName').val();
-    var IsActive = true;
-    var IsPhoneClube = true;
-    var IsPortability = false;
-    var IsPrecoVip = $('#hdnIsPrecoVip').val();
-
-
-
-    $.ajax({
-      url: url,
-      type: 'Post',
-      data: {
-        'Id': Id,
-        'PersonId': personId,
-        'DDNumber': DDNumber,
-        'PhoneNumber': PhoneNumber,
-        'OperatorId': OperatorId,
-        'PlanId': PlanId,
-        'StatusId': StatusId,
-        'AmoutPrecoVip': AmoutPrecoVip,
-        'PlanOptionId': PlanOptionId,
-        'Nickname': Nickname,
-        'IsActive': IsActive,
-        'IsPhoneClube': IsPhoneClube,
-        'IsPortability': IsPortability,
-        'IsPrecoVip': IsPrecoVip
-      },
-      dataType: 'json',
-      success: function (data) {
-        //Once Record is Saved refresh the Grid
-        $("#allphoneGrid").data("kendoGrid").dataSource.read();
-        $("#allphoneGrid").data("kendoGrid").refresh();
-
-        $('#allCustomerModel').hide();
-        $scope.ShowSystemAlert('Record Saved Successfully!');
-      }
-    });
-  }
-
-  $scope.EditPhoneRecord = function (personPhoneId, phoneNumber, phonePlanId, phoneNickName, phoneOperatorId, amoutPrecoVip) {
-
-    $('#phoneDetailTitle').html('Edit Phone Detail');
-    var newAmoutPrecoVip = amoutPrecoVip / 100;
-
-    $("#AmoutPrecoVip").kendoNumericTextBox({
-      value: newAmoutPrecoVip
-    });
-
-    
-    $('#hdnPersonPhoneId').val(personPhoneId); 
-    $('#PhoneNickName').val(phoneNickName); 
-    $('#hdnEditPhoneNumber').val(phoneNumber);
-
-    var url = FoneclubeService.getAPIUrl() + '/manager/phones/Available/Numbers?number=' + phoneNumber;
-    $("#PhoneNumber").kendoDropDownList({
-      optionLabel: "Select",
-      dataTextField: "DisplayPhone",
-      dataValueField: "CompletePhone",
-      dataSource: {
-        transport: {
-          read: {
-            dataType: "json",
-            url: url
+      // Ativa
+      {
+        headerName: 'Ativa',
+        field: 'IsActive',
+        width: 70,
+        cellRenderer: function (params) {
+          const personPhoneId = params.node.data.PersonPhoneId;
+          if (params.value) {
+            return "<button ng-click='showActivateConfirm(" + personPhoneId + ", " + params.node.id + ", true)' class='btn btn-success btn-xs'>On</button>";
+          } else {
+            return "<button ng-click='showActivateConfirm(" + personPhoneId + ", " + params.node.id + ", false)' class='btn btn-danger btn-xs'>Off</button>";
           }
-        }
-      }
-    });
-
-
-    var ddPhoneNumber = $("#PhoneNumber").data("kendoDropDownList");
-    ddPhoneNumber.value(phoneNumber);
-
-    var ddPhonePlan = $("#PhonePlanId").data("kendoDropDownList");
-    ddPhonePlan.value(phonePlanId);
-
-
-    var ddOperator = $("#PhoneOperatorId").data("kendoDropDownList");
-    ddOperator.value(phoneOperatorId);
-
-    //------------------------------------------------------------------------
-    $('#btnCustomerTab').removeClass('btn-default');
-    $('#btnCustomerTab').removeClass('btn-info');
-    $('#btnPhoneTab').removeClass('btn-default');
-    $('#btnPhoneTab').removeClass('btn-info');
-    $('#btnCustomerTab').addClass('btn-default');
-    $('#btnPhoneTab').addClass('btn-info');
-    $('#CustomerDetail-Container').hide();
-    $('#PhoneDetail-Container').show();
-    //------------------------------------------------------------------------
-
-  }
-
-  $scope.UpdatePhonePrice = function () {
-
-    var url = FoneclubeService.getAPIUrl() + '/manager/phones/Update/Phone/Price';
-
-    $.ajax({
-      url: url,
-      type: 'Post',
-      data: {
-        'Id': $('#hdnPersonId').val(),
-        'SinglePrice': $('#payableMontlyPrice').val(),
-        'DescriptionSinglePrice': $('#lblMonthlySubscription').html(),
-      },
-      dataType: 'json',
-      success: function (data) {
-        $scope.ShowSystemAlert('Price has been updated Successfully!');
-      }
-    });
-  }
-
-
-
-  //-------------------------------------------------------------------------------------------- 
-  $scope.customerGridDataSource = new kendo.data.DataSource({
-    type: "json",
-    transport: { read: FoneclubeService.getAPIUrl() + '/profile/all/customers?minimal=true' },
-    serverPaging: false,
-    serverSorting: false
-  });
-  $scope.customerGridOptions = {
-    dataSource: $scope.phoneServiceDataSource,
-    sortable: true,
-    scrollable: true,
-    filterable: {
-      mode: "row",
-      extra: false,
-      operators: {
-        string: {
-          contains: "Contains",
-          startswith: "Starts with",
-          eq: "Is equal to",
-          neq: "Is not equal to"
         },
-        number: {
-          eq: "Equal to",
-          neq: "Not equal to",
-          gte: "Greater Than",
-          lte: "Less Than"
+        filterParams: {
+          filterOptions: [
+            'empty',
+            {
+              displayKey: 'AtivaOn',
+              displayName: 'On',
+              test: function (filterValue, cellValue) {
+                return (cellValue == 'true' || cellValue == true);
+              },
+              hideFilterInput: true
+            },
+            {
+              displayKey: 'AtivaOff',
+              displayName: 'Off',
+              test: function (filterValue, cellValue) {
+                return (cellValue == 'false' || cellValue == false);
+              },
+              hideFilterInput: true
+            }
+          ],
+          applyButton: true,
+          clearButton: true,
+          resetButton: true,
         }
+      },
+      // Plano Fc
+      {
+        headerName: 'Plano Fc',
+        field: 'PlanDescription',
+        width: 100,
+
+      },
+      // Preco Fc
+      {
+        headerName: 'Preco Fc',
+        field: 'CalculatePlanCost',
+        width: 100,
+        filter: 'agNumberColumnFilter'
+      },
+      // Preco VIP
+      {
+        headerName: 'Preco VIP',
+        field: 'CalculateAmoutPrecoVip',
+        width: 100,
+        filter: 'agNumberColumnFilter'
+      },
+      // Apelido
+      {
+        headerName: 'Apelido',
+        field: 'NickName',
+        width: 200
+      }
+    ],
+    rowData: [],
+    defaultColDef: {
+      filter: true,
+      sortable: true,
+      resizable: true,
+      autoHeight: true,
+      filterParams: {
+        applyButton: true,
+        clearButton: true,
+        resetButton: true,
       }
     },
-    columns: [
+    angularCompileRows: true,
+    onGridReady: function () {
+      if (updateMainGrid) {
+        bindMainGrid(vm.grdMainSrc);
+        updateMainGrid = false;
+      }
+      vm.grdMainOption.api.sizeColumnsToFit();
+    },
+    autoSizeColumns: true,
+    rowHeight: 40
+  }
+  vm.grdMainSrc = [];
+  vm.grdHeight = $(window).height() - 200;
+
+  // service grid
+  vm.grdServiceOption = {
+    columnDefs: [
       {
-        field: "Id", width: "50px", title: '-'
-        , template: "<button type='button' ng-click=\"SaveCustomerToPhone('#=Id#')\" class='btn btn-info btn-xs'><i class='fa fa-plus'></i></button>"
-        , filterable: { cell: { showOperators: false } }
+        headerName: 'Service',
+        field: 'ServiceName',
+        width: 200
       },
-      { field: "Name", width: "180px", title: "Name", filterable: { cell: { showOperators: false } } },
-      { field: "NickName", width: "180px", title: "Nick Name", filterable: { cell: { showOperators: false } } },
-      { field: "DocumentNumber", width: "180px", title: "Document Number", filterable: { cell: { showOperators: false } } },
-      { field: "Email", width: "180px", title: "Email", filterable: { cell: { showOperators: false } } }
-    ]
-  }
-  //--------------------------------------------------------------------------------------------
-
-  $scope.showCustomerDetail = function (personId) {
-    $('#CustomerDetailModel').show();
-    $('#hdnPersonId').val(personId);
-
-    //---------------------------------------------------
-    $('#btnCustomerTab').removeClass('btn-default');
-    $('#btnCustomerTab').removeClass('btn-info');
-    $('#btnPhoneTab').removeClass('btn-default');
-    $('#btnPhoneTab').removeClass('btn-info');
-    $('#CustomerDetail-Container').hide();
-    $('#PhoneDetail-Container').hide();
-    $('#btnCustomerTab').addClass('btn-info');
-    $('#btnPhoneTab').addClass('btn-default');
-    $('#CustomerDetail-Container').show();
-
-    $('#ParentName').html('');
-    $('#CustomerNickName').val('');
-    $('#CustomerDocumentNumber').val('');
-    $('#CustomerEmail').val('');
-    $('#CustomerName').val('');
-
-    //-----------------------------------------------------
-
-    $scope.customerSummary();
-    $scope.MonthlySubscription();
-
-
-    debugger;
-
-    $scope.customerAllPhoneGridGridOptions = {
-      dataSource: $scope.customerAllPhoneGridDataSource,
-      sortable: true,
-      scrollable: true,
-      height: 300,
-      columns: [
-
-        {
-          field: "UsoLinha", width: "50px", title: "-"
-
-          , template: "<button type='button' ng-click=\"EditPhoneRecord('#=PersonPhoneId#','#=CompletePhone#', '#=PlanId#', '#=NickName#','#=OperatorId#', '#=AmoutPrecoVip#')\" class='btn btn-info btn-xs'><i class='fa fa-pencil-square-o'></i></button>"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "UsoLinha", width: "80px", title: "Linha em Uso"
-          , template: " # if (UsoLinha == 1) {#  <button class='btn btn-success btn-xs'>sim</button> #}else{# <button class='btn btn-warning btn-xs'>não</button> #}#"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "OperatorId", width: "80px", title: "Operadora Divergente"
-          , template: " # if (OperatorId == 1) {#  <button class='btn btn-success btn-xs'>A</button> #}else{# <button class='btn btn-danger btn-xs'>E</button> #}#"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "OperatorName", width: "180px", title: "Plano Operadora 1"
-          , template: "#:OperatorName# #:MasterOperatorName#"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: true } }
-        },
-        {
-          field: "DisplayPhone", width: "180px", title: "Telefone"
-          , template: "#:DisplayPhone#", attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "PhoneServices"
-          , width: "180px"
-          , title: "Servico da linha"
-
-          , template: function (dataItem) {
-            var personPhoneId = dataItem.PersonPhoneId;
-            var temp = "<ul class='activeServicesContainer'>";
-            if (dataItem.PhoneServices != undefined) {
-              for (var i = 0; i < dataItem.PhoneServices.length; i++) {
-                var item = dataItem.PhoneServices[i];
-                var serviceName = item.ServiceName;
-                var serviceId = item.ServiceId;
-                temp = temp + "<li class='activeService'>"
-                  + "<button class='btn btn-info btn-xs' ng-click='RemoveService(" + serviceId + "," + personPhoneId + ")'>"
-                  + serviceName
-                  + "<i class='fa fa-times'></i>"
-                  + "</button ></li > ";
-              }
-            }
-            temp = temp + "<li class='activeService '><button class='btn btn-success btn-xs'  ng-click='AddNewService(" + personPhoneId + ")'><i class='fa fa-plus'></i></button></li>";
-            temp = temp + "</ul>";
-            return temp;
-          }
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "IsActive", width: "80px", title: "Ativa"
-          , template: " # if (IsActive == 1) {#  <button type='button' ng-click='ShowMessage(#=PersonPhoneId#)' class='btn btn-success btn-xs'>On</button> #}else{# <button type='button' ng-click='ActivateDeactivePhone(#=PersonPhoneId#,true)' class='btn btn-danger btn-xs'>Off</button> #}#"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "PlanDescription", width: "120px", title: "Plano Fc"
-          , template: "#:PlanDescription#", attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "PlanCost", width: "120px", title: "Preco Fc"
-          , template: "#:DisplayPlanCost#", attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "AmoutPrecoVip", width: "80px", title: "Preco VIP"
-          , template: "#:DisplayAmoutPrecoVip#"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "NickName", width: "180px", title: "Apelido"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-      ]
-
-    }
-  }
-
-
-
-  $scope.hideCustomerDetail = function () {
-    $('#CustomerDetailModel').hide();
-    $('#hdnPersonId').val(0);
-  }
-  //--------------------------------------------------------------------------------------------
-
-  $scope.customerSummary = function () {
-    // 
-    var url = FoneclubeService.getAPIUrl() + '/profile/cliente/id/' + $('#hdnPersonId').val()
-    $.ajax({
-      url: url,
-      type: 'Get',
-      dataType: 'json',
-      success: function (data) {
-
-        $('#ParentName').html(data.Pai.Name);
-        $('#ParentId').html(data.Pai.Id);
-
-        $('#CustomerNickName').val(data.NickName);
-        $('#CustomerDocumentNumber').val(data.DocumentNumber);
-        $('#CustomerEmail').val(data.Email);
-        $('#CustomerName').val(data.Name);
+      {
+        headerName: 'Active Date',
+        field: 'ActiveDate',
+        width: 200
       }
-    });
-  }
-
-  $scope.ShowSystemAlert = function (msg) {
-    $('#Content-Alert').show();
-    $('#Content-AlertMessage').html(msg);
-    var target = $('#Content-Alert');
-    if (target.length) {
-      $('html, body').stop().animate({ scrollTop: target.offset().top }, 1000);
-    }
-    $("#Content-Alert").delay(2000).fadeOut(2000);
-  }
-
-  $scope.MonthlySubscription = function () {
-
-    if (parseInt($('#hdnPersonId').val()) == 0)
-      return;
-
-
-    var url = FoneclubeService.getAPIUrl() + '/manager/phones/GetMonthly/Subscription?personId=' + $('#hdnPersonId').val()
-    $.ajax({
-      url: url,
-      type: 'Get',
-      dataType: 'json',
-      success: function (data) {
-        $('#lblMonthlySubscription').html('R$ ' + data);
-        $('#hdnMonthlySubscription').html('R$ ' + data);
-      }
-    });
-  }
-
-  function SetGridProperties() {
-    var pageHeight = $(window).height() - 110;
-    var readUrl = FoneclubeService.getAPIUrl() + '/manager/phones/All/Phones';
-
-    $scope.allphoneDataSource = new kendo.data.DataSource({
-      type: "json",
-      transport: { 
-        read: {
-          dataType: "json",
-          url: readUrl,
-        }
-      },
-      serverPaging: false,
-      serverSorting: false,
-      schema: {
-        model: {
-          fields: {
-            // PlanCost: { type: "number" },
-            // AmoutPrecoVip: { type: "number" },
-            // CalculateAmoutPrecoVip: { type: "number" },
-            // CalculatePlanCost: { type: "number" }
-            // ,CCID: { type: "string" }
-          }
-        }
-      },
-
-    });
-
-    // console.log('works')
-    // debugger;
-    //  console.log($scope.allphoneDataSource)
-
-    $scope.allphoneGridOptions = {
-      dataSource: $scope.allphoneDataSource,
-      height: pageHeight,
-      toolbar: ["excel"],
-      excel: {
-        allPages: true,
-        fileName: "phone Report.xlsx",
-        template: "<a class='k-button k-button-icontext' onclick='customCommand();' href='\\#'></span>Cutom Command</a>"
-      },
+    ],
+    rowData: [],
+    defaultColDef: {
+      filter: false,
       sortable: true,
-      scrollable: true,
-      pageable: {
-        refresh: true,
-        alwaysVisible: false
-      },
-      reorderable: true,
       resizable: true,
-      filterable: {
-        mode: "row",
-        extra: false,
-        operators: {
-          string: { contains: "Contains" },
-          number: { gte: "Greater Than" }
+      autoHeight: true
+    },
+    angularCompileRows: true,
+    onGridReady: function () {
+      if (updateServiceGrid) {
+        bindServiceGrid(vm.grdServiceSrc);
+        updateServiceGrid = false;
+      }
+      vm.grdServiceOption.api.sizeColumnsToFit();
+    },
+    autoSizeColumns: true,
+  };
+  vm.grdServiceSrc = [];
 
+  // assign modal grid
+  vm.grdAssignOption = {
+    columnDefs: [
+      {
+        headerName: '-',
+        field: 'Id',
+        width: 50,
+        cellRenderer: function (params) {
+          return "<button ng-click='assignPhoneToCustomer(" + params.value + ")' class='btn btn-info btn-xs'><i class='fa fa-plus'></i></button>";
         }
       },
-      columns: [
-        {
-          field: "DisplayUsoLinha", width: "80px", title: "Linha em Uso"
-          , template: " # if (UsoLinha == 1) {#  <button class='btn btn-success btn-xs'>sim</button> #}else{# <button class='btn btn-warning btn-xs'>não</button> #}#"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "DisplayOperator", width: "80px", title: "Operadora Divergente"
-          , template: " # if (OperatorId == 1) {#  <button class='btn btn-success btn-xs'>A</button> #}else{# <button class='btn btn-danger btn-xs'>E</button> #}#"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "DisplayPlanoOperador", width: "180px", title: "Plano Operadora 3"
-          , template: "#:DisplayPlanoOperador#"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false, operator: "contains", template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); }, } }
-        },
-        {
-          field: "CompletePhone", width: "180px", title: "Telefone"
-          , template: "#:DisplayPhone#", attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false, operator: "contains", template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); }, } }
-        },
-        {
-          field: "CCID", width: "180px", title: "CCID"
-          , template: "#:CCID#"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "CodigoCliente", width: "180px", title: "Cod. Cliente"
-          , template: "#:CodigoCliente#"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "RazaoSocial", width: "180px", title: "Razao Social"
-          , template: "#:RazaoSocial#"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "PersonName", width: "180px", title: "Cliente 2"
-          , template: "# if( PersonName == '~') {#  <button class='btn btn-success btn-xs' ng-click='ShowAllCustomers(#:CompletePhone#)'><i class='fa fa-plus'></i></button>   #} else {# <div><a ng-click='showCustomerDetail(#:PersonId#)'> #=PersonName# </a></div>  #}# "
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false, operator: "contains", template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); }, } }
-        },
-        {
-          field: "PhoneServices", width: "180px", title: "Servico da linha"
-          , template: function (dataItem) {
-            var personPhoneId = dataItem.PersonPhoneId;
-            var temp = "<ul class='activeServicesContainer'>";
-            if (dataItem.PhoneServices != undefined) {
-              for (var i = 0; i < dataItem.PhoneServices.length; i++) {
-                var item = dataItem.PhoneServices[i];
-                var serviceName = item.ServiceName;
-                var serviceId = item.ServiceId;
-                temp = temp + "<li class='activeService'>"
-                  + "<button class='btn btn-info btn-xs' ng-click='RemoveService(" + serviceId + "," + personPhoneId + ")'>"
-                  + serviceName
-                  + "<i class='fa fa-times'></i>"
-                  + "</button ></li > ";
+      {
+        headerName: 'Name',
+        field: 'Name',
+        width: 100,
+        filter: 'agTextColumnFilter'
+      },
+      {
+        headerName: 'Nick Name',
+        field: 'NickName',
+        width: 150
+      },
+      {
+        headerName: 'Document Number',
+        field: 'DocumentNumber',
+        width: 120,
+        filter: 'agTextColumnFilter'
+      },
+      {
+        headerName: 'Email',
+        field: 'Email',
+        width: 120
+      }
+    ],
+    rowData: [],
+    defaultColDef: {
+      filter: false,
+      sortable: true,
+      resizable: true,
+      autoHeight: true,
+      autoSizeColumns: true,
+    },
+    angularCompileRows: true,
+    onGridReady: function () {
+      if (updateAssignGrid) {
+        bindAssignGrid(vm.customers);
+        updateAssignGrid = false;
+      }
+      vm.grdAssignOption.api.sizeColumnsToFit();
+    },
+
+  };
+
+  // initial function
+  $scope.initPageLoad = async function () {
+    try {
+      vm.loading = true;
+
+      // loading customer
+      var customers = localStorageService.get('customers');
+      if (customers == undefined || customers == null || customers == 'none') {
+        await FoneclubeService.getAllCustomers(false)
+          .then(function (result) {
+            vm.customers = result;
+          })
+          .catch(function (error) {
+            vm.customers = [];
+          });
+
+        localStorageService.set('customers', JSON.stringify(vm.customers));
+
+      } else {
+        vm.customers = JSON.parse(customers);
+      }
+      bindCustomerFilterDropdown();
+
+      // loading phones
+      const phoneData = localStorageService.get('phoneData');
+      if (phoneData == undefined || phoneData == null || phoneData == 'none' || phoneData.length == 0) {
+        await FoneclubeService.getAllPhones()
+          .then(function (result) {
+            vm.grdMainSrc = result;
+          })
+          .catch(function (error) {
+            vm.grdMainSrc = [];
+          });
+        localStorageService.set('phoneData', JSON.stringify(vm.grdMainSrc));
+      } else {
+        vm.grdMainSrc = JSON.parse(phoneData);
+      }
+      vm.freePhones = vm.grdMainSrc.filter(x => x.PersonId == 0);
+      // console.log(vm.freePhones);
+      bindFreePhoneDropdown(vm.freePhones);
+      bindMainGrid(vm.grdMainSrc);
+
+      // load services
+      await FoneclubeService.getServices()
+        .then(function (result) {
+          // load dropdown
+          vm.services = result;
+        })
+        .catch(function (error) {
+          console.log('load services error');
+          vm.services = [];
+        });
+
+      bindServiceDropdown(vm.services);
+
+      // load plans
+      await FoneclubeService.getPlanOptios()
+        .then(function (result) {
+          if (result) {
+            vm.plans = result;
+          }
+        })
+        .catch(function (error) {
+          vm.plans = [];
+        });
+      bindPlanDropdown(vm.plans);
+
+      // load operators
+      await FoneclubeService.getOperators()
+        .then(function (result) {
+          if (result) {
+            vm.operators = result;
+          }
+        })
+        .catch(function (error) {
+
+        });
+      bindOperatorDropdown(vm.operators);
+
+      // modal dismiss
+      $("#edit_modal").on('hidden.bs.modal', function () {
+        const Id = $("#customer-filter").val();
+        if (Id == "-1" || Id == -1) {
+          resetCustomer();
+        }
+      });
+
+      $("#service_modal").on('hidden.bs.modal', function () {
+        // redraw main grid
+        redrawGrid(vm.selectedNodeId);
+      });
+
+
+    } catch (error) {
+      // console.log(error);
+      showMessage('Something went wrong', false);
+    }
+    vm.loading = false;
+    console.log('loading false');
+  }
+
+  // trigger on reload whole page
+  $scope.refreshPage = function () {
+    localStorageService.set('phoneCustomers', 'none');
+    localStorageService.set('phoneData', 'none');
+    location.reload();
+  }
+
+  // trigger on show/hide detail at the top
+  $scope.showHideDetails = function () {
+    vm.visible_details = !vm.visible_details;
+    if (vm.visible_details) {
+      vm.grdHeight = $(window).height() - 200;
+    } else {
+      vm.grdHeight = $(window).height() - 70;
+    }
+  }
+
+  // Activate / deactivate phone number
+  // Confirm dialog
+  // trigger on click Ativa on/off
+  $scope.showActivateConfirm = function (personPhoneId, nodeId, activate) {
+    if (personPhoneId <= 0) {
+      showMessage('Phone is not connected to the customer', false);
+    } else {
+      vm.selectedPersonPhoneId = personPhoneId;
+      vm.selectedNodeId = nodeId;
+      if (activate) {
+        $("#deactivate_confirm_modal").show();
+      } else {
+        $("#activate_confirm_modal").show();
+      }
+    }
+  }
+
+  // activate/deactivate phone number
+  $scope.activatePhone = async function (activate) {
+    if (vm.selectedPersonPhoneId > 0 && vm.selectedNodeId > 0) {
+      // activate phone number
+      // console.log(vm.selectedPersonPhoneId, vm.selectedNodeId);
+      await FoneclubeService.postUpdatePhoneActivate({ personPhoneId: vm.selectedPersonPhoneId, activate: activate })
+        .then(result => {
+          // console.log(result);
+          if (result) {
+            var phone = vm.grdMainSrc.find(x => x.PersonPhoneId == vm.selectedPersonPhoneId);
+            if (phone) {
+              phone.IsActive = activate;
+              // update grid
+              if (activate) {
+                showMessage("Phone is successfully activated", true);
+              } else {
+                showMessage("Phone is successfully deactivated", true);
               }
             }
-            temp = temp + "<li class='activeService '><button class='btn btn-success btn-xs'  ng-click='AddNewService(" + personPhoneId + ")'><i class='fa fa-plus'></i></button></li>";
-            temp = temp + "</ul>";
-            return temp;
+          } else {
+            showMessage("Something went wrong with activation", false);
+            console.log('false');
           }
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: false
-        },
+        })
+        .catch(error => {
+          console.log(error);
+          showMessage("Something went wrong with activation", false);
+        });
+      // refresh grid
+    }
+    this.cancelActivate();
 
+  }
 
-        {
-          field: "IsActive", width: "80px", title: "Ativa"
-          , template: " # if (IsActive == 1) {#  <button type='button' ng-click='ShowMessage(#=PersonPhoneId#)' class='btn btn-success btn-xs'>On</button> #}else{# <button type='button' ng-click='ActivateDeactivePhone(#=PersonPhoneId#,true)' class='btn btn-danger btn-xs'>Off</button> #}#"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false } }
-        },
-        {
-          field: "PlanDescription", width: "120px", title: "Plano Fc"
-          , template: "#:PlanDescription#", attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false, template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); }, } }
-        },
+  // cancel activation
+  $scope.cancelActivate = function () {
+    vm.selectedPersonPhoneId = -1;
+    vm.selectedNodeId = -1;
+    $("#activate_confirm_modal").hide();
+    $("#deactivate_confirm_modal").hide();
+  }
 
-        {
-          field: "CalculatePlanCost", width: "120px", title: "Preco Fc"
-          , template: "#:DisplayPlanCost#", attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false, template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); }, } }
-        },
+  // trigger on alert message [ok]
+  $scope.hideMessageModal = function () {
+    $("#edit_modal").hide();
+  }
 
+  // add/remove service
+  // show dialog
+  $scope.addNewService = function (personPhoneId, nodeId) {
+    if (personPhoneId <= 0) {
+      showMessage('Phhone is not connected with customer', false);
+    } else {
+      vm.selectedPersonPhoneId = personPhoneId;
+      vm.selectedNodeId = nodeId;
+
+      var phone = vm.grdMainSrc.find(x => x.PersonPhoneId == personPhoneId);
+
+      if (phone && phone.PhoneServices && phone.PhoneServices.length > 0) {
+        vm.grdServiceSrc = phone.PhoneServices;
+      } else {
+        vm.grdServiceSrc = [];
+      }
+
+      bindServiceGrid(vm.grdServiceSrc);
+
+      $("#service_modal").modal("show");
+
+    }
+  }
+
+  // add new service
+  $scope.addService = function () {
+    const serviceID = $("#phoneServices").val();
+    if (serviceID != -1) {
+      const params = {
+        Id: vm.selectedPersonPhoneId,
+        Servicos: [
+          {
+            Id: serviceID
+          }
+        ]
+      };
+
+      FoneclubeService.postInsertServiceActive(params)
+        .then(function (result) {
+          // update grid
+          if (result) {
+            const service = vm.services.find(x => x.Id == serviceID);
+            const dt = new Date();
+            vm.grdServiceSrc.push({
+              ServiceId: serviceID,
+              ServiceName: service.Descricao,
+              PersonPhoneId: vm.selectedPersonPhoneId,
+              ActiveDate: dt.toISOString()
+            });
+            bindServiceGrid(vm.grdServiceSrc);
+            const index = vm.grdMainSrc.findIndex(x => x.PersonPhoneId == vm.selectedPersonPhoneId);
+            vm.grdMainSrc[index].PhoneServices = vm.grdServiceSrc;
+          }
+        })
+        .catch(function (error) {
+          // error case
+          // console.log(error);
+          showMessage('Something went wrong on adding service', false);
+        });
+    } else {
+      // console.log("no service selected");
+      showMessage('Please select the service', false);
+    }
+  }
+
+  // remove service
+  $scope.removeService = function (serviceId, personPhoneId, nodeId) {
+    // console.log(serviceId, personPhoneId, nodeId);
+    // show confirm dialog
+    const params = {
+      Id: personPhoneId,
+      Servicos: [
         {
-          field: "CalculateAmoutPrecoVip", width: "80px", title: "Preco VIP"
-          , template: "#:DisplayAmoutPrecoVip#"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false, template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); }, } }
-        },
-        {
-          field: "NickName", width: "180px", title: "Apelido"
-          , attributes: { "class": "#=DisplayOperatorCss#" }
-          , filterable: { cell: { showOperators: false, operator: "contains", template: function (args) { args.element.css("width", "90%").addClass("k-textbox").attr("data-value-update", "keyup"); }, } }
-        },
+          Id: serviceId
+        }
       ]
+    };
+
+    FoneclubeService.postIsertServiceDeactive(params)
+      .then(function (result) {
+        if (result) {
+          showMessage('Service is successfully removed', true);
+          const index = vm.grdMainSrc.findIndex(x => x.PersonPhoneId == personPhoneId);
+          const service_index = vm.grdMainSrc[index].PhoneServices.findIndex(x => x.ServiceId == serviceId);
+          if (service_index >= 0) {
+            vm.grdMainSrc[index].PhoneServices.splice(service_index, 1);
+            redrawGrid(nodeId);
+          }
+        } else {
+          showMessage('Something went wrong in remove service', false);
+        }
+      })
+      .catch(function (error) {
+        showMessage('Something went wrong in remove service', false);
+      });
+  }
+
+  // assign customer to phone
+  // trigger on empty client clicked
+  $scope.assignCustomer = function (personPhoneId, completePhone, nodeId) {
+    vm.selectedPersonPhoneId = personPhoneId;
+    vm.selectedNodeId = nodeId;
+    // vm.selectedPhoneNumber = completePhone;
+    vm.phone = vm.grdMainSrc.find(x => x.CompletePhone == completePhone);
+
+    bindAssignGrid(vm.customers);
+    $("#assign_modal").modal("show");
+    if (vm.grdAssignOption.api) {
+      vm.grdAssignOption.api.sizeColumnsToFit();
+    }
+  }
+
+  // assign phone to customer
+  $scope.assignPhoneToCustomer = function (PersonId) {
+    const operatorId = $("#assign_operator").val();
+    const planId = $("#assign_plan").val();
+    const preco = $("#assign_preco").val() || 0;
+    const apelido = $("#assign_apelido").val() || "";
+
+    const dd = vm.phone.CompletePhone.substring(0, 2);
+    const number = vm.phone.CompletePhone.substring(2);
+
+
+    if (planId != -1 && operatorId != -1) {
+      // assign phone to customer
+      const param = {
+        PersonId: PersonId,
+        PlanId: planId,
+        OperatorId: operatorId,
+        DDNumber: dd,
+        PhoneNumber: number,
+        NickName: apelido,
+        IsActive: true,
+        IsPhoneClube: true,
+        IsPrecoVip: false,
+        AmountPrecoVip: preco
+      }
+
+      if (preco != 0) {
+        param.IsPrecoVip = true;
+      }
+
+      FoneclubeService.postPhoneInsert(param)
+        .then(function (result) {
+          if (result) {
+            showMessage('Phone is successfully assigned', true);
+          }
+        })
+        .catch(function (error) {
+          // console.log("error");
+          showMessage('Failed in assign number', false);
+        });
+
+    } else {
+      // show message for select Plan and Operator
+      showMessage('Please select Plan or Operator', false);
+    }
+  }
+
+  // add new phone to the customer
+  // show add new phone dialog
+  $scope.addNewPhone = function () {
+    if (vm.customer.Id != -1 || vm.customers.Id == "-1") {
+      vm.phoneMode = 1;
+      $("#edit_title").html("Add Phone");
+
+      $("#edit_preco").val("");
+      $("#edit_apelido").val("");
+
+      var operatorList = $("#edit_operator").data("kendoDropDownList");
+      operatorList.value(-1);
+      var planList = $("#edit_plan").data("kendoDropDownList");
+      planList.value(-1);
+
+
+      $("#edit_modal").modal("show");
+    }
+  }
+
+  // update phone inforamtion
+  $scope.savePhoneInfo = function () {
+    const operatorId = $("#edit_operator").val();
+    const planId = $("#edit_plan").val();
+    const preco = $("#edit_preco").val() || 0;
+    const apelido = $("#edit_apelido").val() || "";
+
+    if (operatorId == -1 || planId == -1) {
+      showMessage('Select Plan and Operator', true);
+      return;
     }
 
+    let phoneNumber = $("#edit_phone_list").val();
+    const dd = phoneNumber.substring(0, 2);
+    const number = phoneNumber.substring(2);
+
+    const param = {
+      PersonId: vm.customer.Id,
+      PlanId: planId,
+      OperatorId: operatorId,
+      DDNumber: dd,
+      PhoneNumber: number,
+      NickName: apelido,
+      IsActive: true,
+      IsPhoneClube: true,
+      IsPrecoVip: false,
+      AmountPrecoVip: preco
+    }
+
+    if (preco != 0) {
+      param.IsPrecoVip = true;
+    }
+
+    if (vm.phoneMode == 0) {
+      // update phone info
+      FoneclubeService.postUpdatePlanFoneclube(param)
+        .then(result => {
+          if (result) {
+            showMessage('Phone is successfully updated', true);
+          } else {
+            showMessage('Something went wrong with update Phone', false);
+          }
+        })
+        .catch(error => {
+          showMessage('Something went wrong with update Phone', false);
+        });
+
+    } else {
+      // create assign info
+
+      FoneclubeService.postPhoneInsert(param)
+        .then(result => {
+          if (result) {
+            // console.log("success");
+            showMessage('Phone is successfully added to the customer', true);
+            this.refreshPage();
+          } else {
+            showMessage('Something went wrong with adding number', false);
+            console.log('insert false');
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          showMessage('Something went wrong with adding number', false);
+        });
+    }
+
+    $("#edit_modal").modal("hide");
+  }
+
+  // functions in grid
+  $scope.showCustomerDetail = function (personPhoneId) {
+    const phone = vm.grdMainSrc.find(x => x.PersonPhoneId == personPhoneId);
+    if (phone) {
+      vm.phone = phone;
+      const customer = vm.customers.find(x => x.Id == phone.PersonId);
+      if (customer) {
+        vm.customer = customer;
+      } else {
+        resetCustomer();
+      }
+    }
+    vm.phoneMode = 0;
+    $("#edit_title").html("Edit Phone");
+    $("#edit_phone_input").val(vm.phone.CompletePhone);
+    $("#edit_preco").val(vm.phone.CalculatePlanCost);
+    $("#edit_apelido").val(vm.phone.NickName);
+
+    var operatorList = $("#edit_operator").data("kendoDropDownList");
+    operatorList.value(vm.phone.OperatorId);
+    var planList = $("#edit_plan").data("kendoDropDownList");
+    planList.value(vm.phone.PlanId);
+
+    $("#edit_modal").modal("show");
+  }
+
+  // click to copy text
+  $scope.copyToClip = function (str) {
+    const el = document.createElement('textarea');
+    el.value = str;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showMessage('Text is copied', true);
+  }
+
+  // refresh total linhas
+  $scope.refreshTotalLinhas = async function () {
+    if (vm.customer.Id != -1) {
+      vm.total_linhas = await FoneclubeService.getTotalLinhas(vm.customer.Id)
+        .then(function (result) {
+          //vm.total_linhas = result;
+          return result;
+        })
+        .catch(function (error) {
+          // vm.total_linhas = 0;
+          return 0;
+        });
+    }
+  }
+
+  // update preco unico
+  $scope.updatePrecoUnico = function () {
+    if (vm.customer.Id != -1) {
+      const v = $("#preco_unico").val();
+      if (v != '') {
+        const params = {
+          Id: vm.customer.Id,
+          SinglePrice: v,
+        }
+        FoneclubeService.postUpdatePhonePrice(params)
+          .then(function (result) {
+            // console.log(result);
+            showMessage('Successfully update the Preco Unico', true);
+          })
+          .catch(function (error) {
+            showMessage('Something went wrong with update Preco', false);
+          });
+      }
+    }
+  }
+
+
+  // inner funciton
+  // bind main grid
+  function bindMainGrid(data) {
+    if (vm.grdMainOption.api) {
+      vm.grdMainOption.api.setRowData(data);
+    } else {
+      updateMainGrid = true;
+    }
+  }
+
+  // bind service grid
+  function bindServiceGrid(data) {
+    if (vm.grdServiceOption.api) {
+      vm.grdServiceOption.api.setRowData(data);
+    } else {
+      updateServiceGrid = true;
+    }
+  }
+
+  function bindCustomerFilterDropdown() {
+    var el = $('#customer-filter');
+    if (el) {
+      el.kendoDropDownList({
+        index: 0,
+        optionLabel: { Name: 'All', Id: -1 },
+        dataTextField: 'Name',
+        dataValueField: 'Id',
+        dataSource: vm.customers,
+        filter: true,
+        filtering: function (ev) {
+          const filterValue = ev.filter !== undefined ? ev.filter.value : "";
+          ev.preventDefault();
+
+          this.dataSource.filter({
+            logic: 'or',
+            filters: [
+              {
+                field: 'Name',
+                operator: function (item, value) {
+                  return MainUtils.checkContains(item, value);
+                },
+                value: filterValue
+              },
+              {
+                field: 'Email',
+                operator: function (item, value) {
+                  return MainUtils.checkContains(item, value);
+                },
+                value: filterValue
+              },
+              {
+                field: 'NickName',
+                operator: function (item, value) {
+                  return MainUtils.checkContains(item, value);
+                },
+                value: filterValue
+              }
+            ]
+          });
+        },
+        change: onChangeCustomer
+      });
+    }
+  }
+
+  function bindServiceDropdown(data) {
+    $("#phoneServices").kendoDropDownList({
+      optionLabel: { Descricao: "Choose service", Id: -1 },
+      dataTextField: "Descricao",
+      dataValueField: "Id",
+      dataSource: data
+    });
+  }
+
+  function bindPlanDropdown(data) {
+    $("#assign_plan").kendoDropDownList({
+      optionLabel: { Description: "Choose plan", Id: -1 },
+      dataTextField: "Description",
+      dataValueField: "Id",
+      dataSource: data
+    });
+
+    $("#edit_plan").kendoDropDownList({
+      optionLabel: { Description: "Choose plan", Id: -1 },
+      dataTextField: "Description",
+      dataValueField: "Id",
+      dataSource: data
+    });
+  }
+
+  function bindFreePhoneDropdown(data) {
+    $("#edit_phone_list").kendoDropDownList({
+      optionLabel: { CompletePhone: "New Phone" },
+      dataTextField: "CompletePhone",
+      dataValueField: "CompletePhone",
+      dataSource: data,
+      filter: true,
+      change: function () {
+        const ID = $("#edit_phone_list").val();
+        if (ID == "New Phone") {
+          vm.phoneMode = 1;
+        } else {
+          vm.phoneMode = 2;
+        }
+        $scope.$apply();
+      }
+    });
+  }
+
+  function bindOperatorDropdown(data) {
+    $("#assign_operator").kendoDropDownList({
+      optionLabel: { Name: "Choose operator", Id: -1 },
+      dataTextField: "Name",
+      dataValueField: "Id",
+      dataSource: data
+    });
+
+    $("#edit_operator").kendoDropDownList({
+      optionLabel: { Name: "Choose operator", Id: -1 },
+      dataTextField: "Name",
+      dataValueField: "Id",
+      dataSource: data
+    });
+  }
+
+  function bindAssignGrid(data) {
+    if (vm.grdAssignOption.api) {
+      vm.grdAssignOption.api.setRowData(data);
+    } else {
+      updateAssignGrid = true;
+    }
+  }
+
+  // select name from top list
+  // trigger when 
+  function onChangeCustomer() {
+    const Id = $("#customer-filter").val();
+    if (Id == "-1") {
+      bindMainGrid(vm.grdMainSrc);
+    } else {
+      const data = vm.grdMainSrc.filter(x => x.PersonId == Id);
+      bindMainGrid(data);
+    }
+    bindDetails(Id);
+  }
+  // show details
+  async function bindDetails(ID) {
+    if (ID == "-1") {
+      vm.detail_phone = '';
+      vm.detail_email = '';
+      vm.detail_cpf = '';
+      vm.detail_nomePai = '';
+      vm.detail_atualize = '';
+      vm.detail_cep = '';
+      vm.detail_rua = '';
+      vm.detail_numero = '';
+      vm.detail_complemento = '';
+      vm.detail_bairro = '';
+      vm.detail_cidade = '';
+      vm.detail_estado = '';
+      resetCustomer();
+    } else {
+      const customer = vm.customers.find(x => x.Id == ID);
+      if (customer) {
+        let data = customer;
+        if (customer.fullData) {
+          data = customer.fullData;
+        }
+        if (customer.phone) {
+          vm.detail_phone = MainUtils.toDisplayPhoneNumber(customer.phone);
+        } else if (customer.Phones && customer.Phones.length > 0) {
+          const phone = customer.Phones.find(x => x.IsFoneclube == false);
+          if (phone) {
+            vm.detail_phone = MainUtils.toDisplayPhoneNumber(phone.DDD + phone.Number);
+          }
+        } else {
+          vm.detail_phone = "";
+        }
+
+        vm.customer = data;
+        await $scope.refreshTotalLinhas();
+        $("#preco_unico").val('');
+
+
+        const address = data.Adresses != null && data.Adresses.length > 0 ? data.Adresses[0] : null;
+        vm.detail_email = customer.Email;
+        vm.detail_cpf = '';
+        vm.detail_nomePai = data.Pai != null ? data.Pai.Name : '';
+        vm.detail_atualize = '';
+        vm.detail_cep = address != null ? address.Cep : '';
+        vm.detail_rua = address != null ? address.Street : '';
+        vm.detail_numero = address != null ? address.StreetNumber : '';
+        vm.detail_complemento = address != null ? address.Complement : '';
+        vm.detail_bairro = address != null ? address.Neighborhood : '';
+        vm.detail_cidade = address != null ? address.City : '';
+        vm.detail_estado = address != null ? address.State : '';
+
+        $scope.$apply();
+      } else {
+        // in case for customer not found
+      }
+
+    }
+  }
+
+  function resetCustomer() {
+    vm.customer = {
+      Id: -1,
+      Name: "",
+      DocumentNumber: "",
+      Email: "",
+      NickName: "",
+      Parent: ""
+    }
+    vm.total_linhas = 0;
+    $("#preco_unico").val('');
+  }
+
+  function showMessage(message, success) {
+    if (success) {
+      notify({
+        message: message,
+        duration: 3000,
+        position: 'right',
+        classes: 'alert-success'
+      });
+    } else {
+      notify({
+        message: message,
+        duration: 3000,
+        position: 'right',
+        classes: 'alert-danger'
+      });
+    }
+  }
+
+  function redrawGrid(rowIndex) {
+    var row = vm.grdMainOption.api.getDisplayedRowAtIndex(rowIndex);
+    var rows = [];
+    rows.push(row);
+
+    vm.grdMainOption.api.redrawRows({ rowNodes: rows });
+    vm.grdMainOption.api.resetRowHeights();
   }
 };
-
-AllPhoneNewController.$inject = ['$scope', '$interval', 'FoneclubeService', 'PagarmeService']; 
-
-/**
-CAUTION, IMPORTANT
-
-All this code is not following patterns. The pattern we trying to follow is: 
-https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md
-
-Please do not reaply any of pattern or the this code, structure or techniques 
-used here in this file or the code will not be aproved. 
-
-This page will be organized and refactored but we can not do it now. 
-This page represent all that we do not want in code technique and pattern.
-
-For example: 
-1. We do not use jquery approach, we use angularJS .
-2. We do not need use ajax, we have http service on foneclube.service
-3. Avoid use Scope, use vm.
-
-Maybe you will find other pages that are not following fully the desired patterns 
-But we have the a lot of samples in the project and especially the guide:
-https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md
-
- */

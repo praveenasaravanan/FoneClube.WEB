@@ -109,7 +109,7 @@
             customersSemSoftDelete.push(customer);
           }
         }
-
+        
         vm.tableParams = createUsingFullOptions(customersSemSoftDelete);
         vm.tableParams.reload();
 

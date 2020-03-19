@@ -8,7 +8,11 @@
 
 
     //API live
-    var urlApi = 'http://api.foneclube.com.br/api'
+    // var urlApi = 'http://default-environment.p2badpmtjj.us-east-2.elasticbeanstalk.com/api'
+    // var urlApi = 'http://homol-api.p2badpmtjj.us-east-2.elasticbeanstalk.com/api';
+    var urlApi = 'http://api-homologacao.us-east-2.elasticbeanstalk.com/api';
+    // var urlApi = 'http://localhost:9002/api';
+
 
     this.postBasePerson = postBasePerson;
     this.postUpdatePerson = postUpdatePerson;
@@ -37,7 +41,7 @@
     this.postGeraCobrancaIntegrada = postGeraCobrancaIntegrada;
     this.postCustomerUpdateParent = postCustomerUpdateParent;
     this.postIsertServiceDeactive = postIsertServiceDeactive;
-    this.postIsertServiceActive = postIsertServiceActive;
+    this.postInsertServiceActive = postInsertServiceActive;
     this.postUpdateServiceFoneclube = postUpdateServiceFoneclube;
     this.postPersonFlag = postPersonFlag;
     this.postUpdateFlag = postUpdateFlag;
@@ -102,9 +106,18 @@
     this.getStatusCardDebito = getStatusCardDebito;
     this.getMassChargingFull = getMassChargingFull;
 
+    // added by gardener
+    this.getAllPhones = getAllPhones;
+    this.postUpdatePhoneActivate = postUpdatePhoneActivate;
+    this.postPhoneInsert = postPhoneInsert;
+    this.getTotalLinhas = getTotalLinhas;
+    this.postUpdatePhonePrice = postUpdatePhonePrice;
+    this.postUpdatePlanFoneclube = postUpdatePlanFoneclube;
+
     function getAPIUrl() {
       return urlApi;
     }
+    
     function getLastPaymentType(customer) {
       var q = $q.defer();
       HTTPService.get(
@@ -623,7 +636,7 @@
       return q.promise;
     }
 
-    function postIsertServiceActive(phone) {
+    function postInsertServiceActive(phone) {
       var q = $q.defer();
       HTTPService.post(urlApi.concat('/manager/phones/extra/service/insert'), phone)
         .then(function (data) {
@@ -747,7 +760,7 @@
       return q.promise;
     }
 
-    function getPlanOptios() {
+    async function getPlanOptios() {
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/plans'))
@@ -843,7 +856,7 @@
       return q.promise;
     }
 
-    function getOperators() {
+    async function getOperators() {
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/account/operators'))
@@ -1215,7 +1228,7 @@
       return q.promise;
     }
 
-    function getAllCustomers(minimal) {
+    async function getAllCustomers(minimal) {
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/profile/all/customers?minimal=') + minimal)
@@ -1300,7 +1313,7 @@
       return q.promise;
     }
 
-    function getServices() {
+    async function getServices() {
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/extra/services'))
@@ -1394,7 +1407,7 @@
       return q.promise;
     }
 
-    function getPersonPhones(idPerson){
+    function getPersonPhones(idPerson) {
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/manager/phones/customer/' + idPerson))
@@ -1408,7 +1421,7 @@
       return q.promise;
     }
 
-    function getStatusCardDebito(idPerson){
+    function getStatusCardDebito(idPerson) {
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/cielo/debito/apto/' + idPerson))
@@ -1423,10 +1436,10 @@
     }
 
 
-    function getMassChargingFull(mes,ano){
+    function getMassChargingFull(mes, ano) {
       var q = $q.defer();
 
-      HTTPService.get(urlApi.concat('/charging/mass/full/mes/'+ mes +'/ano/' + ano))
+      HTTPService.get(urlApi.concat('/charging/mass/full/mes/' + mes + '/ano/' + ano))
         .then(function (result) {
           q.resolve(result);
         })
@@ -1437,7 +1450,67 @@
       return q.promise;
     }
 
-    
+    // added by gardener
 
+    async function getAllPhones() {
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/manager/phones/All/Phones'))
+        .then(function (result) {
+          q.resolve(result);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    async function postUpdatePhoneActivate(params) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/profile/phone/activation/update?personPhoneId=' + params.personPhoneId + '&activate=' + params.activate))
+        .then(function (data) {
+          q.resolve(data);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
+
+    async function postPhoneInsert(params) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/manager/phones/insert'), params)
+        .then(function (result) {
+          q.resolve(result);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+    }
+
+    async function getTotalLinhas(personId) {
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/manager/phones/monthly/amount?personId=' + personId))
+        .then(function(result) {
+          q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
+
+    async function postUpdatePhonePrice(params) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/manager/phones/single-price/update'), params)
+        .then(function(result) {
+          q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+    }
   }
 })();

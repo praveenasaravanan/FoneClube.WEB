@@ -3,6 +3,7 @@
     "version": "1.1.1",
     "description": "FoneClubControll: An Ionic project",
     "dependencies": {
+        "@cgross/angular-notify": "^2.5.1",
         "angular-bootstrap-toggle": "^0.1.2",
         "angular-date-time-input": "^1.2.1",
         "angular-datetime-inputs": "^0.2.6",

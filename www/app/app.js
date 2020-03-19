@@ -15,14 +15,15 @@
         'ui.router',
         'ui.toggle',
         'autoCompleteModule',
-        'smart-table'
-        ,'g1b.datetime-inputs'
-        ,'ngclipboard'
-        ,'ngAnimate'
-        ,'vAccordion'
-      , 'ngTable'
-      , 'kendo.directives'
-      ,'agGrid'
+        'smart-table',
+        'g1b.datetime-inputs',
+        'ngclipboard',
+        'ngAnimate',
+        'vAccordion',
+        'ngTable',
+        'kendo.directives',
+        'agGrid',
+        'cgNotify'
     ]);
 
     angular.module('foneClub').controller('globalCtrl', globalCtrl);

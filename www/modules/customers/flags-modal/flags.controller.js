@@ -86,7 +86,7 @@
       vm.cc = selectedFlag.FullEmail.Cc
       vm.bcc = selectedFlag.FullEmail.Bcc
 
-      if(vm.selectedFlag.IdType == 1 || vm.selectedFlag.IdType == 2 || vm.selectedFlag.IdType == 11)
+      if(vm.selectedFlag.IdType == 1 || vm.selectedFlag.IdType == 2)
         vm.showPlanList = true;
       else
         vm.showPlanList = false;
