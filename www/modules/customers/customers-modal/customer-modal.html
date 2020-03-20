@@ -142,11 +142,19 @@
                 <v-pane-content>
                   <div class="divSubHeader form-group">
                     <span>
-                      Status:
-                      <b>{{ chargeAndOrder.Charges.PaymentStatusDescription == '' ? 'Sem transaction associada' : chargeAndOrder.Charges.PaymentStatusDescription
+                      
+                      <div ng-if="!chargeAndOrder.Charges.Pago">
+                      <b >{{ chargeAndOrder.Charges.PaymentStatusDescription == '' ? 'Sem transaction associada' : chargeAndOrder.Charges.PaymentStatusDescription
                         }} {{(chargeAndOrder.Charges.PaymentStatusDescription=='Paid'||chargeAndOrder.Charges.PaymentStatusDescription=='Accepted'? vm.formatDate(chargeAndOrder.Charges.TransactionLastUpdate)
                         : '') | date: 'dd/MM/yyyy' }}
                       </b>
+
+                    </div>
+
+                      <div ng-if="chargeAndOrder.Charges.Pago">
+                        Status: <b >Pago 
+                        </b>
+                    </div>
                     </span>
                     <span>
                       <button class="btn btn-info resent-email" ng-click="vm.onResentEmail(chargeAndOrder.Charges);">

@@ -140,6 +140,10 @@
                 var expiryDate = new Date(data.Charges.ExpireDate);
                 var expiryDateAfter4 = new Date(data.Charges.ExpireDate);
                 expiryDateAfter4.setDate(expiryDateAfter4.getDate() + 3);
+                debugger;
+                if(data.Charges.Pago){
+                  data.Charges.PaymentStatusDescription = "Paid"
+                }
 
                 var currentDate = new Date();
                 if (data.Charges.PaymentStatusDescription == "Paid") {
