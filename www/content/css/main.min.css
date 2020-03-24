@@ -1670,12 +1670,6 @@ textarea#nomeCartao {
 input[type='checkbox'] {
   margin-top: -4px; }
 
-.new-card-modal .btn {
-  margin-bottom: 5px; }
-
-.new-card-modal .btn:last-child {
-  margin-bottom: 10px; }
-
 .customers .ag-cell {
   padding-top: 5px;
   padding-bottom: 5px; }
@@ -1759,6 +1753,12 @@ label {
 
 input[type="checkbox"] {
   margin-top: 0px; }
+
+.new-card-modal .btn {
+  margin-bottom: 5px; }
+
+.new-card-modal .btn:last-child {
+  margin-bottom: 10px; }
 
 .boleto-modal .btn {
   margin-bottom: 5px; }
