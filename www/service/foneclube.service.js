@@ -101,6 +101,7 @@
     this.getPersonPhones = getPersonPhones;
     this.getStatusCardDebito = getStatusCardDebito;
     this.getMassChargingFull = getMassChargingFull;
+    this.getCustomerDaysWithoutCharge = getCustomerDaysWithoutCharge;
 
     function getAPIUrl() {
       return urlApi;
@@ -1431,6 +1432,22 @@
           q.resolve(result);
         })
         .catch(function (error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    function getCustomerDaysWithoutCharge(){
+      var q = $q.defer();
+      
+      HTTPService.get(urlApi.concat('/charging/last/customers/chargings'))
+        .then(function (result) {
+          
+          q.resolve(result);
+        })
+        .catch(function (error) {
+          
           q.reject(error);
         });
 

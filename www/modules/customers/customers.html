@@ -81,11 +81,16 @@
             </span>
           </td>
           <td ng-click="vm.onTapCustomerEdit(customer, $index)" style="cursor: pointer;" title="'Clientes'" sortable="'Name'">
-            <span title="{{ customer.Name }}" style="font-weight: bold;">{{ customer.Name }}
+            <span title="{{ customer.Name }}" style="font-weight: bold;">{{ customer.Name }} 
             </span>
           </td>
 
           <td title="'Ações'">
+
+            <button title="Dias sem Cobrar" ng-if="customer.DiasSemCobrar > 0" class="btn " ng-class="customer.DiasSemCobrar > 35 ? 'btn-warning': 'btn-info'" ng-click="">
+              {{ customer.DiasSemCobrar }}
+            </button>
+
             <button title="Desativar cliente" ng-if="!customer.Desativo" class="btn btn-info" ng-click="vm.onTapSwitchActivate(customer)">
               on
             </button>

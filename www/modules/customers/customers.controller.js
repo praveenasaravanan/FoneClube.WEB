@@ -83,68 +83,68 @@
 
 
       FoneclubeService.getAllCustomers(false).then(function (result) {
-        vm.data.customers = result.map(function (user) {
-          user.Phones = user.Phones.map(function (phone) {
-            if (phone) {
-              phone.phoneFull = phone.DDD.concat(phone.Number);
-            }
-            return phone;
-          });
-          return user;
-        });
-        var customersSemSoftDelete = [];
-        for (var i in vm.data.customers) {
-          var customer = vm.data.customers[i];
-          if (!customer.SoftDelete) {
-            customer.PhoneDDDParent = null;
-            customer.PhoneNumberParent = null;
-            for (var i in customer.Phones) {
-              if (customer.Phones[i]) {
-                if (!customer.Phones[i].IsFoneclube) {
-                  customer.Phones.splice(i, 1);
+
+
+        FoneclubeService.getCustomerDaysWithoutCharge().then(function (resultDaysWithoutCharge) {
+
+          
+          console.log('Wooooooorks')
+          console.log(resultDaysWithoutCharge)
+          var teste= resultDaysWithoutCharge;
+          
+          vm.data.customers = result.map(function (user) {
+
+            user.Teste = 'working'
+            for(var i in resultDaysWithoutCharge){
+              if(user.Id == resultDaysWithoutCharge[i].Id){
+                try{
+                  user.DiasSemCobrar = resultDaysWithoutCharge[i].Charging.DiasSemCobrar
                 }
+                catch(e){}
+                
               }
             }
+            
 
-            customersSemSoftDelete.push(customer);
+            user.Phones = user.Phones.map(function (phone) {
+              if (phone) {
+                phone.phoneFull = phone.DDD.concat(phone.Number);
+              }
+              return phone;
+            });
+            return user;
+          });
+          var customersSemSoftDelete = [];
+          for (var i in vm.data.customers) {
+            var customer = vm.data.customers[i];
+            if (!customer.SoftDelete) {
+              customer.PhoneDDDParent = null;
+              customer.PhoneNumberParent = null;
+              for (var i in customer.Phones) {
+                if (customer.Phones[i]) {
+                  if (!customer.Phones[i].IsFoneclube) {
+                    customer.Phones.splice(i, 1);
+                  }
+                }
+              }
+  
+              customersSemSoftDelete.push(customer);
+            }
           }
-        }
+  
+          vm.tableParams = createUsingFullOptions(customersSemSoftDelete);
+          vm.tableParams.reload();
+          
+  
+        })
 
-        vm.tableParams = createUsingFullOptions(customersSemSoftDelete);
-        vm.tableParams.reload();
+        
 
-        // FoneclubeService.getAllCustomers(false).then(function (result) {
-
-        //   debugger;
-        //   vm.data.customers = result.map(function (user) {
-        //     user.Phones = user.Phones.map(function (phone) {
-        //       phone.phoneFull = phone.DDD.concat(phone.Number);
-        //       return phone;
-        //     });
-        //     return user;
-        //   });
-
-        //   var customersSemSoftDelete = [];
-        //   for (var i in vm.data.customers) {
-        //     var customer = vm.data.customers[i];
-        //     if (!customer.SoftDelete) {
-        //       customer.PhoneDDDParent = null;
-        //       customer.PhoneNumberParent = null;
-        //       for (var i in customer.Phones) {
-        //         if (!customer.Phones[i].IsFoneclube) {
-        //           customer.Phones.splice(i, 1);
-        //         }
-        //       }
-
-        //       customersSemSoftDelete.push(customer);
-        //     }
-        //   }
-
-        //   // debugger;
-        //   vm.tableParams = createUsingFullOptions(customersSemSoftDelete);
-        //   vm.tableParams.reload();
-        // });
+        
       });
+
+
+
     }
 
     /* Deprecated since 09-02-2019 | Ariê Furtado 
