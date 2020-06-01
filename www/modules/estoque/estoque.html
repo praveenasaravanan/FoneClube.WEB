@@ -29,11 +29,10 @@
     
 
                 <td >
-                    <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
                     <select  next-on-enter class="form-control"
                         ng-options="opt as opt for opt in vm.proprietarias"
                         ng-model="linha.selectedpropriedadeInterna"
-                        ng-init="linha.selectedpropriedadeInterna=linha.propriedadeInterna">
+                        ng-init="linha.selectedpropriedadeInterna = linha.propriedadeInterna" style="width: 100px;">
                     <option value="">Selecione</option>
                     </select>
                 </td>
