@@ -10,6 +10,8 @@
             
         var vm = this;
         vm.result;
+        vm.onConfirmaEditcao = onConfirmaEditcao;
+        vm.proprietarias = ["FC", "RM"]
 
         // https://codepen.io/cardozo/pen/QVYXeX    
         FoneclubeService.getLinhasEstoque().then(function(result){
@@ -78,6 +80,11 @@
             
             console.log('Works')
         });
+
+        function onConfirmaEditcao(linha){
+            console.log('onConfirmaEditcao')
+            console.log(linha)
+        }
         
     
       }

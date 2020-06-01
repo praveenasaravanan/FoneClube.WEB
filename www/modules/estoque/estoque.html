@@ -26,6 +26,26 @@
 
             <td title="'Operadora'" filter="{ operadoraDescription: 'text'}" sortable="'operadoraDescription'">
                 {{linha.descricao}}</td>
+
+
+                <td sortable="'teste'">
+                    <input ng-model="linha.linhaLivreOperadora" />
+                
+                </td>   
+                
+                <td sortable="'teste'">
+                    
+                    <select ng-model="proprietaria.selected">
+                        <option ng-repeat="proprietaria in vm.proprietarias" ng-model="proprietaria.selected">{{proprietaria}}</option>
+                    </select>
+                </td> 
+
+                
+            <td sortable="'teste'">
+                <button title="Soft delete" class="btn btn-primary" ng-click="vm.onConfirmaEditcao(linha)">
+                    <i class="glyphicon glyphicon-ok-circle checkcircle"></i>
+                </button>
+            </td>
         </tr>
     </table>
 

@@ -8,7 +8,7 @@
 
 
     //API live
-    var urlApi = 'http://api.foneclube.com.br/api'
+    var urlApi = 'http://localhost:57078/api'
 
     this.postBasePerson = postBasePerson;
     this.postUpdatePerson = postUpdatePerson;
