@@ -26,19 +26,17 @@
 
             <td title="'Operadora'" filter="{ operadoraDescription: 'text'}" sortable="'operadoraDescription'">
                 {{linha.descricao}}</td>
+    
 
-
-                <td sortable="'teste'">
-                    <input ng-model="linha.linhaLivreOperadora" />
-                
-                </td>   
-                
-                <td sortable="'teste'">
-                    
-                    <select ng-model="proprietaria.selected">
-                        <option ng-repeat="proprietaria in vm.proprietarias" ng-model="proprietaria.selected">{{proprietaria}}</option>
+                <td >
+                    <!-- ng-change="vm.changeExtraService($index,service.Id, phoneNumber, service)" -->
+                    <select  next-on-enter class="form-control"
+                        ng-options="opt as opt for opt in vm.proprietarias"
+                        ng-model="linha.selectedpropriedadeInterna"
+                        ng-init="linha.selectedpropriedadeInterna=linha.propriedadeInterna">
+                    <option value="">Selecione</option>
                     </select>
-                </td> 
+                </td>
 
                 
             <td sortable="'teste'">
