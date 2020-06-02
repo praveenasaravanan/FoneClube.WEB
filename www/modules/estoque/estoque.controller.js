@@ -5,8 +5,8 @@
             .module('foneClub')
             .controller('EstoqueController', EstoqueController);
     
-      EstoqueController.inject = ['FlowManagerService', 'FoneclubeService', 'PagarmeService', 'NgTableParams', '$scope'];
-      function EstoqueController(FlowManagerService, FoneclubeService, PagarmeService, NgTableParams, $scope) {
+      EstoqueController.inject = ['FlowManagerService', 'FoneclubeService', 'PagarmeService', 'NgTableParams', '$scope', 'DialogFactory'];
+      function EstoqueController(FlowManagerService, FoneclubeService, PagarmeService, NgTableParams, $scope, DialogFactory) {
             
         var vm = this;
         vm.result;
@@ -100,7 +100,12 @@
             }
 
             FoneclubeService.postPropriedadeIterna(estoquePhone).then(function (result) {
-
+                if(result == true){
+                    DialogFactory.showMessageDialog({ mensagem: 'Associação realizada' });
+                }
+                else{
+                    DialogFactory.showMessageDialog({ mensagem: 'Associação com problema' });
+                }
             })
         }
         
