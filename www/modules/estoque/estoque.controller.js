@@ -84,6 +84,24 @@
         function onConfirmaEditcao(linha){
             console.log('onConfirmaEditcao')
             console.log(linha)
+
+            //public int IdLinha { get; set; }
+            // public string linhaLivreOperadora { get; set; }
+            // public int? operadora { get; set; }
+            // public string descricao { get; set; }
+            // public string propriedadeInterna { get; set; }
+            // public int propriedadeInternaId { get; set; }
+
+            var estoquePhone = {
+                'IdLinha': linha.IdLinha,
+                'operadora': 0,
+                'propriedadeInternaId': 0,
+                'propriedadeInterna': linha.selectedpropriedadeInterna
+            }
+
+            FoneclubeService.postPropriedadeIterna(estoquePhone).then(function (result) {
+
+            })
         }
         
     

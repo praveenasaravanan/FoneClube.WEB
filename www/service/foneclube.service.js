@@ -41,6 +41,7 @@
     this.postUpdateServiceFoneclube = postUpdateServiceFoneclube;
     this.postPersonFlag = postPersonFlag;
     this.postUpdateFlag = postUpdateFlag;
+    this.postPropriedadeIterna = postPropriedadeIterna;
 
     this.getPlans = getPlans;
     this.getCustomerPlans = getCustomerPlans;
@@ -1454,7 +1455,17 @@
       return q.promise;
     }
 
-    
+    function postPropriedadeIterna(estoquePhone) {
+      var q = $q.defer();
+      HTTPService.post(urlApi.concat('/manager/phones/estoque/propriedade/interna'),estoquePhone)
+        .then(function (data) {
+          q.resolve(data);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+      return q.promise;
+    }
 
   }
 })();
