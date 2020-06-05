@@ -11,7 +11,7 @@
         var vm = this;
         vm.result;
         vm.onConfirmaEditcao = onConfirmaEditcao;
-        vm.proprietarias = ["FC", "RM"]
+        vm.proprietarias = ["FC", "RM", "RM (FC)"]
 
         // https://codepen.io/cardozo/pen/QVYXeX    
         FoneclubeService.getLinhasEstoque().then(function(result){
