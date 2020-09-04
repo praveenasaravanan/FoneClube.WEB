@@ -82,7 +82,7 @@
       }
 
 
-      FoneclubeService.getAllCustomers(false).then(function (result) {
+      FoneclubeService.getAllCustomers(true).then(function (result) {
 
 
         FoneclubeService.getCustomerDaysWithoutCharge().then(function (resultDaysWithoutCharge) {
@@ -106,12 +106,12 @@
             }
             
 
-            user.Phones = user.Phones.map(function (phone) {
-              if (phone) {
-                phone.phoneFull = phone.DDD.concat(phone.Number);
-              }
-              return phone;
-            });
+            // user.Phones = user.Phones.map(function (phone) {
+            //   if (phone) {
+            //     phone.phoneFull = phone.DDD.concat(phone.Number);
+            //   }
+            //   return phone;
+            // });
             return user;
           });
           var customersSemSoftDelete = [];

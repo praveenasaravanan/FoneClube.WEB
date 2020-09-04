@@ -64,11 +64,19 @@
     vm.editPendingFlag = editPendingFlag;
     vm.formatDate = formatDate;
     vm.onTapDebito = onTapDebito;
+    vm.temEndereco = false;
 
     init();
 
     function init() {
-      // debugger
+      debugger
+
+      FoneclubeService.getCustomerByCPF(customer.DocumentNumber).then(function (result) {
+        console.log(result)
+        customer.Adresses = result.Adresses;
+        vm.temEndereco = true;
+      })
+
       if (!customer.IdPagarme) {
         PagarmeService.getCustomer(customer.DocumentNumber)
           .then(function (result) {
