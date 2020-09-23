@@ -246,7 +246,9 @@
                                 if(vm.customerComment == undefined)
                                     vm.customerComment = ''
 
+                                debugger;
                                 var emailObject = {
+                                    'Id': customerId,
                                     'To': existentCustomer.email, //existentCustomer.email
                                     'TargetName' : existentCustomer.name,
                                     'TargetTextBlue': resultCapture.boleto_url,

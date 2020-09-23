@@ -448,6 +448,7 @@
               if (charge.boleto_url) boletoUrl = charge.boleto_url;
 
               var emailObject = {
+                Id:vm.customer.Id,
                 To: vm.customer.Email,
                 TargetName: vm.customer.Name,
                 TargetTextBlue: boletoUrl,
@@ -480,6 +481,7 @@
 
             if (charge.PaymentType == CARTAO) {
               var emailObject = {
+                Id:vm.customer.Id,
                 To: vm.customer.Email,
                 TargetName: vm.customer.Name,
                 TargetTextBlue: (charge.Ammount / 100).toFixed(2).replace('.', ','),

@@ -266,6 +266,7 @@
                             vm.customerComment = ''
 
                         var emailObject = {
+                            'Id':vm.customer.Id,
                             'To': vm.newCustomer.email, //vm.newCustomer.email
                             'TargetName' : vm.newCustomer.name,
                             'TargetTextBlue' : $filter('currency')(vm.amount / 100, ""),
