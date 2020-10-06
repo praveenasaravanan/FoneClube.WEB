@@ -314,8 +314,9 @@
         
         vm.DocumentNumberFreeze = angular.copy(result.DocumentNumber);
         vm.customer = result;
-
-        vm.linkRoot = "http://cadastro.foneclube.com.br/" + btoa(vm.customer.Id)
+        vm.customer.linkIndicacao = "https://foneclube.com.br/convite/" + btoa(vm.customer.Id)
+        
+        vm.linkRoot = "https://foneclube.com.br/convite/" + btoa(vm.customer.Id)
 
         console.log('vm.linkRoot')
         console.log(vm.linkRoot)
