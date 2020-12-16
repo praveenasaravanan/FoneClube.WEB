@@ -8,8 +8,12 @@
   function PagarmeService($q, HTTPService) {
         
     //live
-    var apiKey = 'ak_live_fP7ceLSpdBe8gCXGTywVRmC5VTkvN0'
-    var encriptionKey = 'ek_live_U52ijlxsDgB8mk0rzcJde7HYHzqWYl';
+    // var apiKey = 'ak_live_fP7ceLSpdBe8gCXGTywVRmC5VTkvN0'
+    // var encriptionKey = 'ek_live_U52ijlxsDgB8mk0rzcJde7HYHzqWYl';
+
+    //homol
+    var apiKey = "ak_test_rIMnFMFbwNJR1A5RuTmSULl9xxDdoM"
+    var encriptionKey ="ek_test_5rLvyIU3tqMGHKAj94kpCuqSWT37Ps"
 
     this.getCards = getCards;
     this.getCustomers = getCustomers;
@@ -20,6 +24,7 @@
 
     this.postBoleto = postBoleto;
     this.postBoletoDirect = postBoletoDirect;
+    this.postPIX = postPIX;
     this.postTransactionCard = postTransactionCard;
     this.postTransactionExistentCard = postTransactionExistentCard; //refact pra uma só func
     this.postCaptureTransaction = postCaptureTransaction;
@@ -173,6 +178,40 @@
         .then(function(result) {
           console.log(result);
           q.resolve(result);
+        })
+        .catch(function(error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    function postPIX(amount, instructions, customer, expirationDate) {
+      var q = $q.defer();
+
+      var parameters = {
+        api_key: apiKey,
+        encryption_key:encriptionKey,
+        amount: amount,
+        payment_method: 'pix',
+        pix_expiration_date:'2020-12-17',
+        pix_additional_fields: [{value:'1',name:'Quantidade'}]
+      };
+      
+      HTTPService.post('https://api.pagar.me/1/transactions', parameters)
+        .then(function(result) {
+          
+          HTTPService.post(
+            'https://api.pagar.me/1/transactions/'.concat(result.token).concat('/capture'),
+            parameters
+          )
+          .then(function(result) {
+            q.resolve(result);
+          })
+          .catch(function(error) {
+            q.reject(error);
+          });
+
         })
         .catch(function(error) {
           q.reject(error);

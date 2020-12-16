@@ -29,6 +29,7 @@
     this.modalRepeatCardData = {};
     this.showModalBoleto = showModalBoleto;
     this.showModalBoletoPayment = showModalBoletoPayment;
+    this.showModalPIX = showModalPIX;
     this.showModalDebito = showModalDebito;
 
     this.showModalRepeatBoleto = showModalRepeatBoleto;
@@ -82,6 +83,13 @@
       var service = this;
 
       DialogFactory.showTemplate('modules/customers/boleto/boleto.html');
+    }
+
+    function showModalPIX(data) {
+      this.modalBoletoData = data;
+      var service = this;
+
+      DialogFactory.showTemplate('modules/customers/pix/pix.html');
     }
 
     function showModalDebito(data) {

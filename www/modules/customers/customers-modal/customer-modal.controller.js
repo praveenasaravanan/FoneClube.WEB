@@ -64,6 +64,7 @@
     vm.editPendingFlag = editPendingFlag;
     vm.formatDate = formatDate;
     vm.onTapDebito = onTapDebito;
+    vm.onTapPix = onTapPix;
     vm.temEndereco = false;
 
     init();
@@ -537,6 +538,11 @@
 
     function onTapDebito(customer) {
       ViewModelUtilsService.showModalDebito(customer);
+    }
+
+    function onTapPix(customer){
+      console.log(customer)
+      ViewModelUtilsService.showModalPIX(customer);
     }
 
     function editPendingFlag(flag) {
