@@ -194,10 +194,10 @@
         encryption_key:encriptionKey,
         amount: amount,
         payment_method: 'pix',
-        pix_expiration_date:'2020-12-17',
+        pix_expiration_date: expirationDate,
         pix_additional_fields: [{value:'1',name:'Quantidade'}]
       };
-      
+      debugger;
       HTTPService.post('https://api.pagar.me/1/transactions', parameters)
         .then(function(result) {
           

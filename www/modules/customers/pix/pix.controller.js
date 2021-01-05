@@ -206,7 +206,7 @@
                    } 
                 }
 
-                     PagarmeService.postPIX(vm.amount, vm.commentBoleto, existentCustomer, addExpirationDays(vm.expirationDateField))
+                     PagarmeService.postPIX(vm.amount, vm.commentBoleto, existentCustomer, formatDateYYYYmmDD(addExpirationDays(vm.expirationDateField)))
                      .then(function(resultCapture){
     
                           debugger;
@@ -253,6 +253,20 @@
                         });
 
     
+            }
+
+            function formatDateYYYYmmDD(date) {
+                var d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+            
+                if (month.length < 2) 
+                    month = '0' + month;
+                if (day.length < 2) 
+                    day = '0' + day;
+            
+                return [year, month, day].join('-');
             }
     
             function saveHistoryPayment(idBoleto, acquirer_id){
