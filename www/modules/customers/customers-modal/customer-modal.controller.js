@@ -541,7 +541,7 @@
     }
 
     function onTapPix(customer){
-      console.log(customer)
+      console.log(customer);
       ViewModelUtilsService.showModalPIX(customer);
     }
 

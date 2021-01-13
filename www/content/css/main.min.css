@@ -1754,6 +1754,12 @@ label {
 input[type="checkbox"] {
   margin-top: 0px; }
 
+.new-card-modal .btn {
+  margin-bottom: 5px; }
+
+.new-card-modal .btn:last-child {
+  margin-bottom: 10px; }
+
 .boleto-modal .btn {
   margin-bottom: 5px; }
 
@@ -1768,12 +1774,6 @@ input[type="checkbox"] {
   margin-bottom: 5px; }
 
 .boleto-modal .btn:last-child {
-  margin-bottom: 10px; }
-
-.new-card-modal .btn {
-  margin-bottom: 5px; }
-
-.new-card-modal .btn:last-child {
   margin-bottom: 10px; }
 
 .new-card-modal .btn {

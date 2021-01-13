@@ -57,6 +57,7 @@
 
             var CARTAO = 1;
             var BOLETO = 2;
+            var PIX = 3;
 
             init();
             calculate();
@@ -219,19 +220,96 @@
                                   'customerComment':vm.customerComment,
                                   'foneclubeComment' : vm.comment
                               };
+
+
                               
                               
-                              // FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
-                              //     console.log(result);
-                              // })
-                              // .catch(function(error){
-                              //     console.log('catch error');
-                              //     console.log(error);
-                              //     var teste1 = emailObject;
-                              //     var teste2 = existentCustomer;
-                              //     var teste3 = vm.amount;
-                              //     alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
-                              // });
+                              FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
+                                  console.log(result);
+                              })
+                              .catch(function(error){
+                                  console.log('catch error');
+                                  console.log(error);
+                                  var teste1 = emailObject;
+                                  var teste2 = existentCustomer;
+                                  var teste3 = vm.amount;
+                                  alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
+                              });
+
+                              //pix_qr_code
+                              debugger;
+                              var customerCharging = {
+                                Id: vm.customer.Id,
+                                Charging:{
+                                    PixCode: resultCapture.pix_qr_code,
+                                    Comment:vm.comment,
+                                    CommentEmail:vm.customerComment,
+                                    CommentBoleto:vm.commentBoleto,
+                                    Ammount: vm.amount,
+                                    CollectorName: MainUtils.getAgent(),
+                                    PaymentType: PIX,
+                                    BoletoId: null,
+                                    AcquireId: resultCapture.acquirer_id,
+                                    AnoVingencia:vm.year,
+                                    MesVingencia: vm.month.trim(),
+                                  ChargeStatus: vm.chargeStatus,
+                                  TransactionId: resultCapture.tid,
+                                  ComissionConceded: false // need to see the property nameComissionConceded
+                                }
+                            }
+                
+
+                            FoneclubeService.postHistoryPayment(customerCharging).then(function (result) {
+            
+                                if(vm.pagar)
+                                {
+                                    FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
+            
+                                      if(!result)
+                                        alert('Não foi possível dar baixa em comissão');
+                                        
+            
+                                        // FoneclubeService.dispatchedBonus(vm.customer.Id).then(function (result) {
+                                          
+                                        //   debugger
+                                        //   if(!result)
+                                        //     alert('Não foi possível dar baixa em comissão');
+            
+                                        // })
+                                        // .catch(function (error) {
+                                        //   alert('Não foi possível dar baixa em comissão');
+                                        // })
+            
+                                    })
+                                    .catch(function (error) {
+                                      alert('Não foi possível dar baixa em comissão');
+                                    })
+                                }
+                               
+                                 
+                                })
+                                .catch(function(error){
+                                    // debugger
+                                    alert('Aviso em verificação secundária, printar tela -  ' 
+                                    + '_' + customerCharging.Id
+                                    + '_' + customerCharging.ChargeStatus
+                                    + '_' + customerCharging.TransactionId
+                                    + '_' + customerCharging.ComissionConceded
+                                    + '_' + customerCharging.Charging.Comment
+                                    + '_' + customerCharging.Charging.CommentEmail
+                                    + '_' + customerCharging.Charging.CommentBoleto
+                                    + '_' + customerCharging.Charging.Ammount
+                                    + '_' + customerCharging.Charging.CollectorName
+                                    + '_' + customerCharging.Charging.PaymentType
+                                    + '_' + customerCharging.Charging.BoletoId
+                                    + '_' + customerCharging.Charging.AcquireId
+                                    + '_' + customerCharging.Charging.AnoVingencia
+                                    + '_' + customerCharging.Charging.MesVingencia
+                                    + '  bc372'
+                                    )
+                                    console.log('catch error');
+                                    console.log(error);
+                                });
                           }
                           catch(erro){
                               var teste1 = emailObject;
@@ -279,7 +357,7 @@
                         CommentBoleto:vm.commentBoleto,
                         Ammount: vm.amount,
                         CollectorName: MainUtils.getAgent(),
-                        PaymentType: BOLETO,
+                        PaymentType: PIX,
                         BoletoId: idBoleto,
                         AcquireId: acquirer_id,
                         AnoVingencia:vm.year,
