@@ -258,33 +258,16 @@
                                 }
                             }
                 
-
+                            debugger;
                             FoneclubeService.postHistoryPayment(customerCharging).then(function (result) {
-            
-                                if(vm.pagar)
-                                {
-                                    FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
-            
-                                      if(!result)
-                                        alert('Não foi possível dar baixa em comissão');
-                                        
-            
-                                        // FoneclubeService.dispatchedBonus(vm.customer.Id).then(function (result) {
-                                          
-                                        //   debugger
-                                        //   if(!result)
-                                        //     alert('Não foi possível dar baixa em comissão');
-            
-                                        // })
-                                        // .catch(function (error) {
-                                        //   alert('Não foi possível dar baixa em comissão');
-                                        // })
-            
-                                    })
-                                    .catch(function (error) {
-                                      alert('Não foi possível dar baixa em comissão');
-                                    })
+                              debugger
+                                if(result){
+                                  vm.message = 'PIX gerado com sucesso'
+                                  vm.cobrancaRealizada = true;
+                                  vm.disableTapPay = false;
                                 }
+                                else
+                                  alert('Não foi possível realizar cobrança');
                                
                                  
                                 })

@@ -11,7 +11,7 @@
     // var urlApi = 'https://api.foneclube.com.br/api'
 
     //API homol
-    var urlApi = 'https://hapi.foneclube.com.br/api'
+    // var urlApi = 'https://hapi.foneclube.com.br/api'
 
 
     //API homol debug
