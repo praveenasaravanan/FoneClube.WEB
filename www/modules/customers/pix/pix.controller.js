@@ -254,6 +254,7 @@
                                     MesVingencia: vm.month.trim(),
                                   ChargeStatus: vm.chargeStatus,
                                   TransactionId: resultCapture.tid,
+                                  SendEmail:vm.enviaEmail,
                                   ComissionConceded: false // need to see the property nameComissionConceded
                                 }
                             }
