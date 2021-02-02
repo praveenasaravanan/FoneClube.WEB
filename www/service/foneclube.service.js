@@ -8,14 +8,14 @@
 
 
     //API live
-    // var urlApi = 'https://api.foneclube.com.br/api'
+    var urlApi = 'https://api.foneclube.com.br/api'
 
     //API homol
     // var urlApi = 'https://hapi.foneclube.com.br/api'
 
 
     //API homol debug
-    var urlApi = 'http://localhost:57078/api'
+    // var urlApi = 'http://localhost:57078/api'
 
     this.postBasePerson = postBasePerson;
     this.postUpdatePerson = postUpdatePerson;
