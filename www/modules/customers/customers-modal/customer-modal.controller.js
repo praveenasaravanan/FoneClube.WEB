@@ -66,11 +66,14 @@
     vm.onTapDebito = onTapDebito;
     vm.onTapPix = onTapPix;
     vm.temEndereco = false;
+    vm.linkAPI;
 
     init();
 
     function init() {
       debugger
+
+      vm.linkAPI = FoneclubeService.getAPIUrl();
 
       FoneclubeService.getCustomerByCPF(customer.DocumentNumber).then(function (result) {
         console.log(result)

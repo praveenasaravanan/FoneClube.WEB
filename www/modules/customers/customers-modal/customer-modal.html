@@ -107,7 +107,7 @@
 
                 <v-pane-content>
 
-                  <p>Tipo: {{flag.TypeDescription }}</p>
+                  <p>Tipo : {{flag.TypeDescription }}</p>
                   
                   <p>Interação: {{flag.PendingInteraction ? 'Pendente' : 'Concluída' }}
                     <span style="cursor:pointer" class="clickable"
@@ -164,8 +164,12 @@
                         Copiar link Boleto
                       </button>
                     </span>
-                    <span>Tipo:
-                      <strong>{{ chargeAndOrder.Charges.descriptionType }} </strong>
+                    <span>Type:
+                      
+                      <strong ng-if="chargeAndOrder.Charges.PaymentType ==3">PIX</strong>
+                      
+                      <strong ng-if="chargeAndOrder.Charges.PaymentType ==2">Boleto</strong>
+                      <strong ng-if="chargeAndOrder.Charges.PaymentType ==1">Cartão</strong>
                       &nbsp;&nbsp;
                       <label ng-if="chargeAndOrder.Charges.descriptionType =='Cartão de crédito'">Final: {{ vm.cards[0].last_digits }}</label>
                     </span>
@@ -189,6 +193,13 @@
                       <strong>Comentário:</strong>
                       {{ chargeAndOrder.Charges.Comment }}
                     </p>
+
+                    <p>
+                      <strong>link qrcode:</strong>
+                      <span ng-if="chargeAndOrder.Charges.PaymentType ==3">{{vm.linkAPI + '/pagarme/pix/qrcode/' + chargeAndOrder.Charges.Id}}</span>
+                    </p>
+
+                    <!-- <strong ng-if="chargeAndOrder.Charges.PaymentType ==3">{{vm.linkAPI + '/pagarme/pix/qrcode/' + chargeAndOrder.Charges.Id}}</strong> -->
                   </div>
                   <div class="form-group">
                     <p>
