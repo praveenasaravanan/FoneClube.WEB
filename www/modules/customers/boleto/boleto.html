@@ -35,20 +35,24 @@
                         <label><input type="checkbox" ng-model="vm.chargeStatusSecond" ng-change="vm.checkOne('2')"
                                       value="2"/> Extra</label>
 
+                        <label><input type="checkbox" ng-model="vm.chargeScheduled"/> Agendado</label>
+
                     </div>
-                    <!--<div class="dropdown">
-                      <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#">
-                        <div class="input-group">
-                          <input type="text" class="form-control" ng-model="vm.Date">
-                          <span class="input-group-addon">
-                            <i class="glyphicon glyphicon-calendar"></i>
-                          </span>
-                        </div>
-                      </a>
-                      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        <datetimepicker ng-model="data.dateDropDownInput" data-datetimepicker-config="{  }" />
-                      </ul>
-                    </div>-->
+                    <div class="agendamento" ng-if="vm.chargeScheduled">
+                        <span>Agendamento:</span>
+
+                        <label>Ano:</label>
+                        <select ng-model="vm.yearScheduled">
+                            <option ng-repeat="year in vm.years" ng-model="vm.year">{{year}}</option>
+                        </select>
+
+                        <label>Mês:</label>
+                        <select ng-model="vm.monthScheduled">
+                            <option ng-repeat="month in vm.months" ng-model="vm.month" ng-selected="{{month == 2}}">
+                                {{month}}
+                            </option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group col-xs-12">

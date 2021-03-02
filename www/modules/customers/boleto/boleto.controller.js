@@ -29,7 +29,7 @@
             vm.enviaEmail = true;
             vm.enviaWhatsapp = true;
             vm.calculate = calculate;
-            vm.years = [2021,2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010];
+            vm.years = [2022, 2021,2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010];
             vm.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
             vm.amount = 0;
@@ -205,6 +205,37 @@
                     vm.expirationDateField = 5; 
                    } 
                 }
+                    debugger;
+                    if(vm.chargeScheduled){
+                      var customerCharging = {
+                        Id: vm.customer.Id,
+                        Charging:{
+                            Comment:vm.comment,
+                            CommentEmail:vm.customerComment,
+                            CommentBoleto:vm.commentBoleto,
+                            Ammount: vm.amount,
+                            CollectorName: MainUtils.getAgent(),
+                            PaymentType: BOLETO,
+                            AnoVingencia:vm.year,
+                            MesVingencia: vm.month,
+                            ChargeStatus: vm.chargeStatus,
+                            ScheduledMonth:vm.monthScheduled,
+                            ScheduledYear:vm.yearScheduled
+                        }
+                      }
+
+                    FoneclubeService.postSchedulePayment(customerCharging).then(function(result){
+                        debugger;
+                    })
+                    .catch(function(error){
+                        console.log('catch error');
+                        console.log(error);
+                    });
+
+                      return;
+                    }
+
+
 
                      PagarmeService.postBoletoDirect(vm.amount, vm.commentBoleto, existentCustomer, addExpirationDays(vm.expirationDateField)).then(function(resultCapture){
     

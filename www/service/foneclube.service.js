@@ -8,20 +8,21 @@
 
 
     //API live
-    var urlApi = 'https://api.foneclube.com.br/api'
+    // var urlApi = 'https://api.foneclube.com.br/api'
 
     //API homol
     // var urlApi = 'https://hapi.foneclube.com.br/api'
 
 
     //API homol debug
-    // var urlApi = 'http://localhost:57078/api'
+    var urlApi = 'http://localhost:57078/api'
 
     this.postBasePerson = postBasePerson;
     this.postUpdatePerson = postUpdatePerson;
     this.postUpdatePersonAdress = postUpdatePersonAdress;
     this.postCheckout = postCheckout;
     this.postHistoryPayment = postHistoryPayment;
+    this.postSchedulePayment = postSchedulePayment;
     this.postDebitoTransaction = postDebitoTransaction;
     this.postDeletePerson = postDeletePerson;
     this.postUpdateCustomer = postUpdateCustomer;
@@ -373,6 +374,20 @@
       var q = $q.defer();
 
       HTTPService.post(urlApi.concat('/profile/charging/insert'), personCharging)
+        .then(function (result) {
+          q.resolve(result);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    function postSchedulePayment(personCharging) {
+      var q = $q.defer();
+
+      HTTPService.post(urlApi.concat('/profile/schedule/insert'), personCharging)
         .then(function (result) {
           q.resolve(result);
         })

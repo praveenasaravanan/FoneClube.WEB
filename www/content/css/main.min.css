@@ -1410,16 +1410,6 @@ v-pane-content {
     margin-left: 5px;
     font-size: 12px; }
 
-.boleto-modal .btn {
-  margin-bottom: 5px; }
-
-.boleto-modal .btn:last-child {
-  margin-bottom: 10px; }
-
-.aviso-sem-pagamento {
-  color: red;
-  font-size: 18px; }
-
 textarea#nomeCartao {
   height: 150px; }
 
@@ -1552,6 +1542,20 @@ input[type='checkbox'] {
     border-bottom: 1px solid #ccc; }
   .customer-modal section .available-card button {
     margin: 0; }
+
+.boleto-modal .btn {
+  margin-bottom: 5px; }
+
+.boleto-modal .btn:last-child {
+  margin-bottom: 10px; }
+
+.aviso-sem-pagamento {
+  color: red;
+  font-size: 18px; }
+
+.agendamento {
+  float: right;
+  margin-right: 20px; }
 
 .edicao-container {
   flex: 1 1 auto;
