@@ -387,7 +387,7 @@
     function postSchedulePayment(personCharging) {
       var q = $q.defer();
 
-      HTTPService.post(urlApi.concat('/profile/schedule/insert'), personCharging)
+      HTTPService.post(urlApi.concat('/profile/charging/schedule/insert'), personCharging)
         .then(function (result) {
           q.resolve(result);
         })

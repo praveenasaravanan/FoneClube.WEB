@@ -223,7 +223,7 @@
                             ScheduledYear:vm.yearScheduled
                         }
                       }
-
+                    //posso colocar na lista de cobranças e ser o primeiro com vingencia
                     FoneclubeService.postSchedulePayment(customerCharging).then(function(result){
                         debugger;
                     })
