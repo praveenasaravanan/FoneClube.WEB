@@ -205,7 +205,8 @@
                     vm.expirationDateField = 5; 
                    } 
                 }
-                    debugger;
+                    
+                    
                     if(vm.chargeScheduled){
                       var customerCharging = {
                         Id: vm.customer.Id,
@@ -225,7 +226,14 @@
                       }
                     //posso colocar na lista de cobranças e ser o primeiro com vingencia
                     FoneclubeService.postSchedulePayment(customerCharging).then(function(result){
-                        debugger;
+
+                      debugger;
+                      if(result){
+                        vm.message = 'Agendamento feito com sucesso'
+                        vm.cobrancaRealizada = true;
+                        vm.disableTapPay = false;
+                      }
+                      
                     })
                     .catch(function(error){
                         console.log('catch error');
