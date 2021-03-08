@@ -41,6 +41,9 @@
             vm.expirationDateField = 3;
             vm.year = new Date().getFullYear().toString();
             vm.month = (new Date().getMonth() + 1).toString();
+            vm.yearScheduled = new Date().getFullYear().toString();
+            vm.monthScheduled = (new Date().getMonth() + 1).toString();
+            vm.scheduledDays = [1,5,10,15,20,25];
             
             var customerId = customer.Id;
             var existentCustomer = {
@@ -221,7 +224,8 @@
                             MesVingencia: vm.month,
                             ChargeStatus: vm.chargeStatus,
                             ScheduledMonth:vm.monthScheduled,
-                            ScheduledYear:vm.yearScheduled
+                            ScheduledYear:vm.yearScheduled,
+                            ScheduledDay:vm.dayScheduled
                         }
                       }
                     //posso colocar na lista de cobranças e ser o primeiro com vingencia

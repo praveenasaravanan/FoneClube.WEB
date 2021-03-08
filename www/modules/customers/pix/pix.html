@@ -34,7 +34,28 @@
                         <br/>
                         <label><input type="checkbox" ng-model="vm.chargeStatusSecond" ng-change="vm.checkOne('2')"
                                       value="2"/> Extra</label>
+                        <label><input type="checkbox" ng-model="vm.chargeScheduled"/> Agendado</label>
+                    </div>
+                    <div class="agendamento" ng-if="vm.chargeScheduled">
+                        <span>Agendamento:</span>
 
+                        <label>Ano:</label>
+                        <select ng-model="vm.yearScheduled">
+                            <option ng-repeat="year in vm.years" ng-model="vm.yearScheduled">{{year}}</option>
+                        </select>
+
+                        <label>Mês:</label>
+                        <select ng-model="vm.monthScheduled">
+                            <option ng-repeat="month in vm.months" ng-model="vm.monthScheduled" ng-selected="{{month == 2}}">
+                                {{month}}
+                            </option>
+                        </select>
+                        <label>Dia:</label>
+                        <select ng-model="vm.dayScheduled">
+                            <option ng-repeat="day in vm.scheduledDays" ng-model="vm.dayScheduled" ng-selected="{{day == 5}}">
+                                {{day}}
+                            </option>
+                        </select>
                     </div>
                     <!--<div class="dropdown">
                       <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#">

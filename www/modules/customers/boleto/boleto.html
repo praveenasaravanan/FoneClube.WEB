@@ -43,13 +43,19 @@
 
                         <label>Ano:</label>
                         <select ng-model="vm.yearScheduled">
-                            <option ng-repeat="year in vm.years" ng-model="vm.year">{{year}}</option>
+                            <option ng-repeat="year in vm.years" ng-model="vm.yearScheduled">{{year}}</option>
                         </select>
 
                         <label>Mês:</label>
                         <select ng-model="vm.monthScheduled">
-                            <option ng-repeat="month in vm.months" ng-model="vm.month" ng-selected="{{month == 2}}">
+                            <option ng-repeat="month in vm.months" ng-model="vm.monthScheduled" ng-selected="{{month == 2}}">
                                 {{month}}
+                            </option>
+                        </select>
+                        <label>Dia:</label>
+                        <select ng-model="vm.dayScheduled">
+                            <option ng-repeat="day in vm.scheduledDays" ng-model="vm.dayScheduled" ng-selected="{{day == 5}}">
+                                {{day}}
                             </option>
                         </select>
                     </div>

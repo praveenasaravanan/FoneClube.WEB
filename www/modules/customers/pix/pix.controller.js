@@ -31,6 +31,8 @@
             vm.calculate = calculate;
             vm.years = [2021, 2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010];
             vm.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+            vm.scheduledDays = [1,5,10,15,20,25];
+            vm.dayScheduled = 5;
 
             vm.amount = 0;
             vm.amountTemp = 0;
@@ -41,6 +43,8 @@
             vm.expirationDateField = 3;
             vm.year = new Date().getFullYear().toString();
             vm.month = (new Date().getMonth() + 1).toString();
+            vm.yearScheduled = new Date().getFullYear().toString();
+            vm.monthScheduled = (new Date().getMonth() + 1).toString();
             
             var customerId = customer.Id;
             var existentCustomer = {
@@ -205,6 +209,44 @@
                    {
                     vm.expirationDateField = 5; 
                    } 
+                }
+                debugger;
+                if(vm.chargeScheduled){
+                  var PIX = 3;
+                  var customerCharging = {
+                    Id: vm.customer.Id,
+                    Charging:{
+                        Comment:vm.comment,
+                        CommentEmail:vm.customerComment,
+                        CommentBoleto:"",
+                        Ammount: vm.amount,
+                        CollectorName: MainUtils.getAgent(),
+                        PaymentType: PIX,
+                        AnoVingencia:vm.year,
+                        MesVingencia: vm.month,
+                        ChargeStatus: vm.chargeStatus,
+                        ScheduledMonth:vm.monthScheduled,
+                        ScheduledYear:vm.yearScheduled,
+                        ScheduledDay:vm.dayScheduled
+                    }
+                  }
+                //posso colocar na lista de cobranças e ser o primeiro com vingencia
+                FoneclubeService.postSchedulePayment(customerCharging).then(function(result){
+
+                  debugger;
+                  if(result){
+                    vm.message = 'Agendamento feito com sucesso'
+                    vm.cobrancaRealizada = true;
+                    vm.disableTapPay = false;
+                  }
+                  
+                })
+                .catch(function(error){
+                    console.log('catch error');
+                    console.log(error);
+                });
+
+                  return;
                 }
 
                      PagarmeService.postPIX(vm.amount, vm.commentBoleto, existentCustomer, formatDateYYYYmmDD(addExpirationDays(vm.expirationDateField)))
