@@ -1172,9 +1172,6 @@ v-pane-content {
   .menu-container .menu-close-mobile {
     display: none; }
 
-.tela-report td {
-  padding-right: 20px; }
-
 .busca-status {
   margin-top: 25px; }
 
@@ -1299,6 +1296,9 @@ v-pane-content {
   text-align: center;
   font-size: 1vw; }
 
+.tela-report td {
+  padding-right: 20px; }
+
 .borda-topo {
   margin-top: 100px;
   position: relative; }
@@ -1410,20 +1410,6 @@ v-pane-content {
     margin-left: 5px;
     font-size: 12px; }
 
-.boleto-modal .btn {
-  margin-bottom: 5px; }
-
-.boleto-modal .btn:last-child {
-  margin-bottom: 10px; }
-
-.aviso-sem-pagamento {
-  color: red;
-  font-size: 18px; }
-
-.agendamento {
-  float: right;
-  margin-right: 20px; }
-
 textarea#nomeCartao {
   height: 150px; }
 
@@ -1442,6 +1428,20 @@ textarea#nomeCartao {
 
 input[type='checkbox'] {
   margin-top: -4px; }
+
+.boleto-modal .btn {
+  margin-bottom: 5px; }
+
+.boleto-modal .btn:last-child {
+  margin-bottom: 10px; }
+
+.aviso-sem-pagamento {
+  color: red;
+  font-size: 18px; }
+
+.agendamento {
+  float: right;
+  margin-right: 20px; }
 
 .customer-modal .flag-warning {
   color: #ffb300; }

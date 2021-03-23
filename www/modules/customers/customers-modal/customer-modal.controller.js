@@ -65,6 +65,7 @@
     vm.formatDate = formatDate;
     vm.onTapDebito = onTapDebito;
     vm.onTapPix = onTapPix;
+    vm.onTapLiberarBeneficio = onTapLiberarBeneficio
     vm.temEndereco = false;
     vm.linkAPI;
 
@@ -565,6 +566,29 @@
         } else {
           DialogFactory.showAlertDialog({ message: 'Update de flag falhou' });
         }
+      });
+    }
+
+    function onTapLiberarBeneficio(customer){
+      DialogFactory.dialogConfirm({
+        mensagem:
+          'Atenção essa ação irá dar baixa nos benefícios do cliente, tem certeza que o cliente recebeu a comissão e bônus e deseja proseguir?'
+      }).then(function (value) {
+        if (value) {
+          FoneclubeService.dispatchedCommision(vm.customer.Id).then(function (result) {
+            if(result){
+              DialogFactory.showAlertDialog({ message: 'Baixa efetuada com sucesso' });
+            }
+            else{
+              DialogFactory.showAlertDialog({ message: 'Ocorreu um problema ao tentar dar baixa' });
+            }
+            
+          })
+          .catch(function (error) {
+
+          })
+        }
+        
       });
     }
 
