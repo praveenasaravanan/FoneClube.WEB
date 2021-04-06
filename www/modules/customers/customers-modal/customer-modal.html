@@ -112,7 +112,7 @@
                 <v-pane-content>
 
                   <p>Tipo : {{flag.TypeDescription }}</p>
-                  
+
                   <p>Interação: {{flag.PendingInteraction ? 'Pendente' : 'Concluída' }}
                     <span style="cursor:pointer" class="clickable"
                       ng-click="vm.editPendingFlag(flag)"> &#9998; </span>
@@ -144,7 +144,7 @@
                     <span>{{ vm.chargesArray.length - $index }}ª Cob.</span>
                     <span class="spnR">R${{ chargeAndOrder.Charges.Ammount / 100 }}</span>
                     <span class="spnVence">Vencimento: {{ chargeAndOrder.Charges.BoletoExpires | date: 'dd/MM/yyyy' }}</span>
-                    
+
                     <span class="spnRef">Vigencia. {{ chargeAndOrder.Charges.MesVingencia + '/' + chargeAndOrder.Charges.AnoVingencia }}</span>
                   </span>
                 </v-pane-header>
@@ -169,9 +169,9 @@
                       </button>
                     </span>
                     <span>Type:
-                      
+
                       <strong ng-if="chargeAndOrder.Charges.PaymentType ==3">PIX</strong>
-                      
+
                       <strong ng-if="chargeAndOrder.Charges.PaymentType ==2">Boleto</strong>
                       <strong ng-if="chargeAndOrder.Charges.PaymentType ==1">Cartão</strong>
                       &nbsp;&nbsp;
@@ -188,7 +188,7 @@
                     </span>
                   </div>
                   <div class="form-group">
-                    
+
                     <p>
                       <strong>Id:</strong>
                       {{ chargeAndOrder.Charges.TransactionId }}
@@ -223,7 +223,7 @@
                       <strong>{{ chargeAndOrder.Charges.CreationDate | date: 'yyyy/MM/dd hh:mm:ss a' }}
                       </strong>
                     </p>
-                  </div>       
+                  </div>
                   <button class="btn btn-info col-xs-12 col-sm-3 info" ng-click="vm.onTapPaymentHistoryDetail(chargeAndOrder.Charges);">
                     + Info
                   </button>
@@ -264,24 +264,28 @@
 
             <br />
 
-            <h4 ng-click="vm.onClickSecundaryChargingsTitle()" class="colapsable-title" ng-show="vm.historyLog.length > 0">
-              &#x276F; Histórico Cobrança registro secundário
+            <h4 ng-click="vm.onClickSecundaryChargingsTitle()" class="colapsable-title" ng-show="vm.historyScheduleLog.length > 0">
+              &#x276F; Histórico agendamento
             </h4>
-            <v-accordion ng-if="vm.showSecundaryChargings" ng-show="vm.historyLog.length > 0" id="accordionB" class="vAccordion--default"
+            <v-accordion ng-if="vm.showSecundaryChargings" ng-show="vm.historyScheduleLog.length > 0" id="accordionB" class="vAccordion--default"
               multiple control="accordionB">
-              <v-pane expanded="false" ng-init="status.open = true" is-open="status.open" ng-repeat="log in vm.historyLog">
+              <v-pane expanded="false" ng-init="status.open = true" is-open="status.open" ng-repeat="log in vm.historyScheduleLog">
                 <v-pane-header>
                   <p>
-                    Cobrança criada: {{ log.pagarmeResponse.date_created | date: 'yyyy/MM/dd' }}
+                    <!-- {"DataExecucao":"2021-03-15T00:00:00","DataAgendamento":"0001-01-01T00:00:00",
+                    "Vingencia":"2021-06-01T00:00:00","Executado":true,"Tipo":"BOLETO","ValorCobrado":"113"} -->
+                    Agendado para :{{ log.DataExecucao | date: 'dd/MM/yyyy' }}  Cobrado: {{ log.Executado ? "sim" : "não" }}
                   </p>
                 </v-pane-header>
 
                 <v-pane-content>
+                  <p>Tipo : {{ log.Tipo }}</p>
+                  <p>Valor Cobrado : {{ log.ValorCobrado / 100 }} R$</p>
                   <p>
-                    Data da Cobrança: {{ log.pagarmeResponse.date_created | date: 'yyyy/MM/dd' }}
+                    Vingência: {{ log.Vingencia | date: 'dd/MM/yyyy' }}
                   </p>
-                  <p>Id pagarme da Cobrança: {{ log.pagarmeResponse.id }}</p>
-                  <p>Método de Pagamento: {{ log.pagarmeResponse.payment_method }}</p>
+
+                  <!--<p>Método de Pagamento: {{ log.pagarmeResponse.payment_method }}</p>
                   <p>Valor cobrado: {{ log.pagarmeResponse.amount / 100 }} R$</p>
                   <p>Comentário Boleto: {{ log.boletoComment }}</p>
                   <p>Comentário cliente: {{ log.customerComment }}</p>
@@ -290,7 +294,7 @@
                     link boleto:
                     <a href="{{ log.pagarmeResponse.boleto_url }}" target="_blank">{{ log.pagarmeResponse.boleto_url }}
                     </a>
-                  </p>
+                  </p> -->
                 </v-pane-content>
               </v-pane>
             </v-accordion>

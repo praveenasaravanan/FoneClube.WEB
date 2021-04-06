@@ -85,6 +85,7 @@
     this.getTemplates = getTemplates;
     this.getStatusAPI = getStatusAPI;
     this.getChargingLog = getChargingLog;
+    this.getChargingScheduleHistory = getChargingScheduleHistory;
     this.getLinhasEstoque = getLinhasEstoque;
     this.getStatusTelefonesOperadora = getStatusTelefonesOperadora;
     this.getLastPersonCharging = getLastPersonCharging;
@@ -1197,6 +1198,20 @@
       return q.promise;
     }
 
+    function getChargingScheduleHistory(matricula) {
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/charging/schedule/history/') + matricula)
+        .then(function (result) {
+          q.resolve(result);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
     function getLinhasEstoque() {
       var q = $q.defer();
 
@@ -1463,14 +1478,14 @@
 
     function getCustomerDaysWithoutCharge(){
       var q = $q.defer();
-      
+
       HTTPService.get(urlApi.concat('/charging/last/customers/chargings'))
         .then(function (result) {
-          
+
           q.resolve(result);
         })
         .catch(function (error) {
-          
+
           q.reject(error);
         });
 

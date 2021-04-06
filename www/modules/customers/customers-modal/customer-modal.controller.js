@@ -121,7 +121,7 @@
       );
 
       FoneclubeService.getChargeAndServiceOrderHistory(customer.Id).then(function (result){
-        
+
         debugger;
         vm.chargesAndOrders = result;
         vm.chargesArray = [];
@@ -141,7 +141,7 @@
               vm.chargesAndOrders[i].Charges.resentMessage = 'Reenviar email';
             } catch (e) { }
 
-            
+
             data.Charges.descriptionType = data.Charges.PaymentType == CARTAO ? 'Cartão de crédito' : 'Boleto';
 
             var DEBITO = 3;
@@ -238,6 +238,21 @@
           vm.historyLog = [];
           for (var i in result) {
             vm.historyLog.push(JSON.parse(result[i]));
+          }
+          // debugger;
+        })
+        .catch(function (error) {
+          console.log('catch error');
+          console.log(error);
+        });
+
+      FoneclubeService.getChargingScheduleHistory(customer.Id)
+        .then(function (result) {
+          console.log('------- getChargingScheduleHistory');
+          // debugger;
+          vm.historyScheduleLog = [];
+          for (var i in result) {
+            vm.historyScheduleLog.push(result[i]);
           }
           // debugger;
         })
@@ -438,7 +453,7 @@
       if(charge.PaymentType == DEBITO)
       {
        alert('ainda não é possível reenviar email de cobrança de débito');
-       return; 
+       return;
       }
 
       DialogFactory.dialogConfirm({
@@ -582,13 +597,13 @@
             else{
               DialogFactory.showAlertDialog({ message: 'Ocorreu um problema ao tentar dar baixa' });
             }
-            
+
           })
           .catch(function (error) {
 
           })
         }
-        
+
       });
     }
 
