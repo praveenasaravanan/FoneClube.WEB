@@ -21,7 +21,7 @@
     vm.hideLoader = hideLoader;
 
     var releaseMode = true;
-    var version = '1.5.8';
+    var version = '1.5.9';
 
     setFavicon();
 
@@ -60,7 +60,7 @@
       });
 
     }
-      
+
     function show(params){
       closeAllPopups();
       return $ionicPopup.show(params);

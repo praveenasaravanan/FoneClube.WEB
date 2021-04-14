@@ -34,7 +34,7 @@
     vm.showCards = true;
     vm.showChargings = true;
     vm.showServiceOrders = true;
-    vm.showSecundaryChargings = false;
+    vm.showSecundaryChargings = true;
     vm.showFlags = false;
     vm.flags = [];
 
