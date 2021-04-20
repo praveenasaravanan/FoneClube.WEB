@@ -343,6 +343,83 @@ button {
   right: 17px;
   top: 44px; }
 
+.pane {
+  overflow-y: auto; }
+
+.cadastro-container {
+  display: flex;
+  flex: 1 1 auto;
+  height: 100%;
+  flex-direction: column;
+  background-color: #ecf0f5; }
+
+.botao-upload-cadastro {
+  height: 69px;
+  width: 130px;
+  background-color: #dfdfdf;
+  text-align: center;
+  margin-left: 12px;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+  align-items: center;
+  float: left;
+  cursor: pointer;
+  font-weight: bold;
+  color: #656565; }
+  .botao-upload-cadastro img {
+    height: 40px;
+    width: 40px; }
+  .botao-upload-cadastro input {
+    display: none; }
+
+.thumb-image {
+  height: 69px;
+  border: solid;
+  width: 130px;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer; }
+
+.row {
+  margin-right: 0px;
+  margin-left: 0px; }
+
+.popup-lista-imagens {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+  .popup-lista-imagens .ngdialog-content {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    justify-content: center;
+    align-items: center; }
+  .popup-lista-imagens .ngdialog-close:before {
+    content: ''; }
+  .popup-lista-imagens img {
+    max-width: 600px; }
+  .popup-lista-imagens .next {
+    width: 100px;
+    cursor: pointer;
+    content: url("../../content/assets/icons/right-image.png"); }
+    .popup-lista-imagens .next:hover {
+      content: url("../../content/assets/icons/right-image-hover.png"); }
+  .popup-lista-imagens .back {
+    width: 100px;
+    cursor: pointer;
+    content: url("../../content/assets/icons/left-image.png"); }
+    .popup-lista-imagens .back:hover {
+      content: url("../../content/assets/icons/left-image-hover.png"); }
+
 .all-phones .borda-topo-estoque {
   margin-top: 250px;
   position: relative; }
@@ -431,83 +508,6 @@ button {
   z-index: 9;
   right: 17px;
   top: 44px; }
-
-.pane {
-  overflow-y: auto; }
-
-.cadastro-container {
-  display: flex;
-  flex: 1 1 auto;
-  height: 100%;
-  flex-direction: column;
-  background-color: #ecf0f5; }
-
-.botao-upload-cadastro {
-  height: 69px;
-  width: 130px;
-  background-color: #dfdfdf;
-  text-align: center;
-  margin-left: 12px;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-around;
-  align-items: center;
-  float: left;
-  cursor: pointer;
-  font-weight: bold;
-  color: #656565; }
-  .botao-upload-cadastro img {
-    height: 40px;
-    width: 40px; }
-  .botao-upload-cadastro input {
-    display: none; }
-
-.thumb-image {
-  height: 69px;
-  border: solid;
-  width: 130px;
-  border: none;
-  margin-left: 10px;
-  cursor: pointer; }
-
-.row {
-  margin-right: 0px;
-  margin-left: 0px; }
-
-.popup-lista-imagens {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center; }
-  .popup-lista-imagens .ngdialog-content {
-    position: relative;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    justify-content: center;
-    align-items: center; }
-  .popup-lista-imagens .ngdialog-close:before {
-    content: ''; }
-  .popup-lista-imagens img {
-    max-width: 600px; }
-  .popup-lista-imagens .next {
-    width: 100px;
-    cursor: pointer;
-    content: url("../../content/assets/icons/right-image.png"); }
-    .popup-lista-imagens .next:hover {
-      content: url("../../content/assets/icons/right-image-hover.png"); }
-  .popup-lista-imagens .back {
-    width: 100px;
-    cursor: pointer;
-    content: url("../../content/assets/icons/left-image.png"); }
-    .popup-lista-imagens .back:hover {
-      content: url("../../content/assets/icons/left-image-hover.png"); }
 
 .pane {
   overflow-y: auto; }
@@ -605,35 +605,50 @@ button {
   width: 100%;
   height: 100%; }
 
-.pane {
-  overflow-y: auto; }
+.estoque .borda-topo-estoque {
+  margin-top: 160px;
+  position: relative; }
 
-.lista-customer-container {
-  display: flex;
-  flex: 1 1 auto;
-  height: 100%;
-  flex-direction: column;
-  background-color: #ecf0f5; }
-  .lista-customer-container .form-container {
-    margin-top: 15px; }
+.estoque .table-scroll thead {
+  display: table;
+  width: 94%;
+  table-layout: fixed;
+  margin-top: -120px;
+  position: absolute;
+  background-color: white; }
 
-.checkout-customer .etapa-quantia {
-  background-color: white;
-  height: 150px;
-  padding-left: 15px;
-  padding-right: 15px; }
-  .checkout-customer .etapa-quantia .form-group {
-    padding-top: 10px; }
-    .checkout-customer .etapa-quantia .form-group label, .checkout-customer .etapa-quantia .form-group input {
-      font-size: 20px; }
-    .checkout-customer .etapa-quantia .form-group input {
-      height: 40px; }
+.estoque .table-scroll tbody {
+  overflow-y: auto;
+  display: block;
+  width: 100%;
+  table-layout: fixed; }
 
-.checkout-customer .cartao-container p {
-  margin-bottom: 5px; }
+.estoque .table-scroll tr {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  height: 100%; }
 
-.checkout-customer .cartao-container p:last-child {
-  margin-bottom: 10px; }
+.estoque .table-scroll td {
+  height: 47px; }
+
+.estoque .titulo-teste {
+  color: grey;
+  position: absolute;
+  z-index: 10000;
+  margin-top: -104px;
+  margin-left: 80px; }
+
+.estoque .pagination-custom {
+  position: absolute;
+  margin-top: -110px; }
+
+.estoque .limites-pag {
+  position: absolute;
+  right: 0;
+  z-index: 10001;
+  margin-right: 24px;
+  margin-top: -150px; }
 
 .login-container {
   background-color: #F7F7F7;
@@ -794,6 +809,36 @@ v-pane-content {
     transform: rotate(-90deg); }
   .vAccordion--default v-pane-header:hover, .vAccordion--default v-pane-header:focus {
     color: #2196F3; }
+
+.pane {
+  overflow-y: auto; }
+
+.lista-customer-container {
+  display: flex;
+  flex: 1 1 auto;
+  height: 100%;
+  flex-direction: column;
+  background-color: #ecf0f5; }
+  .lista-customer-container .form-container {
+    margin-top: 15px; }
+
+.checkout-customer .etapa-quantia {
+  background-color: white;
+  height: 150px;
+  padding-left: 15px;
+  padding-right: 15px; }
+  .checkout-customer .etapa-quantia .form-group {
+    padding-top: 10px; }
+    .checkout-customer .etapa-quantia .form-group label, .checkout-customer .etapa-quantia .form-group input {
+      font-size: 20px; }
+    .checkout-customer .etapa-quantia .form-group input {
+      height: 40px; }
+
+.checkout-customer .cartao-container p {
+  margin-bottom: 5px; }
+
+.checkout-customer .cartao-container p:last-child {
+  margin-bottom: 10px; }
 
 .mass-charging-container {
   display: flex;
@@ -1254,51 +1299,6 @@ v-pane-content {
   text-align: center;
   font-size: 1vw; }
 
-.estoque .borda-topo-estoque {
-  margin-top: 160px;
-  position: relative; }
-
-.estoque .table-scroll thead {
-  display: table;
-  width: 94%;
-  table-layout: fixed;
-  margin-top: -120px;
-  position: absolute;
-  background-color: white; }
-
-.estoque .table-scroll tbody {
-  overflow-y: auto;
-  display: block;
-  width: 100%;
-  table-layout: fixed; }
-
-.estoque .table-scroll tr {
-  display: table;
-  table-layout: fixed;
-  width: 100%;
-  height: 100%; }
-
-.estoque .table-scroll td {
-  height: 47px; }
-
-.estoque .titulo-teste {
-  color: grey;
-  position: absolute;
-  z-index: 10000;
-  margin-top: -104px;
-  margin-left: 80px; }
-
-.estoque .pagination-custom {
-  position: absolute;
-  margin-top: -110px; }
-
-.estoque .limites-pag {
-  position: absolute;
-  right: 0;
-  z-index: 10001;
-  margin-right: 24px;
-  margin-top: -150px; }
-
 .borda-topo {
   margin-top: 100px;
   position: relative; }
@@ -1409,6 +1409,20 @@ v-pane-content {
     color: white;
     margin-left: 5px;
     font-size: 12px; }
+
+.boleto-modal .btn {
+  margin-bottom: 5px; }
+
+.boleto-modal .btn:last-child {
+  margin-bottom: 10px; }
+
+.aviso-sem-pagamento {
+  color: red;
+  font-size: 18px; }
+
+.agendamento {
+  float: right;
+  margin-right: 20px; }
 
 .customer-modal .flag-warning {
   color: #ffb300; }
@@ -1524,45 +1538,6 @@ v-pane-content {
   .customer-modal section .available-card button {
     margin: 0; }
 
-.boleto-modal .btn {
-  margin-bottom: 5px; }
-
-.boleto-modal .btn:last-child {
-  margin-bottom: 10px; }
-
-.aviso-sem-pagamento {
-  color: red;
-  font-size: 18px; }
-
-.agendamento {
-  float: right;
-  margin-right: 20px; }
-
-textarea#nomeCartao {
-  height: 150px; }
-
-.dialog-toolbar {
-  width: 100%;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 30px; }
-
-.show-template .header {
-  height: auto !important; }
-  .show-template .header button {
-    top: 0; }
-
-input[type='checkbox'] {
-  margin-top: -4px; }
-
-.existent-card-modal .btn {
-  margin-bottom: 5px; }
-
-.existent-card-modal .btn:last-child {
-  margin-bottom: 10px; }
-
 textarea#nomeCartao {
   height: 150px; }
 
@@ -1674,6 +1649,31 @@ table.s_table tr td {
   color: white;
   padding-top: 10px; }
 
+.existent-card-modal .btn {
+  margin-bottom: 5px; }
+
+.existent-card-modal .btn:last-child {
+  margin-bottom: 10px; }
+
+textarea#nomeCartao {
+  height: 150px; }
+
+.dialog-toolbar {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px; }
+
+.show-template .header {
+  height: auto !important; }
+  .show-template .header button {
+    top: 0; }
+
+input[type='checkbox'] {
+  margin-top: -4px; }
+
 .customers .ag-cell {
   padding-top: 5px;
   padding-bottom: 5px; }
@@ -1778,16 +1778,16 @@ input[type="checkbox"] {
   float: right;
   margin-right: 20px; }
 
-.boleto-modal .btn {
-  margin-bottom: 5px; }
-
-.boleto-modal .btn:last-child {
-  margin-bottom: 10px; }
-
 .new-card-modal .btn {
   margin-bottom: 5px; }
 
 .new-card-modal .btn:last-child {
+  margin-bottom: 10px; }
+
+.boleto-modal .btn {
+  margin-bottom: 5px; }
+
+.boleto-modal .btn:last-child {
   margin-bottom: 10px; }
 
 .mensagens-dialog {

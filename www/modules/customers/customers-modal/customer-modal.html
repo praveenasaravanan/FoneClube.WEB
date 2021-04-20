@@ -254,6 +254,9 @@
                   <p>
                     Vingência: {{ log.Vingencia | date: 'dd/MM/yyyy' }}
                   </p>
+                  <button class="btn btn-info" ng-click="vm.onTapDesfazer(log)">
+                    Desfazer agendamento
+                  </button>
 
                   <!--<p>Método de Pagamento: {{ log.pagarmeResponse.payment_method }}</p>
                   <p>Valor cobrado: {{ log.pagarmeResponse.amount / 100 }} R$</p>

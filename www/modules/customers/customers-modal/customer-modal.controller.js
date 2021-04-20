@@ -65,6 +65,7 @@
     vm.formatDate = formatDate;
     vm.onTapDebito = onTapDebito;
     vm.onTapPix = onTapPix;
+    vm.onTapDesfazer = onTapDesfazer;
     vm.onTapLiberarBeneficio = onTapLiberarBeneficio
     vm.temEndereco = false;
     vm.linkAPI;
@@ -604,6 +605,34 @@
           })
         }
 
+      });
+    }
+
+    function onTapDesfazer(item){
+
+      console.log(item);
+
+      DialogFactory.dialogConfirm({
+        mensagem:
+          'Atenção essa ação irá desfazer o agendamento, deseja proseguir?'
+      }).then(function (value) {
+        if (value) {
+          FoneclubeService.getDeleteAgendamentoCobranca(item.Id)
+            .then(function (result) {
+              console.log(result);
+              if (result) {
+                DialogFactory.showMessageDialog({
+                  message:
+                    'o agendamento foi removido com sucesso'
+                });
+                closeThisDialog(0);
+              } else DialogFactory.showMessageDialog({ message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber });
+            })
+            .catch(function (error) {
+              console.log('catch error');
+              console.log(error);
+            });
+        }
       });
     }
 

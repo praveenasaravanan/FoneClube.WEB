@@ -112,6 +112,7 @@
     this.getStatusCardDebito = getStatusCardDebito;
     this.getMassChargingFull = getMassChargingFull;
     this.getCustomerDaysWithoutCharge = getCustomerDaysWithoutCharge;
+    this.getDeleteAgendamentoCobranca = getDeleteAgendamentoCobranca;
 
     function getAPIUrl() {
       return urlApi;
@@ -328,6 +329,8 @@
 
       return q.promise;
     }
+
+
 
     function postUpdatePersonAdress(personCheckout) {
       var q = $q.defer();
@@ -1501,6 +1504,21 @@
         .catch(function (error) {
           q.reject(error);
         });
+      return q.promise;
+    }
+
+    function getDeleteAgendamentoCobranca(id) {
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/charging/schedule/delete/' + id))
+        .then(function (result) {
+          q.resolve(result);
+        })
+        .catch(function (error) {
+
+          q.reject(error);
+        });
+
       return q.promise;
     }
 
