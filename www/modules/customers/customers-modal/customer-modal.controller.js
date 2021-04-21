@@ -611,6 +611,10 @@
     function onTapDesfazer(item){
 
       console.log(item);
+      debugger;
+
+
+
 
       DialogFactory.dialogConfirm({
         mensagem:
@@ -619,14 +623,25 @@
         if (value) {
           FoneclubeService.getDeleteAgendamentoCobranca(item.Id)
             .then(function (result) {
+
+              debugger;
               console.log(result);
               if (result) {
+
                 DialogFactory.showMessageDialog({
-                  message:
-                    'o agendamento foi removido com sucesso'
+                  mensagem: 'o agendamento foi removido com sucesso',
+                  titulo: 'Informação'
                 });
-                closeThisDialog(0);
-              } else DialogFactory.showMessageDialog({ message: 'Usuário não foi removido, guarde o documento dele: ' + customer.DocumentNumber });
+
+              }
+              else{
+
+                DialogFactory.showMessageDialog({
+                  mensagem: 'o agendamento não foi removido',
+                  titulo: 'Informação'
+                });
+              }
+
             })
             .catch(function (error) {
               console.log('catch error');
