@@ -1,11 +1,11 @@
 (function() {
     'use strict';
-    
+
         angular
             .module('foneClub')
             .controller('PIXController', PIXController);
-    
-  
+
+
         PIXController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService', '$filter'];
         function PIXController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService, $filter) {
 
@@ -31,7 +31,7 @@
             vm.calculate = calculate;
             vm.years = [2021, 2020,2019,2018,2017,2016,2015,2014,2013,2012,2011,2010];
             vm.months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-            vm.scheduledDays = [1,5,10,15,20,25];
+            vm.scheduledDays = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
             vm.dayScheduled = 5;
 
             vm.amount = 0;
@@ -45,7 +45,7 @@
             vm.month = (new Date().getMonth() + 1).toString();
             vm.yearScheduled = new Date().getFullYear().toString();
             vm.monthScheduled = (new Date().getMonth() + 1).toString();
-            
+
             var customerId = customer.Id;
             var existentCustomer = {
                         'name' : customer.Name,
@@ -53,7 +53,7 @@
                         'email' : customer.Email,
                         'address' : getAddress(customer),
                         'phone' : getContactPhone(customer)
-    
+
             }
 
             vm.Padrão = false;
@@ -100,7 +100,7 @@
               vm.totaisComissoes = result;
 
             })
-            
+
 
             FoneclubeService.getCommision(customer.Id).then(function (result) {
               vm.bonus = parseFloat(result.Ammount / 100).toFixed(2);
@@ -170,7 +170,7 @@
                   vm.chargeStatusDiv = false;
                 }
             }
-            
+
             function onTapCancel(number){
                 vm.etapaDados = true;
                 vm.etapaConfirmacao = false;
@@ -178,12 +178,12 @@
                 if (number == 1){
                     vm.amount = 0;
                     vm.comment = '';
-                    vm.cobrancaRealizada = false;   
+                    vm.cobrancaRealizada = false;
                 }
             }
-            
+
             function onTapPagar(){
-    
+
                 console.log('tap pagar boleto')
                 console.log(parseInt(vm.amount))
               var em = vm.amount.toString().split(".");
@@ -191,7 +191,7 @@
               if (em[1] != undefined) {
                 vm.amount = vm.amount.toString().replace(".", "")
               }
-    
+
                 vm.disableTapPay = true;
                 vm.message = 'Iniciando transação';
                 vm.instructions = 'FoneClub - 2017'
@@ -202,13 +202,13 @@
 
                 if(!vm.expirationDateField)
                 {
-                    vm.expirationDateField = 5; 
+                    vm.expirationDateField = 5;
                 }
                 else{
                    if(vm.expirationDateField <= 0)
                    {
-                    vm.expirationDateField = 5; 
-                   } 
+                    vm.expirationDateField = 5;
+                   }
                 }
                 debugger;
                 if(vm.chargeScheduled){
@@ -239,7 +239,7 @@
                     vm.cobrancaRealizada = true;
                     vm.disableTapPay = false;
                   }
-                  
+
                 })
                 .catch(function(error){
                     console.log('catch error');
@@ -251,7 +251,7 @@
 
                      PagarmeService.postPIX(vm.amount, vm.commentBoleto, existentCustomer, formatDateYYYYmmDD(addExpirationDays(vm.expirationDateField)))
                      .then(function(resultCapture){
-    
+
                           debugger;
                           try{
                               var chargingLog = {
@@ -264,8 +264,8 @@
                               };
 
 
-                              
-                              
+
+
                               FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
                                   console.log(result);
                               })
@@ -300,7 +300,7 @@
                                   ComissionConceded: false // need to see the property nameComissionConceded
                                 }
                             }
-                
+
                             debugger;
                             FoneclubeService.postHistoryPayment(customerCharging).then(function (result) {
                               debugger
@@ -311,12 +311,12 @@
                                 }
                                 else
                                   alert('Não foi possível realizar cobrança');
-                               
-                                 
+
+
                                 })
                                 .catch(function(error){
                                     // debugger
-                                    alert('Aviso em verificação secundária, printar tela -  ' 
+                                    alert('Aviso em verificação secundária, printar tela -  '
                                     + '_' + customerCharging.Id
                                     + '_' + customerCharging.ChargeStatus
                                     + '_' + customerCharging.TransactionId
@@ -344,19 +344,19 @@
                               alert("Alerta a cobrança não pode ser salva, se possível pare a tela aqui sem atualizar nada e entre em contato com cardozo")
                           }
 
-                    
+
                         })
                         .catch(function(error){
                             try{
-                                DialogFactory.showMessageDialog({mensagem: 'Erro na captura da transação' + error.status});                             
+                                DialogFactory.showMessageDialog({mensagem: 'Erro na captura da transação' + error.status});
                             }
                             catch(erro){
-                                DialogFactory.showMessageDialog({mensagem:'Erro na captura da transação'});                             
+                                DialogFactory.showMessageDialog({mensagem:'Erro na captura da transação'});
                             }
                             console.log(error);
                         });
 
-    
+
             }
 
             function formatDateYYYYmmDD(date) {
@@ -364,17 +364,17 @@
                     month = '' + (d.getMonth() + 1),
                     day = '' + d.getDate(),
                     year = d.getFullYear();
-            
-                if (month.length < 2) 
+
+                if (month.length < 2)
                     month = '0' + month;
-                if (day.length < 2) 
+                if (day.length < 2)
                     day = '0' + day;
-            
+
                 return [year, month, day].join('-');
             }
-    
+
             function saveHistoryPayment(idBoleto, acquirer_id){
-              
+
                 var customerCharging = {
                     Id: vm.customer.Id,
                     Charging:{
@@ -393,7 +393,7 @@
                       ComissionConceded: vm.pagar // need to see the property nameComissionConceded
                     }
                 }
-    
+
                 FoneclubeService.postHistoryPayment(customerCharging).then(function (result) {
 
                     if(vm.pagar)
@@ -402,10 +402,10 @@
 
                           if(!result)
                             alert('Não foi possível dar baixa em comissão');
-                            
+
 
                             // FoneclubeService.dispatchedBonus(vm.customer.Id).then(function (result) {
-                              
+
                             //   debugger
                             //   if(!result)
                             //     alert('Não foi possível dar baixa em comissão');
@@ -420,12 +420,12 @@
                           alert('Não foi possível dar baixa em comissão');
                         })
                     }
-                   
-                     
+
+
                     })
                     .catch(function(error){
                         // debugger
-                        alert('Aviso em verificação secundária, printar tela -  ' 
+                        alert('Aviso em verificação secundária, printar tela -  '
                         + '_' + customerCharging.Id
                         + '_' + customerCharging.ChargeStatus
                         + '_' + customerCharging.TransactionId
@@ -445,8 +445,8 @@
                         console.log('catch error');
                         console.log(error);
                     });
-        
-        
+
+
                 }
                 function getContactPhone(customer){
 
@@ -462,7 +462,7 @@
                             'number' : '997865645'
                         }
                     }
-                    
+
 
                 var contacts = UtilsService.getContactPhoneFromPhones(customer.Phones);
                 if (!contacts || contacts.length == 0  || contacts[0].DDD == '' || contacts[0].Number == '') {
@@ -476,7 +476,7 @@
                     }
                 }
             }
-            
+
             function getAddress(customer) {
                 var address = customer.Adresses;
                 if (!address || address.length == 0) {
@@ -493,17 +493,17 @@
                     }
                 }
             }
-            
+
             function onTapPaymentHistoryDetail(history) {
                 ViewModelUtilsService.showModalPaymentHistoryDetail(history, vm.customer);
             }
 
-            
+
             function addExpirationDays(days) {
                 var dat = new Date();
                 dat.setDate(dat.getDate() + days);
                 return dat.toISOString();
               }
-    
+
         }
     })();

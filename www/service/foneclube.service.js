@@ -91,6 +91,7 @@
     this.getLastPersonCharging = getLastPersonCharging;
     this.getAllCustomers = getAllCustomers;
     this.getReintegrateDatePagarme = getReintegrateDatePagarme;
+    this.getScheduleDateExecuted = getScheduleDateExecuted;
     this.getAllPhonesStatus = getAllPhonesStatus;
     this.getMassChargingData = getMassChargingData;
     this.getStatusDivergencia = getStatusDivergencia;
@@ -223,6 +224,21 @@
       var q = $q.defer();
 
       HTTPService.get(urlApi.concat('/pagarme/transacao/reintegrate/date'))
+        .then(function (result) {
+          q.resolve(result);
+        })
+        .catch(function (error) {
+          q.reject(error);
+        });
+
+      return q.promise;
+    }
+
+    //api/charging/schedule/executed/date
+    function getScheduleDateExecuted() {
+      var q = $q.defer();
+
+      HTTPService.get(urlApi.concat('/charging/schedule/executed/date'))
         .then(function (result) {
           q.resolve(result);
         })

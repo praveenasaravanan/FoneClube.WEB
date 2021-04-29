@@ -20,6 +20,16 @@
             alert('Aviso: o watcher pegou uma exceção, por favor, tire um print para companhamento: lc24')
         })
 
+        FoneclubeService.getScheduleDateExecuted().then(function (result) {
+          // debugger
+          var registro = new Date(result);
+          vm.dateschedule = registro.toString().split('GMT')[0];
+      }).catch(function(error){
+          alert('Aviso: o watcher pegou uma exceção, por favor, tire um print para companhamento: lc24')
+      })
+
+
+
         FoneclubeService.getStatusAPI().then(function(result){
                 vm.statusBase = result;
                 console.log(result)
@@ -29,7 +39,7 @@
 
             var users = FireBaseManagerUtil.getUsers();
 
-                      
+
             for(var i in users){
                 var user = users[i];
                 if(user.user == vm.user && user.password == vm.password)
@@ -57,7 +67,7 @@
             }
         }
 
-        
+
         function formatDate(date) {
             var monthNames = [
               "January", "February", "March",
@@ -65,11 +75,11 @@
               "August", "September", "October",
               "November", "December"
             ];
-          
+
             var day = date.getDate();
             var monthIndex = date.getMonth();
             var year = date.getFullYear();
-          
+
             return day + ' ' + monthNames[monthIndex] + ' ' + year;
         }
 

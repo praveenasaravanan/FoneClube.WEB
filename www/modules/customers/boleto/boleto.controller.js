@@ -1,11 +1,11 @@
 (function() {
     'use strict';
-    
+
         angular
             .module('foneClub')
             .controller('BoletoModalController', BoletoModalController);
-    
-  
+
+
         BoletoModalController.inject = ['ViewModelUtilsService', 'PagarmeService', 'MainUtils', 'FoneclubeService', 'DialogFactory', 'UtilsService', '$filter'];
         function BoletoModalController(ViewModelUtilsService, PagarmeService, MainUtils, FoneclubeService, DialogFactory, UtilsService, $filter) {
 
@@ -43,8 +43,8 @@
             vm.month = (new Date().getMonth() + 1).toString();
             vm.yearScheduled = new Date().getFullYear().toString();
             vm.monthScheduled = (new Date().getMonth() + 1).toString();
-            vm.scheduledDays = [1,5,10,15,20,25];
-            
+            vm.scheduledDays = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+
             var customerId = customer.Id;
             var existentCustomer = {
                         'name' : customer.Name,
@@ -52,7 +52,7 @@
                         'email' : customer.Email,
                         'address' : getAddress(customer),
                         'phone' : getContactPhone(customer)
-    
+
             }
 
             vm.Padrão = false;
@@ -98,7 +98,7 @@
               vm.totaisComissoes = result;
 
             })
-            
+
 
             FoneclubeService.getCommision(customer.Id).then(function (result) {
               vm.bonus = parseFloat(result.Ammount / 100).toFixed(2);
@@ -168,7 +168,7 @@
                   vm.chargeStatusDiv = false;
                 }
             }
-            
+
             function onTapCancel(number){
                 vm.etapaDados = true;
                 vm.etapaConfirmacao = false;
@@ -176,12 +176,12 @@
                 if (number == 1){
                     vm.amount = 0;
                     vm.comment = '';
-                    vm.cobrancaRealizada = false;   
+                    vm.cobrancaRealizada = false;
                 }
             }
-            
+
             function onTapPagar(){
-    
+
                 console.log('tap pagar boleto')
                 console.log(parseInt(vm.amount))
               var em = vm.amount.toString().split(".");
@@ -189,7 +189,7 @@
               if (em[1] != undefined) {
                 vm.amount = vm.amount.toString().replace(".", "")
               }
-    
+
                 vm.disableTapPay = true;
                 vm.message = 'Iniciando transação';
                 vm.instructions = 'FoneClub - 2017'
@@ -200,16 +200,16 @@
 
                 if(!vm.expirationDateField)
                 {
-                    vm.expirationDateField = 5; 
+                    vm.expirationDateField = 5;
                 }
                 else{
                    if(vm.expirationDateField <= 0)
                    {
-                    vm.expirationDateField = 5; 
-                   } 
+                    vm.expirationDateField = 5;
+                   }
                 }
-                    
-                    
+
+
                     if(vm.chargeScheduled){
                       var customerCharging = {
                         Id: vm.customer.Id,
@@ -237,7 +237,7 @@
                         vm.cobrancaRealizada = true;
                         vm.disableTapPay = false;
                       }
-                      
+
                     })
                     .catch(function(error){
                         console.log('catch error');
@@ -250,8 +250,8 @@
 
 
                      PagarmeService.postBoletoDirect(vm.amount, vm.commentBoleto, existentCustomer, addExpirationDays(vm.expirationDateField)).then(function(resultCapture){
-    
-                        
+
+
                         try{
                             var chargingLog = {
                                 'customer': existentCustomer,
@@ -261,7 +261,7 @@
                                 'customerComment':vm.customerComment,
                                 'foneclubeComment' : vm.comment
                             };
-                            
+
                             // debugger
                             FoneclubeService.postChargingLog(JSON.stringify(chargingLog), customerId).then(function(result){
                                 console.log(result);
@@ -299,7 +299,7 @@
                                     // 'CustomerComment':vm.customerComment,
                                     'TemplateType' : 2
                                 }
-                                
+
                                 vm.boleto_url = resultCapture.boleto_url;
 
                                 // debugger;
@@ -348,8 +348,8 @@
                                     console.log(error);
                                 });
                             }
-                            
-    
+
+
                             try{
                               vm.TransactionId = resultCapture.tid;
                                 PagarmeService.notifyCustomerBoleto(resultCapture.id, existentCustomer.email).then(function(resultNotify){
@@ -361,33 +361,33 @@
                                     try{
                                         vm.message = 'Boleto gerado com sucesso. Sem envio de notificação'
                                         vm.cobrancaRealizada = true;
-                                        vm.disableTapPay = false;                                    
+                                        vm.disableTapPay = false;
                                     }
                                     catch(erro){
                                         vm.message = 'Boleto gerado com sucesso. Sem envio de notificação'
                                         vm.cobrancaRealizada = true;
-                                        vm.disableTapPay = false;                                    
+                                        vm.disableTapPay = false;
                                     }
                                     console.log(error);
-    
+
                                 });
-    
+
                             }
                             catch(erro){
-    
+
                             }
-    
-    
+
+
                         saveHistoryPayment(resultCapture.id, resultCapture.acquirer_id);
-    
+
                             vm.message = 'Boleto gerado com sucesso'
                         })
                         .catch(function(error){
                             try{
-                                DialogFactory.showMessageDialog({mensagem: 'Erro na captura da transação' + error.status});                             
+                                DialogFactory.showMessageDialog({mensagem: 'Erro na captura da transação' + error.status});
                             }
                             catch(erro){
-                                DialogFactory.showMessageDialog({mensagem:'Erro na captura da transação'});                             
+                                DialogFactory.showMessageDialog({mensagem:'Erro na captura da transação'});
                             }
                             console.log(error);
                         });
@@ -398,11 +398,11 @@
                 //     DialogFactory.showMessageDialog({titulo: 'Aviso', mensagem: 'Erro ao realizar transação, verifique os dados do cliente. ' + "(" + error.data.errors[0].message + ")"});
                 //     vm.disableTapPay = false;
                 // });
-    
+
             }
-    
+
             function saveHistoryPayment(idBoleto, acquirer_id){
-              
+
                 var customerCharging = {
                     Id: vm.customer.Id,
                     Charging:{
@@ -421,7 +421,7 @@
                       ComissionConceded: vm.pagar // need to see the property nameComissionConceded
                     }
                 }
-    
+
                 FoneclubeService.postHistoryPayment(customerCharging).then(function (result) {
 
                     if(vm.pagar)
@@ -430,10 +430,10 @@
 
                           if(!result)
                             alert('Não foi possível dar baixa em comissão');
-                            
+
 
                             // FoneclubeService.dispatchedBonus(vm.customer.Id).then(function (result) {
-                              
+
                             //   debugger
                             //   if(!result)
                             //     alert('Não foi possível dar baixa em comissão');
@@ -448,12 +448,12 @@
                           alert('Não foi possível dar baixa em comissão');
                         })
                     }
-                   
-                     
+
+
                     })
                     .catch(function(error){
                         // debugger
-                        alert('Aviso em verificação secundária, printar tela -  ' 
+                        alert('Aviso em verificação secundária, printar tela -  '
                         + '_' + customerCharging.Id
                         + '_' + customerCharging.ChargeStatus
                         + '_' + customerCharging.TransactionId
@@ -473,8 +473,8 @@
                         console.log('catch error');
                         console.log(error);
                     });
-        
-        
+
+
                 }
                 function getContactPhone(customer){
 
@@ -490,7 +490,7 @@
                             'number' : '997865645'
                         }
                     }
-                    
+
 
                 var contacts = UtilsService.getContactPhoneFromPhones(customer.Phones);
                 if (!contacts || contacts.length == 0  || contacts[0].DDD == '' || contacts[0].Number == '') {
@@ -504,7 +504,7 @@
                     }
                 }
             }
-            
+
             function getAddress(customer) {
                 var address = customer.Adresses;
                 if (!address || address.length == 0) {
@@ -521,17 +521,17 @@
                     }
                 }
             }
-            
+
             function onTapPaymentHistoryDetail(history) {
                 ViewModelUtilsService.showModalPaymentHistoryDetail(history, vm.customer);
             }
 
-            
+
             function addExpirationDays(days) {
                 var dat = new Date();
                 dat.setDate(dat.getDate() + days);
                 return dat.toISOString();
               }
-    
+
         }
     })();

@@ -614,8 +614,6 @@
       debugger;
 
 
-
-
       DialogFactory.dialogConfirm({
         mensagem:
           'Atenção essa ação irá desfazer o agendamento, deseja proseguir?'
